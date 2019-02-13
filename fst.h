@@ -69,6 +69,7 @@ enum {
     FST_UNKNOWN_ENUM(effGetParamDisplay),
     FST_UNKNOWN_ENUM(effGetParamLabel),
     FST_UNKNOWN_ENUM(effGetParamName),
+    FST_UNKNOWN_ENUM(effGetPlugCategory),
     FST_UNKNOWN_ENUM(effGetProductString),
     FST_UNKNOWN_ENUM(effGetProgram),
     FST_UNKNOWN_ENUM(effGetProgramName),
@@ -95,9 +96,6 @@ enum {
     FST_UNKNOWN_ENUM(effStartProcess),
     FST_UNKNOWN_ENUM(effStopProcess),
     FST_UNKNOWN_ENUM(effVendorSpecific)
-};
-enum {
-    FST_UNKNOWN_ENUM(ERect)
 };
 typedef enum {
     FST_UNKNOWN_ENUM(kPlugCategAnalysis),
@@ -193,9 +191,6 @@ enum {
     FST_UNKNOWN_ENUM(kVstTransportPlaying),
     FST_UNKNOWN_ENUM(kVstTransportRecording)
 };
-enum {
-    FST_UNKNOWN_ENUM(VstPinProperties),
-};
 
 typedef enum {
     FST_UNKNOWN_ENUM(kVstMidiType),
@@ -258,10 +253,15 @@ typedef struct VstTimeInfo_ {
   FST_UNKNOWN(int) smpteOffset; //int32
 } VstTimeInfo;
 
+typedef struct VstPinProperties_ {
+    FST_UNKNOWN(int) arrangementType;
+    char*label;
+    int flags;
+} VstPinProperties;
+
 
 typedef long t_fstPtrInt; /* pointer sized int */
 #define VSTCALLBACK
-typedef FST_UNKNOWN(int) audioMasterCallback;
 
  /* dispatcher(effect, opcode, index, value, ptr, opt) */
 typedef t_fstPtrInt (t_fstEffectDispatcher)(struct AEffect_*, int, int, t_fstPtrInt, void* const, float);
@@ -271,17 +271,21 @@ typedef void (t_fstEffectProcess)(struct AEffect_*, float**indata, float**outdat
 typedef void (t_fstEffectProcessInplace)(struct AEffect_*, float**indata, float**outdata, int sampleframes);
 typedef void (t_fstEffectProcessInplaceDbl)(struct AEffect_*, double**indata, double**outdata, int sampleframes);
 
+typedef FST_UNKNOWN(t_fstEffectDispatcher*) audioMasterCallback;
+
 typedef struct AEffect_ {
   FST_UNKNOWN(int) magic; /* 0x56737450 */
   FST_UNKNOWN(int) uniqueID;
   FST_UNKNOWN(int) version;
 
-  t_fstEffectDispatcher dispatcher; // (AEffect*, Vst2::effClose, 0, 0, 0, 0);
+  FST_UNKNOWN(void*) object; // FIXXXME
+
+  t_fstEffectDispatcher* dispatcher; // (AEffect*, Vst2::effClose, 0, 0, 0, 0);
   t_fstEffectGetParameter* getParameter; // float(Aeffect*, int)
   t_fstEffectSetParameter* setParameter; // (Aeffect*, int, float)
   t_fstEffectProcess* process;
   t_fstEffectProcessInplace* processReplacing;
-  t_fstEffectProcessInplace* processDoubleReplacing;
+  t_fstEffectProcessInplaceDbl* processDoubleReplacing;
 
   FST_UNKNOWN(int) numPrograms;
   FST_UNKNOWN(int) numParams;
@@ -294,4 +298,9 @@ typedef struct AEffect_ {
   FST_UNKNOWN(t_fstPtrInt) resvd2;
 } AEffect;
 
-
+typedef struct ERect_ {
+  int left;
+  int right;
+  int top;
+  int bottom;
+} ERect;
