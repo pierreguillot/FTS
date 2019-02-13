@@ -15,7 +15,7 @@ JUCE_PLUGINHOST_VST="1"
 - resave the Project `JUCE/Projucer -resave JUCE/extras/AudioPluginHost/AudioPluginHost.jucer`
 - and try to build it:
 
-~~~
+~~~bash
 cd JUCE/extras/AudioPluginHost/Builds/LinuxMakefile
 make
 ~~~
@@ -90,20 +90,18 @@ It's still quite a lot of errors though...
 
 Look at the output of
 
-~~~
+~~~bash
 make -k -C JUCE/extras/AudioPluginHost/Builds/LinuxMakefile 2>&1 | less
 ~~~
 
 There's a number of errors that are `type` related, using these symbols:
 
-~~~
-AEffect
-VstEvent
-VstEvents
-VstPlugCategory
-VstSpeakerArrangement
-VstTimeInfo
-~~~
+- `AEffect`
+- `VstEvent`
+- `VstEvents`
+- `VstPlugCategory`
+- `VstSpeakerArrangement`
+- `VstTimeInfo`
 
 
 ## VstEvent
@@ -115,7 +113,7 @@ the former is assigned a value of `kVstMidiType`, and compared to `kVstSysExType
 There's also related types `VstMidiEvent` and `VstMidiSysexEvent` which can be case to `VstEvent`.
 The sysex-type features a `sysexDump` member, that is a dynamically allocated array (most likely of some `BYTE` type).
 
-~~~
+~~~C
 typedef enum {
   FST_UNKNOWN(kVstMidiType),
   FST_UNKNOWN(kVstSysExType),
@@ -155,7 +153,7 @@ Since `VstEvents` is supposed to be a type, let's naively set it to `int`.
 This reveals, that JUCE really wants a struct with members `numEvents` (`int`)
 and `events` (an array with elements to be cast to `*VstEvent` and the like)
 
-~~~
+~~~C
 typedef struct VstEvents_ {
   int numEvents;
   VstEvent**events;
@@ -192,7 +190,7 @@ typedef struct VstSpeakerArrangement_ {
   int numChannels;
   VstSpeakerProperties*speakers;
 } VstSpeakerArrangement;
-
+~~~
 
 
 ## VstSpeakerProperties
@@ -235,6 +233,7 @@ typedef struct VstTimeInfo_ {
   FST_UNKNOWN(int) smpteFrameRate; //int32
   FST_UNKNOWN(int) smpteOffset; //int32
 } VstTimeInfo;
+~~~
 
 ## AEffect
 rinse & repeat.
@@ -265,7 +264,7 @@ luckily JUCE maps those functions quite directly, so we get:
 
 So we end up with something like:
 
-~~~
+~~~C
 typedef long t_fstPtrInt; /* pointer sized int */
 #define VSTCALLBACK
 
