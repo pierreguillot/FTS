@@ -58,7 +58,7 @@ make -k -C JUCE/extras/AudioPluginHost/Builds/LinuxMakefile 2>&1 \
 | sort -u
 ~~~
 
-This gives us the name `Erect` and symbols starting with the following prefixes:
+This gives us the name `ERect` and symbols starting with the following prefixes:
 - `audioMaster*`
 - `eff*`
 - `kPlug*`
@@ -81,7 +81,7 @@ enum {
 
 We wrap all the values into the `FST_UNKNOWN` macro, because we don't know their actual values yet.
 
-- *TODO*: FST_UNKNOWN(x) x = 98765 + __LINE__
+- *TODO*: `FST_UNKNOWN(x) x = 98765 + __LINE__`
 
 
 # some types
