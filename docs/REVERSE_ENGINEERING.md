@@ -237,5 +237,55 @@ typedef struct VstTimeInfo_ {
 } VstTimeInfo;
 
 ## AEffect
+rinse & repeat.
+
+we need a few helpers:
+
+- `VSTCALLBACK` this seems to be only a decorator, we use `#define VSTCALLBACK` to ignore it for now
+- `audioMasterCallback` ??? (that's probably a pointer to the dispatcher function)
+
+        effect = module->moduleMain ((Vst2::audioMasterCallback) &audioMaster);
+
+- a pointer-sized-int, for now `typedef long t_fstPtrInt;` will do
 
 
+after that the biggest issue is that the `AEffect` struct contains a few function-pointers, namely
+- `dispatcher`
+- `getParameter` & `setParameter`
+- `process`, `processReplacing` and `processDoubleReplacing`
+
+luckily JUCE maps those functions quite directly, so we get:
+- t_fstPtrInt dispatcher(AEffect*, int opcode, int index, t_fstPtrInt value, void* const ptr, float opt);
+- void setParameter(AEffect*, int index, float value);
+- float getParameter(AEffect*, int index);
+- void process(AEffect*, float**indata, float**outdata, int sampleframes);
+- void processReplacing(AEffect*, float**indata, float**outdata, int sampleframes);
+- void processReplacingDouble(AEffect*, double**indata, double**outdata, int sampleframes);
+
+
+## VstPinProperties
+this is also a type rather than an enum.
+play the typedef game again, and we get:
+
+~~~C
+typedef struct VstPinProperties_ {
+    FST_UNKNOWN(int) arrangementType;
+    char*label;
+    int flags;
+} VstPinProperties;
+~~~
+
+
+## ERect
+the last remaining type we missed is `ERect`.
+
+rinse & repeat and we have:
+
+~~~C
+typedef struct ERect_ {
+  int left;
+  int right;
+  int top;
+  int bottom;
+} ERect;
+~~~
