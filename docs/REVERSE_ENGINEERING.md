@@ -43,7 +43,7 @@ ln -s $(pwd)/FST JUCE/modules/juce_audio_processors/format_types/VST3_SDK/plugin
 
 # getting our first enum names
 
-building the AudioPluginHost  gets us a lot of errors.
+building the AudioPluginHost  gets us a lot of errors (about 501).
 these errors are interesting, as this is what we want to implement in the `fst.h` headers.
 luckily JUCE will attempt to put everything in the `Vst2` namespace, making it easier to find the
 interesting broken things.
@@ -79,6 +79,6 @@ enum {
 // ...
 ~~~
 
-We wrap all the values into the `FST_UNKNOWN` macro, because we don't know there actual values yet.
+We wrap all the values into the `FST_UNKNOWN` macro, because we don't know their actual values yet.
 
 # TODO: FST_UNKNOWN(x) x = 98765 + __LINE__
