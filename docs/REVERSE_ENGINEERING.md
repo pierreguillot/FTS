@@ -263,6 +263,49 @@ luckily JUCE maps those functions quite directly, so we get:
 - void processReplacingDouble(AEffect*, double**indata, double**outdata, int sampleframes);
 
 
+So we end up with something like:
+
+~~~
+typedef long t_fstPtrInt; /* pointer sized int */
+#define VSTCALLBACK
+
+ /* dispatcher(effect, opcode, index, value, ptr, opt) */
+typedef t_fstPtrInt (t_fstEffectDispatcher)(struct AEffect_*, int, int, t_fstPtrInt, void* const, float);
+typedef void (t_fstEffectSetParameter)(struct AEffect_*, int, float);
+typedef float (t_fstEffectGetParameter)(struct AEffect_*, int);
+typedef void (t_fstEffectProcess)(struct AEffect_*, float**indata, float**outdata, int sampleframes);
+typedef void (t_fstEffectProcessInplace)(struct AEffect_*, float**indata, float**outdata, int sampleframes);
+typedef void (t_fstEffectProcessInplaceDbl)(struct AEffect_*, double**indata, double**outdata, int sampleframes);
+
+typedef FST_UNKNOWN(t_fstEffectDispatcher*) audioMasterCallback;
+
+typedef struct AEffect_ {
+  FST_UNKNOWN(int) magic; /* 0x56737450 */
+  FST_UNKNOWN(int) uniqueID;
+  FST_UNKNOWN(int) version;
+
+  FST_UNKNOWN(void*) object; // FIXXXME
+
+  t_fstEffectDispatcher* dispatcher; // (AEffect*, Vst2::effClose, 0, 0, 0, 0);
+  t_fstEffectGetParameter* getParameter; // float(Aeffect*, int)
+  t_fstEffectSetParameter* setParameter; // (Aeffect*, int, float)
+  t_fstEffectProcess* process;
+  t_fstEffectProcessInplace* processReplacing;
+  t_fstEffectProcessInplaceDbl* processDoubleReplacing;
+
+  FST_UNKNOWN(int) numPrograms;
+  FST_UNKNOWN(int) numParams;
+  FST_UNKNOWN(int) numInputs;
+  FST_UNKNOWN(int) numOutputs;
+  FST_UNKNOWN(int) flags;
+  FST_UNKNOWN(int) initialDelay;
+
+  FST_UNKNOWN(t_fstPtrInt) resvd1;
+  FST_UNKNOWN(t_fstPtrInt) resvd2;
+} AEffect;
+~~~
+
+
 ## VstPinProperties
 this is also a type rather than an enum.
 play the typedef game again, and we get:
@@ -289,3 +332,7 @@ typedef struct ERect_ {
   int bottom;
 } ERect;
 ~~~
+
+# conclusion
+with the changes in place, we can now compile JUCE's AudioPluginProcessor.
+it's still a long way to make it actually work...
