@@ -241,7 +241,6 @@ typedef struct VstSpeakerArrangement_ {
   VstSpeakerProperties*speakers;
 } VstSpeakerArrangement;
 
-#if 1
 typedef struct VstTimeInfo_ {
   FST_UNKNOWN(double) tempo;
   FST_UNKNOWN(int) timeSigNumerator;
@@ -258,6 +257,3 @@ typedef struct VstTimeInfo_ {
   FST_UNKNOWN(int) smpteFrameRate; //int32
   FST_UNKNOWN(int) smpteOffset; //int32
 } VstTimeInfo;
-#else
-typedef int VstTimeInfo;
-#endif
