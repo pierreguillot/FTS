@@ -41,7 +41,7 @@ EOF
 ln -s $(pwd)/FST JUCE/modules/juce_audio_processors/format_types/VST3_SDK/pluginterfaces/vst2.x
 ~~~
 
-# getting errors
+# getting our first enum names
 
 building the AudioPluginHost  gets us a lot of errors.
 these errors are interesting, as this is what we want to implement in the `fst.h` headers.
@@ -50,6 +50,35 @@ interesting broken things.
 
 So lets start, by extracting all the symbols that should be part of the `Vst2` namespace (but are not):
 
+~~~bash
+make -C JUCE/extras/AudioPluginHost/Builds/LinuxMakefile 2>&1 \
+| grep error: \
+| grep "is not a member of .Vst2.$" \
+| sed -e 's|.* error: ||' | sed -e 's|^.||' -e 's|. .*||' \
+| sort -u
 ~~~
-make 2>&1 | grep error: | grep "is not a member of .Vst2.$"| sed -e 's|.* error: ||' | sed -e 's|^.||' -e 's|. .*||' | sort -u
+
+This gives us the name `Erect` and symbols starting with the following prefixes:
+- `audioMaster*`
+- `eff*`
+- `kPlug*`
+- `kSpeaker*`
+- `kVst*`
+- `Vst*`
+
+As a first draft, let's just add all those symbols as enumerations to our `fst.h` header:
+
+~~~C
+#define FST_UNKNOWN(x) x
+enum {
+    FST_UNKNOWN(audioMasterAutomate),
+    FST_UNKNOWN(audioMasterBeginEdit),
+    // ..
+    FST_UNKNOWN(audioMasterWillReplaceOrAccumulate)
+};
+// ...
 ~~~
+
+We wrap all the values into the `FST_UNKNOWN` macro, because we don't know there actual values yet.
+
+# TODO: FST_UNKNOWN(x) x = 98765 + __LINE__
