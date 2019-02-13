@@ -254,15 +254,16 @@ after that the biggest issue is that the `AEffect` struct contains a few functio
 - `process`, `processReplacing` and `processDoubleReplacing`
 
 luckily JUCE maps those functions quite directly, so we get:
-- t_fstPtrInt dispatcher(AEffect*, int opcode, int index, t_fstPtrInt value, void* const ptr, float opt);
-- void setParameter(AEffect*, int index, float value);
-- float getParameter(AEffect*, int index);
-- void process(AEffect*, float**indata, float**outdata, int sampleframes);
-- void processReplacing(AEffect*, float**indata, float**outdata, int sampleframes);
-- void processReplacingDouble(AEffect*, double**indata, double**outdata, int sampleframes);
+~~~
+t_fstPtrInt dispatcher(AEffect*, int opcode, int index, t_fstPtrInt value, void* const ptr, float opt);
+void setParameter(AEffect*, int index, float value);
+float getParameter(AEffect*, int index);
+void process(AEffect*, float**indata, float**outdata, int sampleframes);
+void processReplacing(AEffect*, float**indata, float**outdata, int sampleframes);
+void processReplacingDouble(AEffect*, double**indata, double**outdata, int sampleframes);
+~~~
 
-
-So we end up with something like:
+And we end up with something like:
 
 ~~~C
 typedef long t_fstPtrInt; /* pointer sized int */
