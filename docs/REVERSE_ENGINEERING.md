@@ -28,8 +28,11 @@ and `aeffectx.h` that simply include the real header.
 ~~~bash
 mkdir FST
 touch FST/fst.h
-echo '#include "fst.h"' > FST/aeffect.h
-echo '#include "fst.h"' > FST/aeffectx.h
+for i in aeffect.h aeffectx.h ; do
+cat > $i <<EOF
+#pragma once
+#include "fst.h"
+EOF
 ~~~
 
 - finally, make JUCE use our headers:
