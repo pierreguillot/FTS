@@ -124,6 +124,7 @@ typedef enum {
     FST_UNKNOWN_ENUM(kPlugCategSynth),
     FST_UNKNOWN_ENUM(kPlugSurroundFx)
 } VstPlugCategory;
+
 typedef enum {
     FST_UNKNOWN_ENUM(kSpeakerArr102),
     FST_UNKNOWN_ENUM(kSpeakerArr30Cine),
