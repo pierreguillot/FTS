@@ -1,6 +1,6 @@
 #define FST_UNKNOWN(x) x
 #define FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
-enum {
+typedef enum {
     FST_UNKNOWN_ENUM(audioMasterAutomate),
     FST_UNKNOWN_ENUM(audioMasterBeginEdit),
     FST_UNKNOWN_ENUM(audioMasterCanDo),
@@ -45,8 +45,8 @@ enum {
     FST_UNKNOWN_ENUM(audioMasterVersion),
     FST_UNKNOWN_ENUM(audioMasterWantMidi),
     FST_UNKNOWN_ENUM(audioMasterWillReplaceOrAccumulate)
-};
-enum {
+} t_fstHostOpcode;;
+typedef enum {
     FST_UNKNOWN_ENUM(effCanBeAutomated),
     FST_UNKNOWN_ENUM(effCanDo),
     FST_UNKNOWN_ENUM(effClose),
@@ -90,7 +90,7 @@ enum {
     FST_UNKNOWN_ENUM(effStartProcess),
     FST_UNKNOWN_ENUM(effStopProcess),
     FST_UNKNOWN_ENUM(effVendorSpecific)
-};
+} t_fstPluginOpcode;
 enum {
     FST_UNKNOWN_ENUM(effFlagsCanDoubleReplacing),
     FST_UNKNOWN_ENUM(effFlagsCanReplacing),
