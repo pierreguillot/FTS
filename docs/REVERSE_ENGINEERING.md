@@ -455,3 +455,83 @@ type `t_fstEffectDispatcher`.
 These two functions do the most work when communicating between host and plugin.
 The opcodes for the plugin start with `eff*` (but not `effFlags*`),
 the opcodes for the host start with `audioMaster*`.
+
+
+# Part3: assigning values to enums
+So let's try our code against some real plugins/hosts.
+We start with some freely available plugin from a proper commercial plugin vendor,
+that has been compiled for linux.
+There are not many, but [u-he](https://u-he.com/) provides the `Protoverb` as binaries
+for Windows, macOS and Linux (hooray!), free of charge (hooray again!).
+*u-he* sell commercial plugins as well, so i figure they have a proper license from Steinberg
+that allows them to do this. (I'm a bit afraid that many of the FLOSS VST2 plugins simply
+violate Steinberg's terms of use. So I prefer to use plugins from commercial manufacturers for now.
+Just for the record: by no means I'm trying to reverse engineer any of the plugin's trade secrets.)
+
+Another bonus of `Protoverb` is that it is made *without* JUCE.
+While JUCE is certainly a great toolkit, having plugins outside
+that ecosystem will hopefully provide better coverage of edge cases...
+
+Anyhow: we can try to load the `Protoverb` plugin in the JUCE AudioPluginHost that we
+just compiled with our broken `fst.h` header.
+
+Using <kbd>Ctrl</kbd>+<kbd>p</kbd> -> `Options` -> `Scan for new or updated VST plug-ins`,
+we select the folder where we extracted the `Protoverb.64.so` file into and hit <kbd>Scan</kbd>.
+
+Not very surprisingly it fails to load the plugin.
+
+The error is:
+> Creating VST instance: Protoverb.64
+> *** Unhandled VST Callback: 1
+
+This errors is printed in `juce_audio_processors/format_types/juce_VSTPluginFormat.cpp`,
+when dispatching the callback opcodes.
+Adding a little `printf` around the `JUCE_VST_WRAPPER_INVOKE_MAIN` it becomes clear that
+the plugin is calling the callback from within the `VstPluginMain` function.
+And it refuses to instantiate if we cannot handle this request.
+
+Looking at the `audioMaster` opcodes, i only see `audioMasterVersion`
+that looks like if it could be queried at the very beginning.
+JUCE returns a hardcoded value of `2400` for this opcode,
+and it seems like this is the VST-version (the plugin would need to make sure
+that the host is expecting a compatible VST version before it instantiates itself).
+
+So we now have our first known enum. Yipee!
+
+~~~C
+#define FST_ENUM_EXP(x, y) x = y
+// ...
+   FST_ENUM_EXP(audioMasterVersion, 1),
+~~~
+
+Recompiling, and scanning for the plugin again, leads to...a crash.
+But before that, we get a bit of information (obviously the plugin is quite verbose when
+initializing).
+The interesting parts are
+
+> *** Unhandled VST Callback: 33
+
+and the crash itself, which happens *after* the plugin returned from `VstMainPlugin`.
+
+Starting `gdb` to get a backtrace:
+
+~~~sh
+$ gdb --args JUCE/extras/AudioPluginHost/Builds/LinuxMakefile/build/AudioPluginHost
+[...]
+(gdb) run
+[...]
+Segmentation fault (core dumped)
+(gdb) bt
+#0  0x00007fffed6c9db2 in ?? () from /home/zmoelnig/src/iem/FST/tmp/vst/Protoverb/Protoverb.64.so
+#1  0x00005555556b4d95 in juce::VSTPluginInstance::create (newModule=..., initialSampleRate=44100, initialBlockSize=512)
+    at ../../../../modules/juce_audio_processors/format_types/juce_VSTPluginFormat.cpp:1146
+[...]
+~~~
+
+the relevant line in `juce_VSTPluginFormat.cpp` calls
+
+~~~
+newEffect->dispatcher (newEffect, Vst2::effIdentify, 0, 0, 0, 0);
+~~~
+
+So now we need to find a plugin opcode.
