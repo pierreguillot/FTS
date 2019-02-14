@@ -82,7 +82,12 @@ enum {
 
 We wrap all the values into the `FST_UNKNOWN` macro, because we don't know their actual values yet.
 
-- *TODO*: `FST_UNKNOWN(x) x = 98765 + __LINE__`
+We even might go as far as assign some pseudo-random value that is far off to each enum,
+in order to not accidentally trigger a real enum:
+
+~~~
+FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
+~~~
 
 
 ## some types
@@ -116,8 +121,8 @@ The sysex-type features a `sysexDump` member, that is a dynamically allocated ar
 
 ~~~C
 typedef enum {
-  FST_UNKNOWN(kVstMidiType),
-  FST_UNKNOWN(kVstSysExType),
+  FST_UNKNOWN_ENUM(kVstMidiType),
+  FST_UNKNOWN_ENUM(kVstSysExType),
 } t_fstEventType;
 
 ##define FSTEVENT_COMMON t_fstEventType type; int byteSize
