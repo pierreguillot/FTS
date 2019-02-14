@@ -274,7 +274,7 @@ typedef void (t_fstEffectProcessInplaceDbl)(struct AEffect_*, double**indata, do
 typedef FST_UNKNOWN(t_fstEffectDispatcher*) audioMasterCallback;
 
 typedef struct AEffect_ {
-  FST_UNKNOWN(int) magic; /* 0x56737450 */
+  FST_UNKNOWN(int) magic; /* 0x56737450, aka 'VstP' */
   FST_UNKNOWN(int) uniqueID;
   FST_UNKNOWN(int) version;
 
