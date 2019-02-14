@@ -1,5 +1,6 @@
 #define FST_UNKNOWN(x) x
 #define FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
+#define FST_ENUM_EXP(x, y) x = y
 typedef enum {
   audioMasterVersion = 1,
 
@@ -48,7 +49,12 @@ typedef enum {
     FST_UNKNOWN_ENUM(audioMasterWillReplaceOrAccumulate)
 } t_fstHostOpcode;;
 typedef enum {
-    FST_UNKNOWN_ENUM(effOpen),
+  FST_ENUM_EXP(effIdentify, 1),
+
+  FST_ENUM_EXP(effSetSampleRate, 2),
+  FST_ENUM_EXP(effSetBlockSize, 3),
+
+  FST_ENUM_EXP(effOpen, 4),
     FST_UNKNOWN_ENUM(effClose),
     FST_UNKNOWN_ENUM(effSetProgram),
     FST_UNKNOWN_ENUM(effGetProgram),
@@ -57,8 +63,6 @@ typedef enum {
     FST_UNKNOWN_ENUM(effGetParamLabel),
     FST_UNKNOWN_ENUM(effGetParamDisplay),
     FST_UNKNOWN_ENUM(effGetParamName),
-    FST_UNKNOWN_ENUM(effSetSampleRate),
-    FST_UNKNOWN_ENUM(effSetBlockSize),
     FST_UNKNOWN_ENUM(effMainsChanged),
     FST_UNKNOWN_ENUM(effEditGetRect),
     FST_UNKNOWN_ENUM(effEditOpen),
@@ -69,7 +73,6 @@ typedef enum {
     FST_UNKNOWN_ENUM(effEditSleep),
     FST_UNKNOWN_ENUM(effEditTop),
 
-    FST_UNKNOWN_ENUM(effIdentify),
     FST_UNKNOWN_ENUM(effGetChunk),
     FST_UNKNOWN_ENUM(effSetChunk),
     FST_UNKNOWN_ENUM(effProcessEvents),
