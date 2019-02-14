@@ -1,12 +1,13 @@
 REVERSE ENGINEERING the FST audio plugin API
 ============================================
 
+# Part1: unknown symbols
 
-# starting
+## starting
 We use JUCE-5.4.1 to compile a VST2-compliant plugin host, but without VST-headers.
 
 - edit `JUCE/extras/AudioPluginHost/AudioPluginHost.jucer` and enable VST, by
-enaming the `JUCE_PLUGINHOST_VST3` variable:
+renaming the `JUCE_PLUGINHOST_VST3` variable:
 
 ~~~
 JUCE_PLUGINHOST_VST="1"
@@ -30,8 +31,8 @@ mkdir FST
 touch FST/fst.h
 for i in aeffect.h aeffectx.h ; do
 cat > $i <<EOF
-#pragma once
-#include "fst.h"
+##pragma once
+##include "fst.h"
 EOF
 ~~~
 
@@ -41,7 +42,7 @@ EOF
 ln -s $(pwd)/FST JUCE/modules/juce_audio_processors/format_types/VST3_SDK/pluginterfaces/vst2.x
 ~~~
 
-# getting our first enum names
+## getting our first enum names
 
 building the AudioPluginHost  gets us a lot of errors (about 501).
 these errors are interesting, as this is what we want to implement in the `fst.h` headers.
@@ -69,7 +70,7 @@ This gives us the name `ERect` and symbols starting with the following prefixes:
 As a first draft, let's just add all those symbols as enumerations to our `fst.h` header:
 
 ~~~C
-#define FST_UNKNOWN(x) x
+##define FST_UNKNOWN(x) x
 enum {
     FST_UNKNOWN(audioMasterAutomate),
     FST_UNKNOWN(audioMasterBeginEdit),
@@ -84,7 +85,7 @@ We wrap all the values into the `FST_UNKNOWN` macro, because we don't know their
 - *TODO*: `FST_UNKNOWN(x) x = 98765 + __LINE__`
 
 
-# some types
+## some types
 if we now re-compile the AudioPluginHost against our new headers, we get a lot less errors (about 198).
 It's still quite a lot of errors though...
 
@@ -104,7 +105,7 @@ There's a number of errors that are `type` related, using these symbols:
 - `VstTimeInfo`
 
 
-## VstEvent
+### VstEvent
 A quick `rgrep VstEvent` on the JUCE sources leads us to `modules/juce_audio_processors/format_types/juce_VSTMidiEventList.h`, which reveals that
 `VstEvent` is a structure with at least two members `type` and `byteSize`.
 The later is of a type compatible with `size_t` (a `sizeof()` value is assigned to it),
@@ -119,7 +120,7 @@ typedef enum {
   FST_UNKNOWN(kVstSysExType),
 } t_fstEventType;
 
-#define FSTEVENT_COMMON t_fstEventType type; int byteSize
+##define FSTEVENT_COMMON t_fstEventType type; int byteSize
 typedef struct VstEvent_ {
  FSTEVENT_COMMON;
 } VstEvent;
@@ -148,7 +149,7 @@ typedef struct VstMidiSysexEvent_ {
 `VstEvent`, `VstMidiEvent` and `VstSysexEvent` are removed from our previous enum.
 
 
-## VstEvents
+### VstEvents
 Since `VstEvents` is supposed to be a type, let's naively set it to `int`.
 This reveals, that JUCE really wants a struct with members `numEvents` (`int`)
 and `events` (an array with elements to be cast to `*VstEvent` and the like)
@@ -161,7 +162,7 @@ typedef struct VstEvents_ {
 ~~~
 
 
-## VstSpeakerArrangement
+### VstSpeakerArrangement
 Since `VstSpeakerArrangement` is supposed to be a type, let's naively set it to `int`.
 This will yield errors about not being able to access members in a non-class type.
 
@@ -193,7 +194,7 @@ typedef struct VstSpeakerArrangement_ {
 ~~~
 
 
-## VstSpeakerProperties
+### VstSpeakerProperties
 resolving `VstSpeakerArrangement`, leaves us with a new type `VstSpeakerProperties`.
 We play the above game again, and get:
 
@@ -203,7 +204,7 @@ typedef struct VstSpeakerProperties_ {
 } VstSpeakerProperties;
 ~~~
 
-## VstPlugCategory
+### VstPlugCategory
 A value of this type is compared to `kPlugCategShell`, so we typedef the enumeration
 with the `kPlug*` names to `VstPlugCategory`.
 
@@ -211,7 +212,7 @@ This also adds the `kPlugSurroundFx` value to this new type, if which I am not s
 yet.
 
 
-## VstTimeInfo
+### VstTimeInfo
 Again playing the game by setting `VstTimeInfo` to `int`, gives us members of the struct.
 So far, the types are guessed based on the values they are assigned to (If a floating-point value is assigned,
 we use `double`, for integer types we use `int`):
@@ -225,7 +226,7 @@ typedef struct VstTimeInfo_ {
   FST_UNKNOWN(int) samplePos;
   FST_UNKNOWN(int) flags;// = Vst2::kVstNanosValid
   FST_UNKNOWN(double) nanoSeconds;
-  
+
   FST_UNKNOWN(double) ppqPos; // (double)position.ppqPosition;
   FST_UNKNOWN(double) barStartPos; // (double)ppqPositionOfLastBarStart;
   FST_UNKNOWN(double) cycleStartPos; // (double)ppqLoopStart;
@@ -235,7 +236,7 @@ typedef struct VstTimeInfo_ {
 } VstTimeInfo;
 ~~~
 
-## AEffect
+### AEffect
 rinse & repeat.
 
 we need a few helpers:
@@ -267,7 +268,7 @@ And we end up with something like:
 
 ~~~C
 typedef long t_fstPtrInt; /* pointer sized int */
-#define VSTCALLBACK
+##define VSTCALLBACK
 
  /* dispatcher(effect, opcode, index, value, ptr, opt) */
 typedef t_fstPtrInt (t_fstEffectDispatcher)(struct AEffect_*, int, int, t_fstPtrInt, void* const, float);
@@ -306,7 +307,7 @@ typedef struct AEffect_ {
 ~~~
 
 
-## VstPinProperties
+### VstPinProperties
 this is also a type rather than an enum.
 play the typedef game again, and we get:
 
@@ -319,7 +320,7 @@ typedef struct VstPinProperties_ {
 ~~~
 
 
-## ERect
+### ERect
 the last remaining type we missed is `ERect`.
 
 rinse & repeat and we have:
@@ -333,6 +334,119 @@ typedef struct ERect_ {
 } ERect;
 ~~~
 
-# conclusion
+## conclusion
 with the changes in place, we can now compile JUCE's AudioPluginProcessor.
 it's still a long way to make it actually work...
+
+
+# Part2: how the plugin interfaces with the host
+For now, we have resolved all the names of the API to some more or less random values.
+We also have discovered a few complex types (`struct`s), and while we know the names
+of the struct-members and have an approximate guess of their types, we have no clue about
+the order of the members, and thus the memory layout.
+Since those structs are presumably used to pass data between a plugin host and a plugin,
+getting them right is very important - at least if we don't want crashes.
+
+Until know, we didn't need to know anything about the structure of the API.
+We just blindly provided "reasonable" (dummy) names whenver we encountered an unknown name.
+
+In order to reverse engineer the entire API, we should have a closer look about what we have so far.
+
+- a lot of integer-typed values, presumably grouped in `enum`s
+  - `VstPlugCategory`
+  - a speaker arrangement type
+  - an event type
+- a few "Vst" types
+  - `VstEvent`, `VstMidiEvent`, `VstSysexEvent`, `VstEvents`
+  - `VstSpeakerProperties`, `VstSpeakerArrangement`
+  - `VstTimeInfo`
+  - `VstPinProperties`
+- a generic type
+  - `ERect` (just a rectangle with 4 corners)
+- the somewhat special `AEffect` struct
+  - it is protected with a magic number (that happens to translate to `VstP`)
+  - it contains function pointer
+  - the function pointer members take a pointer to an AEffect as their first argument
+
+we can also make a few assumptions:
+- some of the structs contain a `flags` field, which is presumable an integer type where bits need to be set/unset
+- for simplicity of the API, most of the integer types will be `int32`.
+
+Anyhow, the `AEffect` seems to be a central structure. Most likely it means *Audio Effect*,
+which is a nice name for any kind of plugin.
+So most likely this structure contains an *instance* of a plugin.
+There are some specialized "class methods" (yay: OOP in C!),
+like a DSP block processing `process` and friends, as well as setters and getters for plugin parameters.
+Apart from that there is a generic `dispatcher` function that takes an opcode (an integer)
+that describes the actual functionality.
+That's a nice trick to keep an API small and stable.
+
+Let's have a quick look at how plugins are instantiated (see the `open` method in
+`JUCE/modules/juce_audio_processors/format_types/juce_VSTPluginFormat.cpp`):
+
+- the plugin file ("dll") is opened (using `dlopen()` or the like)
+- the function with the name `VSTPluginMain` (or as a fallback `main`) is obtained from the dll
+- whenever we want to instantiate a new plugin (`constructEffect`) we call this function,
+  and pass it a callback function as an argument.
+  the plugin may use this callback the query information from the host
+- the `VstPluginMain` function returns a pointer to an instance of `AEffect`
+- we can use the `AEffect.dispatcher` function (which has the same signature as the callback function)
+  to call most of the plugin's methods (including an `open` and `close`).
+  A long list of functions callable via the `dispatcher` can be found in
+  `juce_audio_plugin_client/VST/juce_VST_Wrapper.cpp`
+
+In the `juce_VST_Wrapper.cpp` file, we can also find some more Vst2-symbols of the `eff*` category,
+all of them being used as the opcode argument for the `AEffect.dispatcher`.
+
+~~~
+effEditDraw
+effEditMouse
+effEditSleep
+effEditTop
+effString2Parameter
+effGetVstVersion
+effGetCurrentMidiProgram
+effSetTotalSampleToProcess
+effGetNumMidiInputChannels
+effGetNumMidiOutputChannels
+~~~
+
+We also not that the symbols matching `effFlags*` are never used as opcode specifier.
+Instead they are used as bitmasks for `AEffect.flags`.
+
+While we are at it, maybe the `audioMaster*` symbols are opcodes for the callback we pass
+to the `VstPluginMain` function? Let's check:
+
+~~~bash
+rgrep "audioMaster" JUCE \
+| sed -e 's|audioMasterCallback|CB|g' \
+| egrep "audioMaster[A-Z]"
+~~~
+
+Which seems to confirm our idea.
+Let's also check whether we have missed some `audioMaster*` symbols:
+
+~~~bash
+rgrep "Vst2::audioMaster[A-Z]" JUCE/ \
+| sed -e 's|.*Vst2::\(audioMaster[A-Za-z0-9]*\).*|\1|' \
+| sort -u
+~~~
+
+nope. all of them are already in our `fst.h` file.
+
+
+## Conclusion
+There is only a single symbol that needs to be shared between a plugin and a host:
+the name of the main entry function into the plugin, which can be `VstPluginMain` or `main`.
+
+The host calls this function, and provides a callback function of type
+
+~~~C
+typedef t_fstPtrInt (t_fstEffectDispatcher)(AEffect*, int opcode, int, t_fstPtrInt, void* const, float);
+~~~
+
+The main function returns an `AEffect*` handle, which in turn has a member `dispatcher` of the same
+type `t_fstEffectDispatcher`.
+These two functions do the most work when communicating between host and plugin.
+The opcodes for the plugin start with `eff*` (but not `effFlags*`),
+the opcodes for the host start with `audioMaster*`.
