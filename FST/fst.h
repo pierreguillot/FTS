@@ -1,6 +1,8 @@
 #define FST_UNKNOWN(x) x
 #define FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
 typedef enum {
+  audioMasterVersion = 1,
+
     FST_UNKNOWN_ENUM(audioMasterAutomate),
     FST_UNKNOWN_ENUM(audioMasterBeginEdit),
     FST_UNKNOWN_ENUM(audioMasterCanDo),
@@ -42,7 +44,6 @@ typedef enum {
     FST_UNKNOWN_ENUM(audioMasterTempoAt),
     FST_UNKNOWN_ENUM(audioMasterUpdateDisplay),
     FST_UNKNOWN_ENUM(audioMasterVendorSpecific),
-    FST_UNKNOWN_ENUM(audioMasterVersion),
     FST_UNKNOWN_ENUM(audioMasterWantMidi),
     FST_UNKNOWN_ENUM(audioMasterWillReplaceOrAccumulate)
 } t_fstHostOpcode;;
