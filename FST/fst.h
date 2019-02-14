@@ -56,12 +56,6 @@ enum {
     FST_UNKNOWN_ENUM(effEditGetRect),
     FST_UNKNOWN_ENUM(effEditIdle),
     FST_UNKNOWN_ENUM(effEditOpen),
-    FST_UNKNOWN_ENUM(effFlagsCanDoubleReplacing),
-    FST_UNKNOWN_ENUM(effFlagsCanReplacing),
-    FST_UNKNOWN_ENUM(effFlagsHasEditor),
-    FST_UNKNOWN_ENUM(effFlagsIsSynth),
-    FST_UNKNOWN_ENUM(effFlagsNoSoundInStop),
-    FST_UNKNOWN_ENUM(effFlagsProgramChunks),
     FST_UNKNOWN_ENUM(effGetChunk),
     FST_UNKNOWN_ENUM(effGetEffectName),
     FST_UNKNOWN_ENUM(effGetInputProperties),
@@ -97,6 +91,14 @@ enum {
     FST_UNKNOWN_ENUM(effStopProcess),
     FST_UNKNOWN_ENUM(effVendorSpecific)
 };
+enum {
+    FST_UNKNOWN_ENUM(effFlagsCanDoubleReplacing),
+    FST_UNKNOWN_ENUM(effFlagsCanReplacing),
+    FST_UNKNOWN_ENUM(effFlagsHasEditor),
+    FST_UNKNOWN_ENUM(effFlagsIsSynth),
+    FST_UNKNOWN_ENUM(effFlagsNoSoundInStop),
+    FST_UNKNOWN_ENUM(effFlagsProgramChunks),
+} t_fstPluginFlags;
 typedef enum {
     FST_UNKNOWN_ENUM(kPlugCategAnalysis),
     FST_UNKNOWN_ENUM(kPlugCategEffect),
