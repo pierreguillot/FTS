@@ -534,4 +534,80 @@ the relevant line in `juce_VSTPluginFormat.cpp` calls
 newEffect->dispatcher (newEffect, Vst2::effIdentify, 0, 0, 0, 0);
 ~~~
 
-So now we need to find a plugin opcode.
+So we are accessing the `dispatcher` member of the `AEffect` struct.
+Since we don't really know the memory layour of `AEffect` yet, the pointer most likely points to garbage
+
+
+- create minimal VstHost
+- magick: @0
+- unique ID: 1969770582 0x75685056 @28*4
+
+~~~python
+def uid2str(uid):
+     s=""
+     s+=chr((uid>>24)&0xFF)
+     s+=chr((uid>>16)&0xFF)
+     s+=chr((uid>> 8)&0xFF)
+     s+=chr((uid>> 0)&0xFF)
+     return s
+~~~
+
+
+ma gi c_ __ 00 00 00 00  fu nc ti on ?a dd re ss
+fu nc ti on ?a dd re ss  fu nc ti on ?a dd re ss
+fu nc ti on ?a dd re ss  28 29 2A 2B 2C 2D 2E 2F
+30 31 32 33 34 35 36 37  38 39 3A 3B 3C 3D 3E 3F
+40 41 42 43 44 45 46 47  48 49 4A 4B 4C 4D 4E 4F
+50 51 52 53 54 55 56 57  58 59 5A 5B 5C 5D 5E 5F
+60 61 62 63 64 65 66 67  68 69 6A 6B 6C 6D 6E 6F
+un iq id __ 74 75 76 77  fu nc ti on ?a dd re ss
+fu nc ti on ?a dd re ss  88 89 8A 8B 8C 8D 8E 8F
+90 91 92 93 94 95 96 97  98 99 9A 9B 9C 9D 9E 9F
+A0 A1 A2 A3 A4 A5 A6 A7  A8 A9 AA AB AC AD AE AF
+B0 B1 B2 B3 B4 B5 B6 B7  B8 B9 BA BB BC BD BE BF
+C0 C1 C2 C3 C4 C5 C6 C7  C8 C9 CA CB CC CD CE CF
+D0 D1 D2 D3 D4 D5 D6 D7  D8 D9 DA DB DC DD DE DF
+E0 E1 E2 E3 E4 E5 E6 E7  E8 E9 EA EB EC ED EE EF
+F0 F1 F2 F3 F4 F5 F6 F7  F8 F9 FA FB FC FD FE FF
+
+InstaLooper(1.2)|Protoverb(1.0/4105)
+00-03: magic-number
+04-07: 0
+08-0F: a pointer [dispatch/process/getParam/setParam]
+10-17: a pointer [dispatch/process/getParam/setParam]
+18-1F: a pointer [dispatch/process/getParam/setParam]
+20-27: a pointer [dispatch/process/getParam/setParam]
+28-2F: 01.00.00.00.18.00.00.00|01.00.00.00.05.00.00.00 [numPrograms, numParams?]
+30-37: 02.00.00.00.02.00.00.00 [numInputs, numOutputs?]
+38-3F: 11.0000|31.0000 [flags?]
+40-47: 0
+48-4F: 0
+50-57: 0
+58-5F: 0000.80.f3 == 00.00.00.00 + (float)1.
+60-67: pointer to (&effect-48) [object?]
+68-6F: 0
+70-73: unique-id
+74-77: 01.00.00.00 [version?]
+78-7F: a pointer [processRepl/processDblRepl]
+80-87: a pointer [processRepl/processDblRepl]
+88-8F: 0
+
+Digits:30-37: 0/2 (no in, 2 out?)
+Digits:38-3F: 30.01.00000
+Digits:74-77: 01.00.00.00
+
+BowEcho:30-37: 2/2
+BowEcho:38-3F: 31.02.0000
+BowEcho:74-77: 6E.00.00.00
+
+Danaides:30-37: 2/2
+Danaides:38-3F: 31.02.0000
+Danaides:74-77: 66.00.00.00
+
+hypercyclic:30-37: 0/2
+hypercyclic:38-3F: 31.03.0000
+hypercyclic:74-77: 96.00.00.00
+
+tonespace:30-37: 0/2
+tonespace:38-3F: 31.03.0000
+tonespace:74-77: FA.00.00.00
