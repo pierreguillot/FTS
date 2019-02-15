@@ -9,7 +9,7 @@ typedef int t_fstInt32; /* 32bit int */
 #define FST_ENUM_EXP(x, y) x = y
 typedef enum {
   audioMasterVersion = 1,
-
+  // 13: sending latency
     FST_UNKNOWN_ENUM(audioMasterAutomate),
     FST_UNKNOWN_ENUM(audioMasterBeginEdit),
     FST_UNKNOWN_ENUM(audioMasterCanDo),
