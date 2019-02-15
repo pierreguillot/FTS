@@ -1,3 +1,9 @@
+
+#define VSTCALLBACK
+typedef long t_fstPtrInt; /* pointer sized int */
+typedef int t_fstInt32; /* 32bit int */
+
+
 #define FST_UNKNOWN(x) x
 #define FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
 #define FST_ENUM_EXP(x, y) x = y
@@ -279,9 +285,6 @@ typedef struct VstPinProperties_ {
     int flags;
 } VstPinProperties;
 
-
-typedef long t_fstPtrInt; /* pointer sized int */
-#define VSTCALLBACK
 
  /* dispatcher(effect, opcode, index, value, ptr, opt) */
 typedef t_fstPtrInt (t_fstEffectDispatcher)(struct AEffect_*, int, int, t_fstPtrInt, void* const, float);
