@@ -480,7 +480,7 @@ nope. all of them are already in our `fst.h` file.
 
 ## Conclusion
 There is only a single symbol that needs to be shared between a plugin and a host:
-the name of the main entry function into the plugin, which can be `VstPluginMain` or `main`.
+the name of the main entry function into the plugin, which can be `VSTPluginMain` or `main`.
 
 The host calls this function, and provides a callback function of type
 
