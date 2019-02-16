@@ -589,6 +589,7 @@ JUCE is rather big and it turns out that it takes just too long...)
 #include "fst.h"
 typedef AEffect* (t_fstMain)(t_fstEffectDispatcher*);
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
+  printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
   return 0;
 }
 t_fstMain* load_plugin(const char* filename) {
@@ -598,6 +599,7 @@ t_fstMain* load_plugin(const char* filename) {
   if(!vstfun)vstfun=dlsym(handle, "VSTPluginMain");
   if(!vstfun)vstfun=dlsym(handle, "main");
   if(!vstfun)dlclose(handle);
+  printf("loaded %s as %p: %p\n", filename, handle, vstfun);
   return (t_fstMain*)vstfun;
 }
 int test_plugin(const char*filename) {
@@ -613,40 +615,109 @@ int main(int argc, const char*argv[]) {
 }
 ~~~
 
+After building with `g++ -IFST FstHost.cpp -o FstHost -ldl -lrt` we can now try to open
+plugins with `./FstHost path/to/plugin.so`.
 
+Running it on a real plugin ("Protoverb.64.so") just returns
+> FstHost::dispatcher((nil), 1, 0, 0, (nil), 0.000000);
+> unable to instantiate plugin from 'tmp/vst/Protoverb/Protoverb.64.so'
 
+So we apparently *must* handle the `audioMasterVersion` opcode in our local dispatcher
+(just like JUCE does); let's extend our local dispatcher to do that:
 
-- create minimal VstHost
-- magick: @0
-- unique ID: 1969770582 0x75685056 @28*4
-
-~~~python
-def uid2str(uid):
-     s=""
-     s+=chr((uid>>24)&0xFF)
-     s+=chr((uid>>16)&0xFF)
-     s+=chr((uid>> 8)&0xFF)
-     s+=chr((uid>> 0)&0xFF)
-     return s
+~~~
+t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
+  printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
+  switch(opcode) {
+  case audioMasterVersion: return 2400;
+  default:  break;
+  }
+  return 0;
+}
 ~~~
 
+And now we are getting somewhere!
 
-ma gi c_ __ 00 00 00 00  fu nc ti on ?a dd re ss
-fu nc ti on ?a dd re ss  fu nc ti on ?a dd re ss
-fu nc ti on ?a dd re ss  28 29 2A 2B 2C 2D 2E 2F
-30 31 32 33 34 35 36 37  38 39 3A 3B 3C 3D 3E 3F
-40 41 42 43 44 45 46 47  48 49 4A 4B 4C 4D 4E 4F
-50 51 52 53 54 55 56 57  58 59 5A 5B 5C 5D 5E 5F
-60 61 62 63 64 65 66 67  68 69 6A 6B 6C 6D 6E 6F
-un iq id __ 74 75 76 77  fu nc ti on ?a dd re ss
-fu nc ti on ?a dd re ss  88 89 8A 8B 8C 8D 8E 8F
-90 91 92 93 94 95 96 97  98 99 9A 9B 9C 9D 9E 9F
-A0 A1 A2 A3 A4 A5 A6 A7  A8 A9 AA AB AC AD AE AF
-B0 B1 B2 B3 B4 B5 B6 B7  B8 B9 BA BB BC BD BE BF
-C0 C1 C2 C3 C4 C5 C6 C7  C8 C9 CA CB CC CD CE CF
-D0 D1 D2 D3 D4 D5 D6 D7  D8 D9 DA DB DC DD DE DF
-E0 E1 E2 E3 E4 E5 E6 E7  E8 E9 EA EB EC ED EE EF
-F0 F1 F2 F3 F4 F5 F6 F7  F8 F9 FA FB FC FD FE FF
+Let's examine the `AEffect` data we get from the VSTPluginMain-function.
+Setting a breakpoint in `gdb` right after the call to `vstmain`, and running
+`print *effect` gives us:
+
+~~~gdb
+$1 = {magic = 1450406992, uniqueID = 0, version = -141927152, object = 0x7ffff78a5d70, dispatcher = 0x7ffff78a5d60,
+  getParameter = 0x7ffff78a5d50, setParameter = 0x500000001, process = 0x200000002, processReplacing = 0x31,
+  processDoubleReplacing = 0x0, numPrograms = 0, numParams = 0, numInputs = 16, numOutputs = 0, flags = 0,
+  initialDelay = 1065353216, resvd1 = 93824992479632, resvd2 = 0}
+~~~
+
+This looks bad enough.
+Not all looks bad though: `magic` has a value of `1450406992`, which really is `0x56737450` in hex,
+which happens to be the magic number `VstP`.
+The rest however is absymal: negative version numbers, unique IDs that are `0` (how unique can you get),
+a function pointer (to `processReplacing`) that is `0x31` which is definitely invalid.
+
+So let's take a closer look at the actual data.
+For this, we just dump the memory where `AEffect*` points to into a file
+(using `dumpdata(filename, effect, 160);` with the function below, just after calling `VSTPluginMain`)
+and then use some hexeditor on it.
+
+~~~
+#include <string>
+void dumpdata(const char*basename, const void*data, size_t length) {
+  const char*ptr = (const char*)data;
+  std::string filename = std::string(basename);
+  filename+=".bin";
+  FILE*f = fopen(filename.c_str(), "w");
+  for(size_t i=0; i<length; i++) {
+    fprintf(f, "%c", *ptr++);
+  }
+  fclose(f);
+}
+~~~
+
+If we run this repeatedly on the same plugin file, we can collect multiple dumps
+(don't forget to rename them, else they will be overwritten).
+Comparing those multiple dumps, we can see that many bytes stay the same, but a few
+are changing for each run.
+
+~~~
+00000000  50 74 73 56 00 00 00 00  10 ad 87 f7 ff 7f 00 00  |PtsV............|
+00000010  70 ad 87 f7 ff 7f 00 00  60 ad 87 f7 ff 7f 00 00  |p.......`.......|
+00000020  50 ad 87 f7 ff 7f 00 00  01 00 00 00 05 00 00 00  |P...............|
+00000030  02 00 00 00 02 00 00 00  31 00 00 00 00 00 00 00  |........1.......|
+00000040  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000050  10 00 00 00 00 00 00 00  00 00 00 00 00 00 80 3f  |...............?|
+00000060  c0 fb 58 55 55 55 00 00  00 00 00 00 00 00 00 00  |..XUUU..........|
+00000070  56 50 68 75 01 00 00 00  80 ad 87 f7 ff 7f 00 00  |VPhu............|
+00000080  90 ad 87 f7 ff 7f 00 00  00 00 00 00 00 00 00 00  |................|
+00000090  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+~~~
+
+Comparing the changing values with the addresses of heap-allocated memory and functions
+(e.g. the DLL-handle returned by `dlopen()` and the function pointer returned by `dlsym()`)
+it becomes clear, that we have 6 function pointers
+(e.g. `?? ad 87 f7 ff 7f 00 00` at @8, @10, @18, @20, @78, @80) and
+1 heap allocated object (e.g. `c0 fb 58 55 55 55 00 00` at @60).
+On my amd64 system, pointers take 8 byte and aligned at 8 bytes (one halfline in the hexdump).
+
+We don't know which functions are stored in which pointer,
+but it cannot be coincidence, that our `AEffect` struct has exactly 6 function pointers
+(`dispatcher`, `getParameter`, `setParameter`, `process`, `processReplacing`, `processDoubleReplacing`).
+We are also a bit lucky, because we dont really know whether each function ptr must actually be filled
+with a valid function (it might be allowed to set them to `0x0`).
+The `Protoverb` plugin seems to implement all of them!
+
+The heap allocated object (@60) might match the `void*object` member.
+
+Comparing the hexdumps of multiple different plugins, we notice that @70
+there are always 4 printable characters (here `VPhu`), although they are different
+for each plugin.
+Additionally, we notice that the `Protoverb` object (being pretty verbose on the stderr)
+said something like:
+> setUniqueID (1969770582)
+
+This number is `0x75685056` in hex. If we compare that to the bytes @70,
+we cannot help but note that we have discovered the location of the `uniqueID` member.
+
 
 InstaLooper(1.2)|Protoverb(1.0/4105)
 00-03: magic-number
