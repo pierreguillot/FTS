@@ -3,6 +3,8 @@
 #include <dlfcn.h>
 #include "fst.h"
 
+#include <string>
+
 typedef AEffect* (t_fstMain)(t_fstEffectDispatcher*);
 
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
@@ -12,6 +14,16 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
   default:  break;
   }
   return 0;
+}
+void dumpdata(const char*basename, const void*data, size_t length) {
+  const char*ptr = (const char*)data;
+  std::string filename = std::string(basename);
+  filename+=".bin";
+  FILE*f = fopen(filename.c_str(), "w");
+  for(size_t i=0; i<length; i++) {
+    fprintf(f, "%c", *ptr++);
+  }
+  fclose(f);
 }
 
 t_fstMain* load_plugin(const char* filename) {
