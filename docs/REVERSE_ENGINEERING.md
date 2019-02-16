@@ -1,6 +1,44 @@
 REVERSE ENGINEERING the FST audio plugin API
 ============================================
 
+# Part0: used software
+
+our development system used for reverse-engineering is a
+Debian GNU/Linux (amd64) box, running Debian testing/unstable.
+
+
+## general software
+Apart from the general system utilities (like `emacs`, `vi`, `sed`, `grep`,...)
+found on any ordinary Linux system, we also use:
+
+- Compiler: `gcc` (Debian 8.2.0-20) 8.2.0
+- Debugger: `gdb` (Debian 8.2.1-1) 8.2.1
+- Hexeditor: `bless`
+- Diff-viewers: `meld`, `vimdiff`, `vbindiff`
+
+
+## VST related
+all VST-related software was accessed on 2019-02-16.
+
+
+### Frameworks
+
+- JUCE-5.4.1: https://d30pueezughrda.cloudfront.net/juce/juce-5.4.1-linux.zip
+
+### Plugins
+
+- U-he Protoverb: https://u-he.com/products/protoverb/
+- InstaLooper: https://www.audioblast.me/instalooper.html
+- BowEcho: https://ineardisplay.com/plugins/legacy/
+- Danaides: https://ineardisplay.com/plugins/legacy/
+- Digits: http://www.extentofthejam.com/
+- Hypercyclic: http://www.mucoder.net/en/hypercyclic/
+- Tonespace: http://www.mucoder.net/en/tonespace/
+
+### Hosts
+
+- Reaper: https://www.reaper.fm/download.php (reaper5965_linux_x86_64.tar.xz)
+
 # Part1: unknown symbols
 
 ## starting
