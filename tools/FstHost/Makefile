@@ -1,4 +1,5 @@
-CPPFLAGS="-I../../FST"
+CPPFLAGS=-I../../FST
+CXXFLAGS=-g -O0
 LDFLAGS=-ldl
 
 FstHost:
