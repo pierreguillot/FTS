@@ -1,5 +1,5 @@
 CPPFLAGS=-I../../FST
 CXXFLAGS=-g -O0
-LDFLAGS=-ldl
+LDFLAGS=-ldl -lrt
 
 FstHost:
