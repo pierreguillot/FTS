@@ -573,7 +573,47 @@ newEffect->dispatcher (newEffect, Vst2::effIdentify, 0, 0, 0, 0);
 ~~~
 
 So we are accessing the `dispatcher` member of the `AEffect` struct.
-Since we don't really know the memory layour of `AEffect` yet, the pointer most likely points to garbage
+Since we don't really know the memory layour of `AEffect` yet, the pointer most likely points to garbage.
+
+Anyhow, in order to discover the layout of `AEffect` we need to examine it more closely.
+
+For this we write a super-simplistic `FstHost` application,
+that can load plugins for testing.
+(I originally intended to just use the JUCE framework for this;
+but we will experience lots of crashes, and will have to recompile *often*.
+JUCE is rather big and it turns out that it takes just too long...)
+
+~~~C
+#include <stdio.h>
+#include <dlfcn.h>
+#include "fst.h"
+typedef AEffect* (t_fstMain)(t_fstEffectDispatcher*);
+t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
+  return 0;
+}
+t_fstMain* load_plugin(const char* filename) {
+  void*handle = dlopen(filename, RTLD_NOW | RTLD_GLOBAL);
+  void*vstfun = 0;
+  if(!handle)return 0;
+  if(!vstfun)vstfun=dlsym(handle, "VSTPluginMain");
+  if(!vstfun)vstfun=dlsym(handle, "main");
+  if(!vstfun)dlclose(handle);
+  return (t_fstMain*)vstfun;
+}
+int test_plugin(const char*filename) {
+  t_fstMain*vstmain = load_plugin(filename);
+  if(!vstmain)return printf("'%s' was not loaded\n");
+  AEffect*effect = vstmain(&dispatcher);
+  if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
+  return 0;
+}
+int main(int argc, const char*argv[]) {
+  for(int i=1; i<argc; i++) test_plugin(argv[i]);
+  return 0;
+}
+~~~
+
+
 
 
 - create minimal VstHost
