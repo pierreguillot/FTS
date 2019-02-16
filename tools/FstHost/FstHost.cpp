@@ -6,7 +6,7 @@
 typedef AEffect* (t_fstMain)(t_fstEffectDispatcher*);
 
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
-  printf("FstHost::dispatch(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
+  printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
   switch(opcode) {
   case audioMasterVersion: return 2400;
   default:  break;
