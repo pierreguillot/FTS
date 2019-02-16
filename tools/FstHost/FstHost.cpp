@@ -36,20 +36,12 @@ t_fstMain* load_plugin(const char* filename) {
   return (t_fstMain*)vstfun;
 }
 
-void test_plugin(const char*filename) {
+int test_plugin(const char*filename) {
   t_fstMain*vstmain = load_plugin(filename);
-  if(!vstmain)
-    return;
+  if(!vstmain)return printf("'%s' was not loaded\n", filename);
   AEffect*effect = vstmain(&dispatcher);
-  if(!effect) {
-    printf("unable to instantiate plugin from '%s'\n", filename);
-    return;
-  }
-  if(effect->magic != 0x56737450) {
-    printf("magic failed: 0x%08X", effect->magic);
-    return;
-  }
-
+  if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
+  if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
   printf("testing dispatcher\n");
   for(int i=0; i<74; i++) {
     bool skip = false;
@@ -115,6 +107,7 @@ void test_plugin(const char*filename) {
       printf("\t'%.*s'\n", 16, buffer);
   }
   printf("tested dispatcher\n");
+  return 0;
 }
 
 int main(int argc, const char*argv[]) {
