@@ -41,6 +41,7 @@ int test_plugin(const char*filename) {
   if(!vstmain)return printf("'%s' was not loaded\n", filename);
   AEffect*effect = vstmain(&dispatcher);
   if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
+  //dumpdata(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
   printf("testing dispatcher\n");
   for(int i=0; i<74; i++) {
