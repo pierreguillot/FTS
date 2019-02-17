@@ -674,10 +674,9 @@ void dumpdata(const char*basename, const void*data, size_t length) {
 }
 ~~~
 
-If we run this repeatedly on the same plugin file, we can collect multiple dumps
-(don't forget to rename them, else they will be overwritten).
-Comparing those multiple dumps, we can see that many bytes stay the same, but a few
-are changing for each run.
+Inspecting the binary dumps with `bless`, we see that there are quite a lot of
+8- (and some additional 4-) byte sequences that are always zero.
+namely: bytes @04-07 (addresses in hex-notation), @40-57 and @68-6F.
 
 ~~~
 00000000  50 74 73 56 00 00 00 00  10 ad 87 f7 ff 7f 00 00  |PtsV............|
@@ -691,6 +690,11 @@ are changing for each run.
 00000080  90 ad 87 f7 ff 7f 00 00  00 00 00 00 00 00 00 00  |................|
 00000090  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 ~~~
+
+If we run this repeatedly on the same plugin file, we can collect multiple dumps
+(don't forget to rename them, else they will be overwritten).
+Comparing those multiple dumps, we can see that many bytes stay the same, but a few
+are changing for each run.
 
 Comparing the changing values with the addresses of heap-allocated memory and functions
 (e.g. the DLL-handle returned by `dlopen()` and the function pointer returned by `dlsym()`)
@@ -717,6 +721,38 @@ said something like:
 
 This number is `0x75685056` in hex. If we compare that to the bytes @70,
 we cannot help but note that we have discovered the location of the `uniqueID` member.
+
+If we start long enough at the remaining byte sequences, we see some other patterns
+as well.
+esp. at positions @28-37, there seem to be four (little endian) 4-byte integer values
+(`1,5,2,2` for the *ProtoVerb*). These could map to `numPrograms`, `numParams`,
+`numInputs` and `numOutputs`.
+These assumption is hardened by looking at other plugins like *Digits*, *tonespace* and *hypercyclic*
+that are synth-only plugins (no input) and indeed have `0` at @34-37.
+I don't know how many plugins really implement *programs*,
+but it doesn't sound absurd if all plugins we inspect have only a single program,
+while most have numerous parameters.
+So for now, let's assume that @28-37 are indeed  `numPrograms`, `numParams`, `numInputs`
+and `numOutputs`, each taking 4 bytes.
+
+The remaining non-zero bytesequences are
+- @38-3f
+- @5c-5f: always `00 00 80 3f`, which - weirdly enough - is the `1.f` in single-precision floating point (little endian)
+- @74-77
+
+We still have the following fields to find:
+- `flags`
+- `initialDelay`
+- `version`
+- `resvd1`, `resvd2`
+
+The `reserved` fields are most likely set to `0`
+(all fields reserved for future use in structs, usually don't ever get used).
+We know that JUCE (ab?)uses one of them to store a pointer, so they must be 8-bytes (on our 64bit system),
+but we don't have any clue yet about their exact position in memory.
+
+Searching for the `initialDelay` in the JUCE-code, it seems that this value is *in samples*,
+which should make it an `int` value.
 
 
 InstaLooper(1.2)|Protoverb(1.0/4105)
