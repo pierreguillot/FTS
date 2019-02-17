@@ -495,7 +495,7 @@ The opcodes for the plugin start with `eff*` (but not `effFlags*`),
 the opcodes for the host start with `audioMaster*`.
 
 
-# Part3: assigning values to enums
+# Part3: AEffect
 So let's try our code against some real plugins/hosts.
 We start with some freely available plugin from a proper commercial plugin vendor,
 that has been compiled for linux.
@@ -945,3 +945,51 @@ Opening the same plugin in *REAPER* we can also learn a few things:
 
 
 So at least we have the number of inputs, outputs, programs and parameters right, as well as the uniquID.
+
+
+## flags
+
+We have the following flags to assign:
+- `effFlagsHasEditor`
+- `effFlagsIsSynth`
+- `effFlagsCanDoubleReplacing`
+- `effFlagsCanReplacing`
+- `effFlagsNoSoundInStop`
+- `effFlagsProgramChunks`
+
+While the bitfields at @38 have the following values (displayed as little-endian)
+| plugin      | flags
+|-------------|-------------------
+| ProtoEffect | `00000000 00110001`
+| InstaLooper | `00000000 00010001`
+| Digits      | `00000001 00110000`
+| BowEcho     | `00000010 00110001`
+| Danaides    | `00000010 00110001`
+| hypercyclic | `00000011 00110001`
+| tonespace   | `00000011 00110001`
+
+Things we know from running the plugins through REAPER:
+- all effects except *Digits* have a GUI
+- *Protoverb*, *InstaLooper*, *BowEcho*, *Danaides* are all effects (with input and output)
+- *Digits*, *hypercyclic*, *tonespace* are all instruments (aka synths; no input)
+
+
+Comparing this with our binary flag values, we can conclude:
+
+| flag              | value  |
+|-------------------|--------|
+| effFlagsHasEditor | `1<<1` |
+| effFlagsIsSynth   | `1<<9` |
+
+
+It's a it strange that we have `processReplacing` and `processDoubleReplacing` functions
+(according to our hacked up `AEffect` definition) for each plugin,
+although there are no more flags that are all set to `true` for each plugin.
+This might be a problem with our `AEffect` struct or with the plugins
+(or the information about replacing-functions might not be redundant.)
+
+Another observation is that flag `1<<10` is set to `true` for all JUCE-plugins,
+and to `false` for the rest.
+
+I don't really know what either `effFlagsNoSoundInStop` nor `effFlagsProgramChunks`
+actually mean.
