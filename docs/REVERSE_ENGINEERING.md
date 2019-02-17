@@ -800,7 +800,11 @@ but all 4 plugins being based on JUCE (which nudges the user into setting a prop
 Using a version number of `1` as *I don't care* is also not something unheard of...).
 
 Collecting all the info we have so far, we end up with something like the following
-(using `pad` variables to account for unknown 0-memory)
+(using `pad` variables to account for unknown 0-memory).
+There's also a `float1` dummy member (that always holds the value `1.f`),
+and the `initialDelay` is set to the seemingly const-value at @50 (`16` in decimal,
+which is a plausible value for a sample delay; `0` would be better though...).
+
 ~~~C
 typedef struct AEffect_ {
   t_fstInt32 magic; /* @0 0x56737450, aka 'VstP' */
@@ -820,10 +824,10 @@ typedef struct AEffect_ {
   t_fstPtrInt resvd2; //??
   t_fstPtrInt initialDelay; //??
 
-  char  pad2[4]; //?
-  float       myfloat; //?
+  char pad2[4]; //?
+  float float1; //?
   void* object; // FIXXXME
-  t_fstPtrInt pad3; //??
+  char pad3[8] pad3; //??
 
   t_fstInt32 uniqueID; // @112
   t_fstInt32 version;
@@ -834,45 +838,57 @@ typedef struct AEffect_ {
 } AEffect;
 ~~~
 
+If we run the same tests on 32bit plugins, we notice that we got the alignment wrong
+in a number of places.
 
-InstaLooper(1.2)|Protoverb(1.0/4105)
-00-03: magic-number
-04-07: 0
-08-0F: a pointer [dispatch/process/getParam/setParam]
-10-17: a pointer [dispatch/process/getParam/setParam]
-18-1F: a pointer [dispatch/process/getParam/setParam]
-20-27: a pointer [dispatch/process/getParam/setParam]
-28-2F: 01.00.00.00.18.00.00.00|01.00.00.00.05.00.00.00 [numPrograms, numParams?]
-30-37: 02.00.00.00.02.00.00.00 [numInputs, numOutputs?]
-38-3F: 11.0000|31.0000 [flags?]
-40-47: 0
-48-4F: 0
-50-57: 0
-58-5F: 0000.80.f3 == 00.00.00.00 + (float)1.
-60-67: pointer to (&effect-48) [object?]
-68-6F: 0
-70-73: unique-id
-74-77: 01.00.00.00 [version?]
-78-7F: a pointer [processRepl/processDblRepl]
-80-87: a pointer [processRepl/processDblRepl]
-88-8F: 0
+Here's a hexdump of the 1st 96 bytes of a 32bit `AEffect`:
 
-Digits:30-37: 0/2 (no in, 2 out?)
-Digits:38-3F: 30.01.00000
-Digits:74-77: 01.00.00.00
+~~~
+00000000  50 74 73 56 50 91 8d f7  30 92 8d f7 f0 91 8d f7  |PtsVP...0.......|
+00000010  c0 91 8d f7 01 00 00 00  05 00 00 00 02 00 00 00  |................|
+00000020  02 00 00 00 31 00 00 00  00 00 00 00 00 00 00 00  |....1...........|
+00000030  10 00 00 00 00 00 00 00  00 00 00 00 00 00 80 3f  |...............?|
+00000040  c0 ee 56 56 00 00 00 00  56 50 68 75 01 00 00 00  |..VV....VPhu....|
+00000050  80 92 8d f7 c0 92 8d f7  00 00 00 00 00 00 00 00  |................|
+~~~
 
-BowEcho:30-37: 2/2
-BowEcho:38-3F: 31.02.0000
-BowEcho:74-77: 6E.00.00.00
+As we can see, there is no zero padding after the initial 4-byte `magic`.
+Also the number of zeros around the `object` member seems to be off.
 
-Danaides:30-37: 2/2
-Danaides:38-3F: 31.02.0000
-Danaides:74-77: 66.00.00.00
+Using `pointer sized int` instead of `int32` helps a bit, although there's still something
+decidedly weird going on before the `00 00 80 3f` (float 1.f) sequence,
+which we will have to fix later:
 
-hypercyclic:30-37: 0/2
-hypercyclic:38-3F: 31.03.0000
-hypercyclic:74-77: 96.00.00.00
+~~~
+typedef struct AEffect_ {
+  t_fstPtrInt magic;
+  t_fstEffectDispatcher* dispatcher;  //??
+  t_fstEffectProcess* process; //?
+  t_fstEffectGetParameter* getParameter; //??
+  t_fstEffectSetParameter* setParameter; //??
 
-tonespace:30-37: 0/2
-tonespace:38-3F: 31.03.0000
-tonespace:74-77: FA.00.00.00
+  t_fstInt32 numPrograms;
+  t_fstInt32 numParams;
+  t_fstInt32 numInputs;
+  t_fstInt32 numOutputs;
+
+  t_fstPtrInt flags;
+  t_fstPtrInt resvd1; //??
+  t_fstPtrInt resvd2; //??
+  t_fstPtrInt initialDelay; //??
+
+#if defined(__x86_64__)
+  char pad2[4]; //????
+#else
+  char pad2[8]; //????
+#endif
+  float float1; //????
+  void* object;
+  t_fstPtrInt pad3; //??
+  t_fstInt32 uniqueID;
+  t_fstInt32 version;
+
+  t_fstEffectProcessInplace* processReplacing; //??
+  t_fstEffectProcessInplaceDbl* processDoubleReplacing; //??
+} AEffect;
+~~~
