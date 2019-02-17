@@ -803,7 +803,9 @@ Collecting all the info we have so far, we end up with something like the follow
 (using `pad` variables to account for unknown 0-memory).
 There's also a `float1` dummy member (that always holds the value `1.f`),
 and the `initialDelay` is set to the seemingly const-value at @50 (`16` in decimal,
-which is a plausible value for a sample delay; `0` would be better though...).
+which is a plausible value for a sample delay;
+btw, loading the *Protoverb* plugin into *REAPER*,
+will also print something about a 16samples delay to the stderr).
 
 ~~~C
 typedef struct AEffect_ {
@@ -892,3 +894,54 @@ typedef struct AEffect_ {
   t_fstEffectProcessInplaceDbl* processDoubleReplacing; //??
 } AEffect;
 ~~~
+
+
+### conf. REAPER
+Printing the contents `AEffect` for the *Protoverb* plugin in gdb, gives something like:
+
+~~~
+{magic = 1450406992,
+ dispatcher = 0xf78d9150,
+ process = 0xf78d9230,
+ getParameter = 0xf78d91f0,
+ setParameter = 0xf78d91c0,
+ numPrograms = 1,
+ numParams = 5,
+ numInputs = 2,
+ numOutputs = 2,
+ flags = 49,
+ resvd1 = 0,
+ resvd2 = 0,
+ initialDelay = 16,
+ pad2 = "\000\000\000\000\000\000\000",
+ myfloat = 1,
+ object = 0x5656eec0,
+ pad3 = 0,
+ uniqueID = 1969770582,
+ version = 1,
+ processReplacing = 0xf78d9280,
+ processDoubleReplacing = 0xf78d92c0
+}
+~~~
+
+Opening the same plugin in *REAPER* we can also learn a few things:
+
+- 2 in, 2 out
+- 1 built-in program named "initialize"
+- 5 parameters
+  - "main: Output" (100.)
+  - "main: Active #FDN" (1.)
+  - "FDN: Feedback" (50.)
+  - "FDN: Dry" (100.)
+  - "FDN: Wet" (30.)
+- `stderr`
+  - setUniqueID (1969770582)
+  - HOST `REAPER` (so the plugin queries the host for the host-name)
+  - Starting REVISION 4105
+  - sending latency to host... 16
+  - GUI: 1200 x 600
+  - GUI:  640 x 575
+  - CONNECTIONS_PER_PARAMETER: 8
+
+
+So at least we have the number of inputs, outputs, programs and parameters right, as well as the uniquID.
