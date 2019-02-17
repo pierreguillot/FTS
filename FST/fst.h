@@ -297,8 +297,7 @@ typedef void (t_fstEffectProcessInplaceDbl)(struct AEffect_*, double**indata, do
 typedef FST_UNKNOWN(t_fstEffectDispatcher*) audioMasterCallback;
 
 typedef struct AEffect_ {
-  t_fstInt32 magic; /* @0 0x56737450, aka 'VstP' */
-  char padding[4]; // always 0
+  t_fstPtrInt magic; /* @0 0x56737450, aka 'VstP' */
   t_fstEffectDispatcher* dispatcher; // (AEffect*, Vst2::effClose, 0, 0, 0, 0);
   t_fstEffectProcess* process;
   t_fstEffectGetParameter* getParameter; // float(Aeffect*, int)
@@ -310,16 +309,20 @@ typedef struct AEffect_ {
   t_fstInt32 numOutputs;
 
   FST_UNKNOWN(t_fstPtrInt) flags; //??
-  FST_UNKNOWN(t_fstPtrInt) resvd1; //??
-  FST_UNKNOWN(t_fstPtrInt) resvd2; //??
-  FST_UNKNOWN(t_fstPtrInt) initialDelay; //??
+  FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd1); //??
+  FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd2); //??
+  FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(initialDelay); //??
 
-  FST_UNKNOWN(t_fstPtrInt) pad2; //?? this holds a (float)1.0f value
-  FST_UNKNOWN(void*) object; // FIXXXME
-  FST_UNKNOWN(t_fstPtrInt) pad3; //??
-
+#if defined(__x86_64__)
+  char pad2[4]; // wtf?
+#else
+  char pad2[8]; // wtf?
+#endif
+  float float1;
+  void* object;
+  t_fstPtrInt pad3;
   t_fstInt32 uniqueID; // @112
-  FST_UNKNOWN(t_fstInt32) version; //??
+  t_fstInt32 version;
 
   t_fstEffectProcessInplace* processReplacing;
   t_fstEffectProcessInplaceDbl* processDoubleReplacing;
