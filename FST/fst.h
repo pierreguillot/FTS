@@ -297,7 +297,8 @@ typedef void (t_fstEffectProcessInplaceDbl)(struct AEffect_*, double**indata, do
 typedef FST_UNKNOWN(t_fstEffectDispatcher*) audioMasterCallback;
 
 typedef struct AEffect_ {
-  t_fstPtrInt magic; /* @0 0x56737450, aka 'VstP' */
+  t_fstInt32 magic; /* @0 0x56737450, aka 'VstP' */
+  /* auto-padding in place */
   t_fstEffectDispatcher* dispatcher; // (AEffect*, Vst2::effClose, 0, 0, 0, 0);
   t_fstEffectProcess* process;
   t_fstEffectGetParameter* getParameter; // float(Aeffect*, int)
@@ -311,13 +312,9 @@ typedef struct AEffect_ {
   FST_UNKNOWN(t_fstPtrInt) flags; //??
   FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd1); //??
   FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd2); //??
-  FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(initialDelay); //??
+  FST_UNKNOWN(t_fstInt32) FST_UNKNOWN(initialDelay); //??
+  char pad2[8];
 
-#if defined(__x86_64__)
-  char pad2[4]; // wtf?
-#else
-  char pad2[8]; // wtf?
-#endif
   float float1;
   void* object;
   t_fstPtrInt pad3;
