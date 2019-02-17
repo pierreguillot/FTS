@@ -307,7 +307,7 @@ void processReplacing(AEffect*, float**indata, float**outdata, int sampleframes)
 void processReplacingDouble(AEffect*, double**indata, double**outdata, int sampleframes);
 ~~~
 
-And we end up with something like:
+And we end up with something like the following:
 
 ~~~C
 typedef long t_fstPtrInt; /* pointer sized int */
@@ -740,6 +740,32 @@ The remaining non-zero bytesequences are
 - @5c-5f: always `00 00 80 3f`, which - weirdly enough - is the `1.f` in single-precision floating point (little endian)
 - @74-77
 
+the bits at position @38-3f are:
+
+| plugin      | @38-3f (binary)                                                            | decimal |
+|-------------|----------------------------------------------------------------------------|---------|
+| ProtoEffect | `00110001 00000000 00000000 00000000  00000000 00000000 00000000 00000000` | 049 0   |
+| InstaLooper | `00010001 00000000 00000000 00000000  00000000 00000000 00000000 00000000` | 017 0   |
+| Digits      | `00110000 00000001 00000000 00000000  00000000 00000000 00000000 00000000` | 304 0   |
+| BowEcho     | `00110001 00000010 00000000 00000000  00000000 00000000 00000000 00000000` | 561 0   |
+| Danaides    | `00110001 00000010 00000000 00000000  00000000 00000000 00000000 00000000` | 561 0   |
+| hypercyclic | `00110001 00000011 00000000 00000000  00000000 00000000 00000000 00000000` | 817 0   |
+| tonespace   | `00110001 00000011 00000000 00000000  00000000 00000000 00000000 00000000` | 817 0   |
+
+whereas the bits at position @74-77 are:
+
+| plugin      | @74-77 (binary)                       | decimal |
+|-------------|---------------------------------------|---------|
+| ProtoEffect | `00000001 00000000 00000000 00000000` | 1       |
+| InstaLooper | `00000001 00000000 00000000 00000000` | 1       |
+| Digits      | `00000001 00000000 00000000 00000000` | 1       |
+| BowEcho     | `01101110 00000000 00000000 00000000` | 110     |
+| Danaides    | `01100110 00000000 00000000 00000000` | 102     |
+| hypercyclic | `11000010 10010110 00000000 00000000` | 38594   |
+| tonespace   | `11000011 10111010 00000000 00000000` | 47811   |
+|             |                                       |         |
+
+
 We still have the following fields to find:
 - `flags`
 - `initialDelay`
@@ -753,6 +779,60 @@ but we don't have any clue yet about their exact position in memory.
 
 Searching for the `initialDelay` in the JUCE-code, it seems that this value is *in samples*,
 which should make it an `int` value.
+`flags` is certainly `int` (of whatever size, but the more the merrier),
+and `version` most likely as well.
+
+Comparing the values we see at positions @38-3f for various plugins seem to indicate a bitfield
+(rather big changes in the decimal representations, but when looking at the binary representations
+there are not so many changes at all),so for now we assume that this is the `flags` field.
+Whether its 32bit or 64bit we don't really know.
+However, the size of the flags field will most likely be constant across various architectures
+(32bit resp. 64bit), so it probably won't be a "pointer sized int".
+
+The `version` might be encoded in the data at @74-77. This field is (likely)
+a free-form field, where the plugin can put anything (with a possible restriction that
+it should be "better" (newer) plugins should sort after older ones).
+The actual versioning scheme would be left to the plugin authors,
+which might explain the wildly varying version numbers we have
+(with *hyperbolic* and *tonespace* coming from the same author;
+and *BowEcho* and *Danaides* coming from another author;
+but all 4 plugins being based on JUCE (which nudges the user into setting a proper version).
+Using a version number of `1` as *I don't care* is also not something unheard of...).
+
+Collecting all the info we have so far, we end up with something like the following
+(using `pad` variables to account for unknown 0-memory)
+~~~C
+typedef struct AEffect_ {
+  t_fstInt32 magic; /* @0 0x56737450, aka 'VstP' */
+  char pad1[4]; // always 0
+  t_fstEffectDispatcher* dispatcher; // ???
+  t_fstEffectProcess* process; // ???
+  t_fstEffectGetParameter* getParameter; // ???
+  t_fstEffectSetParameter* setParameter; // ???
+
+  t_fstInt32 numPrograms;
+  t_fstInt32 numParams;
+  t_fstInt32 numInputs;
+  t_fstInt32 numOutputs;
+
+  t_fstPtrInt flags; // size unclear
+  t_fstPtrInt resvd1; //??
+  t_fstPtrInt resvd2; //??
+  t_fstPtrInt initialDelay; //??
+
+  char  pad2[4]; //?
+  float       myfloat; //?
+  void* object; // FIXXXME
+  t_fstPtrInt pad3; //??
+
+  t_fstInt32 uniqueID; // @112
+  t_fstInt32 version;
+
+  t_fstEffectProcessInplace* processReplacing; //?
+  t_fstEffectProcessInplaceDbl* processDoubleReplacing; //?
+
+} AEffect;
+~~~
 
 
 InstaLooper(1.2)|Protoverb(1.0/4105)
