@@ -115,12 +115,12 @@ typedef enum {
     FST_UNKNOWN_ENUM(effStopProcess),
 } t_fstPluginOpcode;
 enum {
-    FST_UNKNOWN_ENUM(effFlagsCanDoubleReplacing),
-    FST_UNKNOWN_ENUM(effFlagsCanReplacing),
-    FST_UNKNOWN_ENUM(effFlagsHasEditor),
-    FST_UNKNOWN_ENUM(effFlagsIsSynth),
-    FST_UNKNOWN_ENUM(effFlagsNoSoundInStop),
-    FST_UNKNOWN_ENUM(effFlagsProgramChunks),
+  effFlagsHasEditor = (1<<1),
+  effFlagsIsSynth = (1<<9),
+  FST_UNKNOWN_ENUM(effFlagsCanDoubleReplacing),
+  FST_UNKNOWN_ENUM(effFlagsCanReplacing),
+  FST_UNKNOWN_ENUM(effFlagsNoSoundInStop),
+  FST_UNKNOWN_ENUM(effFlagsProgramChunks),
 } t_fstPluginFlags;
 typedef enum {
     FST_UNKNOWN_ENUM(kPlugCategAnalysis),
