@@ -824,9 +824,9 @@ typedef struct AEffect_ {
   t_fstPtrInt flags; // size unclear
   t_fstPtrInt resvd1; //??
   t_fstPtrInt resvd2; //??
-  t_fstPtrInt initialDelay; //??
+  t_fstInt32 initialDelay; //??
 
-  char pad2[4]; //?
+  char pad2[8]; //?
   float float1; //?
   void* object; // FIXXXME
   char pad3[8] pad3; //??
@@ -877,14 +877,10 @@ typedef struct AEffect_ {
   t_fstPtrInt flags;
   t_fstPtrInt resvd1; //??
   t_fstPtrInt resvd2; //??
-  t_fstPtrInt initialDelay; //??
+  t_fstInt32 initialDelay; //??
 
-#if defined(__x86_64__)
-  char pad2[4]; //????
-#else
-  char pad2[8]; //????
-#endif
-  float float1; //????
+  char pad2[8]; //??
+  float float1; //??
   void* object;
   t_fstPtrInt pad3; //??
   t_fstInt32 uniqueID;
