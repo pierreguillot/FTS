@@ -1,3 +1,5 @@
+#include <stddef.h>
+#include <cstdio>
 #include "fst.h"
 
 static t_fstEffectDispatcher*dispatchHost = 0;
