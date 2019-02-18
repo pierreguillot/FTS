@@ -33,7 +33,13 @@ void print_effect(AEffect*eff) {
 }
 
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
+  switch(opcode) {
+  default: break;
+  case 53: case 3:
+    return 0;
+  }
   printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
+
   return 0;
 }
 
@@ -45,13 +51,13 @@ static float getParameter(AEffect*eff, int index) {
   return 0.5;
 }
 static void process(AEffect*eff, float**indata, float**outdata, int sampleframes) {
-  printf("FstClient::process(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
+  //printf("FstClient::process(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
 }
 static void processReplacing(AEffect*eff, float**indata, float**outdata, int sampleframes) {
-  printf("FstClient::process'(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
+  //printf("FstClient::process'(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
 }
 static void processDoubleReplacing(AEffect*eff, double**indata, double**outdata, int sampleframes) {
-  printf("FstClient::process2(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
+  //printf("FstClient::process2(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
 }
 
 
