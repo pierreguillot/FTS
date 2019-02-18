@@ -42,7 +42,10 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     return 0;
   }
   printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
-
+  if(object) {
+    char*str = (char*)object;
+    printf("\t'%.*s'\n", 512, str);
+  }
   switch(opcode) {
   default: break;
   case effSetProgram:
