@@ -63,6 +63,7 @@ typedef enum {
     FST_UNKNOWN_ENUM(audioMasterWillReplaceOrAccumulate)
 } t_fstHostOpcode;;
 typedef enum {
+  FST_ENUM_EXP(effGetProgramName, 5),
   FST_ENUM_EXP(effIdentify, 0),
 
   FST_ENUM(effGetParamLabel, 6),
@@ -76,7 +77,6 @@ typedef enum {
     FST_UNKNOWN_ENUM(effSetProgram),
     FST_UNKNOWN_ENUM(effGetProgram),
     FST_UNKNOWN_ENUM(effSetProgramName),
-    FST_UNKNOWN_ENUM(effGetProgramName),
     FST_UNKNOWN_ENUM(effMainsChanged),
     FST_UNKNOWN_ENUM(effEditGetRect),
     FST_UNKNOWN_ENUM(effEditOpen),
