@@ -3,14 +3,25 @@
 typedef long t_fstPtrInt; /* pointer sized int */
 typedef int t_fstInt32; /* 32bit int */
 
-
 #define FST_UNKNOWN(x) x
 #define FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
 #define FST_ENUM_EXP(x, y) x = y
+#define FST_ENUM(x, y) x = y
+
+
+/* 197782 is where the array passed at opcode:33 overflows */
+const size_t kVstMaxProductStrLen = FST_UNKNOWN(197782);
+const size_t kVstMaxVendorStrLen = FST_UNKNOWN(197782);
+
+
 typedef enum {
-  audioMasterVersion = 1,
+  FST_ENUM(audioMasterAutomate, 0),
+  FST_ENUM(audioMasterVersion, 1),
+  FST_ENUM(audioMasterGetVendorString, 32),
+  FST_ENUM(audioMasterGetProductString, 33),
+  FST_ENUM(audioMasterGetVendorVersion, 34),
+
   // 13: sending latency
-    FST_UNKNOWN_ENUM(audioMasterAutomate),
     FST_UNKNOWN_ENUM(audioMasterBeginEdit),
     FST_UNKNOWN_ENUM(audioMasterCanDo),
     FST_UNKNOWN_ENUM(audioMasterCloseWindow),
@@ -28,11 +39,8 @@ typedef enum {
     FST_UNKNOWN_ENUM(audioMasterGetOutputSpeakerArrangement),
     FST_UNKNOWN_ENUM(audioMasterGetParameterQuantization),
     FST_UNKNOWN_ENUM(audioMasterGetPreviousPlug),
-    FST_UNKNOWN_ENUM(audioMasterGetProductString),
     FST_UNKNOWN_ENUM(audioMasterGetSampleRate),
     FST_UNKNOWN_ENUM(audioMasterGetTime),
-    FST_UNKNOWN_ENUM(audioMasterGetVendorString),
-    FST_UNKNOWN_ENUM(audioMasterGetVendorVersion),
     FST_UNKNOWN_ENUM(audioMasterIdle),
     FST_UNKNOWN_ENUM(audioMasterIOChanged),
     FST_UNKNOWN_ENUM(audioMasterNeedIdle),
@@ -55,20 +63,21 @@ typedef enum {
     FST_UNKNOWN_ENUM(audioMasterWillReplaceOrAccumulate)
 } t_fstHostOpcode;;
 typedef enum {
+  FST_ENUM_EXP(effSetProgram, 2),
+  FST_ENUM_EXP(effGetProgramName, 5),
+
+  FST_ENUM(effGetParamLabel, 6),
+  FST_ENUM(effGetParamDisplay, 7),
+  FST_ENUM(effGetParamName, 8),
+  FST_ENUM(effSetBlockSize, 11),
+  FST_ENUM(effSetSampleRate, 12),
+
   FST_ENUM_EXP(effIdentify, 0),
-
-  FST_ENUM_EXP(effSetSampleRate, 2),
-  FST_ENUM_EXP(effSetBlockSize, 3),
-
   FST_ENUM_EXP(effOpen, 1),
+
     FST_UNKNOWN_ENUM(effClose),
-    FST_UNKNOWN_ENUM(effSetProgram),
     FST_UNKNOWN_ENUM(effGetProgram),
     FST_UNKNOWN_ENUM(effSetProgramName),
-    FST_UNKNOWN_ENUM(effGetProgramName),
-    FST_UNKNOWN_ENUM(effGetParamLabel),
-    FST_UNKNOWN_ENUM(effGetParamDisplay),
-    FST_UNKNOWN_ENUM(effGetParamName),
     FST_UNKNOWN_ENUM(effMainsChanged),
     FST_UNKNOWN_ENUM(effEditGetRect),
     FST_UNKNOWN_ENUM(effEditOpen),
@@ -115,8 +124,8 @@ typedef enum {
     FST_UNKNOWN_ENUM(effStopProcess),
 } t_fstPluginOpcode;
 enum {
-  effFlagsHasEditor = (1<<1),
-  effFlagsIsSynth = (1<<9),
+  FST_ENUM(effFlagsHasEditor, (1<<1)),
+  FST_ENUM(effFlagsIsSynth, (1<<9)),
   FST_UNKNOWN_ENUM(effFlagsCanDoubleReplacing),
   FST_UNKNOWN_ENUM(effFlagsCanReplacing),
   FST_UNKNOWN_ENUM(effFlagsNoSoundInStop),
@@ -192,8 +201,6 @@ enum {
     FST_UNKNOWN_ENUM(kVstAutomationWriting),
     FST_UNKNOWN_ENUM(kVstBarsValid),
     FST_UNKNOWN_ENUM(kVstCyclePosValid),
-    FST_UNKNOWN_ENUM(kVstMaxProductStrLen),
-    FST_UNKNOWN_ENUM(kVstMaxVendorStrLen),
     FST_UNKNOWN_ENUM(kVstNanosValid),
     FST_UNKNOWN_ENUM(kVstPinIsStereo),
     FST_UNKNOWN_ENUM(kVstPinUseSpeaker),
@@ -301,8 +308,8 @@ typedef struct AEffect_ {
   /* auto-padding in place */
   t_fstEffectDispatcher* dispatcher; // (AEffect*, Vst2::effClose, 0, 0, 0, 0);
   t_fstEffectProcess* process;
-  t_fstEffectGetParameter* getParameter; // float(Aeffect*, int)
   t_fstEffectSetParameter* setParameter; // (Aeffect*, int, float)
+  t_fstEffectGetParameter* getParameter; // float(Aeffect*, int)
 
   t_fstInt32 numPrograms;
   t_fstInt32 numParams;
@@ -321,8 +328,8 @@ typedef struct AEffect_ {
   t_fstInt32 uniqueID; // @112
   t_fstInt32 version;
 
-  t_fstEffectProcessInplace* processReplacing;
-  t_fstEffectProcessInplaceDbl* processDoubleReplacing;
+  FST_UNKNOWN(t_fstEffectProcessInplace*)  FST_UNKNOWN(processReplacing);
+  FST_UNKNOWN(t_fstEffectProcessInplaceDbl*)  FST_UNKNOWN(processDoubleReplacing);
 
 } AEffect;
 
