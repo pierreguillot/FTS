@@ -381,6 +381,42 @@ typedef struct ERect_ {
 with the changes in place, we can now compile JUCE's AudioPluginProcessor.
 it's still a long way to make it actually work...
 
+# Part 1.1 more symbols
+
+The JUCE wrapper is not entirely symmetric, so only deriving missing
+symbols from AudioPluginHost is not enough.
+We also need to compile a (minimal) Audio Plugin using JUCE,
+to get additional symbols.
+Just creating a new *Audio Plugin* project using Projucer will
+give us some additional symbols.
+
+Apart from an additional `VstPinProperties.shortLabel`,
+we still miss the following types:
+
+~~~
+AEffectDispatcherProc
+AEffectSetParameterProc
+AEffectGetParameterProc
+AEffectProcessProc
+AEffectProcessDoubleProc
+~~~
+
+as well as some constants:
+~~~
+kVstMaxLabelLen
+kVstMaxShortLabelLen
+kVstClockValid
+kVstPinIsActive
+kVstSmpte249fps
+kVstSmpteFilm16mm
+kVstSmpteFilm35mm
+kVstVersion
+~~~
+
+The `kVstVersion` is a bit special, as JUCE doesn't use the `Vst2::` namespace on it.
+We have to `#define` it, rather than use an `enum` for it...
+
+
 
 # Part2: how the plugin interfaces with the host
 For now, we have resolved all the names of the API to some more or less random values.
