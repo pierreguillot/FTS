@@ -1,6 +1,5 @@
-#include <stddef.h>
-#include <cstdio>
 #include "fst.h"
+#include <cstdio>
 
 static AEffectDispatcherProc dispatch = 0;
 static int curProgram = 0;
