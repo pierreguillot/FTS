@@ -64,7 +64,6 @@ typedef enum {
 } t_fstHostOpcode;;
 typedef enum {
   FST_ENUM_EXP(effGetProgramName, 5),
-  FST_ENUM_EXP(effIdentify, 0),
 
   FST_ENUM(effGetParamLabel, 6),
   FST_ENUM(effGetParamDisplay, 7),
@@ -72,7 +71,9 @@ typedef enum {
   FST_ENUM(effSetBlockSize, 11),
   FST_ENUM(effSetSampleRate, 12),
 
+  FST_ENUM_EXP(effIdentify, 0),
   FST_ENUM_EXP(effOpen, 1),
+
     FST_UNKNOWN_ENUM(effClose),
     FST_UNKNOWN_ENUM(effSetProgram),
     FST_UNKNOWN_ENUM(effGetProgram),
