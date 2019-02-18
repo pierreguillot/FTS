@@ -1,7 +1,7 @@
 
+#include "fst.h"
 #include <stdio.h>
 #include <dlfcn.h>
-#include "fst.h"
 
 #include <string>
 
