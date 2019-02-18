@@ -3,6 +3,7 @@
 #include "fst.h"
 
 static t_fstEffectDispatcher*dispatch = 0;
+static int curProgram = 0;
 
 static float parameters[3];
 
@@ -42,6 +43,9 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   }
   switch(opcode) {
   default: break;
+  case effGetProgramName:
+    snprintf((char*)object, 32, "FstProgram%d", curProgram);
+    return 0;
   case effGetParamLabel:
     snprintf((char*)object, 32, "°");
     return 0;
