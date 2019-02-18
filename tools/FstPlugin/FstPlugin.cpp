@@ -37,6 +37,19 @@ void print_effect(AEffect*eff) {
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
   switch(opcode) {
   default: break;
+  case effGetParamLabel:
+    snprintf((char*)object, 32, "°");
+    break;
+  case effGetParamName:
+    if(index>=sizeof(parameters))
+      index=sizeof(parameters);
+    snprintf((char*)object, 32, "rotation%c", index+88);
+    break;
+  case effGetParamDisplay:
+    if(index>=sizeof(parameters))
+      index=sizeof(parameters);
+    snprintf((char*)object, 32, "%+03d", int((parameters[index]-0.5)*360+0.5));
+    break;
   case 53: case 3:
     return 0;
   }
