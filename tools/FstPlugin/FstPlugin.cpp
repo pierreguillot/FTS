@@ -39,17 +39,17 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   default: break;
   case effGetParamLabel:
     snprintf((char*)object, 32, "°");
-    break;
+    return 0;
   case effGetParamName:
     if(index>=sizeof(parameters))
       index=sizeof(parameters);
     snprintf((char*)object, 32, "rotation%c", index+88);
-    break;
+    return 0;
   case effGetParamDisplay:
     if(index>=sizeof(parameters))
       index=sizeof(parameters);
     snprintf((char*)object, 32, "%+03d", int((parameters[index]-0.5)*360+0.5));
-    break;
+    return 0;
   case 53: case 3:
     return 0;
   }
@@ -59,7 +59,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
 }
 
 static void setParameter(AEffect*eff, int index, float value) {
-  printf("FstClient::setParameter(%p)[%d] -> %f\n", eff, index, value);
+  //printf("FstClient::setParameter(%p)[%d] -> %f\n", eff, index, value);
   if(index>=sizeof(parameters))
     index=sizeof(parameters);
   parameters[index] = value;
@@ -68,7 +68,7 @@ static void setParameter(AEffect*eff, int index, float value) {
 static float getParameter(AEffect*eff, int index) {
   if(index>=sizeof(parameters))
     index=sizeof(parameters);
-  printf("FstClient::getParameter(%p)[%d] <- %f\n", eff, index, parameters[index]);
+  //printf("FstClient::getParameter(%p)[%d] <- %f\n", eff, index, parameters[index]);
   return parameters[index];
 }
 static void process(AEffect*eff, float**indata, float**outdata, int sampleframes) {
