@@ -2,7 +2,7 @@
 #include <cstdio>
 #include "fst.h"
 
-static t_fstEffectDispatcher*dispatchHost = 0;
+static t_fstEffectDispatcher*dispatch = 0;
 
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
   printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
@@ -29,7 +29,7 @@ static void processDoubleReplacing(AEffect*eff, double**indata, double**outdata,
 
 extern "C"
 AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
-  dispatchHost = dispatch4host;
+  dispatch = dispatch4host;
   AEffect* eff = new AEffect;
 
   eff->magic = 0x56737450;
