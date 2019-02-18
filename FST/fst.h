@@ -3,14 +3,23 @@
 typedef long t_fstPtrInt; /* pointer sized int */
 typedef int t_fstInt32; /* 32bit int */
 
-
 #define FST_UNKNOWN(x) x
 #define FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
 #define FST_ENUM_EXP(x, y) x = y
+
+
+/* 197782 is where the array passed at opcode:33 overflows */
+const size_t kVstMaxProductStrLen = FST_UNKNOWN(197782);
+const size_t kVstMaxVendorStrLen = FST_UNKNOWN(197782);
+
+
 typedef enum {
+  audioMasterAutomate = 0,
   audioMasterVersion = 1,
+  FST_ENUM_EXP(audioMasterGetProductString, 33), /* could as well be audioMasterGetVendorString */
+  FST_UNKNOWN_ENUM(audioMasterGetVendorString),  /* resp, audioMasterGetProductString */
+
   // 13: sending latency
-    FST_UNKNOWN_ENUM(audioMasterAutomate),
     FST_UNKNOWN_ENUM(audioMasterBeginEdit),
     FST_UNKNOWN_ENUM(audioMasterCanDo),
     FST_UNKNOWN_ENUM(audioMasterCloseWindow),
@@ -28,10 +37,8 @@ typedef enum {
     FST_UNKNOWN_ENUM(audioMasterGetOutputSpeakerArrangement),
     FST_UNKNOWN_ENUM(audioMasterGetParameterQuantization),
     FST_UNKNOWN_ENUM(audioMasterGetPreviousPlug),
-    FST_UNKNOWN_ENUM(audioMasterGetProductString),
     FST_UNKNOWN_ENUM(audioMasterGetSampleRate),
     FST_UNKNOWN_ENUM(audioMasterGetTime),
-    FST_UNKNOWN_ENUM(audioMasterGetVendorString),
     FST_UNKNOWN_ENUM(audioMasterGetVendorVersion),
     FST_UNKNOWN_ENUM(audioMasterIdle),
     FST_UNKNOWN_ENUM(audioMasterIOChanged),
@@ -192,8 +199,6 @@ enum {
     FST_UNKNOWN_ENUM(kVstAutomationWriting),
     FST_UNKNOWN_ENUM(kVstBarsValid),
     FST_UNKNOWN_ENUM(kVstCyclePosValid),
-    FST_UNKNOWN_ENUM(kVstMaxProductStrLen),
-    FST_UNKNOWN_ENUM(kVstMaxVendorStrLen),
     FST_UNKNOWN_ENUM(kVstNanosValid),
     FST_UNKNOWN_ENUM(kVstPinIsStereo),
     FST_UNKNOWN_ENUM(kVstPinUseSpeaker),
