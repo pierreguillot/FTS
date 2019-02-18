@@ -78,5 +78,6 @@ AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
 
   eff->processReplacing = processReplacing;
   eff->processDoubleReplacing = processDoubleReplacing;
+  print_effect(eff);
   return eff;
 }
