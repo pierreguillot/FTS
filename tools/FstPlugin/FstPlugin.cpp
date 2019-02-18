@@ -79,6 +79,24 @@ AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
   eff->processReplacing = processReplacing;
   eff->processDoubleReplacing = processDoubleReplacing;
   print_effect(eff);
+
+  for(size_t i = 0; i<64; i++) {
+    char buf[512] = {0};
+    bool skip = false;
+    switch(i) {
+    default: break;
+    }
+    if(skip) {
+      printf("Skipping: %d\n", i);
+      continue;
+    }
+    printf("Trying: %d\n", i);
+    t_fstPtrInt res = dispatch(0, i, 0, 0, buf, 0);
+    if(res)
+      printf("\treturned %d\n", res);
+    if(*buf)
+      printf("\t'%.*s'\n", 512, buf);
+  }
   char buf[512] = {0};
   dispatch(eff, audioMasterGetProductString, 0, 0, buf, 0.f);
   printf("masterProduct: %s\n", buf);
