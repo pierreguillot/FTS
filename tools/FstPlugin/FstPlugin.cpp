@@ -79,5 +79,8 @@ AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
   eff->processReplacing = processReplacing;
   eff->processDoubleReplacing = processDoubleReplacing;
   print_effect(eff);
+  char buf[512] = {0};
+  dispatch(eff, audioMasterGetProductString, 0, 0, buf, 0.f);
+  printf("masterProduct: %s\n", buf);
   return eff;
 }
