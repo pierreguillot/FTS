@@ -293,9 +293,10 @@ typedef struct VstTimeInfo_ {
 } FST_UNKNOWN(VstTimeInfo);
 
 typedef struct VstPinProperties_ {
-    FST_UNKNOWN(int) arrangementType;
-    char*label;
-    int flags;
+  FST_UNKNOWN(int) arrangementType;
+  char*label;
+  char*shortLabel;
+  int flags;
 } FST_UNKNOWN(VstPinProperties);
 
 
