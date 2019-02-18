@@ -1,4 +1,5 @@
-
+#ifndef FST_fst_h_
+#define FST_fst_h_
 
 #define FST_UNKNOWN(x) x
 #define FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
@@ -348,3 +349,6 @@ typedef struct ERect_ {
   int top;
   int bottom;
 } FST_UNKNOWN(ERect);
+
+
+#endif /* FST_fst_h_ */
