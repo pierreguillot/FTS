@@ -16,6 +16,7 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
   }
   return 0;
 }
+
 void dumpdata(const char*basename, const void*data, size_t length) {
   const char*ptr = (const char*)data;
   std::string filename = std::string(basename);
