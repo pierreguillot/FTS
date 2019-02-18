@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="MPzqul" name="VstHost" projectType="consoleapp" jucerVersion="5.4.1">
-  <MAINGROUP id="JJj33p" name="VstHost">
+<JUCERPROJECT id="MPzqul" name="JstHost" projectType="consoleapp" jucerVersion="5.4.1">
+  <MAINGROUP id="JJj33p" name="JstHost">
     <GROUP id="{83D2710B-DCC2-0102-841D-EFC9350BC200}" name="Source">
       <FILE id="SR5IZk" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
