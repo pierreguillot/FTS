@@ -127,7 +127,6 @@ in order to not accidentally trigger a real enum:
 FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
 ~~~
 
-
 ## some types
 if we now re-compile the AudioPluginHost against our new headers, we get a lot less errors (about 198).
 It's still quite a lot of errors though...
@@ -1147,8 +1146,6 @@ This gave me a maximum string length of `197782` bytes. impressive, but i'm not 
 
 The host-opcode `0` seems to be used to tell the host the current values for all the parameters.
 In `juce_VSTPluginFormat.cpp::handleCallback()` this is handled in the `audioMasterAutomate` opcode.
-Looking at the 
-
 
 
 # Part: a plugin
@@ -1343,4 +1340,3 @@ And indeed, this seems to have done the trick!
 When we move a slider, both parameter getter and setter are called as well as the opcodes `6`, `7` & `8`.
 About 0.5 seconds after the last parameter change happened, the host calls opcode `5` (which we already believe
 to be `effGetProgramName`).
-
