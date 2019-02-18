@@ -44,7 +44,7 @@ AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
   eff->numOutputs = 2;
   eff->float1 = 1.;
   eff->object = eff;
-  eff->unqueID = 123456;
+  eff->uniqueID = 123456;
   eff->version = 666;
 
   eff->processReplacing = processReplacing;
