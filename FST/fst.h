@@ -326,8 +326,8 @@ typedef struct AEffect_ {
   t_fstInt32 uniqueID; // @112
   t_fstInt32 version;
 
-  t_fstEffectProcessInplace* processReplacing;
-  t_fstEffectProcessInplaceDbl* processDoubleReplacing;
+  FST_UNKNOWN(t_fstEffectProcessInplace*)  FST_UNKNOWN(processReplacing);
+  FST_UNKNOWN(t_fstEffectProcessInplaceDbl*)  FST_UNKNOWN(processDoubleReplacing);
 
 } AEffect;
 
