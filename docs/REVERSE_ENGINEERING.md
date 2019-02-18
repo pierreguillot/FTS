@@ -1237,7 +1237,9 @@ and `11` looks like the blocksize (`effSetBlockSize`).
 Opcode `5` is what we already suspect to be `effGetProgramName`,
 which we can now confirm by implementing it.
 If we do return a nice string for opcode 5,
-REAPER will
+REAPER will then call opcode `2` with a varying index and then calls opcode `5` again
+(so supposedly it tries to change the program and query the new program name.
+In theory it should use `effGetProgramNameIndexed` instead...
 
 
 
