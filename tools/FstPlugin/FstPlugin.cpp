@@ -2,7 +2,7 @@
 #include <cstdio>
 #include "fst.h"
 
-static t_fstEffectDispatcher*dispatch = 0;
+static AEffectDispatcherProc dispatch = 0;
 static int curProgram = 0;
 
 static float parameters[3];
@@ -100,7 +100,7 @@ static void processDoubleReplacing(AEffect*eff, double**indata, double**outdata,
 
 
 extern "C"
-AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
+AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   dispatch = dispatch4host;
   printf("FstPlugin::main(%p)\n", dispatch4host);
   for(size_t i=0; i<sizeof(parameters); i++)

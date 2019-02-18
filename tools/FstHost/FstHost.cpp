@@ -5,7 +5,7 @@
 
 #include <string>
 
-typedef AEffect* (t_fstMain)(t_fstEffectDispatcher*);
+typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
 
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
   printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
