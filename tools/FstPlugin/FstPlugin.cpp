@@ -30,6 +30,7 @@ static void processDoubleReplacing(AEffect*eff, double**indata, double**outdata,
 extern "C"
 AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
   dispatch = dispatch4host;
+  printf("FstPlugin::main(%p)\n", dispatch4host);
   AEffect* eff = new AEffect;
 
   eff->magic = 0x56737450;
