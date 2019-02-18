@@ -68,8 +68,8 @@ typedef enum {
   FST_ENUM(effGetParamLabel, 6),
   FST_ENUM(effGetParamDisplay, 7),
   FST_ENUM(effGetParamName, 8),
-  FST_ENUM_EXP(effSetSampleRate, 2),
-  FST_ENUM_EXP(effSetBlockSize, 3),
+  FST_ENUM(effSetBlockSize, 11),
+  FST_ENUM(effSetSampleRate, 12),
 
   FST_ENUM_EXP(effOpen, 1),
     FST_UNKNOWN_ENUM(effClose),
