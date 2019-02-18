@@ -116,10 +116,10 @@ AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
   for(size_t i = 0; i<64; i++) {
     char buf[512] = {0};
     t_fstPtrInt res = dispatch(0, i, 0, 0, buf, 0);
-    if(res)
-      printf("\treturned %d\n", res);
     if(*buf)
       printf("\t'%.*s'\n", 512, buf);
+    if(res)
+      printf("\treturned %d\n", res);
   }
   char buf[512] = {0};
   dispatch(eff, audioMasterGetProductString, 0, 0, buf, 0.f);
