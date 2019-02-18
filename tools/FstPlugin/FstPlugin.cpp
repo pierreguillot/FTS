@@ -45,7 +45,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   default: break;
   case effSetProgram:
     curProgram = index,
-    return 0;
+    return 1;
   case effGetProgramName:
     snprintf((char*)object, 32, "FstProgram%d", curProgram);
     return 0;
