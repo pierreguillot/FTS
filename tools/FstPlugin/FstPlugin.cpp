@@ -41,13 +41,17 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   case 53: case 3:
     return 0;
   }
+  printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
+
   switch(opcode) {
   default: break;
   case effSetProgram:
+    printf("setting program to %d\n", value);
     curProgram = value;
     return 1;
   case effGetProgramName:
     snprintf((char*)object, 32, "FstProgram%d", curProgram);
+    printf("setting program-name to %s\n", (char*)object);
     return 0;
   case effGetParamLabel:
     snprintf((char*)object, 32, "°");
