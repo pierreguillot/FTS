@@ -569,6 +569,7 @@ that looks like if it could be queried at the very beginning.
 JUCE returns a hardcoded value of `2400` for this opcode,
 and it seems like this is the VST-version (the plugin would need to make sure
 that the host is expecting a compatible VST version before it instantiates itself).
+Most likely the `kVstVersion` define uses the same value.
 
 So we now have our first known enum. Yipee!
 
