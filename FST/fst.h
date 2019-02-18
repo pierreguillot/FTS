@@ -6,6 +6,7 @@ typedef int t_fstInt32; /* 32bit int */
 #define FST_UNKNOWN(x) x
 #define FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
 #define FST_ENUM_EXP(x, y) x = y
+#define FST_ENUM(x, y) x = y
 
 
 /* 197782 is where the array passed at opcode:33 overflows */
@@ -14,11 +15,11 @@ const size_t kVstMaxVendorStrLen = FST_UNKNOWN(197782);
 
 
 typedef enum {
-  audioMasterAutomate = 0,
-  audioMasterVersion = 1,
-  audioMasterGetVendorString = 32,
-  audioMasterGetProductString = 33,
-  audioMasterGetVendorVersion = 34,
+  FST_ENUM(audioMasterAutomate, 0),
+  FST_ENUM(audioMasterVersion, 1),
+  FST_ENUM(audioMasterGetVendorString, 32),
+  FST_ENUM(audioMasterGetProductString, 33),
+  FST_ENUM(audioMasterGetVendorVersion, 34),
 
   // 13: sending latency
     FST_UNKNOWN_ENUM(audioMasterBeginEdit),
@@ -62,11 +63,11 @@ typedef enum {
     FST_UNKNOWN_ENUM(audioMasterWillReplaceOrAccumulate)
 } t_fstHostOpcode;;
 typedef enum {
-              effGetParamLabel = 6,
-              effGetParamDisplay = 7,
-              effGetParamName = 8,
   FST_ENUM_EXP(effIdentify, 0),
 
+  FST_ENUM(effGetParamLabel, 6),
+  FST_ENUM(effGetParamDisplay, 7),
+  FST_ENUM(effGetParamName, 8),
   FST_ENUM_EXP(effSetSampleRate, 2),
   FST_ENUM_EXP(effSetBlockSize, 3),
 
@@ -122,8 +123,8 @@ typedef enum {
     FST_UNKNOWN_ENUM(effStopProcess),
 } t_fstPluginOpcode;
 enum {
-  effFlagsHasEditor = (1<<1),
-  effFlagsIsSynth = (1<<9),
+  FST_ENUM(effFlagsHasEditor, (1<<1)),
+  FST_ENUM(effFlagsIsSynth, (1<<9)),
   FST_UNKNOWN_ENUM(effFlagsCanDoubleReplacing),
   FST_UNKNOWN_ENUM(effFlagsCanReplacing),
   FST_UNKNOWN_ENUM(effFlagsNoSoundInStop),
