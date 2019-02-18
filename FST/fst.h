@@ -234,7 +234,7 @@ typedef enum {
 #define FSTEVENT_COMMON t_fstEventType type; int byteSize; int deltaFrames
 typedef struct VstEvent_ {
  FSTEVENT_COMMON;
-} VstEvent;
+} FST_UNKNOWN(VstEvent);
 
 typedef struct VstMidiEvent_ {
  FSTEVENT_COMMON;
@@ -244,7 +244,7 @@ typedef struct VstMidiEvent_ {
  FST_UNKNOWN(int) detune;
  FST_UNKNOWN(int) noteOffVelocity;
  char midiData[4];
-} VstMidiEvent;
+} FST_UNKNOWN(VstMidiEvent);
 typedef struct VstMidiSysexEvent_ {
  FSTEVENT_COMMON;
  /* FIXXXME: unknown member order */
@@ -252,22 +252,22 @@ typedef struct VstMidiSysexEvent_ {
   FST_UNKNOWN(int) dumpBytes;
   FST_UNKNOWN(int) flags;
   FST_UNKNOWN(int) resvd1, resvd2;
-} VstMidiSysexEvent;
+} FST_UNKNOWN(VstMidiSysexEvent);
 
 typedef struct VstEvents_ {
   int numEvents;
   VstEvent**events;
-} VstEvents;
+} FST_UNKNOWN(VstEvents);
 
 typedef struct VstSpeakerProperties_ {
   FST_UNKNOWN(int) type;
-} VstSpeakerProperties;
+} FST_UNKNOWN(VstSpeakerProperties);
 
 typedef struct VstSpeakerArrangement_ {
   int type;
   int numChannels;
   VstSpeakerProperties*speakers;
-} VstSpeakerArrangement;
+} FST_UNKNOWN(VstSpeakerArrangement);
 
 typedef struct VstTimeInfo_ {
   FST_UNKNOWN(double) tempo;
@@ -284,13 +284,13 @@ typedef struct VstTimeInfo_ {
   FST_UNKNOWN(double) cycleEndPos; // (double)ppqLoopEnd;
   FST_UNKNOWN(int) smpteFrameRate; //int32
   FST_UNKNOWN(int) smpteOffset; //int32
-} VstTimeInfo;
+} FST_UNKNOWN(VstTimeInfo);
 
 typedef struct VstPinProperties_ {
     FST_UNKNOWN(int) arrangementType;
     char*label;
     int flags;
-} VstPinProperties;
+} FST_UNKNOWN(VstPinProperties);
 
 
  /* dispatcher(effect, opcode, index, value, ptr, opt) */
@@ -331,11 +331,11 @@ typedef struct AEffect_ {
   FST_UNKNOWN(t_fstEffectProcessInplace*)  FST_UNKNOWN(processReplacing);
   FST_UNKNOWN(t_fstEffectProcessInplaceDbl*)  FST_UNKNOWN(processDoubleReplacing);
 
-} AEffect;
+} FST_UNKNOWN(AEffect);
 
 typedef struct ERect_ {
   int left;
   int right;
   int top;
   int bottom;
-} ERect;
+} FST_UNKNOWN(ERect);
