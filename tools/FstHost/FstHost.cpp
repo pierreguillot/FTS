@@ -1,5 +1,6 @@
 
 #include "fst.h"
+#include "../print_aeffect.h"
 #include <stdio.h>
 #include <dlfcn.h>
 
@@ -43,6 +44,8 @@ int test_plugin(const char*filename) {
   if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
   //dumpdata(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
+  print_aeffect(effect);
+
   printf("testing dispatcher\n");
   for(int i=0; i<74; i++) {
     bool skip = false;
