@@ -5,6 +5,9 @@
 #define FST_ENUM_EXP(x, y) x = y
 #define FST_ENUM(x, y) x = y
 
+
+#define kVstVersion FST_UNKNOWN(2400)
+
 #define VSTCALLBACK
 typedef long t_fstPtrInt; /* pointer sized int */
 typedef int t_fstInt32; /* 32bit int */
