@@ -2,7 +2,7 @@ CPPFLAGS=-I../../FST
 CXXFLAGS=-g -O0
 LIBS=
 
-default: FstPlugin
+default: FstPlugin.so
 
 all: FstPlugin.so FstPlugin.32.so FstPlugin.64.so
 
