@@ -294,22 +294,21 @@ typedef struct VstPinProperties_ {
 
 
  /* dispatcher(effect, opcode, index, value, ptr, opt) */
-typedef t_fstPtrInt (t_fstEffectDispatcher)(struct AEffect_*, int, int, t_fstPtrInt, void* const, float);
-typedef void (t_fstEffectSetParameter)(struct AEffect_*, int, float);
-typedef float (t_fstEffectGetParameter)(struct AEffect_*, int);
-typedef void (t_fstEffectProcess)(struct AEffect_*, float**indata, float**outdata, int sampleframes);
-typedef void (t_fstEffectProcessInplace)(struct AEffect_*, float**indata, float**outdata, int sampleframes);
-typedef void (t_fstEffectProcessInplaceDbl)(struct AEffect_*, double**indata, double**outdata, int sampleframes);
+typedef t_fstPtrInt (*AEffectDispatcherProc)(struct AEffect_*, int, int, t_fstPtrInt, void* const, float);
+typedef void (*AEffectSetParameterProc)(struct AEffect_*, int, float);
+typedef float (*AEffectGetParameterProc)(struct AEffect_*, int);
+typedef void (*AEffectProcessProc)(struct AEffect_*, float**indata, float**outdata, int sampleframes);
+typedef void (*AEffectProcessDoubleProc)(struct AEffect_*, double**indata, double**outdata, int sampleframes);
 
-typedef FST_UNKNOWN(t_fstEffectDispatcher*) audioMasterCallback;
+typedef FST_UNKNOWN(AEffectDispatcherProc) audioMasterCallback;
 
 typedef struct AEffect_ {
   t_fstInt32 magic; /* @0 0x56737450, aka 'VstP' */
   /* auto-padding in place */
-  t_fstEffectDispatcher* dispatcher; // (AEffect*, Vst2::effClose, 0, 0, 0, 0);
-  t_fstEffectProcess* process;
-  t_fstEffectSetParameter* setParameter; // (Aeffect*, int, float)
-  t_fstEffectGetParameter* getParameter; // float(Aeffect*, int)
+  AEffectDispatcherProc dispatcher; // (AEffect*, Vst2::effClose, 0, 0, 0, 0);
+  AEffectProcessProc process;
+  AEffectSetParameterProc setParameter; // (Aeffect*, int, float)
+  AEffectGetParameterProc getParameter; // float(Aeffect*, int)
 
   t_fstInt32 numPrograms;
   t_fstInt32 numParams;
@@ -328,9 +327,8 @@ typedef struct AEffect_ {
   t_fstInt32 uniqueID; // @112
   t_fstInt32 version;
 
-  FST_UNKNOWN(t_fstEffectProcessInplace*)  FST_UNKNOWN(processReplacing);
-  FST_UNKNOWN(t_fstEffectProcessInplaceDbl*)  FST_UNKNOWN(processDoubleReplacing);
-
+  FST_UNKNOWN(AEffectProcessProc)  FST_UNKNOWN(processReplacing);
+  FST_UNKNOWN(AEffectProcessDoubleProc)  FST_UNKNOWN(processDoubleReplacing);
 } FST_UNKNOWN(AEffect);
 
 typedef struct ERect_ {
