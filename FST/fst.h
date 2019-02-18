@@ -306,8 +306,8 @@ typedef struct AEffect_ {
   /* auto-padding in place */
   t_fstEffectDispatcher* dispatcher; // (AEffect*, Vst2::effClose, 0, 0, 0, 0);
   t_fstEffectProcess* process;
-  t_fstEffectGetParameter* getParameter; // float(Aeffect*, int)
   t_fstEffectSetParameter* setParameter; // (Aeffect*, int, float)
+  t_fstEffectGetParameter* getParameter; // float(Aeffect*, int)
 
   t_fstInt32 numPrograms;
   t_fstInt32 numParams;
