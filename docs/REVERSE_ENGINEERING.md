@@ -1097,7 +1097,7 @@ it also calls back to the host:
 |hypercyclic | 12   | 7      | `(..., 0, 65024, NULL, 0.f)`
 |hypercyclic | 12   | 6      | `(..., 0,     1, NULL, 0.f)`
 |------------|----- |--------|-------
-|tonespace   |      |        | almost the same as *hypercyclic*, but with an additional final callback to `FstHost::dispatcher(eff, 0, 5, 0, NULL, 0.)` whenever 
+|tonespace   |      |        | almost the same as *hypercyclic*, but with an additional final callback to `FstHost::dispatcher(eff, 0, 5, 0, NULL, 0.)` whenever
 
 I guess that host-opcode `33` is meant to query the hostname. In `juce_VSTPluginFormat.cpp` this is handled with
 the `audioMasterGetProductString` and `audioMasterGetVendorString` opcodes,
@@ -1169,4 +1169,139 @@ AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
   return eff;
 }
 ~~~
+
+This simple plugin allows us to query the host for whatever opcodes the host understands:
+
+~~~C
+for(size_t i = 0; i<64; i++) {
+  char buf[512] = {0};
+  t_fstPtrInt res = dispatch(0, i, 0, 0, buf, 0);
+  if(*buf)
+    printf("\t'%.*s'\n", 512, buf);
+  if(res)
+    printf("\treturned %d\n", res);
+}
+~~~
+
+With REAPER, this returns:
+
+op    | result   | buf        |
+------|----------|------------|
+   *0 |        1 |
+   *1 |     2400 |
+    6 |        1 |
+    8 |        1 |
+   10 |  1200000 |
+   11 |    65536 |
+   12 |        1 |
+   13 |        1 |
+   23 |        1 |
+  *32 |        1 | Cockos
+  *33 |        1 | REAPER
+  *34 |     5965 |
+   42 |        1 |
+   43 |        1 |
+   44 |        1 |
+   48 |        1 | /Net/iem/Benutzer/zmoelnig/Documents/REAPER Media/test.RPP
+
+This table confirms that host-opcode `33` is `audioMasterGetProductString`,
+and we learn that host-opcode `32` is `audioMasterGetVendorString`.
+The number `5969` happens to be the version of REAPER (`5.965`), so
+host-opcode `34` is likely `audioMasterGetVendorVersion`.
+
+TODO: 10, 11
+
+# AEffect initialisation from host
+
+After the `VSTPluginMain` function has returned to the host,
+REAPER calls our plugin a couple or times, with various opcodes:
+
+> FstClient::dispatcher(0x3098d20, 0, 0, 0, (nil), 0.000000)
+> FstClient::dispatcher(0x3098d20, 2, 0, 0, (nil), 0.000000)
+> FstClient::dispatcher(0x3098d20, 5, 0, 0, 0x7fffe1b4a2f0, 0.000000)
+> [...]
+> FstClient::dispatcher(0x3098d20, 10, 0, 0, (nil), 44100.000000)
+> FstClient::dispatcher(0x3098d20, 11, 0, 512, (nil), 0.000000)
+> FstClient::dispatcher(0x3098d20, 12, 0, 1, (nil), 0.000000)
+> FstClient::dispatcher(0x3098d20, 35, 0, 0, (nil), 0.000000)
+> FstClient::dispatcher(0x3098d20, 45, 0, 0, 0x7fffe1b4a530, 0.000000)
+> FstClient::dispatcher(0x3098d20, 47, 0, 0, 0x7fffe1b4a530, 0.000000)
+> FstClient::dispatcher(0x3098d20, 51, 0, 0, 0xab4617, 0.000000)
+> [...]
+> FstClient::dispatcher(0x3098d20, 58, 0, 0, (nil), 0.000000)
+> FstClient::dispatcher(0x3098d20, 71, 0, 0, (nil), 0.000000)
+
+Opcode `10` looks like the host samplerate (`effSetSampleRate`),
+and `11` looks like the blocksize (`effSetBlockSize`).
+
+Opcode `5` is what we already suspect to be `effGetProgramName`,
+which we can now confirm by implementing it.
+If we do return a nice string for opcode 5,
+REAPER will
+
+
+
+
+If we add our new plugin to a REAPER track, we see printout like the following
+(btw: for now i've muted the output for opcodes `53` and `3` as they are spamming
+the console):
+
+> FstClient::setParameter(0x27967d0)[0] -> 0.000000
+> FstClient::setParameter(0x27967d0)[0] -> 0.000000
+> FstClient::dispatcher(0x27967d0, 8, 0, 0, 0x7ffeca15b580, 0.000000)
+> FstClient::dispatcher(0x27967d0, 7, 0, 0, 0x7ffeca15b480, 0.000000)
+> FstClient::dispatcher(0x27967d0, 6, 0, 0, 0x7ffeca15b480, 0.000000)
+> FstClient::setParameter(0x27967d0)[1] -> 279445823603548880896.000000
+> FstClient::setParameter(0x27967d0)[1] -> 0.000000
+> FstClient::dispatcher(0x27967d0, 8, 1, 0, 0x7ffeca15b580, 0.000000)
+> FstClient::dispatcher(0x27967d0, 7, 1, 0, 0x7ffeca15b480, 0.000000)
+> FstClient::dispatcher(0x27967d0, 6, 1, 0, 0x7ffeca15b480, 0.000000)
+> FstClient::setParameter(0x27967d0)[2] -> 279445823603548880896.000000
+> FstClient::setParameter(0x27967d0)[2] -> 0.000000
+> FstClient::dispatcher(0x27967d0, 8, 2, 0, 0x7ffeca15b580, 0.000000)
+> FstClient::dispatcher(0x27967d0, 7, 2, 0, 0x7ffeca15b480, 0.000000)
+> FstClient::dispatcher(0x27967d0, 6, 2, 0, 0x7ffeca15b480, 0.000000)
+
+Since the opcodes `6`, `7` and `8` are the only ones that use the index
+(with an index that goes until `numParams-1`), they are likely to be
+parameter related. Conincidientally we have 3 parameter-related opcodes:
+`effGetParamLabel`, `effGetParamDisplay` and `effGetParamName`.
+
+If we respond to these opcodes with some strings (by copying them into `object`) and
+display the generic FX-GUI in reaper, we notice that our strings appear besides the
+three parameter sliders (`8` to the left, and `7` followed by `6` to the right).
+For other plugins, these strings read like "Gain" (on the left) and "+0.00 dB" (on the right).
+We can pretty safely assume that *Name* refers to the human readable name of the parameter (e.g. "Gain"),
+so *Display* would be a nice string rendering of the value itself (e.g. "+0.00")
+and *Label* would be the units (e.g. "dB").
+
+Playing around with the sliders and watching the calls to `setParameter`,
+we see that whenever we move the slider, both the setter- and the getter-function are called.
+However, we get bogus values, e.g.:
+
+> FstClient::setParameter(0x2a88690)[0] -> -27706476332321908694659177423680045056.000000
+
+This looks like the `setParameter` callback is not called correctly.
+Remember, that we used arbitrary positions for the function pointers in the `AEffect` structure
+(we were just lucky that the `dispatcher` function was at the correct place).
+This means that the host might call the `setParameter` function without providing
+any explicit `value` argument at all )e.g. because the host things this is really the getter).
+So let's play with those, and just revert the order of the two functions:
+
+~~~C
+typedef struct AEffect_ {
+  t_fstInt32 magic;
+  t_fstEffectDispatcher* dispatcher;
+  t_fstEffectProcess* process;
+  t_fstEffectSetParameter* setParameter;
+  t_fstEffectGetParameter* getParameter;
+  // ...
+}
+~~~
+
+And indeed, this seems to have done the trick!
+
+When we move a slider, both parameter getter and setter are called as well as the opcodes `6`, `7` & `8`.
+About 0.5 seconds after the last parameter change happened, the host calls opcode `5` (which we already believe
+to be `effGetProgramName`).
 
