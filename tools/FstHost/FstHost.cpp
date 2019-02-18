@@ -30,10 +30,12 @@ void dumpdata(const char*basename, const void*data, size_t length) {
 t_fstMain* load_plugin(const char* filename) {
   void*handle = dlopen(filename, RTLD_NOW | RTLD_GLOBAL);
   void*vstfun = 0;
+  printf("loading %s as %p\n", filename, handle);
   if(!handle){printf("\t%s\n", dlerror()); return 0; }
   if(!vstfun)vstfun=dlsym(handle, "VSTPluginMain");
   if(!vstfun)vstfun=dlsym(handle, "main");
   if(!vstfun)dlclose(handle);
+  printf("loaded '%s' as %p with %p\n", filename, handle, vstfun);
   return (t_fstMain*)vstfun;
 }
 
