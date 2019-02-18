@@ -43,6 +43,9 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   }
   switch(opcode) {
   default: break;
+  case effSetProgram:
+    curProgram = index,
+    return 0;
   case effGetProgramName:
     snprintf((char*)object, 32, "FstProgram%d", curProgram);
     return 0;
@@ -104,7 +107,7 @@ AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
   eff->getParameter = getParameter;
   eff->setParameter = setParameter;
 
-  eff->numPrograms = 1;
+  eff->numPrograms = 5;
   eff->numParams = 3;
   eff->numInputs = 2;
   eff->numOutputs = 2;
