@@ -4,6 +4,8 @@
 
 static t_fstEffectDispatcher*dispatch = 0;
 
+static float parameters[3];
+
 void print_effect(AEffect*eff) {
   printf("AEffect @ %p", eff);
   if(!eff)return;
@@ -45,10 +47,16 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
 
 static void setParameter(AEffect*eff, int index, float value) {
   printf("FstClient::setParameter(%p)[%d] -> %f\n", eff, index, value);
+  if(index>=sizeof(parameters))
+    index=sizeof(parameters);
+  parameters[index] = value;
+
 }
 static float getParameter(AEffect*eff, int index) {
-  printf("FstClient::getParameter(%p)[%d]\n", eff, index);
-  return 0.5;
+  if(index>=sizeof(parameters))
+    index=sizeof(parameters);
+  printf("FstClient::getParameter(%p)[%d] <- %f\n", eff, index, parameters[index]);
+  return parameters[index];
 }
 static void process(AEffect*eff, float**indata, float**outdata, int sampleframes) {
   //printf("FstClient::process(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
@@ -65,6 +73,9 @@ extern "C"
 AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
   dispatch = dispatch4host;
   printf("FstPlugin::main(%p)\n", dispatch4host);
+  for(size_t i=0; i<sizeof(parameters); i++)
+    parameters[i] = 0.5;
+
   AEffect* eff = new AEffect;
 
   eff->magic = 0x56737450;
