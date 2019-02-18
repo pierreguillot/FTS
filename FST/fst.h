@@ -8,12 +8,6 @@ typedef int t_fstInt32; /* 32bit int */
 #define FST_ENUM_EXP(x, y) x = y
 #define FST_ENUM(x, y) x = y
 
-
-/* 197782 is where the array passed at opcode:33 overflows */
-const size_t kVstMaxProductStrLen = FST_UNKNOWN(197782);
-const size_t kVstMaxVendorStrLen = FST_UNKNOWN(197782);
-
-
 typedef enum {
   FST_ENUM(audioMasterAutomate, 0),
   FST_ENUM(audioMasterVersion, 1),
@@ -197,6 +191,12 @@ typedef enum {
     FST_UNKNOWN_ENUM(kSpeakerTrr)
 } t_fstSpeakerArrangementType;
 enum {
+/* 197782 is where the array passed at opcode:33 overflows */
+    FST_ENUM_EXP(kVstMaxProductStrLen, 197782),
+    FST_ENUM_EXP(kVstMaxVendorStrLen, 197782),
+    FST_ENUM_EXP(kVstMaxLabelLen, 100),
+    FST_ENUM_EXP(kVstMaxShortLabelLen, 100),
+
     FST_UNKNOWN_ENUM(kVstAutomationReading),
     FST_UNKNOWN_ENUM(kVstAutomationWriting),
     FST_UNKNOWN_ENUM(kVstBarsValid),
