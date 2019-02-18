@@ -16,8 +16,9 @@ const size_t kVstMaxVendorStrLen = FST_UNKNOWN(197782);
 typedef enum {
   audioMasterAutomate = 0,
   audioMasterVersion = 1,
-  FST_ENUM_EXP(audioMasterGetProductString, 33), /* could as well be audioMasterGetVendorString */
-  FST_UNKNOWN_ENUM(audioMasterGetVendorString),  /* resp, audioMasterGetProductString */
+  audioMasterGetVendorString = 32,
+  audioMasterGetProductString = 33,
+  audioMasterGetVendorVersion = 34,
 
   // 13: sending latency
     FST_UNKNOWN_ENUM(audioMasterBeginEdit),
@@ -39,7 +40,6 @@ typedef enum {
     FST_UNKNOWN_ENUM(audioMasterGetPreviousPlug),
     FST_UNKNOWN_ENUM(audioMasterGetSampleRate),
     FST_UNKNOWN_ENUM(audioMasterGetTime),
-    FST_UNKNOWN_ENUM(audioMasterGetVendorVersion),
     FST_UNKNOWN_ENUM(audioMasterIdle),
     FST_UNKNOWN_ENUM(audioMasterIOChanged),
     FST_UNKNOWN_ENUM(audioMasterNeedIdle),
