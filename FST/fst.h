@@ -1,12 +1,13 @@
 
-#define VSTCALLBACK
-typedef long t_fstPtrInt; /* pointer sized int */
-typedef int t_fstInt32; /* 32bit int */
 
 #define FST_UNKNOWN(x) x
 #define FST_UNKNOWN_ENUM(x) x = 98765 + __LINE__
 #define FST_ENUM_EXP(x, y) x = y
 #define FST_ENUM(x, y) x = y
+
+#define VSTCALLBACK
+typedef long t_fstPtrInt; /* pointer sized int */
+typedef int t_fstInt32; /* 32bit int */
 
 typedef enum {
   FST_ENUM(audioMasterAutomate, 0),
