@@ -99,15 +99,6 @@ AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
 
   for(size_t i = 0; i<64; i++) {
     char buf[512] = {0};
-    bool skip = false;
-    switch(i) {
-    default: break;
-    }
-    if(skip) {
-      printf("Skipping: %d\n", i);
-      continue;
-    }
-    printf("Trying: %d\n", i);
     t_fstPtrInt res = dispatch(0, i, 0, 0, buf, 0);
     if(res)
       printf("\treturned %d\n", res);
