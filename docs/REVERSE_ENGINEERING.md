@@ -1090,8 +1090,9 @@ Since this sounds promising, we run the code on another plugin (*tonespace*), wh
 Our code returns (with opcode `5`):
 > EDU-C Major Scale
 
-Hooray, we found `effGetProgramName` or `effProgramNameIndexed` (probably the former, as setting the `index` (and/or `ivalue` resp `fvalue`)
-when calling `AEffect.dispatcher` doesn't make any difference.)
+Hooray, we found `effGetProgramName` or `effProgramNameIndexed`
+(probably the former, as setting the `index` (and/or `ivalue` resp. `fvalue`)
+doesn't make any difference.)
 
 We also notice, that the `t_fstPtrInt` returned by `AEffect.dispatcher` is always `0`.
 
@@ -1153,6 +1154,7 @@ This gave me a maximum string length of `197782` bytes. impressive, but i'm not 
 
 The host-opcode `0` seems to be used to tell the host the current values for all the parameters.
 In `juce_VSTPluginFormat.cpp::handleCallback()` this is handled in the `audioMasterAutomate` opcode.
+
 
 
 # Part: a plugin
