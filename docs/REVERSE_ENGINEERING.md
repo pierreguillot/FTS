@@ -1258,6 +1258,8 @@ TODO: 10, 11
 
 # AEffect initialisation from host
 
+## startup
+
 After the `VSTPluginMain` function has returned to the host,
 REAPER calls our plugin a couple or times, with various opcodes:
 
@@ -1286,8 +1288,27 @@ REAPER will then call opcode `2` with a varying index and then calls opcode `5` 
 (so supposedly it tries to change the program and query the new program name.
 In theory it should use `effGetProgramNameIndexed` instead...
 
+To find out what the pointers store, we can just try to print them out
+(making sure to only print the first N bytes, in order to not flood the terminal).
+For most of the opcodes this doesn't print anything (so the `ptr` points to a properly
+zero-initialised memory region), only for opcode `51` we get something:
+
+- `hasCockosExtensions`
+- `hasCockosNoScrollUI`
+- `receiveVstEvents`
+- `receiveVstMidiEvent`
+- `sendVstEvents`
+- `sendVstMidiEvent`
+- `wantsChannelCountNotifications`
+
+This looks very much like a generic interface to either query a property by name
+(could be `effCanDo`) or to allow vendor-specific programs (could be `effVendorSpecific`).
+Looking up how JUCE handles the `effCanDo` in *juce_VST_Wrapper.cpp*, we see that
+it really takes the `ptr` argument as string and compares it to values like
+`bypass`, `sendVstEvents` and `hasCockosExtensions`. Bingo!
 
 
+## inserting the plugin
 
 If we add our new plugin to a REAPER track, we see printout like the following
 (btw: for now i've muted the output for opcodes `53` and `3` as they are spamming
