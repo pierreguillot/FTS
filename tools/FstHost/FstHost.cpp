@@ -5,6 +5,7 @@
 #include <dlfcn.h>
 
 #include <string>
+#include <string.h>
 
 typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
 
@@ -15,10 +16,30 @@ void fstpause(float duration=1.0) {
 }
 
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
-  printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
+  printf("FstHost::dispatcher: ");
   switch(opcode) {
-  case audioMasterVersion: return 2400;
-  default:  break;
+  case audioMasterVersion:
+    printf("MasterVersion\n");
+    return 2400;
+  case audioMasterAutomate:
+    printf("automate parameter[%d] to %f\n", index, opt);
+    break;
+  case audioMasterGetProductString:
+    printf("GetProduct?String\n");
+#if 0
+    for(size_t i=0; i<kVstMaxProductStrLen; i++) {
+      ((char*)ptr)[i] = 64+i%60;
+    }
+#endif
+    strncpy((char*)ptr, "FstProduct?", kVstMaxProductStrLen);
+    return 1;
+  case audioMasterGetVendorString:
+    printf("GetVendor?String\n");
+    strncpy((char*)ptr, "FstVendor?", kVstMaxVendorStrLen);
+    return 1;
+  default:
+    printf("(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
+    break;
   }
   return 0;
 }
@@ -42,7 +63,8 @@ t_fstMain* load_plugin(const char* filename) {
   if(!vstfun)vstfun=dlsym(handle, "VSTPluginMain");
   if(!vstfun)vstfun=dlsym(handle, "main");
   if(!vstfun)dlclose(handle);
-  printf("loaded '%s' as %p with %p\n", filename, handle, vstfun);
+  printf("loaded '%s' @ %p: %p\n", filename, handle, vstfun);
+  fstpause(1.);
   return (t_fstMain*)vstfun;
 }
 
@@ -50,13 +72,25 @@ int test_plugin(const char*filename) {
   t_fstMain*vstmain = load_plugin(filename);
   if(!vstmain)return printf("'%s' was not loaded\n", filename);
   AEffect*effect = vstmain(&dispatcher);
+  printf("instantiated effect %p\n", effect);
   if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
   //dumpdata(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
   print_aeffect(effect);
 
   printf("testing dispatcher\n");
-  for(int i=0; i<74; i++) {
+#if 0
+  for(int i=0; i<effect->numPrograms; i++) {
+   char buffer[512] = { 0 };
+    t_fstPtrInt res = effect->dispatcher (effect, 5, i, i, buffer, i);
+    const char*str = (const char*)res;
+    printf("program#%d[%d=0x%X]: %.*s\n", i, res, res, 32, str);
+    if(*buffer)
+      printf("\t'%.*s'\n", 512, buffer);
+  }
+  return 0;
+#endif
+  for(int i=0; i<78; i++) {
     bool skip = false;
     switch(i) {
     case 1:
@@ -91,7 +125,7 @@ int test_plugin(const char*filename) {
     case 69:
     case 71:
     case 72:
-
+    case 73:
 #if 0
       /* JUCE plugins */
     case 42:
@@ -111,13 +145,16 @@ int test_plugin(const char*filename) {
       printf("skipping: %d\n", i);
       continue;
     }
-    printf("trying: %d\n", i);
+    printf("\ntrying: %d\n", i);
     char buffer[512] = { 0 };
-    t_fstPtrInt res = effect->dispatcher (effect, i, 0, 0, buffer, 0);
-    const char*str = (const char*)res;
-    printf("%d[%d=0x%X]: %.*s\n", i, res, res, 32, str);
+    t_fstPtrInt res = effect->dispatcher (effect, i, 1, 0, buffer, 0.5);
+    if(res) {
+      const char*str = (const char*)res;
+      printf("\t[%d=0x%X]: %.*s\n", i, res, res, 32, str);
+    }
     if(*buffer)
-      printf("\t'%.*s'\n", 16, buffer);
+      printf("\t'%.*s'\n", 512, buffer);
+    fstpause();
   }
   printf("tested dispatcher\n");
   return 0;
