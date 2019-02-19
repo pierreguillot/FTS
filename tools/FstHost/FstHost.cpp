@@ -170,6 +170,7 @@ int test_plugin(const char*filename) {
     }
     //printf("\ntrying: %d\n", i);
     char buffer[200000] = { 0 };
+    snprintf(buffer, 511, "name%d", i);
     t_fstPtrInt res = effect->dispatcher (effect, i, 0, 0, buffer, 0);
     if(res || (buffer && *buffer))
         printf("\ntried: %d\n", i);
@@ -183,6 +184,11 @@ int test_plugin(const char*filename) {
       printf("\tbuffer '%.*s'\n", 512, buffer);
     fstpause();
   }
+  do {
+    char buffer[200000] = { 0 };
+    t_fstPtrInt res = effect->dispatcher (effect, 5, 0, 0, buffer, 0);
+    printf("gotProgName: %.*s\n", 20, buffer);
+  } while(0);
   printf("tested dispatcher with %u (0x%X) opcodes\n", numopcodes, numopcodes);
   return 0;
 }
