@@ -1003,6 +1003,9 @@ Things we know from running the plugins through REAPER:
 - all effects except *Digits* have a GUI
 - *Protoverb*, *InstaLooper*, *BowEcho*, *Danaides* are all effects (with input and output)
 - *Digits*, *hypercyclic*, *tonespace* are all instruments (aka synths; no input)
+Things we know from looking at the source code of JUCE-5.4.1
+- all JUCE plugins have `effFlagsHasEditor|effFlagsCanReplacing|effFlagsProgramChunks`
+- we don't know which JUCE version was used to compile our JUCE plugins!
 
 
 Comparing this with our binary flag values, we can conclude:
