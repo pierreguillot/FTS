@@ -35,4 +35,11 @@ static void print_aeffect(AEffect*eff) {
   printf("\n\n");
 }
 
+static void print_erect(ERect*rect) {
+  printf("ERect[%p]", rect);
+  if(rect)
+    printf(" = %d|%d - %d|%d", rect->top, rect->left, rect->bottom, rect->right);
+  printf("\n");
+}
+
 #endif /* PRINT_AEFFECT_H_ */
