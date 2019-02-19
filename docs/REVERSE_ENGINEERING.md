@@ -1375,3 +1375,74 @@ And indeed, this seems to have done the trick!
 When we move a slider, both parameter getter and setter are called as well as the opcodes `6`, `7` & `8`.
 About 0.5 seconds after the last parameter change happened, the host calls opcode `5` (which we already believe
 to be `effGetProgramName`).
+
+# Part: more enums
+
+## effSetProgramName
+If we set the `numPrograms` to some identifiably value (e.g. 5) and open the plugin with REAPER,
+we can see that it does something like, the following when opening up the generic GUI:
+
+~~~
+FstClient::dispatcher(0x3339ff0, 2, 0, 0, (nil), 0.000000)
+FstClient::dispatcher(0x3339ff0, 5, 0, 0, 0x7ffc1b29af60, 0.000000)
+FstClient::dispatcher(0x3339ff0, 2, 0, 1, (nil), 0.000000)
+FstClient::dispatcher(0x3339ff0, 5, 0, 0, 0x7ffc1b29af60, 0.000000)
+FstClient::dispatcher(0x3339ff0, 2, 0, 2, (nil), 0.000000)
+FstClient::dispatcher(0x3339ff0, 5, 0, 0, 0x7ffc1b29af60, 0.000000)
+FstClient::dispatcher(0x3339ff0, 2, 0, 3, (nil), 0.000000)
+FstClient::dispatcher(0x3339ff0, 5, 0, 0, 0x7ffc1b29af60, 0.000000)
+FstClient::dispatcher(0x3339ff0, 2, 0, 4, (nil), 0.000000)
+FstClient::dispatcher(0x3339ff0, 5, 0, 0, 0x7ffc1b29af60, 0.000000)
+FstClient::dispatcher(0x3339ff0, 2, 0, 0, (nil), 0.000000)
+~~~
+
+If we write a different string into the `ptr` for each call to opcode `5`,
+we can see that the generic GUI displays our strings as the program names.
+So it really seems that REAPER makes each program current and then
+queries the current program name in order to retrieve all program names.
+Which confirms that `effGetProgramName` is `5` and introduces
+`effSetProgram` as `2`.
+
+We can now easily find the opcode for the corresponding `effSetProgramName`,
+by passing a unique string (`"program#%02d" % opcode`) for the opcodes 0..10.
+If we call `effGetProgramName` afterwards, we see that the program name is now
+*program#04*, so `effSetProgramName` is `4`.
+
+We have `effSetProgram`, `effSetProgramName` and `effGetProgramName` as `2`, `4` and `5` resp.,
+so probably `effGetProgram` is `3`.
+This can easily be confirmed by a little test program that first changes the program
+to a known value (using a plugin that actually has that many programs!) via `effSetProgram`,
+and then calling opcode `3` to get that value back (as returned from the dispatcher).
+
+
+## effEdit*
+
+The *Protoverb* plugin prints information:
+
+| opcode      | printout                 | opcodeName |
+|-------------|--------------------------|------------|
+| 13          | "AM_VST_Editor::getRect 1200 x 600" | effEditGetRect? |
+| 14          | "AM_VST_Editor::open"    | effEditOpen? |
+| 15          | "closed editor."         | effEditClose? |
+
+Opcode `13` does not crash if we provide it a ptr to some memory,
+and it will write some address into that provided memory.
+It will also return that same address (just what JUCE does for the `effEditGetRect` opcode.)
+If we read this address as `ERect` we get a garbage rectangle (e.g. `0x78643800+0+0`).
+The memory looks like
+
+> 00 00 00 00 58 02 B0 04  00 00 00 00 00 00 00 00
+
+Given that a GUI rectangle will most likely not have a zero width or height,
+it might be, that the `ERect` members are really only 2-bytes wide (`short`),
+which would then translate to the numbers `0, 0, 600, 1200`,
+which happens to align nicely with the the printout of *Protoverb*
+
+~~~C
+typedef struct ERect_ {
+  short left;
+  short top;
+  short right;
+  short bottom;
+} ERect;
+~~~
