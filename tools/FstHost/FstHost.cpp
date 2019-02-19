@@ -150,57 +150,13 @@ int test_plugin(const char*filename) {
   return 0;
 #endif
   for(int i=0; i<78; i++) {
-    bool skip = false;
-    switch(i) {
-    case 1:
-    case 4:
-      //case 5: /* program name [?] */
-    case 6:
-    case 7:
-    case 8:
-      //case 10: /* AM_AudioMan::reset() */
-      //case 11: /* blocksize */
-      //case 12: /* AM_VST_base::suspend () */
-    case 13: /* AM_VST_Editor::getRect 1200 x 600 */
-    case 14: /* AM_VST_Editor::open */
-      // case 15: /* closing editor */
-    case 22:
-    case 23:
-    case 24:
-    case 25:
-    case 26:
-    case 29:
-    case 33:
-    case 34:
-    case 35:
-    case 45:
-    case 47:  /* AM_VST_base::getVendorString (char* text) */
-    case 48:
-    case 49:
-    case 51:
-    case 58:
-      //case 59: /* u-he plugin doesnt use key, returns false (VST) or jumps to default key handler (WindowProc) */
-    case 63:
-    case 69:
-    case 71:
-    case 72:
-    case 73:
-#if 0
-      /* JUCE plugins */
-    case 42:
-    case 44:
-#endif
-#if 1
-/* Digits plugin */
-    case 3:
-#endif
-      skip = true;
-      break;
-    default: break;
-#if 0
 #endif
     }
-    if(skip) {
+    if (skipOpcode(i)
+#ifdef NOSKIP
+        && (NOSKIP != i)
+#endif
+        ) {
       printf("skipping: %d\n", i);
       continue;
     }
