@@ -141,13 +141,15 @@ int test_plugin(const char*filename) {
 
   printf("testing dispatcher\n");
 #if 0
+  for(size_t opcode=0; opcode < 10; opcode++) {
   for(int i=0; i<effect->numPrograms; i++) {
    char buffer[512] = { 0 };
-    t_fstPtrInt res = effect->dispatcher (effect, 5, i, i, buffer, i);
+    t_fstPtrInt res = effect->dispatcher (effect, opcode, i, i, buffer, i);
     const char*str = (const char*)res;
     printf("program#%d[%d=0x%X]: %.*s\n", i, res, res, 32, str);
     if(*buffer)
       printf("\t'%.*s'\n", 512, buffer);
+  }
   }
   return 0;
 #endif
