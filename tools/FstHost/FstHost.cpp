@@ -15,6 +15,17 @@ void fstpause(float duration=1.0) {
   sleep(1);
 }
 
+static void hexprint(char*data, size_t length) {
+  printf("DATA@%p [%d]", data, length);
+  if(data) {
+    for(size_t i=0; i<length; i++) {
+      if(!(i%16))printf("\n\t");
+      if(!(i% 8))printf(" ");
+      printf(" %02X", *data++);
+    }
+  }
+  printf("\n");
+}
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
   printf("FstHost::dispatcher: ");
   switch(opcode) {
