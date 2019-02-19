@@ -1378,7 +1378,7 @@ to be `effGetProgramName`).
 
 # Part: more enums
 
-## effSetProgramName
+## eff[...]Program[...]
 If we set the `numPrograms` to some identifiably value (e.g. 5) and open the plugin with REAPER,
 we can see that it does something like, the following when opening up the generic GUI:
 
@@ -1446,3 +1446,62 @@ typedef struct ERect_ {
   short bottom;
 } ERect;
 ~~~
+
+## effGetProgramNameIndexed
+
+the following little helper gives us information, what a plugin returns for the various opcodes:
+
+~~~C
+  for(size_t opcode=16; opcode<64; opcode++) {
+    char buffer[200] = { 0 };
+    t_fstPtrInt result = effect->dispatcher(effect, opcode, 0, 0, buffer, 0.f);
+    if(result || *buffer)
+      printf("tested %d\n", opcode);
+    if(result)
+      printf("\t%llu 0x%llX\n", result, result);
+    if(*buffer) {
+      printf("\tbuffer '%.*s'\n", 512, buffer);
+      hexprint(buffer, 16);
+    }
+  }
+~~~
+
+I get:
+
+> tested 22	 | 1316373862 0x4E764566
+> tested 23  |  791 0x317 |  buffer '�  ��U'
+> tested 24  |  1 0x1
+> tested 25  |  1 0x1
+> tested 26  |  1 0x1
+> tested 29  |  1 0x1     |  buffer 'initialize'
+> tested 33  |  1 0x1     |  buffer 'Protoverb-In0'
+> tested 34  |  1 0x1     |  buffer 'Protoverb-Out1'
+> tested 35  |  1 0x1
+> tested 45  |  1 0x1     |  buffer 'Protoverb'
+> tested 47  |  1 0x1     |  buffer 'u-he'
+> tested 48  |  1 0x1     |  buffer 'Protoverb 1.0.0'
+> tested 49  |  65536 0x10000
+> tested 51  |  18446744073709551615 0xFFFFFFFFFFFFFFFF
+> tested 58  |  2400 0x960
+> tested 63  |  18446744073709551615 0xFFFFFFFFFFFFFFFF
+
+The "initialize" string we already know as Protoverbs sole program name.
+The only missing opcode for retrieving program names is `effGetProgramNameIndexed`.
+
+We can confirm this assumption with a plugin that has many programs (e.g. *tonespace*)
+and the following snippet:
+
+~~~C
+  for(int i=0; i<effect->numPrograms; i++) {
+    char buffer[200] = { 0 };
+    effect->dispatcher(effect, 29, i, 0, buffer, 0.f);
+    if(*buffer) {
+      printf("\tbuffer#%d '%.*s'\n", i, 512, buffer);
+    }
+  }
+~~~
+
+## effectName, productString, vendorString, vendorVersion
+
+In the [C-snippet above](#effgetprogramnameindexed), we also get nice strings for
+opcodes `45`, `47`, and `48`.
