@@ -61,8 +61,10 @@ typedef enum {
   FST_ENUM_UNKNOWN(audioMasterWillReplaceOrAccumulate) //?, return 0
 } t_fstHostOpcode;;
 typedef enum {
-  FST_ENUM_EXPERIMENTAL(effSetProgram, 2), // IN:ivalue, return 0
-  FST_ENUM_EXPERIMENTAL(effGetProgramName, 5), // OUT:ptr(char[24]), return 0
+  FST_ENUM(effSetProgram, 2), // IN:ivalue, return 0
+  FST_ENUM(effGetProgram, 3), // return current_program
+  FST_ENUM(effSetProgramName, 4), //IN:ptr(char*), return 0
+  FST_ENUM(effGetProgramName, 5), // OUT:ptr(char[24]), return 0
 
   /* JUCE say that kVstMaxParamStrLen is 8, but hosts allow a bit more (24) */
   FST_ENUM(effGetParamLabel, 6), // OUT:ptr(char[8]), return 0
@@ -83,8 +85,6 @@ typedef enum {
   FST_ENUM_EXPERIMENTAL(effIdentify, 0), // return ByteOrder::bigEndianInt ("NvEf")
   FST_ENUM_EXPERIMENTAL(effOpen, 1), // return 0
   FST_ENUM_UNKNOWN(effClose), // return 0
-  FST_ENUM_UNKNOWN(effGetProgram), // return current_program
-  FST_ENUM_UNKNOWN(effSetProgramName), //IN:ptr(char*), return 0
   FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0 (handleResumeSuspend)
 
   FST_ENUM(effEditGetRect, 13), //OUT:ptr(ERect*), return ptr
