@@ -13,6 +13,7 @@ found on any ordinary Linux system, we also use:
 
 - Compiler: `gcc` (Debian 8.2.0-20) 8.2.0
 - Debugger: `gdb` (Debian 8.2.1-1) 8.2.1
+- Memory Debugger: `valgrind`
 - Hexeditor: `bless`
 - Diff-viewers: `meld`, `vimdiff`, `vbindiff`
 
