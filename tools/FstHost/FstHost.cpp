@@ -151,6 +151,9 @@ int test_plugin(const char*filename) {
 #endif
   size_t numopcodes = 78;
   for(size_t i=0; i<numopcodes; i++) {
+    if(!(i%65536)) {
+      printf("=== mark %d ===\n", i>>16);
+      fflush(stdout);
     }
     if (skipOpcode(i)
 #ifdef NOSKIP
