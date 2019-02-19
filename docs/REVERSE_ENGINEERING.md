@@ -299,7 +299,7 @@ after that the biggest issue is that the `AEffect` struct contains a few functio
 
 luckily JUCE maps those functions quite directly, so we get:
 ~~~
-t_fstPtrInt dispatcher(AEffect*, int opcode, int index, t_fstPtrInt value, void* const ptr, float opt);
+t_fstPtrInt dispatcher(AEffect*, int opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue);
 void setParameter(AEffect*, int index, float value);
 float getParameter(AEffect*, int index);
 void process(AEffect*, float**indata, float**outdata, int sampleframes);
@@ -313,7 +313,7 @@ And we end up with something like the following:
 typedef long t_fstPtrInt; /* pointer sized int */
 ##define VSTCALLBACK
 
- /* dispatcher(effect, opcode, index, value, ptr, opt) */
+ /* dispatcher(effect, opcode, index, ivalue, ptr, fvalue) */
 typedef t_fstPtrInt (t_fstEffectDispatcher)(struct AEffect_*, int, int, t_fstPtrInt, void* const, float);
 typedef void (t_fstEffectSetParameter)(struct AEffect_*, int, float);
 typedef float (t_fstEffectGetParameter)(struct AEffect_*, int);
@@ -625,8 +625,8 @@ JUCE is rather big and it turns out that it takes just too long...)
 #include <dlfcn.h>
 #include "fst.h"
 typedef AEffect* (t_fstMain)(t_fstEffectDispatcher*);
-t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
-  printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
+t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, ivalue, ptr, fvalue);
   return 0;
 }
 t_fstMain* load_plugin(const char* filename) {
@@ -663,8 +663,8 @@ So we apparently *must* handle the `audioMasterVersion` opcode in our local disp
 (just like JUCE does); let's extend our local dispatcher to do that:
 
 ~~~
-t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
-  printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
+t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, ivalue, ptr, fvalue);
   switch(opcode) {
   case audioMasterVersion: return 2400;
   default:  break;
@@ -1089,7 +1089,7 @@ Since this sounds promising, we run the code on another plugin (*tonespace*), wh
 Our code returns (with opcode `5`):
 > EDU-C Major Scale
 
-Hooray, we found `effGetProgramName` or `effProgramNameIndexed` (probably the former, as setting the `index` (and/or `value` resp `opt`)
+Hooray, we found `effGetProgramName` or `effProgramNameIndexed` (probably the former, as setting the `index` (and/or `ivalue` resp `fvalue`)
 when calling `AEffect.dispatcher` doesn't make any difference.)
 
 We also notice, that the `t_fstPtrInt` returned by `AEffect.dispatcher` is always `0`.
@@ -1161,8 +1161,8 @@ In `juce_VSTPluginFormat.cpp::handleCallback()` this is handled in the `audioMas
 #include <cstdio>
 #include "fst.h"
 static t_fstEffectDispatcher*dispatch = 0;
-static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
-  printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
+static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, ptr, fvalue);
   return 0;
 }
 
