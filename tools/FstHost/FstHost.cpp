@@ -154,6 +154,7 @@ int test_plugin(const char*filename) {
   return 0;
 #endif
   size_t numopcodes = 78;
+  //  numopcodes = 0xDEADF00D+1;
   for(size_t i=0; i<numopcodes; i++) {
     curOpCode = i;
     if(!(i%65536)) {
