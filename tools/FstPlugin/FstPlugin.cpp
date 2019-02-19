@@ -25,7 +25,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   PRINTEFFCASE(effIdentify);
   PRINTEFFCASE(effOpen);
   case 53: case 3:
-    //return 0;
+    return 0;
     break;
   }
   if(object) {
