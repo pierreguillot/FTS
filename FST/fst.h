@@ -77,10 +77,10 @@ typedef enum {
   FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
 
 
-  FST_ENUM_UNKNOWN(effGetEffectName), // OUT:ptr(char[64]), return 1
-  FST_ENUM_UNKNOWN(effGetProductString), // OUT:ptr(char[64]), return 1
-  FST_ENUM_UNKNOWN(effGetVendorString), // OUT:ptr(char[64]), return 1
-  FST_ENUM_UNKNOWN(effGetVendorVersion), // return version
+  FST_ENUM(effGetEffectName, 45), // OUT:ptr(char[64]), return 1
+  FST_ENUM(effGetProductString, 48), // OUT:ptr(char[64]), return 1
+  FST_ENUM(effGetVendorString, 47), // OUT:ptr(char[64]), return 1
+  FST_ENUM(effGetVendorVersion, 49), // return version
 
 
   FST_ENUM_EXPERIMENTAL(effIdentify, 0), // return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
