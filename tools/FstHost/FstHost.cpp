@@ -168,7 +168,7 @@ int test_plugin(const char*filename) {
     }
     //printf("\ntrying: %d\n", i);
     char buffer[200000] = { 0 };
-    t_fstPtrInt res = effect->dispatcher (effect, i, 1, 0, buffer, 0.5);
+    t_fstPtrInt res = effect->dispatcher (effect, i, 0, 0, buffer, 0);
     if(res || (buffer && *buffer))
         printf("\ntried: %d\n", i);
 
