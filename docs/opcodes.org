@@ -9,6 +9,9 @@
 |      1 | audioMasterVersion                     | :JUCE returns 2400                                           |
 |     13 |                                        | :Protoverb calls in main (and as response to effcode:30514?) |
 |      6 |                                        | :called as response to effCode:12                            |
+|      7 |                                        | :called by hypercyclic/tonespace as response to effCode:12   |
+|     13 |                                        | :called with 0-args in Protoverb:main and hypercyclic:eff:12 |
+|        |                                        |                                                              |
 |     23 |                                        | :called by JUCE-plugins as response to effCode:12            |
 |     32 | audioMasterGetVendorString             |                                                              |
 |     33 | audioMasterGetProductString            |                                                              |
@@ -65,23 +68,23 @@
 |------------+-----------------------------+------------------------------------------------------|
 |          0 | effIdentify?                |                                                      |
 |          1 | effOpen?                    | :CRASH                                               |
-|          2 | effSetProgram               | set program via ivalue                               |
-|          3 |                             |                                                      |
+|          2 | effSetProgram               | set program# via ivalue                              |
+|          3 | effGetProgram               | returns current program#                             |
 |          4 | effSetProgramName           | :needs a valid ptr, Protoverb calls hostCode:42      |
 |          5 | effGetProgramName           | writes current program name into ptr                 |
 |          6 | effGetParamLabel            | unit (e.g. "dB")                                     |
 |          7 | effGetParamDisplay          | string representation of current value (e.g. "-23")  |
 |          8 | effGetParamName             | human readable name (e.g. "Gain")                    |
 |          9 |                             |                                                      |
-|         10 |                             | :Protoverb prints "AM_AudioMan::reset()"                                      |
+|         10 |                             | :Protoverb prints "AM_AudioMan::reset()"             |
 |         11 | effSetBlockSize             |                                                      |
 |         12 | effSetSampleRate            | :Protoverb does resume/reset and calls hostCode:6    |
 |            |                             | :Digits calls hostCode:6                             |
 |            |                             | :BowEcho/Danaides calls hostCode:23+6                |
 |            |                             | :hypercyclic/tonespace calls hostCode:23+7+6         |
-|         13 | effEditGetRect?             | :Protoverb prints "AM_VST_Editor::getRect" and CRASH |
-|         14 | effEditOpen?                | :Protoverb prints "AM_VST_Editor::open" and EXIT     |
-|         15 | effEditClose?               | :Protoverb prints "closed editor."                   |
+|         13 | effEditGetRect              | :Protoverb prints "AM_VST_Editor::getRect" and CRASH |
+|         14 | effEditOpen                 | :Protoverb prints "AM_VST_Editor::open" and EXIT     |
+|         15 | effEditClose                | :Protoverb prints "closed editor."                   |
 |         51 | effCanDo                    |                                                      |
 |         59 | effKeysRequired?            | :Protoverb prints "u-he plugin doesn't use key"      |
 |      30514 |                             | :Protoverb calls hostCode:13                         |
