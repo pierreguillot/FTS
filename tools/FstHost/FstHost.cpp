@@ -149,8 +149,8 @@ int test_plugin(const char*filename) {
   }
   return 0;
 #endif
-  for(int i=0; i<78; i++) {
-#endif
+  size_t numopcodes = 78;
+  for(size_t i=0; i<numopcodes; i++) {
     }
     if (skipOpcode(i)
 #ifdef NOSKIP
