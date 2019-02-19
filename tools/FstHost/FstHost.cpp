@@ -11,7 +11,6 @@ typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
 
 #include <unistd.h>
 void fstpause(float duration=1.0) {
-  return;
   sleep(1);
 }
 
