@@ -79,6 +79,54 @@ t_fstMain* load_plugin(const char* filename) {
   return (t_fstMain*)vstfun;
 }
 
+bool skipOpcode(size_t opcode) {
+
+  switch(opcode) {
+  case 1:
+#if PLUGIN_JUCE || PLUGIN_DIGITS
+    /* Digits plugin & JUCE plugins */
+  case 3:
+#endif
+    //case 4:
+
+    //case 5: /* program name [?] */
+
+    //case 10: /* AM_AudioMan::reset() */
+    //case 11: /* blocksize */
+    //case 12: /* AM_VST_base::suspend () */
+  case 13: /* AM_VST_Editor::getRect 1200 x 600 */
+  case 14: /* AM_VST_Editor::open, exits with 1! */
+  case 22:
+  case 23:
+  case 24:
+  case 25:
+  case 26:
+  case 29:
+  case 33:
+  case 34:
+  case 35:
+#if PLUGIN_JUCE
+    /* JUCE plugins */
+  case 42:
+  case 44:
+#endif
+  case 45:
+  case 47:  /* AM_VST_base::getVendorString (char* text) */
+  case 48:
+  case 49:
+  case 51:
+  case 58:
+    //case 59: /* u-he plugin doesnt use key, returns false (VST) or jumps to default key handler (WindowProc) */
+  case 63:
+  case 69:
+  case 71:
+  case 72:
+    //case 73:
+    return true;
+  default: break;
+  }
+  return false;
+}
 int test_plugin(const char*filename) {
   t_fstMain*vstmain = load_plugin(filename);
   if(!vstmain)return printf("'%s' was not loaded\n", filename);
