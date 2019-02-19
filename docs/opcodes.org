@@ -59,70 +59,68 @@
 
 ** plugin
 
-|     opcode | value                       | notes                                               |
-|------------+-----------------------------+-----------------------------------------------------|
-|          0 | effIdentify?                |                                                     |
-|          1 | effOpen?                    | :CRASH                                              |
-|          2 | effSetProgram               |                                                     |
-|          3 |                             |                                                     |
-|          4 | effSetProgramName           | :needs a valid ptr, Protoverb calls hostCode:42     |
-|          5 | effGetProgramName           | writes current program name into ptr                |
-|          6 | effGetParamLabel            |                                                     |
-|          7 | effGetParamDisplay          |                                                     |
-|          8 | effGetParamName             |                                                     |
-|          9 |                             |                                                     |
-|         10 |                             |                                                     |
-|         11 | effSetBlockSize             |                                                     |
-|         12 | effSetSampleRate            |                                                     |
+|     opcode | value                       | notes                                                |
+|------------+-----------------------------+------------------------------------------------------|
+|          0 | effIdentify?                |                                                      |
+|          1 | effOpen?                    | :CRASH                                               |
+|          2 | effSetProgram               | set program via ivalue                               |
+|          3 |                             |                                                      |
+|          4 | effSetProgramName           | :needs a valid ptr, Protoverb calls hostCode:42      |
+|          5 | effGetProgramName           | writes current program name into ptr                 |
+|          6 | effGetParamLabel            | unit (e.g. "dB")                                     |
+|          7 | effGetParamDisplay          | string representation of current value (e.g. "-23")  |
+|          8 | effGetParamName             | human readable name (e.g. "Gain")                    |
+|          9 |                             |                                                      |
+|         10 |                             |                                                      |
+|         11 | effSetBlockSize             |                                                      |
+|         12 | effSetSampleRate            |                                                      |
 |         13 | effEditGetRect?             | :Protoverb prints "AM_VST_Editor::getRect" and CRASH |
-|         14 | effEditOpen?                | :Protoverb prints "AM_VST_Editor::open" and EXIT    |
-|         15 | effEditClose?               | :Protoverb prints "closed editor."                  |
-|         51 | effCanDo                    |                                                     |
-|         59 | effKeysRequired?            | :Protoverb prints "u-he plugin doesn't use key"     |
-|      30514 |                             | :Protoverb calls hostCode:13                        |
-| 0xdeadbeef |                             | :REAPER ask for function?                           |
-|------------+-----------------------------+-----------------------------------------------------|
-|            | effGetEffectName            |                                                     |
-|            | effGetProductString         |                                                     |
-|            | effGetVendorString          |                                                     |
-|            | effGetVendorVersion         |                                                     |
-|            | effGetTailSize              |                                                     |
-|            | effGetVstVersion            |                                                     |
-|            | effGetCurrentMidiProgram    |                                                     |
-|            | effGetSpeakerArrangement    |                                                     |
-|            | effGetNumMidiInputChannels  |                                                     |
-|            | effGetNumMidiOutputChannels |                                                     |
-|            | effGetProgram               |                                                     |
-
-|            |                             |                                                     |
-|            | effClose                    |                                                     |
-|            | effSetProgramName           |                                                     |
-|            | effMainsChanged             |                                                     |
-|            | effProcessEvents            |                                                     |
-|            | effCanBeAutomated           |                                                     |
-|            | effString2Parameter         |                                                     |
-|            | effGetProgramNameIndexed    |                                                     |
-|            | effGetInputProperties       |                                                     |
-|            | effGetOutputProperties      |                                                     |
-|            | effGetPlugCategory          |                                                     |
-|            | effSetSpeakerArrangement    |                                                     |
-|            | effSetBypass                |                                                     |
-|            | effVendorSpecific           |                                                     |
-|            | effSetTotalSampleToProcess  |                                                     |
-|            | effSetProcessPrecision      |                                                     |
-|            | effConnectInput             |                                                     |
-|            | effConnectOutput            |                                                     |
-|            | effIdle                     |                                                     |
-|            | effShellGetNextPlugin       |                                                     |
-|            | effStartProcess             |                                                     |
-|            | effStopProcess              |                                                     |
-|            | effEditDraw                 |                                                     |
-|            | effEditMouse                |                                                     |
-|            | effEditSleep                |                                                     |
-|            | effEditTop                  |                                                     |
-|            | effEditIdle                 |                                                     |
-|            | effGetChunk                 |                                                     |
-|            | effSetChunk                 |                                                     |
+|         14 | effEditOpen?                | :Protoverb prints "AM_VST_Editor::open" and EXIT     |
+|         15 | effEditClose?               | :Protoverb prints "closed editor."                   |
+|         51 | effCanDo                    |                                                      |
+|         59 | effKeysRequired?            | :Protoverb prints "u-he plugin doesn't use key"      |
+|      30514 |                             | :Protoverb calls hostCode:13                         |
+| 0xdeadbeef |                             | :REAPER ask for function?                            |
+|------------+-----------------------------+------------------------------------------------------|
+|            | effGetEffectName            |                                                      |
+|            | effGetProductString         |                                                      |
+|            | effGetVendorString          |                                                      |
+|            | effGetVendorVersion         |                                                      |
+|            | effGetTailSize              |                                                      |
+|            | effGetVstVersion            |                                                      |
+|            | effGetCurrentMidiProgram    |                                                      |
+|            | effGetSpeakerArrangement    |                                                      |
+|            | effGetNumMidiInputChannels  |                                                      |
+|            | effGetNumMidiOutputChannels |                                                      |
+|            | effGetProgram               |                                                      |
+|            |                             |                                                      |
+|            | effClose                    |                                                      |
+|            | effMainsChanged             |                                                      |
+|            | effProcessEvents            |                                                      |
+|            | effCanBeAutomated           |                                                      |
+|            | effString2Parameter         |                                                      |
+|            | effGetProgramNameIndexed    |                                                      |
+|            | effGetInputProperties       |                                                      |
+|            | effGetOutputProperties      |                                                      |
+|            | effGetPlugCategory          |                                                      |
+|            | effSetSpeakerArrangement    |                                                      |
+|            | effSetBypass                |                                                      |
+|            | effVendorSpecific           |                                                      |
+|            | effSetTotalSampleToProcess  |                                                      |
+|            | effSetProcessPrecision      |                                                      |
+|            | effConnectInput             |                                                      |
+|            | effConnectOutput            |                                                      |
+|            | effIdle                     |                                                      |
+|            | effShellGetNextPlugin       |                                                      |
+|            | effStartProcess             |                                                      |
+|            | effStopProcess              |                                                      |
+|            | effEditDraw                 |                                                      |
+|            | effEditMouse                |                                                      |
+|            | effEditSleep                |                                                      |
+|            | effEditTop                  |                                                      |
+|            | effEditIdle                 |                                                      |
+|            | effGetChunk                 |                                                      |
+|            | effSetChunk                 |                                                      |
 
 ** flags
 
