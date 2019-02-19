@@ -207,6 +207,8 @@ bool skipOpcodeJUCE(size_t opcode) {
   case 3:
   case 4:
   case 5:
+  case 13: case 14: case 15:
+  case 42:
     return true;
   }
   return false;
@@ -222,28 +224,33 @@ int test_plugin(const char*filename) {
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
   print_aeffect(effect);
 
-
-  t_fstPtrInt X=effect->dispatcher(effect, effSetProgram, 0, 7, 0, 0.f);
-  printf("setProgram -> %ull\n", X);
-  X=effect->dispatcher(effect, 3, 0, 0, 0, 0.f);
-  printf("getProgram? -> %ull\n", X);
-
-
-  ERect* rect = 0;
-  void*xxx=(void*)effect->dispatcher(effect, 13, 0, 0, &rect, 0.f);
-  print_erect(rect);
-  hexprint(rect, 32);
-  return 0;
-  for(size_t opcode=6; opcode<100; opcode++) {
-    if(skipOpcodeJUCE(opcode))continue;
+  #if 0
+  for(int i=0; i<effect->numPrograms; i++) {
+    size_t opcode = 29;
     char buffer[200] = { 0 };
-    printf("testing %d\n", opcode);
-    t_fstPtrInt result = effect->dispatcher(effect, opcode, 0, 0, buffer, 0.f);
-    printf("tested %d: %llu 0x%llX\n", opcode, result, result);
+    t_fstPtrInt result = effect->dispatcher(effect, opcode, i, 0, buffer, 0.f);
+    printf("opcode:%d index:%d -> %llu", opcode, i, result);
     if(*buffer) {
       printf("\tbuffer '%.*s'\n", 512, buffer);
-      hexprint(buffer, 16);
     }
+  }
+  return 0;
+  #endif
+
+  for(size_t opcode=40; opcode<50; opcode++) {
+    if(skipOpcodeJUCE(opcode))continue;
+    char buffer[200] = { 0 };
+    t_fstPtrInt result = effect->dispatcher(effect, opcode, 0, 0, buffer, 0.f);
+    if(result || *buffer)
+      printf("tested %d", opcode);
+    if(result)
+      printf("\t|\t%llu 0x%llX", result, result);
+    if(*buffer) {
+      printf("\t|\tbuffer '%.*s'", 512, buffer);
+      //hexprint(buffer, 16);
+    }
+    if(result || *buffer)
+      printf("\n");
   }
 
   //test_opcodes(effect, 78);
