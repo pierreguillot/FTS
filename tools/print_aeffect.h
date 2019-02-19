@@ -7,7 +7,7 @@
 static void print_aeffect(AEffect*eff) {
   printf("AEffect @ %p", eff);
   if(!eff)return;
-  if(effect->magic != 0x56737450)
+  if(eff->magic != 0x56737450)
     printf("\n\tmagic=0x%X", eff->magic);
   else
     printf("\n\tmagic=VstP");
