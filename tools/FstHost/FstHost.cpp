@@ -183,6 +183,11 @@ int test_plugin(const char*filename) {
     }
     if(*buffer)
       printf("\tbuffer '%.*s'\n", 512, buffer);
+    switch(i) {
+    default: break;
+    case 4:
+      hexprint(buffer, 16);
+    }
     fstpause();
   }
   do {
