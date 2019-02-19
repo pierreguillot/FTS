@@ -73,6 +73,7 @@ typedef enum {
   FST_ENUM(effSetBlockSize, 11), // IN:ivalue, return 0
   FST_ENUM(effSetSampleRate, 12), //IN:fvalue, return 0
 
+  FST_ENUM(effGetProgramNameIndexed, 29), // IN:index, OUT:ptr(char[24], return (hasProg#)
   FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
 
 
@@ -102,7 +103,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
   FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
   FST_ENUM_UNKNOWN(effString2Parameter), // IN:index, IN:ptr(char*), return (hasParam#)
-  FST_ENUM_UNKNOWN(effGetProgramNameIndexed), // IN:index, OUT:ptr(char[24], return (hasProg#)
   FST_ENUM_UNKNOWN(effGetInputProperties), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
   FST_ENUM_UNKNOWN(effGetOutputProperties), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
   FST_ENUM_UNKNOWN(effGetPlugCategory), // return category
