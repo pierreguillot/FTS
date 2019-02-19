@@ -304,12 +304,16 @@ typedef struct VstPinProperties_ {
 } FST_UNKNOWN(VstPinProperties);
 
 
-/* dispatcher(effect, opcode, index, value, ptr, opt) */
+/* t_fstPtrInt dispatcher(effect, opcode, index, ivalue, ptr, fvalue); */
 typedef t_fstPtrInt (*AEffectDispatcherProc)(struct AEffect_*, int, int, t_fstPtrInt, void* const, float);
+/* void setParameter(effect, index, fvalue); */
 typedef void (*AEffectSetParameterProc)(struct AEffect_*, int, float);
+/* float getParameter(effect, index); */
 typedef float (*AEffectGetParameterProc)(struct AEffect_*, int);
-typedef void (*AEffectProcessProc)(struct AEffect_*, float**indata, float**outdata, int sampleframes);
-typedef void (*AEffectProcessDoubleProc)(struct AEffect_*, double**indata, double**outdata, int sampleframes);
+/* void process(effect, indata, outdata, frames); */
+typedef void (*AEffectProcessProc)(struct AEffect_*, float**, float**, int);
+/* void processDoubleReplacing(effect, indata, outdata, frames); */
+typedef void (*AEffectProcessDoubleProc)(struct AEffect_*, double**, double**, int);
 
 typedef FST_UNKNOWN(AEffectDispatcherProc) audioMasterCallback;
 
