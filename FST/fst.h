@@ -87,9 +87,9 @@ typedef enum {
   FST_ENUM_UNKNOWN(effSetProgramName), //IN:ptr(char*), return 0
   FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0 (handleResumeSuspend)
 
-  FST_ENUM_UNKNOWN(effEditGetRect), //OUT:ptr(ERect*), return ptr
-  FST_ENUM_UNKNOWN(effEditOpen),
-  FST_ENUM_UNKNOWN(effEditClose), // return 0
+  FST_ENUM(effEditGetRect, 13), //OUT:ptr(ERect*), return ptr
+  FST_ENUM(effEditOpen, 14),
+  FST_ENUM(effEditClose, 15), // return 0
   FST_ENUM_UNKNOWN(effEditDraw),
   FST_ENUM_UNKNOWN(effEditMouse),
   FST_ENUM_UNKNOWN(effEditSleep),
