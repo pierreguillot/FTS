@@ -1504,4 +1504,19 @@ and the following snippet:
 ## effectName, productString, vendorString, vendorVersion
 
 In the [C-snippet above](#effgetprogramnameindexed), we also get nice strings for
-opcodes `45`, `47`, and `48`.
+opcodes `45`, `47`, and `48`, that look like they would be good matches for
+`effGetEffectName` (45), `effGetProductString` (48) and `effGetVendorString` (47).
+
+The value returned by 49, looks suspiciously like the version:
+
+| plugin      | AEffect.version | returned by `49` |
+|-------------|-----------------|------------------|
+| BowEcho     | 110             | 110              |
+| Danaides    | 102             | 102              |
+| Digits      | 1               |                  |
+| InstaLooper | 1               | 1                |
+| Protoverb   | 1               | 0x10000          |
+| hypercyclic | 150             | 150              |
+| tonespace   | 250             | 250              |
+
+So we assign `effGetVendorVersion` the value of `49`
