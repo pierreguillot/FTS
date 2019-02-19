@@ -352,11 +352,11 @@ typedef struct AEffect_ {
 } FST_UNKNOWN(AEffect);
 
 typedef struct ERect_ {
-  int left;
-  int right;
-  int top;
-  int bottom;
-} FST_UNKNOWN(ERect);
+  short left;
+  short top;
+  short right;
+  short bottom;
+} ERect;
 
 
 #endif /* FST_fst_h_ */
