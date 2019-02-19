@@ -13,109 +13,114 @@ typedef long t_fstPtrInt; /* pointer sized int */
 typedef int t_fstInt32; /* 32bit int */
 
 typedef enum {
-  FST_ENUM(audioMasterAutomate, 0),
-  FST_ENUM(audioMasterVersion, 1),
-  FST_ENUM(audioMasterGetVendorString, 32),
-  FST_ENUM(audioMasterGetProductString, 33),
-  FST_ENUM(audioMasterGetVendorVersion, 34),
+  FST_ENUM(audioMasterAutomate, 0), // IN:index, IN:fvalue, return 0
+  FST_ENUM(audioMasterVersion, 1), // return 2400
+  FST_ENUM(audioMasterGetVendorString, 32), //OUT:ptr(char[kVstMaxVendorStrLen]), return ptr
+  FST_ENUM(audioMasterGetProductString, 33), //OUT:ptr(char[kVstMaxProductStrLen]), return ptr
+  FST_ENUM(audioMasterGetVendorVersion, 34), // return 0x0101
 
   // 13: sending latency??
-  FST_ENUM_UNKNOWN(audioMasterBeginEdit),
-  FST_ENUM_UNKNOWN(audioMasterCanDo),
-  FST_ENUM_UNKNOWN(audioMasterCloseWindow),
-  FST_ENUM_UNKNOWN(audioMasterCurrentId),
-  FST_ENUM_UNKNOWN(audioMasterEndEdit),
-  FST_ENUM_UNKNOWN(audioMasterGetAutomationState),
-  FST_ENUM_UNKNOWN(audioMasterGetBlockSize),
-  FST_ENUM_UNKNOWN(audioMasterGetCurrentProcessLevel),
-  FST_ENUM_UNKNOWN(audioMasterGetDirectory),
-  FST_ENUM_UNKNOWN(audioMasterGetInputLatency),
-  FST_ENUM_UNKNOWN(audioMasterGetLanguage),
-  FST_ENUM_UNKNOWN(audioMasterGetNextPlug),
+  FST_ENUM_UNKNOWN(audioMasterBeginEdit), // IN:index, return 0
+  FST_ENUM_UNKNOWN(audioMasterEndEdit), //IN:index, return 0
+  FST_ENUM_UNKNOWN(audioMasterCanDo), //IN:ptr(char*), return *ptr in {"sendVstEvents", "sizeWindow",...}
+  FST_ENUM_UNKNOWN(audioMasterCloseWindow), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterCurrentId), // return shellUIDToCreate
+  FST_ENUM_UNKNOWN(audioMasterGetAutomationState), // return {unsupported=0, off, read, write, readwrite}
+  FST_ENUM_UNKNOWN(audioMasterGetBlockSize), // return blockSize
+  FST_ENUM_UNKNOWN(audioMasterGetCurrentProcessLevel), // return (!isRealtime)*4
+  FST_ENUM_UNKNOWN(audioMasterGetDirectory), // return (char*)plugindirectory
+  FST_ENUM_UNKNOWN(audioMasterGetInputLatency), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterGetLanguage), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterGetNextPlug), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterGetNumAutomatableParameters),
-  FST_ENUM_UNKNOWN(audioMasterGetOutputLatency),
-  FST_ENUM_UNKNOWN(audioMasterGetOutputSpeakerArrangement),
-  FST_ENUM_UNKNOWN(audioMasterGetParameterQuantization),
-  FST_ENUM_UNKNOWN(audioMasterGetPreviousPlug),
-  FST_ENUM_UNKNOWN(audioMasterGetSampleRate),
-  FST_ENUM_UNKNOWN(audioMasterGetTime),
-  FST_ENUM_UNKNOWN(audioMasterIdle),
-  FST_ENUM_UNKNOWN(audioMasterIOChanged),
-  FST_ENUM_UNKNOWN(audioMasterNeedIdle),
-  FST_ENUM_UNKNOWN(audioMasterOfflineGetCurrentMetaPass),
-  FST_ENUM_UNKNOWN(audioMasterOfflineGetCurrentPass),
-  FST_ENUM_UNKNOWN(audioMasterOfflineRead),
-  FST_ENUM_UNKNOWN(audioMasterOfflineStart),
-  FST_ENUM_UNKNOWN(audioMasterOfflineWrite),
-  FST_ENUM_UNKNOWN(audioMasterOpenWindow),
-  FST_ENUM_UNKNOWN(audioMasterPinConnected),
-  FST_ENUM_UNKNOWN(audioMasterProcessEvents),
-  FST_ENUM_UNKNOWN(audioMasterSetIcon),
+  FST_ENUM_UNKNOWN(audioMasterGetOutputLatency), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterGetOutputSpeakerArrangement), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterGetParameterQuantization), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterGetPreviousPlug), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterGetSampleRate), // return sampleRate
+  FST_ENUM_UNKNOWN(audioMasterGetTime), // return (VstTimeInfo*)
+  FST_ENUM_UNKNOWN(audioMasterIdle), // return 0
+  FST_ENUM_UNKNOWN(audioMasterIOChanged), // return 0
+  FST_ENUM_UNKNOWN(audioMasterNeedIdle), // return 0
+  FST_ENUM_UNKNOWN(audioMasterOfflineGetCurrentMetaPass), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterOfflineGetCurrentPass), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterOfflineRead), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterOfflineStart), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterOfflineWrite), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterOpenWindow), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterPinConnected), //IN:index, IN:ivalue(isOutput), return isValidChannel
+  FST_ENUM_UNKNOWN(audioMasterProcessEvents), //IN:ptr(VstEvents*), return 0
+  FST_ENUM_UNKNOWN(audioMasterSetIcon), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterSetOutputSampleRate),
-  FST_ENUM_UNKNOWN(audioMasterSetTime),
-  FST_ENUM_UNKNOWN(audioMasterSizeWindow),
-  FST_ENUM_UNKNOWN(audioMasterTempoAt),
-  FST_ENUM_UNKNOWN(audioMasterUpdateDisplay),
-  FST_ENUM_UNKNOWN(audioMasterVendorSpecific),
-  FST_ENUM_UNKNOWN(audioMasterWantMidi),
-  FST_ENUM_UNKNOWN(audioMasterWillReplaceOrAccumulate)
+  FST_ENUM_UNKNOWN(audioMasterSetTime), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterSizeWindow), // IN:index(width), IN:value(height), return 1
+  FST_ENUM_UNKNOWN(audioMasterTempoAt), // IN:ivalue, return (10000*BPM)
+  FST_ENUM_UNKNOWN(audioMasterUpdateDisplay), // return 0
+  FST_ENUM_UNKNOWN(audioMasterVendorSpecific), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterWantMidi), // return 0
+  FST_ENUM_UNKNOWN(audioMasterWillReplaceOrAccumulate) //?, return 0
 } t_fstHostOpcode;;
 typedef enum {
-  FST_ENUM_EXPERIMENTAL(effSetProgram, 2),
-  FST_ENUM_EXPERIMENTAL(effGetProgramName, 5),
+  FST_ENUM_EXPERIMENTAL(effSetProgram, 2), // IN:ivalue, return 0
+  FST_ENUM_EXPERIMENTAL(effGetProgramName, 5), // OUT:ptr(char[24]), return 0
 
-  FST_ENUM(effGetParamLabel, 6),
-  FST_ENUM(effGetParamDisplay, 7),
-  FST_ENUM(effGetParamName, 8),
-  FST_ENUM(effSetBlockSize, 11),
-  FST_ENUM(effSetSampleRate, 12),
+  /* JUCE say that kVstMaxParamStrLen is 8, but hosts allow a bit more (24) */
+  FST_ENUM(effGetParamLabel, 6), // OUT:ptr(char[8]), return 0
+  FST_ENUM(effGetParamDisplay, 7), // OUT:ptr(char[8]), return 0
+  FST_ENUM(effGetParamName, 8), // OUT:ptr(char[8]), return 0
+  FST_ENUM(effSetBlockSize, 11), // IN:ivalue, return 0
+  FST_ENUM(effSetSampleRate, 12), //IN:fvalue, return 0
 
-  FST_ENUM_EXPERIMENTAL(effIdentify, 0),
-  FST_ENUM_EXPERIMENTAL(effOpen, 1),
+  FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
 
-  FST_ENUM_UNKNOWN(effClose),
-  FST_ENUM_UNKNOWN(effGetProgram),
-  FST_ENUM_UNKNOWN(effSetProgramName),
-  FST_ENUM_UNKNOWN(effMainsChanged),
-  FST_ENUM_UNKNOWN(effEditGetRect),
+
+  FST_ENUM_UNKNOWN(effGetEffectName), // OUT:ptr(char[64]), return 1
+  FST_ENUM_UNKNOWN(effGetProductString), // OUT:ptr(char[64]), return 1
+  FST_ENUM_UNKNOWN(effGetVendorString), // OUT:ptr(char[64]), return 1
+  FST_ENUM_UNKNOWN(effGetVendorVersion), // return version
+
+
+  FST_ENUM_EXPERIMENTAL(effIdentify, 0), // return ByteOrder::bigEndianInt ("NvEf")
+  FST_ENUM_EXPERIMENTAL(effOpen, 1), // return 0
+  FST_ENUM_UNKNOWN(effClose), // return 0
+  FST_ENUM_UNKNOWN(effGetProgram), // return current_program
+  FST_ENUM_UNKNOWN(effSetProgramName), //IN:ptr(char*), return 0
+  FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0 (handleResumeSuspend)
+
+  FST_ENUM_UNKNOWN(effEditGetRect), //OUT:ptr(ERect*), return ptr
   FST_ENUM_UNKNOWN(effEditOpen),
-  FST_ENUM_UNKNOWN(effEditClose),
-
+  FST_ENUM_UNKNOWN(effEditClose), // return 0
   FST_ENUM_UNKNOWN(effEditDraw),
   FST_ENUM_UNKNOWN(effEditMouse),
   FST_ENUM_UNKNOWN(effEditSleep),
   FST_ENUM_UNKNOWN(effEditTop),
+  FST_ENUM_UNKNOWN(effEditIdle),
 
-  FST_ENUM_UNKNOWN(effGetChunk),
-  FST_ENUM_UNKNOWN(effSetChunk),
-  FST_ENUM_UNKNOWN(effProcessEvents),
-  FST_ENUM_UNKNOWN(effCanBeAutomated),
-  FST_ENUM_UNKNOWN(effString2Parameter),
-  FST_ENUM_UNKNOWN(effGetProgramNameIndexed),
-  FST_ENUM_UNKNOWN(effGetInputProperties),
-  FST_ENUM_UNKNOWN(effGetOutputProperties),
-  FST_ENUM_UNKNOWN(effGetPlugCategory),
+  FST_ENUM_UNKNOWN(effGetChunk), // IN:index, OUT:ptr(void*), return size
+  FST_ENUM_UNKNOWN(effSetChunk), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
+
+  FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
+  FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
+  FST_ENUM_UNKNOWN(effString2Parameter), // IN:index, IN:ptr(char*), return (hasParam#)
+  FST_ENUM_UNKNOWN(effGetProgramNameIndexed), // IN:index, OUT:ptr(char[24], return (hasProg#)
+  FST_ENUM_UNKNOWN(effGetInputProperties), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
+  FST_ENUM_UNKNOWN(effGetOutputProperties), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
+  FST_ENUM_UNKNOWN(effGetPlugCategory), // return category
   FST_ENUM_UNKNOWN(effSetSpeakerArrangement),
-  FST_ENUM_UNKNOWN(effSetBypass),
-  FST_ENUM_UNKNOWN(effGetEffectName),
-  FST_ENUM_UNKNOWN(effGetProductString),
-  FST_ENUM_UNKNOWN(effGetVendorString),
-  FST_ENUM_UNKNOWN(effGetVendorVersion),
-  FST_ENUM_UNKNOWN(effVendorSpecific),
-  FST_ENUM_UNKNOWN(effCanDo),
-  FST_ENUM_UNKNOWN(effGetTailSize),
-  FST_ENUM_UNKNOWN(effKeysRequired),
-  FST_ENUM_UNKNOWN(effGetVstVersion),
-  FST_ENUM_UNKNOWN(effGetCurrentMidiProgram),
-  FST_ENUM_UNKNOWN(effGetSpeakerArrangement),
-  FST_ENUM_UNKNOWN(effSetTotalSampleToProcess),
-  FST_ENUM_UNKNOWN(effSetProcessPrecision),
-  FST_ENUM_UNKNOWN(effGetNumMidiInputChannels),
-  FST_ENUM_UNKNOWN(effGetNumMidiOutputChannels),
+  FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0
+  FST_ENUM_UNKNOWN(effVendorSpecific), //
+  FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
+  FST_ENUM_UNKNOWN(effKeysRequired), // return ((bool)KeyboardFocusRequireq
+  FST_ENUM_UNKNOWN(effGetVstVersion), // return kVstVersion
+  FST_ENUM_UNKNOWN(effGetCurrentMidiProgram), // return -1
+  FST_ENUM_UNKNOWN(effGetSpeakerArrangement), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
+  FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
+  FST_ENUM_UNKNOWN(effSetProcessPrecision), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
+  FST_ENUM_UNKNOWN(effGetNumMidiInputChannels), // return 16*isMidi
+  FST_ENUM_UNKNOWN(effGetNumMidiOutputChannels), // return 16*isMidi
 
   FST_ENUM_UNKNOWN(effConnectInput),
   FST_ENUM_UNKNOWN(effConnectOutput),
-  FST_ENUM_UNKNOWN(effEditIdle),
   FST_ENUM_UNKNOWN(effIdle),
   FST_ENUM_UNKNOWN(effShellGetNextPlugin),
   FST_ENUM_UNKNOWN(effStartProcess),
@@ -333,7 +338,7 @@ typedef struct AEffect_ {
   FST_UNKNOWN(t_fstPtrInt) flags; //??
   FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd1); //??
   FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd2); //??
-  FST_UNKNOWN(t_fstInt32) FST_UNKNOWN(initialDelay); //??
+  FST_UNKNOWN(t_fstInt32) FST_UNKNOWN(initialDelay); //??; latency in samples
   char pad2[8];
 
   float float1;
