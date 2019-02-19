@@ -15,8 +15,9 @@ void fstpause(float duration=1.0) {
   sleep(1);
 }
 
-static void hexprint(char*data, size_t length) {
-  printf("DATA@%p [%d]", data, length);
+static void hexprint(void*ptr, size_t length) {
+  printf("DATA@%p [%d]", ptr, length);
+  unsigned char* data = (unsigned char*)ptr;
   if(data) {
     for(size_t i=0; i<length; i++) {
       if(!(i%16))printf("\n\t");
