@@ -991,15 +991,15 @@ We have the following flags to assign:
 - `effFlagsProgramChunks`
 
 While the bitfields at @38 have the following values (displayed as little-endian)
-| plugin      | flags
-|-------------|-------------------
-| ProtoEffect | `00000000 00110001`
-| InstaLooper | `00000000 00010001`
-| Digits      | `00000001 00110000`
-| BowEcho     | `00000010 00110001`
-| Danaides    | `00000010 00110001`
-| hypercyclic | `00000011 00110001`
-| tonespace   | `00000011 00110001`
+| plugin      | flags               |
+|-------------|---------------------|
+| ProtoEffect | `00000000 00110001` |
+| InstaLooper | `00000000 00010001` |
+| Digits      | `00000001 00110000` |
+| BowEcho     | `00000010 00110001` |
+| Danaides    | `00000010 00110001` |
+| hypercyclic | `00000011 00110001` |
+| tonespace   | `00000011 00110001` |
 
 Things we know from running the plugins through REAPER:
 - all effects except *Digits* have a GUI
@@ -1101,40 +1101,44 @@ giving us hints on what a certain opcode might be supposed to do.
 
 E.g.
 
-| plugin   | opcode | printout |
-|----------|--------|----------|
-|Protoverb | 10     | AM_AudioMan::reset() |
-|Protoverb | 12     | AM_VST_base::resume() / AM_AudioMan::reset() |
-|Protoverb | 15     | closed editor. |
-|Protoverb | 59     | plugin doesn't use key, returns false (VST) or jumps to default key handler (WindowProc) |
-|Digits    | 11     | Block size 2.0000
+| plugin    | opcode | printout                                                                                 |
+|-----------|--------|------------------------------------------------------------------------------------------|
+| Protoverb | 10     | AM_AudioMan::reset()                                                                     |
+| Protoverb | 12     | AM_VST_base::resume() / AM_AudioMan::reset()                                             |
+| Protoverb | 15     | closed editor.                                                                           |
+| Protoverb | 59     | plugin doesn't use key, returns false (VST) or jumps to default key handler (WindowProc) |
+| Digits    | 11     | Block size 2.0000                                                                        |
 
 it also calls back to the host:
 
 
-|plugin      | when | opcode | notes |
-|------------|----- |--------|-------|
-|Protoverb   | main | 33     | during `VSTPluginMain`; after that, the VST-version is printed; in REAPER it also prints "HOST 'REAPER'" |
-|Protoverb   | main | 13     | right before, it prints "Protoverb VST telling unknown about 16 samples latency" (although no arguments are given) |
-|Protoverb   | 12   | 6      | just before the "resume()" comment is issued.
-|------------|----- |--------|-------
-|BowEcho     | 12   | 23     | `(..., 0,     0, NULL, 0.f)` (same for *Danaides*)
-|BowEcho     | 12   | 6      | `(..., 0,     1, NULL, 0.f)` (same for *Danaides*)
-|------------|----- |--------|-------
-|Digits      | 12   | 6      | `(..., 0,     1, NULL, 0.f)`
-|------------|----- |--------|-------
-|hypercyclic | 0    | 13     | `(..., 0,     0, NULL, 0.f)`
-|hypercyclic | 0    | 42     | `(..., 0,     0, NULL, 0.f)`
-|hypercyclic | 0    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]
-|hypercyclic | 0    | 13     | `(..., 0,     0, NULL, 0.f)`
-|hypercyclic | 0    | 42     | `(..., 0,     0, NULL, 0.f)`
-|hypercyclic | 0    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]
-|hypercyclic | 2    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]
-|hypercyclic | 12   | 23     | `(..., 0,     0, NULL, 0.f)`
-|hypercyclic | 12   | 7      | `(..., 0, 65024, NULL, 0.f)`
-|hypercyclic | 12   | 6      | `(..., 0,     1, NULL, 0.f)`
-|------------|----- |--------|-------
-|tonespace   |      |        | almost the same as *hypercyclic*, but with an additional final callback to `FstHost::dispatcher(eff, 0, 5, 0, NULL, 0.)` whenever
+| plugin      | when | opcode | notes                                                                            |
+|-------------|------|--------|----------------------------------------------------------------------------------|
+| Protoverb   | main | 33     | after that, the VST-version is printed; in REAPER it also prints "HOST 'REAPER'" |
+| Protoverb   | main | 13     | right before, it prints "Protoverb VST telling unknown about 16 samples latency" |
+|             |      |        | (although no arguments are given to the callback)                                |
+| Protoverb   | 12   | 6      | just before the "resume()" comment is issued.                                    |
+|-------------|------|--------|----------------------------------------------------------------------------------|
+| BowEcho     | 12   | 23     | `(..., 0,     0, NULL, 0.f)` (same for *Danaides*)                               |
+| BowEcho     | 12   | 6      | `(..., 0,     1, NULL, 0.f)` (same for *Danaides*)                               |
+|-------------|------|--------|----------------------------------------------------------------------------------|
+| Digits      | 12   | 6      | `(..., 0,     1, NULL, 0.f)`                                                     |
+|-------------|------|--------|----------------------------------------------------------------------------------|
+| hypercyclic | 0    | 13     | `(..., 0,     0, NULL, 0.f)`                                                     |
+| hypercyclic | 0    | 42     | `(..., 0,     0, NULL, 0.f)`                                                     |
+| hypercyclic | 0    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]          |
+| hypercyclic | 0    | 13     | `(..., 0,     0, NULL, 0.f)`                                                     |
+| hypercyclic | 0    | 42     | `(..., 0,     0, NULL, 0.f)`                                                     |
+| hypercyclic | 0    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]          |
+| hypercyclic | 2    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]          |
+| hypercyclic | 12   | 23     | `(..., 0,     0, NULL, 0.f)`                                                     |
+| hypercyclic | 12   | 7      | `(..., 0, 65024, NULL, 0.f)`                                                     |
+| hypercyclic | 12   | 6      | `(..., 0,     1, NULL, 0.f)`                                                     |
+|-------------|------|--------|----------------------------------------------------------------------------------|
+| tonespace   |      |        | almost the same as *hypercyclic*, but with an additional final callback          |
+|             |      |        | to `FstHost::dispatcher(eff, 0, 5, 0, NULL, 0.)` whenever                        |
+
+
 
 I guess that host-opcode `33` is meant to query the hostname. In `juce_VSTPluginFormat.cpp` this is handled with
 the `audioMasterGetProductString` and `audioMasterGetVendorString` opcodes,
@@ -1220,29 +1224,34 @@ for(size_t i = 0; i<64; i++) {
 
 With REAPER, this returns:
 
-op    | result   | buf        |
-------|----------|------------|
-   *0 |        1 |
-   *1 |     2400 |
-    6 |        1 |
-    8 |        1 |
-   10 |  1200000 |
-   11 |    65536 |
-   12 |        1 |
-   13 |        1 |
-   23 |        1 |
-  *32 |        1 | Cockos
-  *33 |        1 | REAPER
-  *34 |     5965 |
-   42 |        1 |
-   43 |        1 |
-   44 |        1 |
-   48 |        1 | /Net/iem/Benutzer/zmoelnig/Documents/REAPER Media/test.RPP
+| op     | result     | buf                               |
+| ------ | ---------- | ------------                      |
+| *0*    | 1          |                                   |
+| *1*    | 2400       |                                   |
+| 6      | 1          |                                   |
+| 8      | 1          |                                   |
+| 10     | 1200000    |                                   |
+| 11     | 65536      |                                   |
+| 12     | 1          |                                   |
+| 13     | 1          |                                   |
+| 23     | 1          |                                   |
+| *32*   | 1          | Cockos                            |
+| *33*   | 1          | REAPER                            |
+| *34*   | 5965       |                                   |
+| 42     | 1          |                                   |
+| 43     | 1          |                                   |
+| 44     | 1          |                                   |
+| 48     | 1          | ~/Documents/REAPER Media/test.RPP |
+|        |            |                                   |
 
 This table confirms that host-opcode `33` is `audioMasterGetProductString`,
 and we learn that host-opcode `32` is `audioMasterGetVendorString`.
 The number `5969` happens to be the version of REAPER (`5.965`), so
 host-opcode `34` is likely `audioMasterGetVendorVersion`.
+
+The opcode `48` returns the currently opened REAPER session file.
+The `audioMasterGetDirectory` might match, but REAPER returns a
+file rather than a diretory.
 
 TODO: 10, 11
 
