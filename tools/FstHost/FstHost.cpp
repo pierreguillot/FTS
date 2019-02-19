@@ -139,16 +139,8 @@ bool skipOpcode(size_t opcode) {
   }
   return false;
 }
-int test_plugin(const char*filename) {
-  t_fstMain*vstmain = load_plugin(filename);
-  if(!vstmain)return printf("'%s' was not loaded\n", filename);
-  AEffect*effect = vstmain(&dispatcher);
-  printf("instantiated effect %p\n", effect);
-  if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
-  //dumpdata(filename, effect, 160);
-  if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
-  print_aeffect(effect);
 
+void test_opcodes(AEffect*effect, size_t numopcodes=78) {
   printf("testing dispatcher\n");
 #if 0
   for(size_t opcode=0; opcode < 10; opcode++) {
@@ -163,7 +155,6 @@ int test_plugin(const char*filename) {
   }
   return 0;
 #endif
-  size_t numopcodes = 78;
   //  numopcodes = 0xDEADF00D+1;
   for(size_t i=0; i<numopcodes; i++) {
     curOpCode = i;
@@ -206,6 +197,18 @@ int test_plugin(const char*filename) {
     printf("gotProgName: %.*s\n", 20, buffer);
   } while(0);
   printf("tested dispatcher with %u (0x%X) opcodes\n", numopcodes, numopcodes);
+}
+
+int test_plugin(const char*filename) {
+  t_fstMain*vstmain = load_plugin(filename);
+  if(!vstmain)return printf("'%s' was not loaded\n", filename);
+  AEffect*effect = vstmain(&dispatcher);
+  printf("instantiated effect %p\n", effect);
+  if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
+  //dumpdata(filename, effect, 160);
+  if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
+  print_aeffect(effect);
+  test_opcodes(effect, 78);
   return 0;
 }
 
