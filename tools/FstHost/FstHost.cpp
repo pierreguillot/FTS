@@ -163,18 +163,22 @@ int test_plugin(const char*filename) {
       printf("skipping: %d\n", i);
       continue;
     }
-    printf("\ntrying: %d\n", i);
+    //printf("\ntrying: %d\n", i);
     char buffer[512] = { 0 };
     t_fstPtrInt res = effect->dispatcher (effect, i, 1, 0, buffer, 0.5);
+    if(res || (buffer && *buffer))
+        printf("\ntried: %d\n", i);
+
+
     if(res) {
       const char*str = (const char*)res;
       printf("\t[%d=0x%X]: %.*s\n", i, res, res, 32, str);
     }
     if(*buffer)
-      printf("\t'%.*s'\n", 512, buffer);
+      printf("\tbuffer '%.*s'\n", 512, buffer);
     fstpause();
   }
-  printf("tested dispatcher\n");
+  printf("tested dispatcher with %u (0x%X) opcodes\n", numopcodes, numopcodes);
   return 0;
 }
 
