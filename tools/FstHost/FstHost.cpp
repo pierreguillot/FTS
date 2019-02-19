@@ -52,6 +52,13 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
     return 1;
   default:
     printf("(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
+    //printf("(%p, %x, %x, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
+    do {
+      char *str=(char*)ptr;
+      if(str && *str) {
+        printf("\t'%.*s'\n", 512, str);
+      }
+    } while(0);
     break;
   }
   return 0;
