@@ -14,6 +14,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   default:
     printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
     break;
+#if 0
   PRINTEFFCASE(effSetProgram);
   PRINTEFFCASE(effGetProgramName);
   PRINTEFFCASE(effGetParamLabel);
@@ -24,6 +25,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   PRINTEFFCASE(effCanDo);
   PRINTEFFCASE(effIdentify);
   PRINTEFFCASE(effOpen);
+#endif
   case 53: case 3:
     return 0;
     break;
