@@ -1137,15 +1137,16 @@ it also calls back to the host:
 | hypercyclic | 12   | 6      | `(..., 0,     1, NULL, 0.f)`                                                     |
 |-------------|------|--------|----------------------------------------------------------------------------------|
 | tonespace   |      |        | almost the same as *hypercyclic*, but with an additional final callback          |
-|             |      |        | to `FstHost::dispatcher(eff, 0, 5, 0, NULL, 0.)` whenever                        |
+|             |      |        | to `FstHost::dispatcher(eff, 0, 5, 0, NULL, 0.)` whenever we iterated over params|
 
 
 
-I guess that host-opcode `33` is meant to query the hostname. In `juce_VSTPluginFormat.cpp` this is handled with
+I guess that host-opcode `33` is meant to query the name of the host application.
+In `juce_VSTPluginFormat.cpp` this is handled with
 the `audioMasterGetProductString` and `audioMasterGetVendorString` opcodes,
 which both return `1` and write a string into the `ptr`.
 The string has a maximum length of `min(kVstMaxProductStrLen, kVstMaxVendorStrLen)`,
-so these two symbols areactually constants, not enums.
+so these two symbols are actually constants, not enums.
 We don't know the actual maximum string lengths, so I tried to compile with `-fsanitize=address -fsanitize=undefined`
 and write as many bytes into the return string as possible.
 This gave me a maximum string length of `197782` bytes. impressive, but i'm not sure i can trust these values...
