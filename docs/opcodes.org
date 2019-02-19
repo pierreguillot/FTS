@@ -1,0 +1,151 @@
+
+* opcode tables
+
+** host
+
+| opcode | value                                  | notes                                        |
+|--------+----------------------------------------+----------------------------------------------|
+|      0 | audioMasterAutomate                    |                                              |
+|      1 | audioMasterVersion                     | JUCE returns 2400                            |
+|     13 |                                        | Protoverb calls as response to effcode:30514 |
+|     32 | audioMasterGetVendorString             |                                              |
+|     33 | audioMasterGetProductString            |                                              |
+|     34 | audioMasterGetVendorVersion            | JUCE returns 0x0101                          |
+|     42 |                                        | Protoverb calls as response to effcode:4     |
+|--------+----------------------------------------+----------------------------------------------|
+|        | audioMasterBeginEdit                   |                                              |
+|        | audioMasterEndEdit                     |                                              |
+|        | audioMasterCanDo                       |                                              |
+|        | audioMasterCurrentId                   |                                              |
+|        | audioMasterGetAutomationState          |                                              |
+|        | audioMasterGetBlockSize                |                                              |
+|        | audioMasterGetCurrentProcessLevel      |                                              |
+|        | audioMasterGetDirectory                |                                              |
+|        | audioMasterGetNumAutomatableParameters |                                              |
+|        | audioMasterGetSampleRate               |                                              |
+|        | audioMasterGetTime                     |                                              |
+|        | audioMasterIdle                        |                                              |
+|        | audioMasterIOChanged                   |                                              |
+|        | audioMasterNeedIdle                    |                                              |
+|        | audioMasterPinConnected                |                                              |
+|        | audioMasterProcessEvents               |                                              |
+|        | audioMasterSetOutputSampleRate         |                                              |
+|        | audioMasterSizeWindow                  |                                              |
+|        | audioMasterTempoAt                     |                                              |
+|        | audioMasterUpdateDisplay               |                                              |
+|        | audioMasterWantMidi                    |                                              |
+|--------+----------------------------------------+----------------------------------------------|
+|        | audioMasterGetLanguage                 | JUCE-ignore                                  |
+|        | audioMasterGetOutputSpeakerArrangement | JUCE-ignore                                  |
+|        | audioMasterGetParameterQuantization    | JUCE-ignore                                  |
+|        | audioMasterGetPreviousPlug             | JUCE-ignore                                  |
+|        | audioMasterGetNextPlug                 | JUCE-ignore                                  |
+|        | audioMasterSetTime                     | JUCE-ignore                                  |
+|        | audioMasterWillReplaceOrAccumulate     | JUCE-ignore                                  |
+|        | audioMasterGetInputLatency             | JUCE-ignore                                  |
+|        | audioMasterGetOutputLatency            | JUCE-ignore                                  |
+|        | audioMasterOpenWindow                  | JUCE-ignore                                  |
+|        | audioMasterCloseWindow                 | JUCE-ignore                                  |
+|        | audioMasterSetIcon                     | JUCE-ignore                                  |
+|        | audioMasterOfflineGetCurrentMetaPass   | JUCE-ignore                                  |
+|        | audioMasterOfflineGetCurrentPass       | JUCE-ignore                                  |
+|        | audioMasterOfflineRead                 | JUCE-ignore                                  |
+|        | audioMasterOfflineStart                | JUCE-ignore                                  |
+|        | audioMasterOfflineWrite                | JUCE-ignore                                  |
+|        | audioMasterVendorSpecific              | JUCE-ignore                                  |
+|        |                                        |                                              |
+
+
+
+** plugin
+
+|     opcode | value                       | notes                                               |
+|------------+-----------------------------+-----------------------------------------------------|
+|          0 | effIdentify?                |                                                     |
+|          1 | effOpen?                    | :CRASH                                              |
+|          2 | effSetProgram               |                                                     |
+|          3 |                             |                                                     |
+|          4 | effSetProgramName           | :needs a valid ptr, Protoverb calls hostCode:42     |
+|          5 | effGetProgramName           | writes current program name into ptr                |
+|          6 | effGetParamLabel            |                                                     |
+|          7 | effGetParamDisplay          |                                                     |
+|          8 | effGetParamName             |                                                     |
+|          9 |                             |                                                     |
+|         10 |                             |                                                     |
+|         11 | effSetBlockSize             |                                                     |
+|         12 | effSetSampleRate            |                                                     |
+|         13 | effEditGetRect?             | :Protoverb prints "AM_VST_Editor::getRect" and CRASH |
+|         14 | effEditOpen?                | :Protoverb prints "AM_VST_Editor::open" and EXIT    |
+|         15 | effEditClose?               | :Protoverb prints "closed editor."                  |
+|         51 | effCanDo                    |                                                     |
+|         59 | effKeysRequired?            | :Protoverb prints "u-he plugin doesn't use key"     |
+|      30514 |                             | :Protoverb calls hostCode:13                        |
+| 0xdeadbeef |                             | :REAPER ask for function?                           |
+|------------+-----------------------------+-----------------------------------------------------|
+|            | effGetEffectName            |                                                     |
+|            | effGetProductString         |                                                     |
+|            | effGetVendorString          |                                                     |
+|            | effGetVendorVersion         |                                                     |
+|            | effGetTailSize              |                                                     |
+|            | effGetVstVersion            |                                                     |
+|            | effGetCurrentMidiProgram    |                                                     |
+|            | effGetSpeakerArrangement    |                                                     |
+|            | effGetNumMidiInputChannels  |                                                     |
+|            | effGetNumMidiOutputChannels |                                                     |
+|            | effGetProgram               |                                                     |
+
+|            |                             |                                                     |
+|            | effClose                    |                                                     |
+|            | effSetProgramName           |                                                     |
+|            | effMainsChanged             |                                                     |
+|            | effProcessEvents            |                                                     |
+|            | effCanBeAutomated           |                                                     |
+|            | effString2Parameter         |                                                     |
+|            | effGetProgramNameIndexed    |                                                     |
+|            | effGetInputProperties       |                                                     |
+|            | effGetOutputProperties      |                                                     |
+|            | effGetPlugCategory          |                                                     |
+|            | effSetSpeakerArrangement    |                                                     |
+|            | effSetBypass                |                                                     |
+|            | effVendorSpecific           |                                                     |
+|            | effSetTotalSampleToProcess  |                                                     |
+|            | effSetProcessPrecision      |                                                     |
+|            | effConnectInput             |                                                     |
+|            | effConnectOutput            |                                                     |
+|            | effIdle                     |                                                     |
+|            | effShellGetNextPlugin       |                                                     |
+|            | effStartProcess             |                                                     |
+|            | effStopProcess              |                                                     |
+|            | effEditDraw                 |                                                     |
+|            | effEditMouse                |                                                     |
+|            | effEditSleep                |                                                     |
+|            | effEditTop                  |                                                     |
+|            | effEditIdle                 |                                                     |
+|            | effGetChunk                 |                                                     |
+|            | effSetChunk                 |                                                     |
+
+** flags
+
+| bit | name                       | notes                 |
+|-----+----------------------------+-----------------------|
+|   1 | effFlagsHasEditor          |                       |
+|   2 |                            | always 0              |
+|   3 |                            | always 0              |
+|   4 |                            | always 0              |
+|   5 | ??                         | always 1              |
+|   6 | ??                         | InstaLooper=0, else 1 |
+|   7 |                            | always 0              |
+|   8 |                            | always 0              |
+|   9 | effFlagsIsSynth            |                       |
+|  10 | ??                         |                       |
+|  11 |                            | always 0              |
+|  12 |                            | always 0              |
+|  13 |                            | always 0              |
+|  14 |                            | always 0              |
+|  15 |                            | always 0              |
+|  16 |                            | always 0              |
+|-----+----------------------------+-----------------------|
+|   ? | effFlagsCanDoubleReplacing |                       |
+|   ? | effFlagsCanReplacing       |                       |
+|   ? | effFlagsNoSoundInStop      |                       |
+|   ? | effFlagsProgramChunks      |                       |
