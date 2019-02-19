@@ -735,9 +735,9 @@ are changing for each run.
 
 Comparing the changing values with the addresses of heap-allocated memory and functions
 (e.g. the DLL-handle returned by `dlopen()` and the function pointer returned by `dlsym()`)
-it becomes clear, that we have 6 function pointers
+it becomes clear, that we have six function pointers
 (e.g. `?? ad 87 f7 ff 7f 00 00` at @8, @10, @18, @20, @78, @80) and
-1 heap allocated object (e.g. `c0 fb 58 55 55 55 00 00` at @60).
+one heap allocated object (e.g. `c0 fb 58 55 55 55 00 00` at @60).
 On my amd64 system, pointers take 8 byte and aligned at 8 bytes (one halfline in the hexdump).
 
 We don't know which functions are stored in which pointer,
@@ -752,7 +752,7 @@ The heap allocated object (@60) might match the `void*object` member.
 Comparing the hexdumps of multiple different plugins, we notice that @70
 there are always 4 printable characters (here `VPhu`), although they are different
 for each plugin.
-Additionally, we notice that the `Protoverb` object (being pretty verbose on the stderr)
+Additionally, we notice that the `Protoverb` plugin (being pretty verbose on the stderr)
 said something like:
 > setUniqueID (1969770582)
 
@@ -894,9 +894,7 @@ Here's a hexdump of the 1st 96 bytes of a 32bit `AEffect`:
 As we can see, there is no zero padding after the initial 4-byte `magic`.
 Also the number of zeros around the `object` member seems to be off.
 
-Using `pointer sized int` instead of `int32` helps a bit, although there's still something
-decidedly weird going on before the `00 00 80 3f` (float 1.f) sequence,
-which we will have to fix later:
+Using `pointer sized int` instead of `int32` helps a bit:
 
 ~~~
 typedef struct AEffect_ {
