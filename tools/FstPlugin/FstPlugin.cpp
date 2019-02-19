@@ -8,13 +8,26 @@ static int curProgram = 0;
 
 static float parameters[3];
 
+#define PRINTEFFCASE(x) case x: printf("FstClient::dispatcher[%s] ", #x); break
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
   switch(opcode) {
-  default: break;
+  default:
+    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
+    break;
+  PRINTEFFCASE(effSetProgram);
+  PRINTEFFCASE(effGetProgramName);
+  PRINTEFFCASE(effGetParamLabel);
+  PRINTEFFCASE(effGetParamDisplay);
+  PRINTEFFCASE(effGetParamName);
+  PRINTEFFCASE(effSetBlockSize);
+  PRINTEFFCASE(effSetSampleRate);
+  PRINTEFFCASE(effCanDo);
+  PRINTEFFCASE(effIdentify);
+  PRINTEFFCASE(effOpen);
   case 53: case 3:
-    return 0;
+    //return 0;
+    break;
   }
-  printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
   if(object) {
     char*str = (char*)object;
     printf("\t'%.*s'\n", 512, str);
