@@ -26,8 +26,10 @@ static void hexprint(char*data, size_t length) {
   }
   printf("\n");
 }
+static size_t curOpCode = 0;
+
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
-  printf("FstHost::dispatcher: ");
+  printf("FstHost::dispatcher[%u]: ", curOpCode);
   switch(opcode) {
   case audioMasterVersion:
     printf("MasterVersion\n");
@@ -151,6 +153,7 @@ int test_plugin(const char*filename) {
 #endif
   size_t numopcodes = 78;
   for(size_t i=0; i<numopcodes; i++) {
+    curOpCode = i;
     if(!(i%65536)) {
       printf("=== mark %d ===\n", i>>16);
       fflush(stdout);
