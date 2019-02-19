@@ -8,6 +8,12 @@
 
 typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
 
+#include <unistd.h>
+void fstpause(float duration=1.0) {
+  return;
+  sleep(1);
+}
+
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
   printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
   switch(opcode) {
