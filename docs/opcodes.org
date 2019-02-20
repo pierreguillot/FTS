@@ -85,8 +85,8 @@
 |         13 | effEditGetRect              | :Protoverb prints "AM_VST_Editor::getRect" and CRASH               |
 |         14 | effEditOpen                 | :Protoverb prints "AM_VST_Editor::open" and EXIT                   |
 |         15 | effEditClose                | :Protoverb prints "closed editor."                                 |
-|         22 |                             | :Protoverv returns  0x4E764566                                     |
-|         23 |                             | :Protoverb returns 0x317 (or 0x307) and writes an address into ptr |
+|         22 | effIdentify                 | :Protoverv returns 0x4E764566                                      |
+|         23 | effGetChunk                 | :Protoverb returns 0x317 (or 0x307) and writes an address into ptr |
 |         24 |                             | :Protoverb returns 1                                               |
 |         25 |                             | :Protoverb returns 1                                               |
 |         26 |                             | :Protoverb returns 1                                               |
