@@ -76,9 +76,9 @@
 |          7 | effGetParamDisplay          | string representation of current value (e.g. "-23")                |
 |          8 | effGetParamName             | human readable name (e.g. "Gain")                                  |
 |          9 |                             |                                                                    |
-|         10 |                             | :Protoverb prints "AM_AudioMan::reset()"                           |
+|         10 | effSetSampleRate            | :Protoverb prints "AM_AudioMan::reset()"                           |
 |         11 | effSetBlockSize             |                                                                    |
-|         12 | effSetSampleRate            | :Protoverb does resume/reset and calls hostCode:6                  |
+|         12 |                             | :Protoverb does resume/reset and calls hostCode:6                  |
 |            |                             | :Digits calls hostCode:6                                           |
 |            |                             | :BowEcho/Danaides calls hostCode:23+6                              |
 |            |                             | :hypercyclic/tonespace calls hostCode:23+7+6                       |
