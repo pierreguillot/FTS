@@ -248,7 +248,7 @@ int test_plugin(const char*filename) {
   return 0;
   #endif
 
-  for(size_t opcode=40; opcode<50; opcode++) {
+  for(size_t opcode=16; opcode<63; opcode++) {
     if(skipOpcodeJUCE(opcode))continue;
     char buffer[200] = { 0 };
     t_fstPtrInt result = effect->dispatcher(effect, opcode, 0, 0, buffer, 0.f);
