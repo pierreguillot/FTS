@@ -1159,9 +1159,11 @@ In `juce_VSTPluginFormat.cpp::handleCallback()` this is handled in the `audioMas
 In order to understand how each opcode is used, we may look at *juce_VST_Wrapper.cpp*
 to find out which parameters are used (and how) for a given opcode, and how values are returned:
 
-| opcode                      | IN                 | OUT                     | return                | notes                        |
+### JUCE effect Opcodes
+
+| effect opcode               | IN                 | OUT                     | return                | notes                        |
 |-----------------------------|--------------------|-------------------------|-----------------------|------------------------------|
-| effCanBeAutomated           | index              |                         | 0/1                   | can param#index be automated |
+| effCanBeAutomated           | index              |                         | 0/1                   | can param#idx be automated?  |
 | effCanDo                    | ptr(char[])        |                         | 0/1/-1                |                              |
 | effOpen                     |                    |                         | 0                     |                              |
 | effClose                    |                    |                         | 0                     |                              |
