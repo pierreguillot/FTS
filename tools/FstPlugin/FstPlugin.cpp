@@ -9,6 +9,9 @@ static int curProgram = 0;
 
 static float parameters[3];
 
+
+static char chunk[] = "This is the chunk for the FstPlugin.";
+
 #define PRINTEFFCASE(x) case x: printf("FstClient::dispatcher(%p, %s, ...)\n", eff, #x); break
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
   switch(opcode) {
@@ -49,6 +52,13 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   }
   switch(opcode) {
   default: break;
+  case effGetChunk:
+    {
+      char**ptr=(char**)object;
+      *ptr=chunk;
+    }
+    //printf("getChunk: %d bytes @ %p\n", sizeof(chunk), chunk);
+    return sizeof(chunk);
   case effSetProgram:
     //printf("setting program to %d\n", value);
     curProgram = value;
