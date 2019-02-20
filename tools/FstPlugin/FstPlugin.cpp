@@ -14,19 +14,30 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   default:
     printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
     break;
-#if 0
+#if 1
   PRINTEFFCASE(effSetProgram);
+  PRINTEFFCASE(effGetProgram);
+  PRINTEFFCASE(effSetProgramName);
   PRINTEFFCASE(effGetProgramName);
   PRINTEFFCASE(effGetParamLabel);
   PRINTEFFCASE(effGetParamDisplay);
   PRINTEFFCASE(effGetParamName);
   PRINTEFFCASE(effSetBlockSize);
   PRINTEFFCASE(effSetSampleRate);
+  PRINTEFFCASE(effGetProgramNameIndexed);
   PRINTEFFCASE(effCanDo);
+  PRINTEFFCASE(effGetEffectName);
+  PRINTEFFCASE(effGetProductString);
+  PRINTEFFCASE(effGetVendorString);
+  PRINTEFFCASE(effGetVendorVersion);
   PRINTEFFCASE(effIdentify);
-  PRINTEFFCASE(effOpen);
+  PRINTEFFCASE(effEditGetRect);
+  PRINTEFFCASE(effEditOpen);
+  PRINTEFFCASE(effEditClose);
+  PRINTEFFCASE(effGetChunk);
+  PRINTEFFCASE(effGetVstVersion);
 #endif
-  case 53: case 3:
+  case 53:
     return 0;
     break;
   }
