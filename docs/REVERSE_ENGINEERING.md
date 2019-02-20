@@ -1155,6 +1155,65 @@ This gave me a maximum string length of `197782` bytes. impressive, but i'm not 
 The host-opcode `0` seems to be used to tell the host the current values for all the parameters.
 In `juce_VSTPluginFormat.cpp::handleCallback()` this is handled in the `audioMasterAutomate` opcode.
 
+## how JUCE handles opcodes
+In order to understand how each opcode is used, we may look at *juce_VST_Wrapper.cpp*
+
+| opcode         | IN | OUT | return  |
+|----------------|----|-----|---------|
+effCanBeAutomated  | (can parameter# be automated) IN:index, return 0
+effCanDo  |IN:ptr(char*), returns 0|1|-1
+effClose  | return 0
+effEditClose  | return 0
+effEditGetRect  |OUT:ptr(ERect*), return ptr
+effGetChunk  | IN:index, OUT:ptr(void*), return size
+effGetCurrentMidiProgram  | return -1
+effGetEffectName  | OUT:ptr(char[64]), return 1
+effGetInputProperties  |IN:index, OUT:ptr(VstPinProperties*), return 1|0
+effGetNumMidiInputChannels  | return 16*isMidi
+effGetNumMidiOutputChannels  | return 16*isMidi
+effGetOutputProperties  |IN:index, OUT:ptr(VstPinProperties*), return 1|0
+effGetParamDisplay  | OUT:ptr(char[8]), return 0
+effGetParamLabel  | OUT:ptr(char[8]), return 0
+effGetParamName  | OUT:ptr(char[8]), return 0
+effGetPlugCategory  | return category
+effGetProductString  | OUT:ptr(char[64]), return 1
+effGetProgramNameIndexed  | IN:index, OUT:ptr(char[24], return (hasProg#)
+effGetProgramName  | OUT:ptr(char[24]), return 0
+effGetProgram  | return current_program
+effGetSpeakerArrangement  | OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
+effGetTailSize  | return audiotailInSamples
+effGetVendorString  | OUT:ptr(char[64]), return 1
+effGetVendorVersion  | return version
+effGetVstVersion  | return kVstVersion
+effIdentify  | return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
+effKeysRequired  | return ((bool)KeyboardFocusRequireq
+effMainsChanged  | IN:ivalue, return 0 (handleResumeSuspend)
+effOpen  | return 0
+effProcessEvents  | IN:ptr(VstEvents*), return ((bool)MidiProcessed
+effSetBlockSize  | IN:ivalue, return 0
+effSetBypass  |IN:ivalue, return 0
+effSetChunk  | IN:index, IN:ivalue(size), IN:ptr(void*), return 0
+effSetProcessPrecision  |IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
+effSetProgram  | IN:ivalue, return 0
+effSetProgramName  |IN:ptr(char*), return 0
+effSetSampleRate  |IN:fvalue, return 0
+effSetTotalSampleToProcess  | return ivalue
+effString2Parameter  | IN:index, IN:ptr(char*), return (hasParam#)
+effConnectInput),
+effConnectOutput),
+effIdle),
+effSetSpeakerArrangement),
+effVendorSpecific  |
+effEditDraw),
+effEditIdle),
+effEditMouse),
+effEditOpen, 14),
+effEditSleep),
+effEditTop),
+effShellGetNextPlugin),
+effStartProcess),
+effStopProcess),
+
 
 
 # Part: a plugin
