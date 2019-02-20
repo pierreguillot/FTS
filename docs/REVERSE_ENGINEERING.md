@@ -377,11 +377,7 @@ typedef struct ERect_ {
 } ERect;
 ~~~
 
-## conclusion
-with the changes in place, we can now compile JUCE's AudioPluginProcessor.
-it's still a long way to make it actually work...
-
-# Part 1.1 more symbols
+## more symbols
 
 The JUCE wrapper is not entirely symmetric, so only deriving missing
 symbols from AudioPluginHost is not enough.
@@ -415,6 +411,10 @@ kVstVersion
 
 The `kVstVersion` is a bit special, as JUCE doesn't use the `Vst2::` namespace on it.
 We have to `#define` it, rather than use an `enum` for it...
+
+## conclusion
+with the changes in place, we can now compile JUCE's AudioPluginProcessor.
+it's still a long way to make it actually work...
 
 
 
