@@ -11,7 +11,6 @@
 |      6 |                                        | :called as response to effCode:12                            |
 |      7 |                                        | :called by hypercyclic/tonespace as response to effCode:12   |
 |     13 |                                        | :called with 0-args in Protoverb:main and hypercyclic:eff:12 |
-|        |                                        |                                                              |
 |     23 |                                        | :called by JUCE-plugins as response to effCode:12            |
 |     32 | audioMasterGetVendorString             |                                                              |
 |     33 | audioMasterGetProductString            |                                                              |
