@@ -1597,9 +1597,43 @@ So it's probably save to assume that `58` is the opcode
 that allows the host to query the plugin for it's VST version.
 Which would make it the `effGetVstVersion`.
 
-# chunks
+## Chunks
 In the [C-snippet above](#effgetprogramnameindexed), we also get an interesting result for opcode `23`:
 the return value is a reasonable number (791), and something is written to the `ptr`.
 
 If we take a closer look on what is written, we see that the plugin wrote the address
 of some heap-allocated memory into our buffer.
+Comparing this to how JUCE handles the various opcodes, this could be `effGetChunk`.
+
+Inspecting the data returned by *Protoverb*, we get something like:
+
+~~~
+#pgm=initialize
+#AM=Protoverb
+#Vers=10000
+#Endian=little
+#nm=5
+#ms=none
+#ms=ModWhl
+#ms=PitchW
+#ms=Breath
+#ms=Xpress
+#nv=0
+#cm=main
+CcOp=100.00
+#FDN=1
+#cm=PCore
+[...]
+// Section for ugly compressed binary Data
+// DON'T TOUCH THIS
+[...]
+~~~
+
+This indeed looks very much like some state dump of the plugin.
+Other plugins returns only binary data (*hypercyclic*, *tonespace*).
+
+*InstaLooper* is the only tested plugins that doesn't return anything.
+It also happens to be the only tested plugin that has the bit#6 in
+the `AEffect.flags` structure set to `0` - hinting that
+`effFlagsProgramChunks = (1<<5)` (which would explain that this
+flag has something to do with the ability to get/set chunks).
