@@ -1508,7 +1508,7 @@ typedef struct ERect_ {
 } ERect;
 ~~~
 
-## effGetProgramNameIndexed
+## effIdentify
 
 the following little helper gives us information, what a plugin returns for the various opcodes:
 
@@ -1546,6 +1546,10 @@ I get:
 >     tested 58  |  2400 0x960
 >     tested 63  |  18446744073709551615 0xFFFFFFFFFFFFFFFF
 
+the value returned by opcode `22` is identical with the once that JUCE returns for the `effIdentify` opcode.
+So we assign that.
+
+## effGetProgramNameIndexed
 The "initialize" string we already know as Protoverbs sole program name.
 The only missing opcode for retrieving program names is `effGetProgramNameIndexed`.
 
