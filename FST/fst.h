@@ -70,8 +70,8 @@ typedef enum {
   FST_ENUM(effGetParamLabel, 6), // OUT:ptr(char[8]), return 0
   FST_ENUM(effGetParamDisplay, 7), // OUT:ptr(char[8]), return 0
   FST_ENUM(effGetParamName, 8), // OUT:ptr(char[8]), return 0
+  FST_ENUM(effSetSampleRate, 10), //IN:fvalue, return 0
   FST_ENUM(effSetBlockSize, 11), // IN:ivalue, return 0
-  FST_ENUM(effSetSampleRate, 12), //IN:fvalue, return 0
 
   FST_ENUM(effGetProgramNameIndexed, 29), // IN:index, OUT:ptr(char[24], return (hasProg#)
   FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
