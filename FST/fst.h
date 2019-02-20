@@ -83,7 +83,7 @@ typedef enum {
   FST_ENUM(effGetVendorVersion, 49), // return version
 
 
-  FST_ENUM_EXPERIMENTAL(effIdentify, 0), // return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
+  FST_ENUM(effIdentify, 22), // return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
   FST_ENUM_EXPERIMENTAL(effOpen, 1), // return 0
   FST_ENUM_UNKNOWN(effClose), // return 0
   FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0 (handleResumeSuspend)
@@ -97,7 +97,7 @@ typedef enum {
   FST_ENUM_UNKNOWN(effEditTop),
   FST_ENUM_UNKNOWN(effEditIdle),
 
-  FST_ENUM_UNKNOWN(effGetChunk), // IN:index, OUT:ptr(void*), return size
+  FST_ENUM(effGetChunk, 23), // IN:index, OUT:ptr(void*), return size
   FST_ENUM_UNKNOWN(effSetChunk), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
 
   FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
