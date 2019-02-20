@@ -171,5 +171,17 @@ static void print_erect(ERect*rect) {
     printf(" = %d|%d - %d|%d", rect->top, rect->left, rect->bottom, rect->right);
   printf("\n");
 }
+static void print_hex(void*ptr, size_t length) {
+  printf("DATA@%p [%d]", ptr, length);
+  unsigned char* data = (unsigned char*)ptr;
+  if(data) {
+    for(size_t i=0; i<length; i++) {
+      if(!(i%16))printf("\n\t");
+      if(!(i% 8))printf(" ");
+      printf(" %02X", *data++);
+    }
+  }
+  printf("\n");
+}
 
 #endif /* PRINT_AEFFECT_H_ */
