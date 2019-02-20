@@ -129,10 +129,10 @@ typedef enum {
 enum {
   FST_ENUM(effFlagsHasEditor, (1<<0)),
   FST_ENUM_EXPERIMENTAL(effFlagsProgramChunks, (1<<5)),
-  FST_ENUM_UNKNOWN(effFlagsCanDoubleReplacing),
-  FST_ENUM_UNKNOWN(effFlagsCanReplacing),
-  FST_ENUM_UNKNOWN(effFlagsNoSoundInStop),
   FST_ENUM(effFlagsIsSynth, (1<<8)),
+  FST_ENUM_EXPERIMENTAL(effFlagsCanDoubleReplacing, 0),
+  FST_ENUM_EXPERIMENTAL(effFlagsCanReplacing, 0),
+  FST_ENUM_EXPERIMENTAL(effFlagsNoSoundInStop, 0),
 } t_fstPluginFlags;
 typedef enum {
   FST_ENUM_UNKNOWN(kPlugCategAnalysis),
