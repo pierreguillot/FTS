@@ -24,6 +24,20 @@ t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ival
   }
   return 0xBEEF;
 }
+
+void test_opcodes(AEffect*effect, size_t toopcode = 100, size_t fromopcode=0) {
+  printf("testing host's dispatcher\n");
+  for(size_t opcode=fromopcode; opcode<toopcode; opcode++) {
+    char buf[1024] = {0};
+    dispatch_v(effect, opcode, 0, 0, buf, 0.f);
+    if(*buf) {
+      printf("\t'%.*s'\n", 1024, buf);
+    }
+  }
+  printf("tested hosts's dispatcher with opcodes %d..%d\n", fromopcode, toopcode);
+}
+
+
 #define PRINTEFFCASE(x) \
   case x:               \
   if(x>98765)                                                           \
