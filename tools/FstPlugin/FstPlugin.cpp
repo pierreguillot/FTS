@@ -184,7 +184,7 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->numOutputs = 2;
   eff->float1 = 1.;
   eff->object = eff;
-  eff->uniqueID = 0xdead;
+  eff->uniqueID = 0xf00d;
   eff->version = 666;
 
   eff->flags |= effFlagsProgramChunks;
