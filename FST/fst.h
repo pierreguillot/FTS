@@ -98,7 +98,7 @@ typedef enum {
   FST_ENUM_UNKNOWN(effEditIdle),
 
   FST_ENUM(effGetChunk, 23), // IN:index, OUT:ptr(void*), return size
-  FST_ENUM_UNKNOWN(effSetChunk), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
+  FST_ENUM(effSetChunk, 24), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
 
   FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
   FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
