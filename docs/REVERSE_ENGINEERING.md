@@ -1349,7 +1349,7 @@ With REAPER, this returns:
 | *1*    | 2400       |                                   |
 | 6      | 1          |                                   |
 | 8      | 1          |                                   |
-| 10     | 1200000    |                                   |
+| *10*   | 1200000    |                                   |
 | 11     | 65536      |                                   |
 | 12     | 1          |                                   |
 | 13     | 1          |                                   |
@@ -1369,7 +1369,7 @@ The number `5969` happens to be the version of REAPER (`5.965`), so
 host-opcode `34` is likely `audioMasterGetVendorVersion`.
 
 The opcode `48` returns the currently opened REAPER session file.
-The `audioMasterGetDirectory` might match, but REAPER returns a
+The `audioMasterGetDirectory` might match, although REAPER returns a
 file rather than a diretory.
 
 Opcode `10` is a weirdo number, obviously for humans (rather than computers).
