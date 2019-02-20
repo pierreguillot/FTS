@@ -294,7 +294,7 @@ typedef struct VstTimeInfo_ {
   FST_UNKNOWN(int) samplePos;
   FST_UNKNOWN(int) flags;// = Vst2::kVstNanosValid
   FST_UNKNOWN(double) nanoSeconds;
-
+  /* ppq: Pulses Per Quaternote */
   FST_UNKNOWN(double) ppqPos; // (double)position.ppqPosition;
   FST_UNKNOWN(double) barStartPos; // (double)ppqPositionOfLastBarStart;
   FST_UNKNOWN(double) cycleStartPos; // (double)ppqLoopStart;
