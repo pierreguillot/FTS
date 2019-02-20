@@ -8,7 +8,7 @@ static int curProgram = 0;
 
 static float parameters[3];
 
-#define PRINTEFFCASE(x) case x: printf("FstClient::dispatcher[%s] ", #x); break
+#define PRINTEFFCASE(x) case x: printf("FstClient::dispatcher(%p, %s, ...)\n", eff, #x); break
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
   switch(opcode) {
   default:
