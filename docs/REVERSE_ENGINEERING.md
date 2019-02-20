@@ -1751,13 +1751,13 @@ The only entry that makes sense is the `audioMasterCurrentId`.
 
 Opcode:11, returning `3`, might be `audioMasterGetAutomationState` (unless it is in the list of opcodes not handled by JUCE).
 
-Opcode:7 returns a pointer. If we print the memory at the given position, we get the first 64 bytes like:
+Opcode:7 returns a pointer. If we print the memory at the given position, we get the first 80 bytes like:
 
 >     09 00 00 00 30 D3 01 41  00 00 00 00 80 88 E5 40
 >     00 90 30 F3 DF FE D2 42  32 EF 75 99 3F 7D 1A 40
 >     00 00 00 00 00 00 5E 40  0A A8 FF FF FF FF 0F 40
 >     00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-
+>     04 00 00 00 04 00 00 00  02 00 00 00 EF BE AD DE
 
 This *might* be `VstTimeInfo` struct as returned by `audioMasterGetTime`.
 Record that chunk multiple times (luckily the opcode:12 gets called whenever we start playback in REAPER), and inspect it.
