@@ -89,7 +89,7 @@
 |         15 | effEditClose                | :Protoverb prints "closed editor."                                 |
 |         22 | effIdentify                 | :Protoverv returns 0x4E764566                                      |
 |         23 | effGetChunk                 | :Protoverb returns 0x317 (or 0x307) and writes an address into ptr |
-|         24 |                             | :Protoverb returns 1                                               |
+|         24 | effSetChunk                 | :Protoverb returns 1                                               |
 |         25 |                             | :Protoverb returns 1                                               |
 |         26 |                             | :Protoverb returns 1                                               |
 |         29 | effGetProgramNameIndexed    | :Protoverb returns 1 and ptr:"initialize"                          |
@@ -110,7 +110,6 @@
 |      30514 |                             | :Protoverb calls hostCode:13                                       |
 | 0xdeadbeef |                             | :REAPER ask for function?                                          |
 |------------+-----------------------------+--------------------------------------------------------------------|
-|            | effIdentify                 |                                                                    |
 |            | effOpen                     |                                                                    |
 |            | effClose                    |                                                                    |
 |            | effGetTailSize              |                                                                    |
@@ -142,8 +141,6 @@
 |            | effEditSleep                |                                                                    |
 |            | effEditTop                  |                                                                    |
 |            | effEditIdle                 |                                                                    |
-|            | effGetChunk                 |                                                                    |
-|            | effSetChunk                 |                                                                    |
 
 ** flags
 
