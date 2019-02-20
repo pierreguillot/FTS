@@ -3,6 +3,7 @@
 
 #include "fst.h"
 #include <stdio.h>
+#include <string>
 
 #define PRINT_AEFFECT__OPCODESTR(x)             \
   case x:                                       \
@@ -183,5 +184,18 @@ static void print_hex(void*ptr, size_t length) {
   }
   printf("\n");
 }
+
+void dump_data(const char*basename, const void*data, size_t length) {
+  const char*ptr = (const char*)data;
+  std::string filename = std::string(basename);
+  filename+=".bin";
+  FILE*f = fopen(filename.c_str(), "w");
+  for(size_t i=0; i<length; i++) {
+    fprintf(f, "%c", *ptr++);
+  }
+  fclose(f);
+}
+
+
 
 #endif /* PRINT_AEFFECT_H_ */
