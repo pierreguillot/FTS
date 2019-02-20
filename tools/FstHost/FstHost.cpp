@@ -29,8 +29,10 @@ static void hexprint(void*ptr, size_t length) {
 static size_t curOpCode = 0;
 
 t_fstPtrInt dispatch (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
-  if(effect)
+  if(effect) {
+    effect->resvd2 = opcode;
     return effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
+  }
   return 0xDEAD;
 }
 t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
@@ -46,7 +48,7 @@ t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ival
 }
 
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
-  printf("FstHost::dispatcher[%u]: ", curOpCode);
+  printf("FstHost::dispatcher[%d]: ", effect?effect->resvd2:-1);
   switch(opcode) {
   case audioMasterVersion:
     printf("MasterVersion\n");
