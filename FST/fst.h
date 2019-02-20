@@ -75,8 +75,11 @@ typedef enum {
   FST_ENUM(effSetSampleRate, 10), //IN:fvalue, return 0
   FST_ENUM(effSetBlockSize, 11), // IN:ivalue, return 0
 
+  FST_ENUM(effIdentify, 22), // return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
+  FST_ENUM(effGetChunk, 23), // IN:index, OUT:ptr(void*), return size
+  FST_ENUM(effSetChunk, 24), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
+
   FST_ENUM(effGetProgramNameIndexed, 29), // IN:index, OUT:ptr(char[24], return (hasProg#)
-  FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
 
 
   FST_ENUM(effGetEffectName, 45), // OUT:ptr(char[64]), return 1
@@ -84,9 +87,10 @@ typedef enum {
   FST_ENUM(effGetVendorString, 47), // OUT:ptr(char[64]), return 1
   FST_ENUM(effGetVendorVersion, 49), // return version
 
+  FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
+  FST_ENUM(effGetVstVersion, 58), // return kVstVersion
+  FST_ENUM_EXPERIMENTAL(effKeysRequired, 59), // return ((bool)KeyboardFocusRequireq
 
-  FST_ENUM(effIdentify, 22), // return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
-  FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0;  (handleResumeSuspend)
 
   FST_ENUM(effEditGetRect, 13), //OUT:ptr(ERect*), return ptr
   FST_ENUM(effEditOpen, 14),
@@ -97,9 +101,7 @@ typedef enum {
   FST_ENUM_UNKNOWN(effEditTop),
   FST_ENUM_UNKNOWN(effEditIdle),
 
-  FST_ENUM(effGetChunk, 23), // IN:index, OUT:ptr(void*), return size
-  FST_ENUM(effSetChunk, 24), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
-
+  FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0;  (handleResumeSuspend)
   FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
   FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
   FST_ENUM_UNKNOWN(effString2Parameter), // IN:index, IN:ptr(char*), return (hasParam#)
@@ -110,8 +112,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0
   FST_ENUM_UNKNOWN(effVendorSpecific), //
   FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
-  FST_ENUM_UNKNOWN(effKeysRequired), // return ((bool)KeyboardFocusRequireq
-  FST_ENUM(effGetVstVersion, 58), // return kVstVersion
   FST_ENUM_UNKNOWN(effGetCurrentMidiProgram), // return -1
   FST_ENUM_UNKNOWN(effGetSpeakerArrangement), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
   FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
