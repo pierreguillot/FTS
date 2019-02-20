@@ -153,7 +153,7 @@ void test_opcodes(AEffect*effect, size_t numopcodes=78) {
   for(size_t opcode=0; opcode < 10; opcode++) {
   for(int i=0; i<effect->numPrograms; i++) {
    char buffer[512] = { 0 };
-    t_fstPtrInt res = effect->dispatcher (effect, opcode, i, i, buffer, i);
+    t_fstPtrInt res = dispatch (effect, opcode, i, i, buffer, i);
     const char*str = (const char*)res;
     printf("program#%d[%d=0x%X]: %.*s\n", i, res, res, 32, str);
     if(*buffer)
@@ -180,7 +180,7 @@ void test_opcodes(AEffect*effect, size_t numopcodes=78) {
     //printf("\ntrying: %d\n", i);
     char buffer[200000] = { 0 };
     snprintf(buffer, 511, "name%d", i);
-    t_fstPtrInt res = effect->dispatcher (effect, i, 0, 0, buffer, 0);
+    t_fstPtrInt res = dispatch (effect, i, 0, 0, buffer, 0);
     if(res || (buffer && *buffer))
         printf("\ntried: %d\n", i);
 
@@ -200,7 +200,7 @@ void test_opcodes(AEffect*effect, size_t numopcodes=78) {
   }
   do {
     char buffer[200000] = { 0 };
-    t_fstPtrInt res = effect->dispatcher (effect, 5, 0, 0, buffer, 0);
+    t_fstPtrInt res = dispatch (effect, 5, 0, 0, buffer, 0);
     printf("gotProgName: %.*s\n", 20, buffer);
   } while(0);
   printf("tested dispatcher with %u (0x%X) opcodes\n", numopcodes, numopcodes);
@@ -225,17 +225,17 @@ void test_setChunk(AEffect*effect) {
   t_fstPtrInt size=0;
   int index = 0;
   /* get data */
-  size = effect->dispatcher(effect, effGetChunk, index, 0, &data, 0.f);
+  size = dispatch(effect, effGetChunk, index, 0, &data, 0.f);
   printf("index#%d: got %d bytes @ 0x%X\n", index, size, data);
 
   index = 1;
-  size = effect->dispatcher(effect, effGetChunk, index, 0, &data, 0.f);
+  size = dispatch(effect, effGetChunk, index, 0, &data, 0.f);
   printf("index#%d: got %d bytes @ 0x%X\n", index, size, data);
 
   index = 0;
-  t_fstPtrInt result = effect->dispatcher(effect, effSetChunk, index, size, &data, 0.f);
+  t_fstPtrInt result = dispatch(effect, effSetChunk, index, size, &data, 0.f);
   printf("index#%d: setChunk[%d] returned %ull\n", index, (int)effSetChunk, result);
-  size = effect->dispatcher(effect, effGetChunk, index, 0, &data, 0.f);
+  size = dispatch(effect, effGetChunk, index, 0, &data, 0.f);
   printf("index#%d: got %d bytes @ 0x%X\n", index, size, data);
 }
 
@@ -245,7 +245,7 @@ void test_opcode23(AEffect*effect) {
 
   t_fstPtrInt*buffer[8] = {0};
   printf("testing OP:%d\n", opcode);
-  t_fstPtrInt result = effect->dispatcher(effect, opcode, index, 0, buffer, 0.f);
+  t_fstPtrInt result = dispatch(effect, opcode, index, 0, buffer, 0.f);
   printf("\tresult |\t%llu 0x%llX\n", result, result);
   if(*buffer) {
     printf("\tbuffer '%.*s'\n", 512, (char*)*buffer);
@@ -270,7 +270,7 @@ int test_plugin(const char*filename) {
   for(int i=0; i<effect->numPrograms; i++) {
     size_t opcode = 29;
     char buffer[200] = { 0 };
-    t_fstPtrInt result = effect->dispatcher(effect, opcode, i, 0, buffer, 0.f);
+    t_fstPtrInt result = dispatch(effect, opcode, i, 0, buffer, 0.f);
     printf("opcode:%d index:%d -> %llu", opcode, i, result);
     if(*buffer) {
       printf("\tbuffer '%.*s'\n", 512, buffer);
@@ -282,7 +282,7 @@ int test_plugin(const char*filename) {
   for(size_t opcode=16; opcode<63; opcode++) {
     if(skipOpcodeJUCE(opcode))continue;
     char buffer[200] = { 0 };
-    t_fstPtrInt result = effect->dispatcher(effect, opcode, 0, 0, buffer, 0.f);
+    t_fstPtrInt result = dispatch(effect, opcode, 0, 0, buffer, 0.f);
     if(result || *buffer)
       printf("tested %d", opcode);
     if(result)
