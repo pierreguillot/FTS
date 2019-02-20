@@ -18,6 +18,9 @@ typedef enum {
   FST_ENUM(audioMasterGetVendorString, 32), //OUT:ptr(char[kVstMaxVendorStrLen]), return ptr
   FST_ENUM(audioMasterGetProductString, 33), //OUT:ptr(char[kVstMaxProductStrLen]), return ptr
   FST_ENUM(audioMasterGetVendorVersion, 34), // return 0x0101
+  FST_ENUM(audioMasterTempoAt, 10), // IN:ivalue, return (10000*BPM)
+  FST_ENUM(audioMasterGetSampleRate, 16), // return sampleRate
+  FST_ENUM(audioMasterGetBlockSize, 17), // return blockSize
 
   // 13: sending latency??
   FST_ENUM_UNKNOWN(audioMasterBeginEdit), // IN:index, return 0
@@ -26,7 +29,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(audioMasterCloseWindow), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterCurrentId), // return shellUIDToCreate
   FST_ENUM_UNKNOWN(audioMasterGetAutomationState), // return {unsupported=0, off, read, write, readwrite}
-  FST_ENUM_UNKNOWN(audioMasterGetBlockSize), // return blockSize
   FST_ENUM_UNKNOWN(audioMasterGetCurrentProcessLevel), // return (!isRealtime)*4
   FST_ENUM_UNKNOWN(audioMasterGetDirectory), // return (char*)plugindirectory
   FST_ENUM_UNKNOWN(audioMasterGetInputLatency), //?, return 0
@@ -37,7 +39,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(audioMasterGetOutputSpeakerArrangement), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterGetParameterQuantization), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterGetPreviousPlug), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterGetSampleRate), // return sampleRate
   FST_ENUM_UNKNOWN(audioMasterGetTime), // return (VstTimeInfo*)
   FST_ENUM_UNKNOWN(audioMasterIdle), // return 0
   FST_ENUM_UNKNOWN(audioMasterIOChanged), // return 0
@@ -54,7 +55,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(audioMasterSetOutputSampleRate),
   FST_ENUM_UNKNOWN(audioMasterSetTime), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterSizeWindow), // IN:index(width), IN:value(height), return 1
-  FST_ENUM_UNKNOWN(audioMasterTempoAt), // IN:ivalue, return (10000*BPM)
   FST_ENUM_UNKNOWN(audioMasterUpdateDisplay), // return 0
   FST_ENUM_UNKNOWN(audioMasterVendorSpecific), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterWantMidi), // return 0
