@@ -45,6 +45,7 @@ void test_opcodes(AEffect*effect, size_t toopcode = 100, size_t fromopcode=0) {
   else                                                                  \
     printf("FstClient::dispatcher(%p, %s, %d, %d, %p, %f)\n", eff, #x, index, value, object, opt); \
   break;
+
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
   switch(opcode) {
   default:
@@ -153,10 +154,6 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
       do {
         static bool first=true;
         if(first) {
-#if 0
-          for(int i=0; i<0xFFFF; i++)
-            dispatch_v(eff, 7, 0, i, 0, 0.); //ival(0)->33797640 (0x203B608); ival(65024)->45888216 (0x2BC32D8)
-#endif
           test_opcodes(eff, 50);
         } else {
           char*str = (char*)dispatch_v(eff, 7, 0, 65024, 0, 0.);
@@ -171,7 +168,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
 
   }
   //printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
-  printf("\n");
+  //printf("JMZ\n");
 
   return 0;
 }
