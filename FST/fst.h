@@ -111,7 +111,7 @@ typedef enum {
   FST_ENUM_UNKNOWN(effVendorSpecific), //
   FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
   FST_ENUM_UNKNOWN(effKeysRequired), // return ((bool)KeyboardFocusRequireq
-  FST_ENUM_UNKNOWN(effGetVstVersion), // return kVstVersion
+  FST_ENUM(effGetVstVersion, 58), // return kVstVersion
   FST_ENUM_UNKNOWN(effGetCurrentMidiProgram), // return -1
   FST_ENUM_UNKNOWN(effGetSpeakerArrangement), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
   FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
