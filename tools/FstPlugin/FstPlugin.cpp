@@ -17,7 +17,7 @@ static char chunk[] = "This is the chunk for the FstPlugin.";
   if(x>98765)                                                           \
     printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, x, index, value, object, opt); \
   else                                                                  \
-    printf("FstClient::dispatcher(%p, %s, ...)\n", eff, #x);            \
+    printf("FstClient::dispatcher(%p, %s, %d, %d, %p, %f)\n", eff, #x, index, value, object, opt); \
   break;
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
   switch(opcode) {
