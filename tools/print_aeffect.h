@@ -22,6 +22,17 @@ static void print_aeffect(AEffect*eff) {
   printf("\n\tnumOutputs=%d", eff->numOutputs);
 
   printf("\n\tflags=0x%X", eff->flags);
+#define PRINT_AEFFECT__FLAG(x) if(effFlags##x) \
+    {if(effFlags##x & eff->flags)printf("\n\t      %s", #x);} \
+  else printf("\n\t      ???%s???", #x)
+
+  PRINT_AEFFECT__FLAG(HasEditor);
+  PRINT_AEFFECT__FLAG(IsSynth);
+  PRINT_AEFFECT__FLAG(CanDoubleReplacing);
+  PRINT_AEFFECT__FLAG(CanReplacing);
+  PRINT_AEFFECT__FLAG(NoSoundInStop);
+  PRINT_AEFFECT__FLAG(ProgramChunks);
+
   printf("\n\tresvd1=0x%X", eff->resvd1);
   printf("\n\tresvd2=0x%X", eff->resvd2);
   printf("\n\tinitialDelay=%d", eff->initialDelay);
