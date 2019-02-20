@@ -1,5 +1,5 @@
 CPPFLAGS=-I../../FST
-CXXFLAGS=-g -O0
+CXXFLAGS=-g -O0 -fPIC
 LIBS=
 
 default: FstPlugin.so
