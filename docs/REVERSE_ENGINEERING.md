@@ -1529,3 +1529,10 @@ This is the same value that JUCE pluginhosts return (hardcoded) to the
 So it's probably save to assume that `58` is the opcode
 that allows the host to query the plugin for it's VST version.
 Which would make it the `effGetVstVersion`.
+
+# chunks
+In the [C-snippet above](#effgetprogramnameindexed), we also get an interesting result for opcode `23`:
+the return value is a reasonable number (791), and something is written to the `ptr`.
+
+If we take a closer look on what is written, we see that the plugin wrote the address
+of some heap-allocated memory into our buffer.
