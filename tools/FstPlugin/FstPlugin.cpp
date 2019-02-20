@@ -137,6 +137,8 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->uniqueID = 0xdead;
   eff->version = 666;
 
+  eff->flags |= effFlagsProgramChunks;
+
   eff->processReplacing = processReplacing;
   eff->processDoubleReplacing = processDoubleReplacing;
   print_aeffect(eff);
