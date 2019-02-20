@@ -30,13 +30,26 @@ t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ival
         effect, effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
     t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
     printf("AEffect.dispatch: %llu (0x%llX)\n", result, result);
+    fstpause(0.5);
     return result;
   }
   return 0xDEAD;
 }
 
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
-  printf("FstHost::dispatcher[%d]: ", effect?effect->resvd2:-1);
+  char sbuf[256] = {0};
+  printf("FstHost::dispatcher[%d]", effect?effect->resvd2:-1);
+  printf("(%s, %d, %d, %p, %f)\n",
+      hostCode2string(opcode, sbuf, 255),
+      index, (int)value,
+      ptr, opt);
+  if(ptr) {
+    char *str=(char*)ptr;
+    if(*str) {
+      printf("\t'%.*s'\n", 512, str);
+    } else
+      printf("\t<nil>\n");
+  }
   switch(opcode) {
   case audioMasterVersion:
     printf("MasterVersion\n");
@@ -61,7 +74,7 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
     printf("42?\n");
     return 0;
   default:
-    printf("(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
+    printf("dyspatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
     //printf("(%p, %x, %x, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
     do {
       char *str=(char*)ptr;
