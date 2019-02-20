@@ -160,7 +160,12 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
           if(*str) {
             printf("\t'%.*s'\n", 512, str);
           }
-          print_hex(str, 512);
+          char filename[128];
+          static int icount = 0;
+          snprintf(filename, 127, "./testdump.%d", icount);
+          printf("OUTFILE[%d]: %s\n", icount, filename);
+          icount++;
+          dump_data(filename, str, 512);
         }
         first=false;
       } while(0);
