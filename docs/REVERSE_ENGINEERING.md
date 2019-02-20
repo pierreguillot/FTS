@@ -1167,12 +1167,12 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effClose                    |                    |                         | 0                     |                              |
 | effEditClose                |                    |                         | 0                     |                              |
 | effEditGetRect              |                    | ptr(ERect[])            | ptr                   |                              |
-| effEditDraw                 |                    |                         |                       | not handled                  |
-| effEditIdle                 |                    |                         |                       | not handled                  |
-| effEditMouse                |                    |                         |                       | not handled                  |
+| effEditDraw                 |                    |                         |                       | JUCE-ignored                 |
+| effEditIdle                 |                    |                         |                       | JUCE-ignored                 |
+| effEditMouse                |                    |                         |                       | JUCE-ignored                 |
 | effEditOpen                 | ptr(Window)        |                         |                       |                              |
-| effEditSleep                |                    |                         |                       | not handled                  |
-| effEditTop                  |                    |                         |                       | not handled                  |
+| effEditSleep                |                    |                         |                       | JUCE-ignored                 |
+| effEditTop                  |                    |                         |                       | JUCE-ignored                 |
 | effGetChunk                 | index              | ptr(void[])             | size                  |                              |
 | effSetChunk                 | index, ivalue, ptr |                         | 0                     | ivalue=size                  |
 | effGetCurrentMidiProgram    |                    |                         | -1                    |                              |
@@ -1207,13 +1207,13 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effSetSampleRate            | fvalue             |                         | 0                     |                              |
 | effSetTotalSampleToProcess  | ivalue             |                         | ivalue                |                              |
 | effString2Parameter         | index, ptr(char[]) |                         | hasParam#index        |                              |
-| effConnectInput             |                    |                         |                       | not handled                  |
-| effConnectOutput            |                    |                         |                       | not handled                  |
-| effIdle                     |                    |                         |                       | not handled                  |
+| effConnectInput             |                    |                         |                       | JUCE-ignored                 |
+| effConnectOutput            |                    |                         |                       | JUCE-ignored                 |
+| effIdle                     |                    |                         |                       | JUCE-ignored                 |
 | effVendorSpecific           | ALL                |                         |                       |                              |
-| effShellGetNextPlugin       |                    |                         |                       | not handled                  |
-| effStartProcess             |                    |                         |                       | not handled                  |
-| effStopProcess              |                    |                         |                       | not handled                  |
+| effShellGetNextPlugin       |                    |                         |                       | JUCE-ignored                 |
+| effStartProcess             |                    |                         |                       | JUCE-ignored                 |
+| effStopProcess              |                    |                         |                       | JUCE-ignored                 |
 
 
 
