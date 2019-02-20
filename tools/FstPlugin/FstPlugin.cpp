@@ -2,6 +2,7 @@
 #include "../print_aeffect.h"
 
 #include <cstdio>
+#include <cstring>
 
 static AEffectDispatcherProc dispatch = 0;
 static int curProgram = 0;
@@ -110,7 +111,7 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
     parameters[i] = 0.5;
 
   AEffect* eff = new AEffect;
-
+  memset(eff, 0, sizeof(AEffect));
   eff->magic = 0x56737450;
   eff->dispatcher = dispatcher;
   eff->process = process;
