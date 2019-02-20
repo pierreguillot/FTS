@@ -14,18 +14,6 @@ void fstpause(float duration=1.0) {
   sleep(1);
 }
 
-static void hexprint(void*ptr, size_t length) {
-  printf("DATA@%p [%d]", ptr, length);
-  unsigned char* data = (unsigned char*)ptr;
-  if(data) {
-    for(size_t i=0; i<length; i++) {
-      if(!(i%16))printf("\n\t");
-      if(!(i% 8))printf(" ");
-      printf(" %02X", *data++);
-    }
-  }
-  printf("\n");
-}
 static size_t curOpCode = -1;
 
 t_fstPtrInt dispatch (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
@@ -206,7 +194,7 @@ void test_opcodes(AEffect*effect, size_t numopcodes=78) {
     switch(i) {
     default: break;
     case 4:
-      hexprint(buffer, 16);
+      print_hex(buffer, 16);
     }
     fstpause();
   }
@@ -262,7 +250,7 @@ void test_opcode23(AEffect*effect) {
   if(*buffer) {
     printf("\tbuffer '%.*s'\n", 512, (char*)*buffer);
   }
-  //hexprint(*buffer, result);
+  //print_hex(*buffer, result);
 }
 
 int test_plugin(const char*filename) {
@@ -334,7 +322,7 @@ int test_plugin(const char*filename) {
       printf("\t|\t%llu 0x%llX", result, result);
     if(*buffer) {
       printf("\t|\tbuffer '%.*s'", 512, buffer);
-      //hexprint(buffer, 16);
+      //print_hex(buffer, 16);
     }
     if(result || *buffer)
       printf("\n");
