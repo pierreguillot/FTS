@@ -1757,3 +1757,29 @@ Opcode:7 returns a pointer. If we print the memory at the given position, we get
 >     00 90 30 F3 DF FE D2 42  32 EF 75 99 3F 7D 1A 40
 >     00 00 00 00 00 00 5E 40  0A A8 FF FF FF FF 0F 40
 >     00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+
+
+This *might* be `VstTimeInfo` struct as returned by `audioMasterGetTime`.
+Record that chunk multiple times (luckily the opcode:12 gets called whenever we start playback in REAPER), and inspect it.
+Bytes @08-0f (`00 00 00 00 80 88 E5 40`) are *44100* in double precision, and the `VstTimeInfo` struct has a `sampleRate`
+field, that is supposed to be `double`. That looks very promising!
+
+Bytes @20-27 hold *120* in double (`tempo`). The first 8 bytes @00-07 read as double are monotonically increasing,
+but the values (40448, 109056, 78848, 90624) are certainly not `nanoSeconds` (rather: samples).
+Bytes @28-30 have values like *0*, *3.99999*, *15.9999*, *12.9999* (in double), which seems to be right.
+
+| position | field      | typical values   | type   | notes                    |
+|----------+------------+------------------+--------+--------------------------|
+| @00-07   |            | 78848, 90624     |        | monotonically increasing |
+| @08-0f   | sampleRate | 44100            | double |                          |
+| @10-17   |            |                  |        |                          |
+| @18-1f   |            |                  |        |                          |
+| @20-27   | temp       | 120              | double |                          |
+| @28-30   |            | 0, 3.999, 15.999 | double |                          |
+| @30-37   |            | 0                |        | 00 00 00 00 00 00 00 00  |
+| @38-3f   |            | 0, 4             | double |                          |
+| @40-43   |            | 4, 7             | int32  | timeSigNumerator         |
+| @44-47   |            | 4, 5             | int32  | timeSigDenominator       |
+| @48-4b   |            | 1,2,4,5          | int32  |                          |
+| @4c-4f   |            |                  | int32  | ef be ad de (flags?)     |
+|          |            |                  |        |                          |
