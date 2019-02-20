@@ -1768,18 +1768,21 @@ Bytes @20-27 hold *120* in double (`tempo`). The first 8 bytes @00-07 read as do
 but the values (40448, 109056, 78848, 90624) are certainly not `nanoSeconds` (rather: samples).
 Bytes @28-30 have values like *0*, *3.99999*, *15.9999*, *12.9999* (in double), which seems to be right.
 
-| position | field      | typical values   | type   | notes                    |
-|----------+------------+------------------+--------+--------------------------|
-| @00-07   |            | 78848, 90624     |        | monotonically increasing |
-| @08-0f   | sampleRate | 44100            | double |                          |
-| @10-17   |            |                  |        |                          |
-| @18-1f   |            |                  |        |                          |
-| @20-27   | temp       | 120              | double |                          |
-| @28-30   |            | 0, 3.999, 15.999 | double |                          |
-| @30-37   |            | 0                |        | 00 00 00 00 00 00 00 00  |
-| @38-3f   |            | 0, 4             | double |                          |
-| @40-43   |            | 4, 7             | int32  | timeSigNumerator         |
-| @44-47   |            | 4, 5             | int32  | timeSigDenominator       |
-| @48-4b   |            | 1,2,4,5          | int32  |                          |
-| @4c-4f   |            |                  | int32  | ef be ad de (flags?)     |
-|          |            |                  |        |                          |
+The `VstTimeInfo` struct supposedly has 7 double values and 6 int32 values.
+
+
+| position | field              | typical values   | type    | notes                    |
+|----------+--------------------+------------------+---------+--------------------------|
+| @00-07   |                    | 78848, 90624     | double? | monotonically increasing |
+| @08-0f   | sampleRate         | 44100            | double  |                          |
+| @10-17   |                    | 86800677000000   | double  |                          |
+| @18-1f   |                    |                  | double  | ??                       |
+| @20-27   | tempo              | 120              | double  |                          |
+| @28-30   |                    | 0, 3.999, 15.999 | double  |                          |
+| @30-37   |                    | 0                |         | 00 00 00 00 00 00 00 00  |
+| @38-3f   |                    | 0, 4             | double  |                          |
+| @40-43   | timeSigNumerator   | 4, 7             | int32   |                          |
+| @44-47   | timeSigDenominator | 4, 5             | int32   |                          |
+| @48-4b   |                    | 1,2,4,5          | int32   |                          |
+| @4c-4f   |                    | 0xDEADBEEF       | magic   |                          |
+|          |                    |                  |         |                          |
