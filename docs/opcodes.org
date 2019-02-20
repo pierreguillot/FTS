@@ -83,6 +83,7 @@
 |            |                             | :Digits calls hostCode:6                                           |
 |            |                             | :BowEcho/Danaides calls hostCode:23+6                              |
 |            |                             | :hypercyclic/tonespace calls hostCode:23+7+6                       |
+|            |                             | :REAPER calls with ivalue=1/0                                      |
 |         13 | effEditGetRect              | :Protoverb prints "AM_VST_Editor::getRect" and CRASH               |
 |         14 | effEditOpen                 | :Protoverb prints "AM_VST_Editor::open" and EXIT                   |
 |         15 | effEditClose                | :Protoverb prints "closed editor."                                 |
@@ -95,6 +96,7 @@
 |         33 |                             | :Protoverb returns 1 and ptr:"Protoverb-In0"                       |
 |         34 |                             | :Protoverb returns 1 and ptr:"Protoverb-Out0"                      |
 |         35 |                             | :Protoverb returns 1                                               |
+|            |                             | :REAPER calls with 0                                               |
 |         45 | effGetEffectName            | :Protoverb returns 1 and ptr:"Protoverb"                           |
 |         47 | effGetVendorString          | :Protoverb returns 1 and ptr:"u-he"; prints getVendorString()      |
 |         48 | effGetProductString         | :Protoverb returns 1 and ptr:"Protoverb 1.0.0"                     |
@@ -103,6 +105,8 @@
 |         58 | effGetVstVersion            | :Protoverb returns 2400 (0x960)                                    |
 |         59 | effKeysRequired?            | :Protoverb prints "u-he plugin doesn't use key"                    |
 |         63 |                             | :Protoverb returns  0xFFFFFFFFFFFFFFFF (with ptr:"")               |
+|         71 |                             | :REAPER calls with 0                                               |
+|         72 |                             | :REAPER calls with 0                                               |
 |      30514 |                             | :Protoverb calls hostCode:13                                       |
 | 0xdeadbeef |                             | :REAPER ask for function?                                          |
 |------------+-----------------------------+--------------------------------------------------------------------|
