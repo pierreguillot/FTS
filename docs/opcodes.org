@@ -66,8 +66,9 @@
 
 |     opcode | value                       | notes                                                              |
 |------------+-----------------------------+--------------------------------------------------------------------|
-|          0 |                             |                                                                    |
+|          0 |                             | :REAPER calls with 0 (at the very beginning)                       |
 |          1 |                             | :CRASH                                                             |
+|            |                             | :REAPER calls with 0 (at the very end)                             |
 |          2 | effSetProgram               | set program# via ivalue                                            |
 |          3 | effGetProgram               | returns current program#                                           |
 |          4 | effSetProgramName           | :needs a valid ptr, Protoverb calls hostCode:42                    |
