@@ -12,11 +12,17 @@ static float parameters[3];
 
 static char chunk[] = "This is the chunk for the FstPlugin.";
 
-#define PRINTEFFCASE(x) case x: printf("FstClient::dispatcher(%p, %s, ...)\n", eff, #x); break
+#define PRINTEFFCASE(x) \
+  case x:               \
+  if(x>98765)                                                           \
+    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, x, index, value, object, opt); \
+  else                                                                  \
+    printf("FstClient::dispatcher(%p, %s, ...)\n", eff, #x);            \
+  break;
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
   switch(opcode) {
   default:
-    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
+    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)...\n", eff, opcode, index, value, object, opt);
     break;
 #if 1
   PRINTEFFCASE(effSetProgram);
