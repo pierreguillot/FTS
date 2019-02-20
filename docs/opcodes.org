@@ -181,8 +181,8 @@
 | audioMasterUpdateDisplay               |    | -                | -                               |                0 | triggerAsyncUpdate()                                            |
 | audioMasterIOChanged                   |    | -                | -                               |                0 | setLatencyDelay                                                 |
 | audioMasterNeedIdle                    |    | -                | -                               |                0 | startTimer(50)                                                  |
-| audioMasterGetSampleRate               |    | -                | -                               |       samplerate |                                                                 |
-| audioMasterGetBlockSize                |    | -                | -                               |        blocksize |                                                                 |
+| audioMasterGetSampleRate               | 16 | -                | -                               |       samplerate |                                                                 |
+| audioMasterGetBlockSize                | 17 | -                | -                               |        blocksize |                                                                 |
 | audioMasterWantMidi                    |    | -                | -                               |                0 | wantsMidi=true                                                  |
 | audioMasterGetDirectory                |    | -                | -                               | (char*)directory |                                                                 |
 | audioMasterTempoAt                     | 10 | -                | -                               |        10000*bpm |                                                                 |
