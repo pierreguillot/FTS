@@ -8,12 +8,12 @@
 |      0 | audioMasterAutomate                    |                                                                              |
 |      1 | audioMasterVersion                     | :JUCE returns 2400                                                           |
 |      2 |                                        | :REAPER returns 0xDEAD                                                       |
-|     13 |                                        | :Protoverb calls in main (and as response to effcode:30514?)                 |
 |      6 |                                        | :called as response to effCode:12 with ivalue=1                              |
 |      7 | audioMasterGetTime                     | :called by hypercyclic/tonespace as response to effCode:12 with ivalue=65024 |
 |        |                                        | :REAPER returns an address                                                   |
 |     10 | audioMasterTempoAt                     |                                                                              |
 |     13 |                                        | :called with 0-args in Protoverb:main and hypercyclic:eff:12                 |
+|    13? |                                        | :Protoverb calls in main (and as response to effcode:30514?)                 |
 |     16 | audioMasterGetSampleRate               |                                                                              |
 |     17 | audioMasterGetBlockSize                |                                                                              |
 |     23 |                                        | :called by JUCE-plugins with 0-args as response to effCode:12                |
