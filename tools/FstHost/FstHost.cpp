@@ -87,17 +87,6 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
   return 0;
 }
 
-void dumpdata(const char*basename, const void*data, size_t length) {
-  const char*ptr = (const char*)data;
-  std::string filename = std::string(basename);
-  filename+=".bin";
-  FILE*f = fopen(filename.c_str(), "w");
-  for(size_t i=0; i<length; i++) {
-    fprintf(f, "%c", *ptr++);
-  }
-  fclose(f);
-}
-
 t_fstMain* load_plugin(const char* filename) {
   void*handle = dlopen(filename, RTLD_NOW | RTLD_GLOBAL);
   void*vstfun = 0;
@@ -272,7 +261,7 @@ int test_plugin(const char*filename) {
   AEffect*effect = vstmain(&dispatcher);
   printf("instantiated effect %p\n", effect);
   if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
-  //dumpdata(filename, effect, 160);
+  //dump_data(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
   print_aeffect(effect);
 
