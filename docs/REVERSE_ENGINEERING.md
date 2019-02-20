@@ -1157,62 +1157,63 @@ In `juce_VSTPluginFormat.cpp::handleCallback()` this is handled in the `audioMas
 
 ## how JUCE handles opcodes
 In order to understand how each opcode is used, we may look at *juce_VST_Wrapper.cpp*
+to find out which parameters are used (and how) for a given opcode, and how values are returned:
 
-| opcode         | IN | OUT | return  |
-|----------------|----|-----|---------|
-effCanBeAutomated  | (can parameter# be automated) IN:index, return 0
-effCanDo  |IN:ptr(char*), returns 0|1|-1
-effClose  | return 0
-effEditClose  | return 0
-effEditGetRect  |OUT:ptr(ERect*), return ptr
-effGetChunk  | IN:index, OUT:ptr(void*), return size
-effGetCurrentMidiProgram  | return -1
-effGetEffectName  | OUT:ptr(char[64]), return 1
-effGetInputProperties  |IN:index, OUT:ptr(VstPinProperties*), return 1|0
-effGetNumMidiInputChannels  | return 16*isMidi
-effGetNumMidiOutputChannels  | return 16*isMidi
-effGetOutputProperties  |IN:index, OUT:ptr(VstPinProperties*), return 1|0
-effGetParamDisplay  | OUT:ptr(char[8]), return 0
-effGetParamLabel  | OUT:ptr(char[8]), return 0
-effGetParamName  | OUT:ptr(char[8]), return 0
-effGetPlugCategory  | return category
-effGetProductString  | OUT:ptr(char[64]), return 1
-effGetProgramNameIndexed  | IN:index, OUT:ptr(char[24], return (hasProg#)
-effGetProgramName  | OUT:ptr(char[24]), return 0
-effGetProgram  | return current_program
-effGetSpeakerArrangement  | OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
-effGetTailSize  | return audiotailInSamples
-effGetVendorString  | OUT:ptr(char[64]), return 1
-effGetVendorVersion  | return version
-effGetVstVersion  | return kVstVersion
-effIdentify  | return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
-effKeysRequired  | return ((bool)KeyboardFocusRequireq
-effMainsChanged  | IN:ivalue, return 0 (handleResumeSuspend)
-effOpen  | return 0
-effProcessEvents  | IN:ptr(VstEvents*), return ((bool)MidiProcessed
-effSetBlockSize  | IN:ivalue, return 0
-effSetBypass  |IN:ivalue, return 0
-effSetChunk  | IN:index, IN:ivalue(size), IN:ptr(void*), return 0
-effSetProcessPrecision  |IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
-effSetProgram  | IN:ivalue, return 0
-effSetProgramName  |IN:ptr(char*), return 0
-effSetSampleRate  |IN:fvalue, return 0
-effSetTotalSampleToProcess  | return ivalue
-effString2Parameter  | IN:index, IN:ptr(char*), return (hasParam#)
-effConnectInput),
-effConnectOutput),
-effIdle),
-effSetSpeakerArrangement),
-effVendorSpecific  |
-effEditDraw),
-effEditIdle),
-effEditMouse),
-effEditOpen, 14),
-effEditSleep),
-effEditTop),
-effShellGetNextPlugin),
-effStartProcess),
-effStopProcess),
+| opcode                      | IN                 | OUT                     | return                | notes                        |
+|-----------------------------|--------------------|-------------------------|-----------------------|------------------------------|
+| effCanBeAutomated           | index              |                         | 0/1                   | can param#index be automated |
+| effCanDo                    | ptr(char[])        |                         | 0/1/-1                |                              |
+| effOpen                     |                    |                         | 0                     |                              |
+| effClose                    |                    |                         | 0                     |                              |
+| effEditClose                |                    |                         | 0                     |                              |
+| effEditGetRect              |                    | ptr(ERect[])            | ptr                   |                              |
+| effEditDraw                 |                    |                         |                       | not handled                  |
+| effEditIdle                 |                    |                         |                       | not handled                  |
+| effEditMouse                |                    |                         |                       | not handled                  |
+| effEditOpen                 | ptr(Window)        |                         |                       |                              |
+| effEditSleep                |                    |                         |                       | not handled                  |
+| effEditTop                  |                    |                         |                       | not handled                  |
+| effGetChunk                 | index              | ptr(void[])             | size                  |                              |
+| effSetChunk                 | index, ivalue, ptr |                         | 0                     | ivalue=size                  |
+| effGetCurrentMidiProgram    |                    |                         | -1                    |                              |
+| effGetEffectName            |                    | ptr(char[64])           | 1                     |                              |
+| effGetInputProperties       | index              | ptr(VstPinProperties[]) | 1/0                   |                              |
+| effGetOutputProperties      | index              | ptr(VstPinProperties[]) | 1/0                   |                              |
+| effGetNumMidiInputChannels  |                    |                         | 16/0                  | 16 if plugin handles MIDI    |
+| effGetNumMidiOutputChannels |                    |                         | 16/0                  | 16 if plugin handles MIDI    |
+| effGetParamDisplay          |                    | ptr(char[8])            | 0                     |                              |
+| effGetParamLabel            |                    | ptr(char[8])            | 0                     |                              |
+| effGetParamName             |                    | ptr(char[8])            | 0                     |                              |
+| effGetPlugCategory          |                    |                         | category              |                              |
+| effGetProductString         |                    | ptr(char[64])           | 1                     |                              |
+| effGetProgramNameIndexed    |                    | ptr(char[24])           | hasProgram#index      |                              |
+| effGetProgramName           |                    | ptr(char[24])           | 0                     |                              |
+| effGetProgram               |                    |                         | current_program       |                              |
+| effGetSpeakerArrangement    |                    | ivalue([]), ptr([])     | (!(hasAUX or isMidi)) | in:(SpeakerArrangement[])    |
+| effSetSpeakerArrangement    | ivalue(ptr), ptr   |                         | 0/1                   |                              |
+| effGetTailSize              |                    |                         | audiotailInSamples    |                              |
+| effGetVendorString          |                    | ptr(char[64])           | 1                     |                              |
+| effGetVendorVersion         |                    |                         | version               |                              |
+| effGetVstVersion            |                    |                         | kVstVersion           |                              |
+| effIdentify                 |                    |                         | bigEndianInt("NvEf")  | 1316373862=0x4e764566        |
+| effKeysRequired             |                    |                         | isKbdFocusRequired    |                              |
+| effMainsChanged             | ivalue             |                         | 0                     |                              |
+| effProcessEvents            | ptr(VstEvents[])   |                         | isMidiProcessed       |                              |
+| effSetBlockSize             | ivalue             |                         | 0                     |                              |
+| effSetBypass                | ivalue             |                         | 0                     |                              |
+| effSetProcessPrecision      | ivalue             |                         | !isProcessing         |                              |
+| effSetProgram               | ivalue             |                         | 0                     |                              |
+| effSetProgramName           | ptr(char[])        |                         | 0                     |                              |
+| effSetSampleRate            | fvalue             |                         | 0                     |                              |
+| effSetTotalSampleToProcess  | ivalue             |                         | ivalue                |                              |
+| effString2Parameter         | index, ptr(char[]) |                         | hasParam#index        |                              |
+| effConnectInput             |                    |                         |                       | not handled                  |
+| effConnectOutput            |                    |                         |                       | not handled                  |
+| effIdle                     |                    |                         |                       | not handled                  |
+| effVendorSpecific           | ALL                |                         |                       |                              |
+| effShellGetNextPlugin       |                    |                         |                       | not handled                  |
+| effStartProcess             |                    |                         |                       | not handled                  |
+| effStopProcess              |                    |                         |                       | not handled                  |
 
 
 
