@@ -213,6 +213,18 @@ bool skipOpcodeJUCE(size_t opcode) {
   return false;
 }
 
+void test_opcode23(AEffect*effect) {
+  size_t opcode = 23;
+  t_fstPtrInt*buffer[8] = {0};
+  printf("testing OP:%d\n", opcode);
+  t_fstPtrInt result = effect->dispatcher(effect, opcode, 0, 0, buffer, 0.f);
+  printf("\tresult |\t%llu 0x%llX\n", result, result);
+  if(*buffer) {
+    printf("\tbuffer '%.*s'\n", 512, (char*)*buffer);
+  }
+  hexprint(*buffer, result);
+}
+
 int test_plugin(const char*filename) {
   t_fstMain*vstmain = load_plugin(filename);
   if(!vstmain)return printf("'%s' was not loaded\n", filename);
