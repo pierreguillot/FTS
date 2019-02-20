@@ -14,11 +14,30 @@ static float parameters[3];
 static char chunk[] = "This is the chunk for the FstPlugin.";
 
 void print_struct7(AEffect* effect) {
+#if 0
   auto *str = (double*)dispatch(effect, 7, 0, 65024, 0, 0.);
   for(size_t i=0; i<64/sizeof(*str); i++)
     std::cout << " " << str[i];
   std::cout << " : " << str[2]/(1000000000);
   std::cout << std::endl;
+#else
+  auto *vti = (VstTimeInfo*)dispatch(effect, 7, 0, 65024, 0, 0.);
+#define PRINT_VTI(x) std::cout << std::endl << "\t" << #x << ": " << vti->x
+  PRINT_VTI(samplePos);
+  PRINT_VTI(sampleRate);
+  PRINT_VTI(nanoSeconds);
+  PRINT_VTI(ppqPos);
+  PRINT_VTI(tempo);
+  PRINT_VTI(barStartPos);
+  PRINT_VTI(cycleStartPos);
+  PRINT_VTI(cycleEndPos);
+  PRINT_VTI(timeSigNumerator);
+  PRINT_VTI(timeSigDenominator);
+  PRINT_VTI(flags);
+  PRINT_VTI(smpteFrameRate);
+  PRINT_VTI(smpteOffset);
+  std::cout << std::endl;
+#endif
 }
 
 t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
