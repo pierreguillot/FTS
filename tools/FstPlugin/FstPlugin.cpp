@@ -35,6 +35,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   PRINTEFFCASE(effEditOpen);
   PRINTEFFCASE(effEditClose);
   PRINTEFFCASE(effGetChunk);
+  PRINTEFFCASE(effSetChunk);
   PRINTEFFCASE(effGetVstVersion);
 #endif
   case 53:
