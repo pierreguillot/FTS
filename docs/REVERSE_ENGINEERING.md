@@ -1217,6 +1217,59 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effStartProcess             |                    |                         |                       | JUCE-ignored                 |
 | effStopProcess              |                    |                         |                       | JUCE-ignored                 |
 
+### JUCE host Opcodes
+
+for host opcodes (`audioMaster*`) check out *juce_VSTPluginFormat.cpp*:
+
+| host opcode                            | IN               | OUT         |           return | notes                                                           |
+|----------------------------------------+------------------+-------------+------------------+-----------------------------------------------------------------|
+| audioMasterAutomate                    | index, fvalue    | -           |                0 |                                                                 |
+| audioMasterProcessEvents               | ptr(VstEvents*)) | -           |                0 |                                                                 |
+| audioMasterGetTime                     | -                | -           |         &vsttime |                                                                 |
+| audioMasterIdle                        | -                | -           |                0 |                                                                 |
+| audioMasterSizeWindow                  | index, value     |             |                1 | setWindowSize(index,value)                                      |
+| audioMasterUpdateDisplay               | -                | -           |                0 | triggerAsyncUpdate()                                            |
+| audioMasterIOChanged                   | -                | -           |                0 | setLatencyDelay                                                 |
+| audioMasterNeedIdle                    | -                | -           |                0 | startTimer(50)                                                  |
+| audioMasterGetSampleRate               | -                | -           |       samplerate |                                                                 |
+| audioMasterGetBlockSize                | -                | -           |        blocksize |                                                                 |
+| audioMasterWantMidi                    | -                | -           |                0 | wantsMidi=true                                                  |
+| audioMasterGetDirectory                | -                | -           | (char*)directory |                                                                 |
+| audioMasterTempoAt                     | -                | -           |        10000*bpm |                                                                 |
+| audioMasterGetAutomationState          | -                | -           |        0/1/2/3/4 | 0 = not supported, 1 = off, 2 = read, 3 = write, 4 = read/write |
+| audioMasterBeginEdit                   | index            | -           |                0 | gesture                                                         |
+| audioMasterEndEdit                     | index            | -           |                0 | gesture                                                         |
+| audioMasterPinConnected                | index,value      | -           |              0/1 | 0=true; value=direction                                         |
+| audioMasterGetCurrentProcessLevel      | -                | -           |              4/0 | 4 if not realtime                                               |
+|----------------------------------------+------------------+-------------+------------------+-----------------------------------------------------------------|
+| audioMasterCanDo                       | ptr(char[])      | -           |              1/0 | 1 if we can handle feature                                      |
+| audioMasterVersion                     | -                | -           |             2400 |                                                                 |
+| audioMasterCurrentId                   | -                | -           | shellUIDToCreate | ?                                                               |
+| audioMasterGetNumAutomatableParameters | -                | -           |                0 |                                                                 |
+| audioMasterGetVendorVersion            | -                | -           |           0x0101 |                                                                 |
+| audioMasterGetVendorString             | -                | ptr(char[]) |              ptr | getHostName()                                                   |
+| audioMasterGetProductString            | -                | ptr(char[]) |              ptr | getHostName()                                                   |
+| audioMasterSetOutputSampleRate         | -                | -           |                0 |                                                                 |
+|----------------------------------------+------------------+-------------+------------------+-----------------------------------------------------------------|
+| audioMasterGetLanguage                 |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterGetOutputSpeakerArrangement |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterGetParameterQuantization    |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterGetPreviousPlug             |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterGetNextPlug                 |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterSetTime                     |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterWillReplaceOrAccumulate     |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterGetInputLatency             |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterGetOutputLatency            |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterOpenWindow                  |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterCloseWindow                 |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterSetIcon                     |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineGetCurrentMetaPass   |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineGetCurrentPass       |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineRead                 |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineStart                |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineWrite                |                  |             |                  | JUCE-ignored                                                    |
+| audioMasterVendorSpecific              |                  |             |                  | JUCE-ignored                                                    |
+
 
 
 # Part: a plugin
