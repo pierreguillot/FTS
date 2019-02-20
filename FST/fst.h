@@ -128,10 +128,10 @@ typedef enum {
 } t_fstPluginOpcode;
 enum {
   FST_ENUM(effFlagsHasEditor, (1<<0)),
+  FST_ENUM_EXPERIMENTAL(effFlagsProgramChunks, (1<<5)),
   FST_ENUM_UNKNOWN(effFlagsCanDoubleReplacing),
   FST_ENUM_UNKNOWN(effFlagsCanReplacing),
   FST_ENUM_UNKNOWN(effFlagsNoSoundInStop),
-  FST_ENUM_UNKNOWN(effFlagsProgramChunks),
   FST_ENUM(effFlagsIsSynth, (1<<8)),
 } t_fstPluginFlags;
 typedef enum {
