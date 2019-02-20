@@ -234,7 +234,8 @@ int test_plugin(const char*filename) {
   //dumpdata(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
   print_aeffect(effect);
-
+  test_opcode23(effect);
+  return 0;
   #if 0
   for(int i=0; i<effect->numPrograms; i++) {
     size_t opcode = 29;
