@@ -33,7 +33,17 @@ t_fstPtrInt dispatch (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue
     return effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
   return 0xDEAD;
 }
-
+t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  if(effect) {
+    char opcodestr[256];
+    printf("AEffect.dispatch(%p, %s, %d, %llu, %p, %f)\n",
+        effect, effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
+    t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
+    printf("AEffect.dispatch: %llu (0x%llX)\n", result, result);
+    return result;
+  }
+  return 0xDEAD;
+}
 
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
   printf("FstHost::dispatcher[%u]: ", curOpCode);
