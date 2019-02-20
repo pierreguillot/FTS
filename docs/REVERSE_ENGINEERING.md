@@ -1773,14 +1773,14 @@ The `VstTimeInfo` struct supposedly has 7 double values and 6 int32 values.
 
 | position | field              | typical values   | type    | notes                    |
 |----------+--------------------+------------------+---------+--------------------------|
-| @00-07   |                    | 78848, 90624     | double? | monotonically increasing |
+| @00-07   | samplePos          | 78848, 90624     | double  | position in samples      |
 | @08-0f   | sampleRate         | 44100            | double  |                          |
 | @10-17   |                    | 86800677000000   | double  |                          |
-| @18-1f   |                    |                  | double  | ??                       |
+| @18-1f   | ppqPos             |                  | double  | position in beats        |
 | @20-27   | tempo              | 120              | double  |                          |
-| @28-30   |                    | 0, 3.999, 15.999 | double  |                          |
-| @30-37   |                    | 0                |         | 00 00 00 00 00 00 00 00  |
-| @38-3f   |                    | 0, 4             | double  |                          |
+| @28-30   | barStartPos        | 0, 3.999, 15.999 | double  |                          |
+| @30-37   | cycleStartPos      | 0                | double  | 00 00 00 00 00 00 00 00  |
+| @38-3f   | cycleEndPos        | 0, 4             | double  |                          |
 | @40-43   | timeSigNumerator   | 4, 7             | int32   |                          |
 | @44-47   | timeSigDenominator | 4, 5             | int32   |                          |
 | @48-4b   |                    | 1,2,4,5          | int32   |                          |
