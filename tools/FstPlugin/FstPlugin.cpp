@@ -164,10 +164,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
         if(first) {
           test_opcodes(eff, 50);
         } else {
-          char*str = (char*)dispatch_v(eff, 7, 0, 65024, 0, 0.);
-          if(*str) {
-            printf("\t'%.*s'\n", 512, str);
-          }
+          auto *str = (char*)dispatch_v(eff, 7, 0, 65024, 0, 0.);
           char filename[128];
           static int icount = 0;
           snprintf(filename, 127, "./testdump.%d", icount);
