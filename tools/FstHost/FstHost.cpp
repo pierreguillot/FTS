@@ -26,7 +26,7 @@ static void hexprint(void*ptr, size_t length) {
   }
   printf("\n");
 }
-static size_t curOpCode = 0;
+static size_t curOpCode = -1;
 
 t_fstPtrInt dispatch (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
   if(effect) {
