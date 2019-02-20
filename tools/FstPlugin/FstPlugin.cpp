@@ -12,6 +12,18 @@ static float parameters[3];
 
 static char chunk[] = "This is the chunk for the FstPlugin.";
 
+
+t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  if(effect) {
+    char opcodestr[256];
+    printf("dispatch4host(%p, %s, %d, %llu, %p, %f)\n",
+        effect, hostCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
+    t_fstPtrInt result = dispatch(effect, opcode, index, ivalue, ptr, fvalue);
+    printf("dispatch4host: %llu (0x%llX)\n", result, result);
+    return result;
+  }
+  return 0xBEEF;
+}
 #define PRINTEFFCASE(x) \
   case x:               \
   if(x>98765)                                                           \
