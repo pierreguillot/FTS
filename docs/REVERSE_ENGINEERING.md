@@ -1012,8 +1012,8 @@ Comparing this with our binary flag values, we can conclude:
 
 | flag              | value  |
 |-------------------|--------|
-| effFlagsHasEditor | `1<<1` |
-| effFlagsIsSynth   | `1<<9` |
+| effFlagsHasEditor | `1<<0` |
+| effFlagsIsSynth   | `1<<8` |
 
 
 It's a it strange that we have `processReplacing` and `processDoubleReplacing` functions
@@ -1022,7 +1022,7 @@ although there are no more flags that are all set to `true` for each plugin.
 This might be a problem with our `AEffect` struct or with the plugins
 (or the information about replacing-functions might not be redundant.)
 
-Another observation is that flag `1<<10` is set to `true` for all JUCE-plugins,
+Another observation is that flag `1<<9` is set to `true` for all JUCE-plugins,
 and to `false` for the rest.
 
 I don't really know what either `effFlagsNoSoundInStop` nor `effFlagsProgramChunks`
