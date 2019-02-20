@@ -3,61 +3,63 @@
 
 ** host
 
-| opcode | value                                  | notes                                                        |
-|--------+----------------------------------------+--------------------------------------------------------------|
-|      0 | audioMasterAutomate                    |                                                              |
-|      1 | audioMasterVersion                     | :JUCE returns 2400                                           |
-|     13 |                                        | :Protoverb calls in main (and as response to effcode:30514?) |
-|      6 |                                        | :called as response to effCode:12                            |
-|      7 |                                        | :called by hypercyclic/tonespace as response to effCode:12   |
-|     13 |                                        | :called with 0-args in Protoverb:main and hypercyclic:eff:12 |
-|     23 |                                        | :called by JUCE-plugins as response to effCode:12            |
-|     32 | audioMasterGetVendorString             |                                                              |
-|     33 | audioMasterGetProductString            |                                                              |
-|     34 | audioMasterGetVendorVersion            | :JUCE returns 0x0101                                         |
-|     42 |                                        | :Protoverb calls as response to effcode:4                    |
-|--------+----------------------------------------+--------------------------------------------------------------|
-|        | audioMasterBeginEdit                   |                                                              |
-|        | audioMasterEndEdit                     |                                                              |
-|        | audioMasterCanDo                       |                                                              |
-|        | audioMasterCurrentId                   |                                                              |
-|        | audioMasterGetAutomationState          |                                                              |
-|        | audioMasterGetBlockSize                |                                                              |
-|        | audioMasterGetCurrentProcessLevel      |                                                              |
-|        | audioMasterGetDirectory                |                                                              |
-|        | audioMasterGetNumAutomatableParameters |                                                              |
-|        | audioMasterGetSampleRate               |                                                              |
-|        | audioMasterGetTime                     |                                                              |
-|        | audioMasterIdle                        |                                                              |
-|        | audioMasterIOChanged                   |                                                              |
-|        | audioMasterNeedIdle                    |                                                              |
-|        | audioMasterPinConnected                |                                                              |
-|        | audioMasterProcessEvents               |                                                              |
-|        | audioMasterSetOutputSampleRate         |                                                              |
-|        | audioMasterSizeWindow                  |                                                              |
-|        | audioMasterTempoAt                     |                                                              |
-|        | audioMasterUpdateDisplay               |                                                              |
-|        | audioMasterWantMidi                    |                                                              |
-|--------+----------------------------------------+--------------------------------------------------------------|
-|        | audioMasterGetLanguage                 | JUCE-ignore                                                  |
-|        | audioMasterGetOutputSpeakerArrangement | JUCE-ignore                                                  |
-|        | audioMasterGetParameterQuantization    | JUCE-ignore                                                  |
-|        | audioMasterGetPreviousPlug             | JUCE-ignore                                                  |
-|        | audioMasterGetNextPlug                 | JUCE-ignore                                                  |
-|        | audioMasterSetTime                     | JUCE-ignore                                                  |
-|        | audioMasterWillReplaceOrAccumulate     | JUCE-ignore                                                  |
-|        | audioMasterGetInputLatency             | JUCE-ignore                                                  |
-|        | audioMasterGetOutputLatency            | JUCE-ignore                                                  |
-|        | audioMasterOpenWindow                  | JUCE-ignore                                                  |
-|        | audioMasterCloseWindow                 | JUCE-ignore                                                  |
-|        | audioMasterSetIcon                     | JUCE-ignore                                                  |
-|        | audioMasterOfflineGetCurrentMetaPass   | JUCE-ignore                                                  |
-|        | audioMasterOfflineGetCurrentPass       | JUCE-ignore                                                  |
-|        | audioMasterOfflineRead                 | JUCE-ignore                                                  |
-|        | audioMasterOfflineStart                | JUCE-ignore                                                  |
-|        | audioMasterOfflineWrite                | JUCE-ignore                                                  |
-|        | audioMasterVendorSpecific              | JUCE-ignore                                                  |
-|        |                                        |                                                              |
+| opcode | value                                  | notes                                                                        |
+|--------+----------------------------------------+------------------------------------------------------------------------------|
+|      0 | audioMasterAutomate                    |                                                                              |
+|      1 | audioMasterVersion                     | :JUCE returns 2400                                                           |
+|      2 |                                        | :REAPER returns 0xDEAD                                                       |
+|     13 |                                        | :Protoverb calls in main (and as response to effcode:30514?)                 |
+|      6 |                                        | :called as response to effCode:12 with ivalue=1                              |
+|      7 |                                        | :called by hypercyclic/tonespace as response to effCode:12 with ivalue=65024 |
+|        |                                        | :REAPER returns an address                                                   |
+|     10 | audioMasterTempoAt                     |                                                                              |
+|     13 |                                        | :called with 0-args in Protoverb:main and hypercyclic:eff:12                 |
+|     16 | audioMasterGetSampleRate               |                                                                              |
+|     17 | audioMasterGetBlockSize                |                                                                              |
+|     23 |                                        | :called by JUCE-plugins with 0-args as response to effCode:12                |
+|     32 | audioMasterGetVendorString             |                                                                              |
+|     33 | audioMasterGetProductString            |                                                                              |
+|     34 | audioMasterGetVendorVersion            | :JUCE returns 0x0101                                                         |
+|     42 |                                        | :Protoverb calls as response to effSetProgramName                            |
+|--------+----------------------------------------+------------------------------------------------------------------------------|
+|        | audioMasterBeginEdit                   |                                                                              |
+|        | audioMasterEndEdit                     |                                                                              |
+|        | audioMasterCanDo                       |                                                                              |
+|        | audioMasterCurrentId                   |                                                                              |
+|        | audioMasterGetAutomationState          |                                                                              |
+|        | audioMasterGetCurrentProcessLevel      |                                                                              |
+|        | audioMasterGetDirectory                |                                                                              |
+|        | audioMasterGetNumAutomatableParameters |                                                                              |
+|        | audioMasterGetTime                     |                                                                              |
+|        | audioMasterIdle                        |                                                                              |
+|        | audioMasterIOChanged                   |                                                                              |
+|        | audioMasterNeedIdle                    |                                                                              |
+|        | audioMasterPinConnected                |                                                                              |
+|        | audioMasterProcessEvents               |                                                                              |
+|        | audioMasterSetOutputSampleRate         |                                                                              |
+|        | audioMasterSizeWindow                  |                                                                              |
+|        | audioMasterUpdateDisplay               |                                                                              |
+|        | audioMasterWantMidi                    |                                                                              |
+|--------+----------------------------------------+------------------------------------------------------------------------------|
+|        | audioMasterGetLanguage                 | JUCE-ignore                                                                  |
+|        | audioMasterGetOutputSpeakerArrangement | JUCE-ignore                                                                  |
+|        | audioMasterGetParameterQuantization    | JUCE-ignore                                                                  |
+|        | audioMasterGetPreviousPlug             | JUCE-ignore                                                                  |
+|        | audioMasterGetNextPlug                 | JUCE-ignore                                                                  |
+|        | audioMasterSetTime                     | JUCE-ignore                                                                  |
+|        | audioMasterWillReplaceOrAccumulate     | JUCE-ignore                                                                  |
+|        | audioMasterGetInputLatency             | JUCE-ignore                                                                  |
+|        | audioMasterGetOutputLatency            | JUCE-ignore                                                                  |
+|        | audioMasterOpenWindow                  | JUCE-ignore                                                                  |
+|        | audioMasterCloseWindow                 | JUCE-ignore                                                                  |
+|        | audioMasterSetIcon                     | JUCE-ignore                                                                  |
+|        | audioMasterOfflineGetCurrentMetaPass   | JUCE-ignore                                                                  |
+|        | audioMasterOfflineGetCurrentPass       | JUCE-ignore                                                                  |
+|        | audioMasterOfflineRead                 | JUCE-ignore                                                                  |
+|        | audioMasterOfflineStart                | JUCE-ignore                                                                  |
+|        | audioMasterOfflineWrite                | JUCE-ignore                                                                  |
+|        | audioMasterVendorSpecific              | JUCE-ignore                                                                  |
+|        |                                        |                                                                              |
 
 
 
