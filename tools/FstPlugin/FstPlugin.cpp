@@ -112,7 +112,8 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   }
   if(object) {
     char*str = (char*)object;
-    printf("\t'%.*s'\n", 512, str);
+    if(*str)
+      printf("\tFtsClient::dispatcher(ptr='%.*s')\n", 512, str);
   }
   switch(opcode) {
   default: break;
