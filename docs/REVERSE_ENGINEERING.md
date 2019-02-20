@@ -1520,3 +1520,12 @@ The value returned by 49, looks suspiciously like the version:
 | tonespace   | 250             | 250              |
 
 So we assign `effGetVendorVersion` the value of `49`
+
+## effGetVstVersion
+
+Opcode `58` returns `2400` for all plugins I've tested so far.
+This is the same value that JUCE pluginhosts return (hardcoded) to the
+`audioMasterVersion` opcode.
+So it's probably save to assume that `58` is the opcode
+that allows the host to query the plugin for it's VST version.
+Which would make it the `effGetVstVersion`.
