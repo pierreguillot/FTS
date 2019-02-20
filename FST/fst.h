@@ -287,21 +287,21 @@ typedef struct VstSpeakerArrangement_ {
 } FST_UNKNOWN(VstSpeakerArrangement);
 
 typedef struct VstTimeInfo_ {
-  FST_UNKNOWN(double) samplePos; //OK
-  FST_UNKNOWN(double) sampleRate;// = rate; //OK
-  FST_UNKNOWN(double) nanoSeconds; //OK
+  double samplePos; //OK
+  double sampleRate;// = rate; //OK
+  double nanoSeconds; //OK
   /* ppq: Pulses Per Quaternote */
-  FST_UNKNOWN(double) ppqPos; // (double)position.ppqPosition; //OK
-  FST_UNKNOWN(double) tempo; //OK
-  FST_UNKNOWN(double) barStartPos; // (double)ppqPositionOfLastBarStart; //OK
-  FST_UNKNOWN(double) cycleStartPos; // (double)ppqLoopStart; //OK
-  FST_UNKNOWN(double) cycleEndPos; // (double)ppqLoopEnd; //OK
-  FST_UNKNOWN(int) timeSigNumerator; //OK
-  FST_UNKNOWN(int) timeSigDenominator; //OK
+  double ppqPos; // (double)position.ppqPosition; //OK
+  double tempo; //OK
+  double barStartPos; // (double)ppqPositionOfLastBarStart; //OK
+  double cycleStartPos; // (double)ppqLoopStart; //OK
+  double cycleEndPos; // (double)ppqLoopEnd; //OK
+  int timeSigNumerator; //OK
+  int timeSigDenominator; //OK
 
-  FST_UNKNOWN(int) flags;// = Vst2::kVstNanosValid
-  FST_UNKNOWN(int) smpteFrameRate; //int32
-  FST_UNKNOWN(int) smpteOffset; //int32
+  FST_UNKNOWN(int) flags;// = Vst2::kVstNanosValid //?
+  FST_UNKNOWN(int) smpteFrameRate; //int32 //?
+  FST_UNKNOWN(int) smpteOffset; //int32 //?
 } FST_UNKNOWN(VstTimeInfo);
 
 typedef struct VstPinProperties_ {
