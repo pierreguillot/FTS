@@ -122,7 +122,7 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->numOutputs = 2;
   eff->float1 = 1.;
   eff->object = eff;
-  eff->uniqueID = 123456;
+  eff->uniqueID = 0xdead;
   eff->version = 666;
 
   eff->processReplacing = processReplacing;
