@@ -1325,7 +1325,7 @@ TODO: 10, 11
 ## startup
 
 After the `VSTPluginMain` function has returned to the host,
-REAPER calls our plugin a couple or times, with various opcodes:
+REAPER calls our plugin a couple or times, with various opcodes (sorted by opcode number)):
 
 >     FstClient::dispatcher(0x3098d20, 0, 0, 0, (nil), 0.000000)
 >     FstClient::dispatcher(0x3098d20, 2, 0, 0, (nil), 0.000000)
@@ -1370,6 +1370,15 @@ This looks very much like a generic interface to either query a property by name
 Looking up how JUCE handles the `effCanDo` in *juce_VST_Wrapper.cpp*, we see that
 it really takes the `ptr` argument as string and compares it to values like
 `bypass`, `sendVstEvents` and `hasCockosExtensions`. Bingo!
+
+If we do *not* sort the output, we notice that after the plugin has been created with
+opcode `0` is run (only) at the very beginning, when the plugin is initialised.
+On the other hand, opcode `1` is run (only) at the very end.
+So, these seem to be some initialisation/deinitialisation opcodes for the plugin.
+`effOpen` and `effClose` look like likely candidates.
+
+
+
 
 
 ## inserting the plugin
