@@ -1317,7 +1317,14 @@ The opcode `48` returns the currently opened REAPER session file.
 The `audioMasterGetDirectory` might match, but REAPER returns a
 file rather than a diretory.
 
-TODO: 10, 11
+Opcode `10` is a weirdo number, obviously for humans (rather than computers).
+Reading up a bit on what JUCE does for the various audioMaster-opcodes,
+I stumbled upong the `audioMasterTempoAt`, which - according to the comments
+in the JUCE code - is meant to be the tempo in "BMP * 10000".
+So the universal default of *120bpm* would be 1200000 which is exactly what
+we have here.
+
+TODO: 11
 
 
 # AEffect initialisation from host
