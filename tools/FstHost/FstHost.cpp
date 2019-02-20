@@ -28,6 +28,13 @@ static void hexprint(void*ptr, size_t length) {
 }
 static size_t curOpCode = 0;
 
+t_fstPtrInt dispatch (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  if(effect)
+    return effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
+  return 0xDEAD;
+}
+
+
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
   printf("FstHost::dispatcher[%u]: ", curOpCode);
   switch(opcode) {
