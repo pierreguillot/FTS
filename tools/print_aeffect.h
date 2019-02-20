@@ -11,10 +11,10 @@ static void print_aeffect(AEffect*eff) {
     printf("\n\tmagic=0x%X", eff->magic);
   else
     printf("\n\tmagic=VstP");
-  printf("\n\tdispatcher=%p", eff->dispatcher);
-  printf("\n\tprocess=%p", eff->process);
-  printf("\n\tgetParameter=%p", eff->getParameter);
-  printf("\n\tsetParameter=%p", eff->setParameter);
+  printf("\n\tdispatcherCB=%p", eff->dispatcher);
+  printf("\n\tprocessCB=%p", eff->process);
+  printf("\n\tgetParameterCB=%p", eff->getParameter);
+  printf("\n\tsetParameterCB=%p", eff->setParameter);
 
   printf("\n\tnumPrograms=%d", eff->numPrograms);
   printf("\n\tnumParams=%d", eff->numParams);
@@ -41,8 +41,8 @@ static void print_aeffect(AEffect*eff) {
   printf("\n\tuniqueID=%d", eff->uniqueID);
   printf("\n\tversion=%d", eff->version);
 
-  printf("\n\tprocessReplacing=%p", eff->processReplacing);
-  printf("\n\tprocessDoubleReplacing=%p", eff->processDoubleReplacing);
+  printf("\n\tprocessReplacingCB=%p", eff->processReplacing);
+  printf("\n\tprocessDoubleReplacingCB=%p", eff->processDoubleReplacing);
   printf("\n\n");
 }
 
