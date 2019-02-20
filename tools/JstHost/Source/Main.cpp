@@ -18,6 +18,10 @@ int main (int argc, char* argv[]) {
      // ..your code goes here!
      paths.add(File(argv[1]));
 
+
+    pointer_sized_int identify = ByteOrder::bigEndianInt ("NvEf");
+    std::cerr << "identify: "<<identify<<std::endl;
+
     PluginDirectoryScanner scanner(knownPluginList, formatToScan, paths, true, File(), true);
     String cur;
     while(scanner.scanNextFile(false, cur)) {;}
