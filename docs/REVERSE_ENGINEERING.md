@@ -1568,11 +1568,13 @@ and the following snippet:
 
 ## effectName, productString, vendorString, vendorVersion
 
-In the [C-snippet above](#effgetprogramnameindexed), we also get nice strings for
+In the [C-snippet above](#effidentify), we also get nice strings for
 opcodes `45`, `47`, and `48`, that look like they would be good matches for
 `effGetEffectName` (45), `effGetProductString` (48) and `effGetVendorString` (47).
 
-The value returned by 49, looks suspiciously like the version:
+The value returned for `49` looks suspiciously like the plugin version.
+
+E.g. if we compare the values to the ones we assumed to be `AEffect.version`:
 
 | plugin      | AEffect.version | returned by `49` |
 |-------------|-----------------|------------------|
