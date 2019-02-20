@@ -1708,3 +1708,52 @@ It also happens to be the only tested plugin that has the bit#6 in
 the `AEffect.flags` structure set to `0` - hinting that
 `effFlagsProgramChunks = (1<<5)` (which would explain that this
 flag has something to do with the ability to get/set chunks).
+
+
+# some audioMaster opcodes
+time to play get some more opcodes for the host.
+We want the plugin host to be properly running, so the plugin initialisation time is probably too early.
+All real plugins observed so far, call a number of host-opcodes when they receive opcode `12`:
+/*BowEcho*/*Danaides*/*hypercyclic*/*tonespace* ron opcode `23`, *hypercyclic*/*tonespace* also call `7`
+and all plugins call `6`.
+
+So opcode:12 seems to be a good place to test the plugin host, which we do
+by simply running again, but this time in the opcode:12 callback.
+~~~
+for(size_t opcode=0; opcode<50; opcode++) {
+   char buffer[1024] = {0};
+   hostDispatch(effect, opcode, 0, 0, buf, 0.f);
+}
+~~~
+
+This time this gives us the following opcodes that don't return `0x0`:
+
+| op | result |
+|----|--------|
+|  2 | 57005 (0xDEAD) |
+|  6 | 1 (0x1) |
+|  7 | 60352024 (0x398E618) |
+|  8 | 1 (0x1) |
+| 11 | 3 (0x3) |
+| 12 | 1 (0x1) |
+| 13 | 1 (0x1) |
+| 15 | 1 (0x1) |
+| 23 | 1 (0x1) |
+| 42 | 1 (0x1) |
+| 43 | 1 (0x1) |
+| 44 | 1 (0x1) |
+| 48 | 1 (0x1) |
+
+Opcode:2 is interesting, as it has such a low number *and* such a funny hex-representation
+(which is obviously a magic value).
+The [JUCE host opcode table](#juce-host-opcodes) does not leave many possibilities.
+The only entry that makes sense is the `audioMasterCurrentId`.
+
+Opcode:11, returning `3`, might be `audioMasterGetAutomationState` (unless it is in the list of opcodes not handled by JUCE).
+
+Opcode:7 returns a pointer. If we print the memory at the given position, we get the first 64 bytes like:
+
+>     09 00 00 00 30 D3 01 41  00 00 00 00 80 88 E5 40
+>     00 90 30 F3 DF FE D2 42  32 EF 75 99 3F 7D 1A 40
+>     00 00 00 00 00 00 5E 40  0A A8 FF FF FF FF 0F 40
+>     00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
