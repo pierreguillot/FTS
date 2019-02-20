@@ -86,7 +86,7 @@ typedef enum {
   FST_ENUM(effIdentify, 22), // return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
   FST_ENUM_EXPERIMENTAL(effOpen, 1), // return 0
   FST_ENUM_UNKNOWN(effClose), // return 0
-  FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0 (handleResumeSuspend)
+  FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0;  (handleResumeSuspend)
 
   FST_ENUM(effEditGetRect, 13), //OUT:ptr(ERect*), return ptr
   FST_ENUM(effEditOpen, 14),
