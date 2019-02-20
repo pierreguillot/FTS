@@ -213,6 +213,25 @@ bool skipOpcodeJUCE(size_t opcode) {
   return false;
 }
 
+void test_setChunk(AEffect*effect) {
+  t_fstPtrInt data=0;
+  t_fstPtrInt size=0;
+  int index = 0;
+  /* get data */
+  size = effect->dispatcher(effect, effGetChunk, index, 0, &data, 0.f);
+  printf("index#%d: got %d bytes @ 0x%X\n", index, size, data);
+
+  index = 1;
+  size = effect->dispatcher(effect, effGetChunk, index, 0, &data, 0.f);
+  printf("index#%d: got %d bytes @ 0x%X\n", index, size, data);
+
+  index = 0;
+  t_fstPtrInt result = effect->dispatcher(effect, effSetChunk, index, size, &data, 0.f);
+  printf("index#%d: setChunk[%d] returned %ull\n", index, (int)effSetChunk, result);
+  size = effect->dispatcher(effect, effGetChunk, index, 0, &data, 0.f);
+  printf("index#%d: got %d bytes @ 0x%X\n", index, size, data);
+}
+
 void test_opcode23(AEffect*effect) {
   size_t opcode = 23;
   int index = 0;
