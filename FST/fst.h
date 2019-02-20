@@ -61,6 +61,8 @@ typedef enum {
   FST_ENUM_UNKNOWN(audioMasterWillReplaceOrAccumulate) //?, return 0
 } t_fstHostOpcode;;
 typedef enum {
+  FST_ENUM_EXPERIMENTAL(effOpen, 0), // return 0
+  FST_ENUM_EXPERIMENTAL(effClose, 1), // return 0
   FST_ENUM(effSetProgram, 2), // IN:ivalue, return 0
   FST_ENUM(effGetProgram, 3), // return current_program
   FST_ENUM(effSetProgramName, 4), //IN:ptr(char*), return 0
@@ -84,8 +86,6 @@ typedef enum {
 
 
   FST_ENUM(effIdentify, 22), // return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
-  FST_ENUM_EXPERIMENTAL(effOpen, 1), // return 0
-  FST_ENUM_UNKNOWN(effClose), // return 0
   FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0;  (handleResumeSuspend)
 
   FST_ENUM(effEditGetRect, 13), //OUT:ptr(ERect*), return ptr
