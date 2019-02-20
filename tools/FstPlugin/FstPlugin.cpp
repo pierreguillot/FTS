@@ -132,6 +132,25 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     return 0;
   case effCanDo:
     return 0;
+  case 12:
+      printf("opcode:12\n");
+      dispatch_v(eff, 23, 0, 0, 0, 0.);
+      do {
+        static bool first=true;
+        if(first) {
+          for(int i=0; i<0xFFFF; i++)
+            dispatch_v(eff, 7, 0, i, 0, 0.); //ival(0)->33797640 (0x203B608); ival(65024)->45888216 (0x2BC32D8)
+        } else {
+          char*str = (char*)dispatch_v(eff, 7, 0, 65024, 0, 0.);
+          if(*str) {
+            printf("\t'%.*s'\n", 512, str);
+          }
+          print_hex(str, 512);
+        }
+        first=false;
+      } while(0);
+    dispatch_v(eff, 6, 0, 1, 0, 0.);
+
   }
   //printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
   printf("\n");
