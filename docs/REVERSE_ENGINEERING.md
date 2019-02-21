@@ -1040,10 +1040,10 @@ I don't really know what either `effFlagsNoSoundInStop` nor `effFlagsProgramChun
 actually mean.
 The former is most likely related to time-based plugins (e.g. a reverb; if you pause playback
 and reset to some other playback position, then you probably don't want the reverb of the
-pre-pause input in your output)
+pre-pause input in your output).
 
 
-# getting some opcodes
+## getting some opcodes
 to find out the actual values of the opcodes, we just send various opcodes to the putative `dispatcher`
 function of the `AEffect` and see what happens.
 This is also a good test to see whether we have the address of the `dispatcher` correct.
