@@ -1786,7 +1786,7 @@ which will have the values `64` and `8` resp.
 time to play get some more opcodes for the host.
 We want the plugin host to be properly running, so the plugin initialisation time is probably too early.
 All real plugins observed so far, call a number of host-opcodes when they receive opcode `12`:
-/*BowEcho*/*Danaides*/*hypercyclic*/*tonespace* ron opcode `23`, *hypercyclic*/*tonespace* also call `7`
+/*BowEcho*/*Danaides*/*hypercyclic*/*tonespace* run opcode `23`, *hypercyclic*/*tonespace* also call `7`
 and all plugins call `6`.
 
 So opcode:12 seems to be a good place to test the plugin host, which we do
@@ -1822,6 +1822,8 @@ The [JUCE host opcode table](#juce-host-opcodes) does not leave many possibiliti
 The only entry that makes sense is the `audioMasterCurrentId`.
 
 Opcode:11, returning `3`, might be `audioMasterGetAutomationState` (unless it is in the list of opcodes not handled by JUCE).
+
+## VstTimeInfo
 
 Opcode:7 returns a pointer. If we print the memory at the given position, we get the first 80 bytes like:
 
