@@ -397,7 +397,18 @@ AEffectProcessProc
 AEffectProcessDoubleProc
 ~~~
 
-as well as some constants:
+These function types replace our old `t_fstEffectProcess*` types:
+
+| OLD                            | NEW                        |
+|--------------------------------|----------------------------|
+| `t_fstEffectDispatcher`        | `AEffectDispatcherProc`    |
+| `t_fstEffectGetParameter`      | `AEffectGetParameterProc`  |
+| `t_fstEffectSetParameter`      | `AEffectSetParameterProc`  |
+| `t_fstEffectProcess`           | `AEffectProcessProc`       |
+| `t_fstEffectProcessInplace`    | `AEffectProcessProc`       |
+| `t_fstEffectProcessInplaceDbl` | `AEffectProcessDoubleProc` |
+
+And we also miss some constants:
 ~~~
 kVstMaxLabelLen
 kVstMaxShortLabelLen
