@@ -859,10 +859,10 @@ will also print something about a 16samples delay to the stderr).
 typedef struct AEffect_ {
   t_fstInt32 magic; /* @0 0x56737450, aka 'VstP' */
   char pad1[4]; // always 0
-  t_fstEffectDispatcher* dispatcher; // ???
-  t_fstEffectProcess* process; // ???
-  t_fstEffectGetParameter* getParameter; // ???
-  t_fstEffectSetParameter* setParameter; // ???
+  AEffectDispatcherProc* dispatcher; // ???
+  AEffectProcessProc* process; // ???
+  AEffectGetParameterProc* getParameter; // ???
+  AEffectSetParameterProc* setParameter; // ???
 
   t_fstInt32 numPrograms;
   t_fstInt32 numParams;
@@ -882,8 +882,8 @@ typedef struct AEffect_ {
   t_fstInt32 uniqueID; // @112
   t_fstInt32 version;
 
-  t_fstEffectProcessInplace* processReplacing; //?
-  t_fstEffectProcessInplaceDbl* processDoubleReplacing; //?
+  AEffectProcessProc* processReplacing; //?
+  AEffectProcessDoubleProc* processDoubleReplacing; //?
 
 } AEffect;
 ~~~
@@ -910,10 +910,10 @@ Using `pointer sized int` instead of `int32` helps a bit:
 ~~~
 typedef struct AEffect_ {
   t_fstPtrInt magic;
-  t_fstEffectDispatcher* dispatcher;  //??
-  t_fstEffectProcess* process; //?
-  t_fstEffectGetParameter* getParameter; //??
-  t_fstEffectSetParameter* setParameter; //??
+  AEffectDispatcherProc* dispatcher;  //??
+  AEffectProcessProc* process; //?
+  AEffectGetParameterProc* getParameter; //??
+  AEffectSetParameterProc* setParameter; //??
 
   t_fstInt32 numPrograms;
   t_fstInt32 numParams;
@@ -932,8 +932,8 @@ typedef struct AEffect_ {
   t_fstInt32 uniqueID;
   t_fstInt32 version;
 
-  t_fstEffectProcessInplace* processReplacing; //??
-  t_fstEffectProcessInplaceDbl* processDoubleReplacing; //??
+  AEffectProcessProc* processReplacing; //??
+  AEffectProcessDoubleProc* processDoubleReplacing; //??
 } AEffect;
 ~~~
 
@@ -1290,7 +1290,7 @@ for host opcodes (`audioMaster*`) check out *juce_VSTPluginFormat.cpp*:
 #include <stddef.h>
 #include <cstdio>
 #include "fst.h"
-static t_fstEffectDispatcher*dispatch = 0;
+static AEffectDispatcherProc*dispatch = 0;
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
   printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, ptr, fvalue);
   return 0;
@@ -1313,7 +1313,7 @@ static void processDoubleReplacing(AEffect*eff, double**indata, double**outdata,
   printf("FstClient::process2(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
 }
 extern "C"
-AEffect*VSTPluginMain(t_fstEffectDispatcher*dispatch4host) {
+AEffect*VSTPluginMain(AEffectDispatcherProc*dispatch4host) {
   dispatch = dispatch4host;
   printf("FstPlugin::main(%p)\n", dispatch4host);
   AEffect* eff = new AEffect;
@@ -1505,10 +1505,10 @@ So let's play with those, and just revert the order of the two functions:
 ~~~C
 typedef struct AEffect_ {
   t_fstInt32 magic;
-  t_fstEffectDispatcher* dispatcher;
-  t_fstEffectProcess* process;
-  t_fstEffectSetParameter* setParameter;
-  t_fstEffectGetParameter* getParameter;
+  AEffectDispatcherProc* dispatcher;
+  AEffectProcessProc* process;
+  AEffectSetParameterProc* setParameter;
+  AEffectGetParameterProc* getParameter;
   // ...
 }
 ~~~
