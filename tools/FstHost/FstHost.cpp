@@ -148,6 +148,29 @@ void test_reaper(AEffect*effect) {
   dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
   printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 }
+
+void test_opcode3334(AEffect*effect) {
+  size_t opcode = effGetInputProperties;
+  VstPinProperties vpp;
+  memset(&vpp, 0, sizeof(vpp));
+  printf("\ntrying: %d\n", opcode);
+  t_fstPtrInt res = dispatch (effect, opcode, 0, 0, &vpp, 0);
+  printf("returned %llu\n", res);
+  if(res)
+    print_pinproperties(&vpp);
+
+  opcode = effGetOutputProperties;
+  memset(&vpp, 0, sizeof(vpp));
+  printf("\ntrying: %d\n", opcode);
+  res = dispatch (effect, opcode, 0, 0, &vpp, 0);
+  printf("returned %llu\n", res);
+  if(res) {
+    print_pinproperties(&vpp);
+    print_hex(&vpp, 2*sizeof(vpp));
+  }
+}
+
+
 bool skipOpcode(size_t opcode) {
 
   switch(opcode) {
