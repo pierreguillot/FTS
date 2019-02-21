@@ -5,7 +5,33 @@
 #include <stdio.h>
 #include <string>
 
-#define FST_UTILS__OPCODESTR(x)             \
+
+
+static void print_hex(void*ptr, size_t length) {
+  printf("DATA@%p [%d]", ptr, length);
+  unsigned char* data = (unsigned char*)ptr;
+  if(data) {
+    for(size_t i=0; i<length; i++) {
+      if(!(i%16))printf("\n\t");
+      if(!(i% 8))printf(" ");
+      printf(" %02X", *data++);
+    }
+  }
+  printf("\n");
+}
+
+void dump_data(const char*basename, const void*data, size_t length) {
+  const char*ptr = (const char*)data;
+  std::string filename = std::string(basename);
+  filename+=".bin";
+  FILE*f = fopen(filename.c_str(), "w");
+  for(size_t i=0; i<length; i++) {
+    fprintf(f, "%c", *ptr++);
+  }
+  fclose(f);
+}
+
+#define FST_UTILS__OPCODESTR(x)                 \
   case x:                                       \
     if(x>98765)break;                           \
     snprintf(output, length, "%s", #x);         \
@@ -200,30 +226,6 @@ static void print_timeinfo(VstTimeInfo*vti) {
   FST_UTILS__VTI_d(vti, currentBar);
   FST_UTILS__VTI_x(vti, magic);
   printf("\n");
-}
-
-static void print_hex(void*ptr, size_t length) {
-  printf("DATA@%p [%d]", ptr, length);
-  unsigned char* data = (unsigned char*)ptr;
-  if(data) {
-    for(size_t i=0; i<length; i++) {
-      if(!(i%16))printf("\n\t");
-      if(!(i% 8))printf(" ");
-      printf(" %02X", *data++);
-    }
-  }
-  printf("\n");
-}
-
-void dump_data(const char*basename, const void*data, size_t length) {
-  const char*ptr = (const char*)data;
-  std::string filename = std::string(basename);
-  filename+=".bin";
-  FILE*f = fopen(filename.c_str(), "w");
-  for(size_t i=0; i<length; i++) {
-    fprintf(f, "%c", *ptr++);
-  }
-  fclose(f);
 }
 
 
