@@ -56,15 +56,17 @@ void test_opcodes(AEffect*effect, size_t toopcode = 100, size_t fromopcode=0) {
 #define PRINTEFFCASE(x) \
   case x:               \
   if(x>98765)                                                           \
-    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, x, index, ivalue, object, fvalue); \
+    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, x, index, ivalue, ptr, fvalue); \
   else                                                                  \
-    printf("FstClient::dispatcher(%p, %s, %d, %d, %p, %f)\n", eff, #x, index, ivalue, object, fvalue); \
+    printf("FstClient::dispatcher(%p, %s, %d, %d, %p, %f)\n", eff, #x, index, ivalue, ptr, fvalue); \
   break;
 
-static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const object, float fvalue) {
+static bool dispatcher_printEff(AEffect*eff,
+    t_fstInt32 opcode, int index,
+    t_fstPtrInt ivalue, void* const ptr, float fvalue) {
   switch(opcode) {
   default:
-    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)...\n", eff, opcode, index, ivalue, object, fvalue);
+    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)...\n", eff, opcode, index, ivalue, ptr, fvalue);
     break;
   PRINTEFFCASE(effCanBeAutomated);
   PRINTEFFCASE(effCanDo);
@@ -123,9 +125,13 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     /* REAPER calls this permanently */
     //printf("53...\n");
     //print_struct7(eff);
-    return 0;
+    return false;
     break;
   }
+  return true;
+}
+static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const object, float fvalue) {
+  if(!dispatcher_printEff(eff, opcode, index, ivalue, object, fvalue))return 0;
   if(object) {
     char*str = (char*)object;
     if(*str)
