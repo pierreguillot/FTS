@@ -22,26 +22,7 @@ void print_struct7(AEffect* effect) {
   std::cout << std::endl;
 #else
   auto *vti = (VstTimeInfo*)dispatch(effect, 7, 0, 65024, 0, 0.);
-#define PRINT_VTI(x) std::cout << std::endl << "\t" << #x << ": " << vti->x
-  PRINT_VTI(samplePos);
-  PRINT_VTI(sampleRate);
-  PRINT_VTI(nanoSeconds);
-  std::cout << "\t= " << (vti->nanoSeconds * 0.000000001) << "sec";
-  PRINT_VTI(ppqPos);
-  PRINT_VTI(tempo);
-  PRINT_VTI(barStartPos);
-  PRINT_VTI(cycleStartPos);
-  PRINT_VTI(cycleEndPos);
-  PRINT_VTI(timeSigNumerator);
-  PRINT_VTI(timeSigDenominator);
-  PRINT_VTI(flags);
-  PRINT_VTI(smpteFrameRate);
-  PRINT_VTI(smpteOffset);
-
-  PRINT_VTI(currentBar);
-  printf("\n\tmagic: 0x%X", vti->magic);
-
-  std::cout << std::endl;
+  print_timeinfo(vti);
 #endif
 }
 
