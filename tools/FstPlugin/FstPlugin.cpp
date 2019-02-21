@@ -120,7 +120,8 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
 #endif
   case 53:
     /* REAPER calls this permanently */
-    print_struct7(eff);
+    //printf("53...\n");
+    //print_struct7(eff);
     return 0;
     break;
   }
