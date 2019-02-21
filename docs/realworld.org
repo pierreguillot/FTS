@@ -164,3 +164,67 @@ struct {
 
 has =arrangementType=0; flags=3= for our "normal" test plugins
 and =arrangementType=1; flags=2= for our the reaper plugins
+
+this probably means:
+
+kVstPinIsActive=1;
+kVstPinUseSpeaker=2;
+kSpeakerArrMono=0;
+
+
+* Flags and Double
+
+| plugin             |        process |      replacing |     replacing2 |
+|--------------------+----------------+----------------+----------------|
+| BowEcho            | 0x7fa99438edc0 | 0x7fa99438edd0 | 0x7fa99438ede0 |
+| Danaides           | 0x7f69e5e5a940 | 0x7f69e5e5a950 | 0x7f69e5e5a960 |
+| DigitsVST_64       | 0x7f549efad620 | 0x7f549efacc80 | 0x7f549efad650 |
+| hypercyclic        | 0x7f9217a2a9be | 0x7f9217a2a9ce | 0x7f9217a2a9dc |
+| InstaLooperVST-x64 | 0x7f7504284660 | 0x7f7504284670 | 0x7f7504284680 |
+| Protoverb.64       | 0x7f2c0ed37d70 | 0x7f2c0ed37d80 | 0x7f2c0ed37d90 |
+| tonespace          | 0x7f7f723159be | 0x7f7f723159ce | 0x7f7f723159dc |
+|--------------------+----------------+----------------+----------------|
+| reacomp            | 0x7febc27162e0 | 0x7febc27162e0 | 0x7febc271cea0 |
+| readelay           | 0x7f3624b55820 | 0x7f3624b55820 | 0x7f3624b59940 |
+| reagate            | 0x7fa4303f2cf0 | 0x7fa4303f2cf0 | 0x7fa4303f7fd0 |
+| reasyndr           | 0x7f0de838a220 | 0x7f0de838a300 |          (nil) |
+| reasynth           | 0x7f60ca2d1020 | 0x7f60ca2d3330 |          (nil) |
+| reaverbate         | 0x7f7d1d15e5c0 | 0x7f7d1d15e5c0 | 0x7f7d1d15e640 |
+| reavocode          | 0x7fcc4ab2a130 | 0x7fcc4ab2a130 | 0x7fcc4ab2a1d0 |
+
+
+| plugin             | flags             |
+|--------------------+-------------------|
+| Protoverb.64       | 00000000 00110001 |
+| DigitsVST_64       | 00000001 00110000 |
+| InstaLooperVST-x64 | 00000000 00010001 |
+| BowEcho            | 00000010 00110001 |
+| Danaides           | 00000010 00110001 |
+| hypercyclic        | 00000011 00110001 |
+| tonespace          | 00000011 00110001 |
+|--------------------+-------------------|
+| reacomp            | 00010000 00010001 |
+| readelay           | 00010000 00110001 |
+| reagate            | 00010000 00010001 |
+| reasyndr           | 00000001 00010001 |
+| reasynth           | 00000001 00010001 |
+| reaverbate         | 00010000 00010001 |
+| reavocode          | 00010000 00110001 |
+|--------------------+-------------------|
+| FLAGS              | ___C__98 __54___0 |
+
+
+| flag                       |   | value | notes                        |
+|----------------------------+---+-------+------------------------------|
+| effFlagsHasEditor          | 0 | 1<< 0 |                              |
+| effFlagsProgramChunks      | 5 | 1<< 5 |                              |
+| effFlagsIsSynth            | 8 | 1<< 8 |                              |
+|----------------------------+---+-------+------------------------------|
+| effFlagsCanDoubleReplacing | C | 1<<12 |                              |
+| effFlagsCanReplacing       | 4 | 1<<4  |                              |
+| effFlagsNoSoundInStop      | 9 | 1<<9  |                              |
+|----------------------------+---+-------+------------------------------|
+|                            | 4 |       | ALL                          |
+|                            | 9 |       | JUCE                         |
+|                            | C |       | only reaper (except reasyn*) |
+|                            |   |       |                              |
