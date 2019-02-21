@@ -127,12 +127,12 @@ typedef enum {
   FST_ENUM_UNKNOWN(effStopProcess),
 } t_fstPluginOpcode;
 enum {
-  FST_ENUM(effFlagsHasEditor, (1<<0)),
-  FST_ENUM_EXPERIMENTAL(effFlagsProgramChunks, (1<<5)),
-  FST_ENUM(effFlagsIsSynth, (1<<8)),
-  FST_ENUM_EXPERIMENTAL(effFlagsCanDoubleReplacing, 0),
-  FST_ENUM_EXPERIMENTAL(effFlagsCanReplacing, 0),
-  FST_ENUM_EXPERIMENTAL(effFlagsNoSoundInStop, 0),
+  FST_ENUM(effFlagsHasEditor,          (1<<0)),
+  FST_ENUM(effFlagsCanReplacing,       (1<<4)),
+  FST_ENUM(effFlagsProgramChunks,      (1<<5)),
+  FST_ENUM(effFlagsIsSynth,            (1<<8)),
+  FST_ENUM(effFlagsNoSoundInStop,      (1<<9)),
+  FST_ENUM(effFlagsCanDoubleReplacing, (1<<12)),
 } t_fstPluginFlags;
 typedef enum {
   FST_ENUM_UNKNOWN(kPlugCategAnalysis),
@@ -353,8 +353,8 @@ typedef struct AEffect_ {
   t_fstInt32 uniqueID; // @112
   t_fstInt32 version;
 
-  FST_UNKNOWN(AEffectProcessProc)  FST_UNKNOWN(processReplacing);
-  FST_UNKNOWN(AEffectProcessDoubleProc)  FST_UNKNOWN(processDoubleReplacing);
+  AEffectProcessProc processReplacing;
+  AEffectProcessDoubleProc processDoubleReplacing;
 } FST_UNKNOWN(AEffect);
 
 typedef struct ERect_ {
