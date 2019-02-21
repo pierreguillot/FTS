@@ -80,6 +80,8 @@ typedef enum {
   FST_ENUM(effSetChunk, 24), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
 
   FST_ENUM(effGetProgramNameIndexed, 29), // IN:index, OUT:ptr(char[24], return (hasProg#)
+  FST_ENUM(effGetInputProperties, 33), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
+  FST_ENUM(effGetOutputProperties, 34), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
 
 
   FST_ENUM(effGetEffectName, 45), // OUT:ptr(char[64]), return 1
@@ -105,8 +107,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
   FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
   FST_ENUM_UNKNOWN(effString2Parameter), // IN:index, IN:ptr(char*), return (hasParam#)
-  FST_ENUM_UNKNOWN(effGetInputProperties), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
-  FST_ENUM_UNKNOWN(effGetOutputProperties), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
   FST_ENUM_UNKNOWN(effGetPlugCategory), // return category
   FST_ENUM_UNKNOWN(effSetSpeakerArrangement),
   FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0
@@ -203,8 +203,8 @@ enum {
 /* 197782 is where the array passed at opcode:33 overflows */
   FST_ENUM_EXPERIMENTAL(kVstMaxProductStrLen, 197782),
   FST_ENUM_EXPERIMENTAL(kVstMaxVendorStrLen, 197782),
-  FST_ENUM_EXPERIMENTAL(kVstMaxLabelLen, 100),
-  FST_ENUM_EXPERIMENTAL(kVstMaxShortLabelLen, 100),
+  FST_ENUM_EXPERIMENTAL(kVstMaxLabelLen, 64),
+  FST_ENUM_EXPERIMENTAL(kVstMaxShortLabelLen, 8),
 
   FST_ENUM_UNKNOWN(kVstBarsValid),
   FST_ENUM_UNKNOWN(kVstClockValid),
@@ -307,10 +307,10 @@ typedef struct VstTimeInfo_ {
 } FST_UNKNOWN(VstTimeInfo);
 
 typedef struct VstPinProperties_ {
-  FST_UNKNOWN(int) arrangementType;
-  char*label;
-  char*shortLabel;
-  int flags;
+  char label[64];
+  FST_UNKNOWN(int) flags; //?
+  FST_UNKNOWN(int) arrangementType; //?
+  char shortLabel[8];
 } FST_UNKNOWN(VstPinProperties);
 
 
