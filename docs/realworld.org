@@ -75,3 +75,46 @@ hostDispatcher(0, 0xDEADBEEF, 0xDEADFOOD, 0, "SLIDER2DB", 0.f);
 
 I *think* that the plugin is asking for shared functions.
 At least, if we return a function pointer, the `reacomp.vst` plugin loads!
+
+
+* Categories as reported by REAPER
+
+** Delay
+- ReaDelay
+** Dynamics
+- ReaComp
+- ReaXComp
+** EQ
+- ReaEQ
+** External
+- ReaCast
+- ReaInsert
+- ReaNINJAM
+- ReaStream (8ch)
+** Gate
+- ReaGate
+** MIDI
+- ReaControlMIDI
+** Pitch Correction
+- ReaPitch
+** Reverb
+- ReaVerb
+- ReaVerbate
+** Sampler
+- ReaSamplOmatic5000
+** Surround
+- ReaSurround
+** Synth
+- Digits
+- hypercyclic
+- tonespace
+- ReaSynDr
+- ReaSynth
+
+** Tools
+- ReaFir
+- ReaVocode
+- ReaVoice
+** Tuner
+- ReaTune
+
