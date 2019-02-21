@@ -284,7 +284,7 @@ typedef struct VstSpeakerProperties_ {
 typedef struct VstSpeakerArrangement_ {
   int type;
   int numChannels;
-  VstSpeakerProperties*speakers;
+  VstSpeakerProperties speakers[];
 } FST_UNKNOWN(VstSpeakerArrangement);
 
 typedef struct VstTimeInfo_ {
