@@ -1709,6 +1709,78 @@ the `AEffect.flags` structure set to `0` - hinting that
 `effFlagsProgramChunks = (1<<5)` (which would explain that this
 flag has something to do with the ability to get/set chunks).
 
+## VstPinProperties
+Opcodes `33` and `34` return strings that seem to be related to input and output.
+There is no obvious effect opcode that provides such strings, nor can we find anything
+in the [JUCE effect Opcodes tables](#juce-effect-opcodes).
+
+The only opcodes that deal wit in put and output are `effGetInputProperties` resp. `effGetOutputProperties`.
+But these should return a `VstPinProperties` struct.
+
+So let us investigate the returned buffer:
+
+~~~
+00000000  50 72 6f 74 6f 76 65 72  62 2d 49 6e 30 00 00 00  |Protoverb-In0...|
+00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000040  03 00 00 00 00 00 00 00  50 72 6f 74 6f 76 30 00  |........Protov0.|
+00000050  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+~~~
+
+The first 14 bytes are the 'Protoverb-In1' string.
+The interesting thing is, that at position @44 we see a similar string 'Protov0'.
+
+Investigating the buffer for other plugins, gives similar results (e.g.
+*hypercyclic* has a string 'out0' at position @0 and the same string 'out0' @44).
+
+Compare this with our tentative definition of the `VstPinProperties` struct:
+
+~~~
+typedef struct VstPinProperties_ {
+  int arrangementType;
+  char*label;
+  char*shortLabel;
+  int flags;
+} VstPinProperties;
+~~~
+
+"Protoverb-In0" and "Protov0" could indeed be the `label` resp. `shortLabel`.
+
+At position @40 we have a number `3` (in all tested plugins).
+This could be a `flag` or an `arrangementType`.
+
+So the opcode really filled in a `VstPinProperties` structure,
+rather than a string, as we first thought.
+However, because the structure contains a string at the very beginning
+(that is: the address of the string is the same as the address of the containing struct),
+our naive "print buffer" approach had revealed it.
+
+In order for the struct to be useful, the strings must have a fixed size.
+Since we have other information at @40, the first string must not exceed this byte.
+So it can have a maximum size of 64 bytes.
+The second string (supposedly `shortLabel`) ought to be shorter than the first one.
+If it only occupied 8 bytes, the entire struct would nicely align to 16 byte boundaries.
+
+The only remaining question is, what about the `flags` and `arrangementType` fields.
+Since both would be 4 byte ints (as all `int`s we have seen so far were 4 bytes),
+both would fit into the gap between `label` and `shortLabel`.
+In this case, one would have to be `0`, and the other `3`.
+
+JUCE-4.2.1 will always set the flags to *at least* `kVstPinIsActive | kVstPinUseSpeaker`,
+suggesting that this is the non-0 field:
+
+~~~
+typedef struct VstPinProperties_ {
+  char label[64];
+  int flags; //?
+  int arrangementType; //?
+  char shortLabel[8];
+} VstPinProperties;
+~~~
+
+There are also two related constants `kVstMaxLabelLen` and `kVstMaxShortLabelLen`
+which will have the values `64` and `8` resp.
 
 # some audioMaster opcodes
 time to play get some more opcodes for the host.
