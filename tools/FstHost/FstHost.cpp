@@ -13,6 +13,13 @@ void fstpause(float duration=1.0) {
   sleep(1);
 }
 
+float db2slider(float f) {
+  return f;
+}
+float slider2db(float f) {
+  return f;
+}
+
 static size_t curOpCode = -1;
 
 t_fstPtrInt dispatch (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
@@ -50,6 +57,9 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
       printf("\t<nil>\n");
   }
   switch(opcode) {
+  case 0xDEADBEEF:
+    printf("deadbeef...\n");
+    return (t_fstPtrInt)db2slider;
   case audioMasterVersion:
     printf("MasterVersion\n");
     return 2400;
