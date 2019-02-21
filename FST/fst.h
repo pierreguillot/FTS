@@ -15,6 +15,7 @@ typedef int t_fstInt32; /* 32bit int */
 typedef enum {
   FST_ENUM(audioMasterAutomate, 0), // IN:index, IN:fvalue, return 0
   FST_ENUM(audioMasterVersion, 1), // return 2400
+  FST_ENUM_EXPERIMENTAL(audioMasterCurrentId, 2), // return shellUIDToCreate
   FST_ENUM(audioMasterGetVendorString, 32), //OUT:ptr(char[kVstMaxVendorStrLen]), return ptr
   FST_ENUM(audioMasterGetProductString, 33), //OUT:ptr(char[kVstMaxProductStrLen]), return ptr
   FST_ENUM(audioMasterGetVendorVersion, 34), // return 0x0101
@@ -28,7 +29,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(audioMasterEndEdit), //IN:index, return 0
   FST_ENUM_UNKNOWN(audioMasterCanDo), //IN:ptr(char*), return *ptr in {"sendVstEvents", "sizeWindow",...}
   FST_ENUM_UNKNOWN(audioMasterCloseWindow), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterCurrentId), // return shellUIDToCreate
   FST_ENUM_UNKNOWN(audioMasterGetAutomationState), // return {unsupported=0, off, read, write, readwrite}
   FST_ENUM_UNKNOWN(audioMasterGetCurrentProcessLevel), // return (!isRealtime)*4
   FST_ENUM_UNKNOWN(audioMasterGetDirectory), // return (char*)plugindirectory
