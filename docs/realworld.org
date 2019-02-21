@@ -68,7 +68,7 @@ hmm, now
 plugins that come with REAPER fail to instantiate.
 however, in the `VSTPluginMain` function they call the host
 with two callbacks:
-#+BEGIN_SRC
+#+BEGIN_SRC C
 hostDispatcher(0, 0xDEADBEEF, 0xDEADFOOD, 0, "DB2SLIDER", 0.f);
 hostDispatcher(0, 0xDEADBEEF, 0xDEADFOOD, 0, "SLIDER2DB", 0.f);
 #+END_SRC
