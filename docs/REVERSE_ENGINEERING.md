@@ -2053,3 +2053,19 @@ kVstSmpteValid
 kVstTempoValid
 kVstTimeSigValid
 ~~~
+
+
+# speaker setup
+
+### AudioPluginHost
+JUCE crashes  when using a heap-allocated `VstSpeakerArrangement`,
+the reason being that the a pointer `VstSpeakerProperties` is not
+necessarily a varsized arrays. instead we should use:
+
+~~~
+typedef struct VstSpeakerArrangement_ {
+  int type;
+  int numChannels;
+  VstSpeakerProperties speakers[];
+} VstSpeakerArrangement;
+~~~
