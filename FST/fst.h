@@ -215,12 +215,13 @@ enum {
   FST_ENUM_UNKNOWN(kVstTempoValid),
   FST_ENUM_UNKNOWN(kVstTimeSigValid),
 
-
   FST_ENUM_UNKNOWN(kVstAutomationReading),
   FST_ENUM_UNKNOWN(kVstAutomationWriting),
+
   FST_ENUM_UNKNOWN(kVstPinIsActive),
   FST_ENUM_UNKNOWN(kVstPinIsStereo),
   FST_ENUM_UNKNOWN(kVstPinUseSpeaker),
+
   FST_ENUM_UNKNOWN(kVstProcessPrecision32),
   FST_ENUM_UNKNOWN(kVstProcessPrecision64),
 
