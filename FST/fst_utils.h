@@ -6,7 +6,6 @@
 #include <string>
 
 
-
 static void print_hex(void*ptr, size_t length) {
   printf("DATA@%p [%d]", ptr, length);
   unsigned char* data = (unsigned char*)ptr;
@@ -29,6 +28,14 @@ void dump_data(const char*basename, const void*data, size_t length) {
     fprintf(f, "%c", *ptr++);
   }
   fclose(f);
+}
+
+template <class inttype>
+static void print_binary(inttype data, const char*suffix="") {
+  size_t bits = sizeof(data)*8;
+  while(bits--)
+    printf("%d", (data>>bits)&0x1);
+  printf("%s", suffix);
 }
 
 #define FST_UTILS__OPCODESTR(x)                 \
@@ -167,7 +174,7 @@ static void print_aeffect(AEffect*eff) {
   printf("\n\tnumInputs=%d", eff->numInputs);
   printf("\n\tnumOutputs=%d", eff->numOutputs);
 
-  printf("\n\tflags=0x%X", eff->flags);
+  printf("\n\tflags="); print_binary(eff->flags);
 #define FST_UTILS__FLAG(x) if(effFlags##x)                  \
     {if(effFlags##x & eff->flags)printf("\n\t      %s", #x);}   \
   else printf("\n\t      ???%s???", #x)
