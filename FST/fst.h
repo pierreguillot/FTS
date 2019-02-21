@@ -299,7 +299,7 @@ typedef struct VstTimeInfo_ {
   int timeSigNumerator; //OK
   int timeSigDenominator; //OK
 
-  int FST_UNKNOWN(fst_currentBar), FST_UNKNOWN(fst_magic); // we just made these fields up, as their values seem to be neither flags nor smtp*
+  int FST_UNKNOWN(currentBar), FST_UNKNOWN(magic); // we just made these fields up, as their values seem to be neither flags nor smtp*
 
   FST_UNKNOWN(int) flags;// = Vst2::kVstNanosValid //?
   FST_UNKNOWN(int) smpteFrameRate; //int32 //?
