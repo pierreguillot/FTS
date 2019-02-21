@@ -1,6 +1,5 @@
-
 #include "fst.h"
-#include "../print_aeffect.h"
+#include "fst_utils.h"
 #include <stdio.h>
 #include <dlfcn.h>
 
