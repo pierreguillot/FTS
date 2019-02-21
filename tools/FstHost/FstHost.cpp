@@ -303,6 +303,18 @@ void test_opcode23(AEffect*effect) {
   //print_hex(*buffer, result);
 }
 
+void test_opcode29(AEffect*effect) {
+  for(int i=0; i<effect->numPrograms; i++) {
+    size_t opcode = 29; //effGetProgramNameIndexed;
+    char buffer[200] = { 0 };
+    t_fstPtrInt result = dispatch(effect, opcode, i, 0, buffer, 0.f);
+    printf("opcode:%d index:%d -> %llu", opcode, i, result);
+    if(*buffer) {
+      printf("\tbuffer '%.*s'\n", 512, buffer);
+    }
+  }
+}
+
 int test_plugin(const char*filename) {
   t_fstMain*vstmain = load_plugin(filename);
   if(!vstmain)return printf("'%s' was not loaded\n", filename);
@@ -314,18 +326,7 @@ int test_plugin(const char*filename) {
   print_aeffect(effect);
   test_reaper(effect);
   return 0;
-  #if 0
-  for(int i=0; i<effect->numPrograms; i++) {
-    size_t opcode = 29;
-    char buffer[200] = { 0 };
-    t_fstPtrInt result = dispatch(effect, opcode, i, 0, buffer, 0.f);
-    printf("opcode:%d index:%d -> %llu", opcode, i, result);
-    if(*buffer) {
-      printf("\tbuffer '%.*s'\n", 512, buffer);
-    }
-  }
-  return 0;
-  #endif
+  //test_opcode29(effect); return 0;
 
   for(size_t opcode=16; opcode<63; opcode++) {
     if(skipOpcodeJUCE(opcode))continue;
