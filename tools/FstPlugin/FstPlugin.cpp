@@ -130,10 +130,10 @@ static bool dispatcher_printEff(AEffect*eff,
   }
   return true;
 }
-static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const object, float fvalue) {
-  if(!dispatcher_printEff(eff, opcode, index, ivalue, object, fvalue))return 0;
-  if(object) {
-    char*str = (char*)object;
+static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  if(!dispatcher_printEff(eff, opcode, index, ivalue, ptr, fvalue))return 0;
+  if(ptr) {
+    char*str = (char*)ptr;
     if(*str)
       printf("\tFtsClient::dispatcher(ptr='%.*s')\n", 512, str);
   }
@@ -141,8 +141,8 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   default: break;
   case effGetChunk:
     {
-      char**ptr=(char**)object;
-      *ptr=chunk;
+      char**strptr=(char**)ptr;
+      *strptr=chunk;
     }
     //printf("getChunk: %d bytes @ %p\n", sizeof(chunk), chunk);
     return sizeof(chunk);
@@ -151,21 +151,21 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     curProgram = ivalue;
     return 1;
   case effGetProgramName:
-    snprintf((char*)object, 32, "FstProgram%d", curProgram);
-    //printf("JMZ:setting program-name to %s\n", (char*)object);
+    snprintf((char*)ptr, 32, "FstProgram%d", curProgram);
+    //printf("JMZ:setting program-name to %s\n", (char*)ptr);
     return 1;
   case effGetParamLabel:
-    snprintf((char*)object, 32, "°");
+    snprintf((char*)ptr, 32, "°");
     return 0;
   case effGetParamName:
     if(index>=sizeof(parameters))
       index=sizeof(parameters);
-    snprintf((char*)object, 32, "rotation%c", index+88);
+    snprintf((char*)ptr, 32, "rotation%c", index+88);
     return 0;
   case effGetParamDisplay:
     if(index>=sizeof(parameters))
       index=sizeof(parameters);
-    snprintf((char*)object, 32, "%+03d", int((parameters[index]-0.5)*360+0.5));
+    snprintf((char*)ptr, 32, "%+03d", int((parameters[index]-0.5)*360+0.5));
     return 0;
   case effCanDo:
     return 0;
@@ -188,9 +188,8 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
         first=false;
       } while(0);
     dispatch_v(eff, 6, 0, 1, 0, 0.);
-
   }
-  //printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, object, fvalue);
+  //printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, ptr, fvalue);
   //printf("JMZ\n");
 
   return 0;
