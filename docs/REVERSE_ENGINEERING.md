@@ -1392,6 +1392,33 @@ we have here.
 
 TODO: 11
 
+## process functions
+We can also test our process functions, by adding some printout to them.
+
+We notice that REAPER keeps calling our `process` function
+(spamming the console, so we don't see much else).
+Again, this is good news, as it means that we have the address of the `process` member correct.
+
+If we apply the plugin on some track with music and printout the first sample
+of the first channel (`printf("%f\n", indata[0][0]))`) we see that the samples
+are nicely in the range between `-1...+1` which is what we expected.
+
+It also confirms that REAPER is not calling some `processDouble` function.
+Which is probably logical, as we haven't set either of the
+`effFlagsCanReplacing` nor `effFlagsCanDoubleReplacing` flags (we don't know them yet).
+
+If we set the various bits of `AEffect.flags` one by one (carefully leaving out #0 (editor) and #8 (synth))
+and watch which of the `processReplacing` functions are being called, we soon learn new flags:
+
+| flag                         | value   |
+|------------------------------|---------|
+| effFlagsCanReplacing         | `1<< 4` |
+| effFlagsCanDoubleReplacing   | `1<<12` |
+
+Again, by printing out the first sample of the first channel (either as `float` or as `double`)
+we learn that we already have the order correct (`processReplacing` comes before `processDoubleReplacing`
+at the very end of `AEffect`.)
+
 
 # AEffect initialisation from host
 
