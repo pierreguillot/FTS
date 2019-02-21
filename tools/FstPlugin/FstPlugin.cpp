@@ -56,17 +56,16 @@ void test_opcodes(AEffect*effect, size_t toopcode = 100, size_t fromopcode=0) {
 #define PRINTEFFCASE(x) \
   case x:               \
   if(x>98765)                                                           \
-    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, x, index, value, object, opt); \
+    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, x, index, ivalue, object, fvalue); \
   else                                                                  \
-    printf("FstClient::dispatcher(%p, %s, %d, %d, %p, %f)\n", eff, #x, index, value, object, opt); \
+    printf("FstClient::dispatcher(%p, %s, %d, %d, %p, %f)\n", eff, #x, index, ivalue, object, fvalue); \
   break;
 
-static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt value, void* const object, float opt) {
+static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const object, float fvalue) {
   switch(opcode) {
   default:
-    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)...\n", eff, opcode, index, value, object, opt);
+    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)...\n", eff, opcode, index, ivalue, object, fvalue);
     break;
-#if 1
   PRINTEFFCASE(effCanBeAutomated);
   PRINTEFFCASE(effCanDo);
   PRINTEFFCASE(effClose);
@@ -120,7 +119,6 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   PRINTEFFCASE(effStopProcess);
   PRINTEFFCASE(effString2Parameter);
   PRINTEFFCASE(effVendorSpecific);
-#endif
   case 53:
     /* REAPER calls this permanently */
     //printf("53...\n");
@@ -143,8 +141,8 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     //printf("getChunk: %d bytes @ %p\n", sizeof(chunk), chunk);
     return sizeof(chunk);
   case effSetProgram:
-    //printf("setting program to %d\n", value);
-    curProgram = value;
+    //printf("setting program to %d\n", ivalue);
+    curProgram = ivalue;
     return 1;
   case effGetProgramName:
     snprintf((char*)object, 32, "FstProgram%d", curProgram);
@@ -186,7 +184,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     dispatch_v(eff, 6, 0, 1, 0, 0.);
 
   }
-  //printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, value, object, opt);
+  //printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, object, fvalue);
   //printf("JMZ\n");
 
   return 0;
