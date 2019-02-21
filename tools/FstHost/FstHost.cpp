@@ -197,7 +197,7 @@ bool skipOpcode(size_t opcode) {
   return false;
 }
 
-void test_opcodes(AEffect*effect, size_t numopcodes=78) {
+void test_opcodes(AEffect*effect, size_t endopcode=78, size_t startopcode=10) {
   printf("testing dispatcher\n");
 #if 0
   for(size_t opcode=0; opcode < 10; opcode++) {
@@ -212,8 +212,8 @@ void test_opcodes(AEffect*effect, size_t numopcodes=78) {
   }
   return 0;
 #endif
-  //  numopcodes = 0xDEADF00D+1;
-  for(size_t i=0; i<numopcodes; i++) {
+  //  endopcode = 0xDEADF00D+1;
+  for(size_t i=startopcode; i<endopcode; i++) {
     curOpCode = i;
     if(!(i%65536)) {
       printf("=== mark %d ===\n", i>>16);
@@ -253,7 +253,7 @@ void test_opcodes(AEffect*effect, size_t numopcodes=78) {
     t_fstPtrInt res = dispatch (effect, 5, 0, 0, buffer, 0);
     printf("gotProgName: %.*s\n", 20, buffer);
   } while(0);
-  printf("tested dispatcher with %u (0x%X) opcodes\n", numopcodes, numopcodes);
+  printf("tested dispatcher with opcodes %u..%u\n", startopcode, endopcode);
 }
 
 bool skipOpcodeJUCE(size_t opcode) {
