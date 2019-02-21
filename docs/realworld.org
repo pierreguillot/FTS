@@ -138,3 +138,29 @@ Vst2::VstPinProperties pinProps;
 if (dispatch (Vst2::effGetOutputProperties, index, 0, &pinProps, 0.0f) != 0)
   return String (pinProps.label, sizeof (pinProps.label));
 #+END_SRC
+
+** VstPinProperties.flags
+
+if (kVstPinUseSpeaker): layout=VstPinProperties.arrangementType
+else if (kVstPinIsStereo): layout=stereo
+else: layout=mono
+
+** VstPinProperties.arrangementType
+->  SpeakerMappings::vstArrangementTypeToChannelSet
+
+SpeakerMappings::vstArrangementTypeToChannelSet (pinProps.arrangementType, 0);
+const Vst2::VstSpeakerArrangement* arr = (isInput ? inArr : outArr);
+layout = SpeakerMappings::vstArrangementTypeToChannelSet (*arr);
+
+
+#+BEGIN_SRC C
+struct {
+  char label[64];
+  int flags;
+  int arrangmentType;
+  char shortLabel[8];
+}
+#+END_SRC
+
+has =arrangementType=0; flags=3= for our "normal" test plugins
+and =arrangementType=1; flags=2= for our the reaper plugins
