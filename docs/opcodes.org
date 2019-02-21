@@ -97,6 +97,7 @@
 |         33 |                             | :Protoverb returns 1 and ptr:"Protoverb-In0"                       |
 |         34 |                             | :Protoverb returns 1 and ptr:"Protoverb-Out0"                      |
 |         35 |                             | :Protoverb returns 1                                               |
+|            |                             | :reacom.vst returns 1                                              |
 |            |                             | :REAPER calls with 0                                               |
 |         45 | effGetEffectName            | :Protoverb returns 1 and ptr:"Protoverb"                           |
 |         47 | effGetVendorString          | :Protoverb returns 1 and ptr:"u-he"; prints getVendorString()      |
