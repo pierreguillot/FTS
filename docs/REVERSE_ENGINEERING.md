@@ -1747,6 +1747,11 @@ the `AEffect.flags` structure set to `0` - hinting that
 `effFlagsProgramChunks = (1<<5)` (which would explain that this
 flag has something to do with the ability to get/set chunks).
 
+Of the `effFlags*`, the only reamining unknown flags is `effFlagsNoSoundInStop`.
+Our [test plugins](#flags) have the flags `1<<0`, `1<<4`, `1<<5`, `1<<8` and `1<<9` set,
+of which we haven't used `1<<9` yet.
+Most likely this is the `effFlagsNoSoundInStop`.
+
 ## VstPinProperties
 Opcodes `33` and `34` return strings that seem to be related to input and output.
 There is no obvious effect opcode that provides such strings, nor can we find anything
