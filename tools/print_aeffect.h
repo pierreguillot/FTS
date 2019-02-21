@@ -172,6 +172,36 @@ static void print_erect(ERect*rect) {
     printf(" = %d|%d - %d|%d", rect->top, rect->left, rect->bottom, rect->right);
   printf("\n");
 }
+
+static void print_timeinfo(VstTimeInfo*vti) {
+  printf("VstTimeInfo @ %p", vti);
+  if(!vti) {
+    printf("\n");
+    return;
+  }
+#define PRINT_AEFFECT__VTI_g(ti, x) printf("\n\t%s: %g", #x, ti->x)
+#define PRINT_AEFFECT__VTI_d(ti, x) printf("\n\t%s: %d", #x, ti->x)
+#define PRINT_AEFFECT__VTI_x(ti, x) printf("\n\t%s: 0x%X", #x, ti->x)
+  PRINT_AEFFECT__VTI_g(vti, samplePos);
+  PRINT_AEFFECT__VTI_g(vti, sampleRate);
+  PRINT_AEFFECT__VTI_g(vti, nanoSeconds);
+  printf("\t= %gsec", (vti->nanoSeconds * 0.000000001));
+  PRINT_AEFFECT__VTI_g(vti, ppqPos);
+  PRINT_AEFFECT__VTI_g(vti, tempo);
+  PRINT_AEFFECT__VTI_g(vti, barStartPos);
+  PRINT_AEFFECT__VTI_g(vti, cycleStartPos);
+  PRINT_AEFFECT__VTI_g(vti, cycleEndPos);
+  PRINT_AEFFECT__VTI_d(vti, timeSigNumerator);
+  PRINT_AEFFECT__VTI_d(vti, timeSigDenominator);
+  PRINT_AEFFECT__VTI_d(vti, flags);
+  PRINT_AEFFECT__VTI_d(vti, smpteFrameRate);
+  PRINT_AEFFECT__VTI_d(vti, smpteOffset);
+
+  PRINT_AEFFECT__VTI_d(vti, currentBar);
+  PRINT_AEFFECT__VTI_x(vti, magic);
+  printf("\n");
+}
+
 static void print_hex(void*ptr, size_t length) {
   printf("DATA@%p [%d]", ptr, length);
   unsigned char* data = (unsigned char*)ptr;
