@@ -7,7 +7,8 @@
 |--------+----------------------------------------+------------------------------------------------------------------------------|
 |      0 | audioMasterAutomate                    |                                                                              |
 |      1 | audioMasterVersion                     | :JUCE returns 2400                                                           |
-|      2 |                                        | :REAPER returns 0xDEAD                                                       |
+|      2 | audioMasterCurrentId?                  | :REAPER returns 0xDEAD                                                       |
+|      2 |                                        | :REAPER-plugins call this in the ctor                                        |
 |      6 |                                        | :called as response to effCode:12 with ivalue=1                              |
 |      7 | audioMasterGetTime                     | :called by hypercyclic/tonespace as response to effCode:12 with ivalue=65024 |
 |        |                                        | :REAPER returns an address                                                   |
