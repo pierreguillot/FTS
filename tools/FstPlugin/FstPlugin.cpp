@@ -16,9 +16,8 @@ static char chunk[] = "This is the chunk for the FstPlugin.";
 void print_struct7(AEffect* effect) {
 #if 0
   auto *str = (double*)dispatch(effect, 7, 0, 65024, 0, 0.);
-  for(size_t i=0; i<64/sizeof(*str); i++)
+  for(size_t i=0; i<96/sizeof(*str); i++)
     std::cout << " " << str[i];
-  std::cout << " : " << str[2]/(1000000000);
   std::cout << std::endl;
 #else
   auto *vti = (VstTimeInfo*)dispatch(effect, 7, 0, 65024, 0, 0.);
