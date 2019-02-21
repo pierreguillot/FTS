@@ -118,3 +118,12 @@ At least, if we return a function pointer, the `reacomp.vst` plugin loads!
 ** Tuner
 - ReaTune
 
+
+
+* VstPinProperties
+
+#+BEGIN_SRC C++
+Vst2::VstPinProperties pinProps;
+if (dispatch (Vst2::effGetOutputProperties, index, 0, &pinProps, 0.0f) != 0)
+  return String (pinProps.label, sizeof (pinProps.label));
+#+END_SRC
