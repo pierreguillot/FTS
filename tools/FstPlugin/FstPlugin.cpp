@@ -53,6 +53,12 @@ void test_opcodes(AEffect*effect, size_t toopcode = 100, size_t fromopcode=0) {
 }
 
 
+static void test_opcode6266(AEffect*eff,
+    t_fstInt32 opcode, int index,
+    t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  print_hex(ptr, 256);
+}
+
 #define PRINTEFFCASE(x) \
   case x:               \
   if(x>98765)                                                           \
@@ -139,6 +145,9 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   }
   switch(opcode) {
   default: break;
+  case 66: case 62:
+    test_opcode6266(eff, opcode, index, ivalue, ptr, fvalue);
+    return 0;
   case effGetChunk:
     {
       char**strptr=(char**)ptr;
