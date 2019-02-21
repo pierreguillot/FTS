@@ -23,13 +23,16 @@
 |     34 | audioMasterGetVendorVersion            | :JUCE returns 0x0101                                                         |
 |     42 |                                        | :Protoverb calls as response to effSetProgramName                            |
 |--------+----------------------------------------+------------------------------------------------------------------------------|
-|        | audioMasterBeginEdit                   |                                                                              |
-|        | audioMasterEndEdit                     |                                                                              |
+|        | audioMasterWantMidi                    |                                                                              |
 |        | audioMasterCanDo                       |                                                                              |
 |        | audioMasterCurrentId                   |                                                                              |
+|        | audioMasterGetDirectory                |                                                                              |
+|        | audioMasterBeginEdit                   |                                                                              |
+|        | audioMasterSizeWindow                  |                                                                              |
+|        | audioMasterUpdateDisplay               |                                                                              |
+|        | audioMasterEndEdit                     |                                                                              |
 |        | audioMasterGetAutomationState          |                                                                              |
 |        | audioMasterGetCurrentProcessLevel      |                                                                              |
-|        | audioMasterGetDirectory                |                                                                              |
 |        | audioMasterGetNumAutomatableParameters |                                                                              |
 |        | audioMasterIdle                        |                                                                              |
 |        | audioMasterIOChanged                   |                                                                              |
@@ -37,9 +40,6 @@
 |        | audioMasterPinConnected                |                                                                              |
 |        | audioMasterProcessEvents               |                                                                              |
 |        | audioMasterSetOutputSampleRate         |                                                                              |
-|        | audioMasterSizeWindow                  |                                                                              |
-|        | audioMasterUpdateDisplay               |                                                                              |
-|        | audioMasterWantMidi                    |                                                                              |
 |--------+----------------------------------------+------------------------------------------------------------------------------|
 |        | audioMasterGetLanguage                 | JUCE-ignore                                                                  |
 |        | audioMasterGetOutputSpeakerArrangement | JUCE-ignore                                                                  |
