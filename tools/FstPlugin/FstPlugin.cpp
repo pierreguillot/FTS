@@ -26,6 +26,7 @@ void print_struct7(AEffect* effect) {
   PRINT_VTI(samplePos);
   PRINT_VTI(sampleRate);
   PRINT_VTI(nanoSeconds);
+  std::cout << "\t= " << (vti->nanoSeconds * 0.000000001) << "sec";
   PRINT_VTI(ppqPos);
   PRINT_VTI(tempo);
   PRINT_VTI(barStartPos);
@@ -36,6 +37,10 @@ void print_struct7(AEffect* effect) {
   PRINT_VTI(flags);
   PRINT_VTI(smpteFrameRate);
   PRINT_VTI(smpteOffset);
+
+  PRINT_VTI(currentBar);
+  printf("\n\tmagic: 0x%X", vti->magic);
+
   std::cout << std::endl;
 #endif
 }
