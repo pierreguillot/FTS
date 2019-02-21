@@ -1782,6 +1782,21 @@ typedef struct VstPinProperties_ {
 There are also two related constants `kVstMaxLabelLen` and `kVstMaxShortLabelLen`
 which will have the values `64` and `8` resp.
 
+
+## MIDI
+adding a MIDI-item in REAPER and pressing some keys
+will send plenty of messages with effect opcode `66` to a plugin.
+There's also the occasional opcode `62`:
+
+~~~
+FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
+FstClient::dispatcher(0x19b9250, 62, 0, 0, 0x7ffe232a7660, 0.000000);
+FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
+FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
+~~~
+
+
+
 # some audioMaster opcodes
 time to play get some more opcodes for the host.
 We want the plugin host to be properly running, so the plugin initialisation time is probably too early.
