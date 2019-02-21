@@ -218,13 +218,13 @@ static float getParameter(AEffect*eff, int index) {
   return parameters[index];
 }
 static void process(AEffect*eff, float**indata, float**outdata, int sampleframes) {
-  //printf("FstClient::process(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
+  //printf("FstClient::process(%p, %p, %p, %d) -> %f\n", eff, indata, outdata, sampleframes, indata[0][0]);
 }
 static void processReplacing(AEffect*eff, float**indata, float**outdata, int sampleframes) {
-  //printf("FstClient::process'(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
+  //printf("FstClient::process1(%p, %p, %p, %d) -> %f\n", eff, indata, outdata, sampleframes, indata[0][0]);
 }
 static void processDoubleReplacing(AEffect*eff, double**indata, double**outdata, int sampleframes) {
-  //printf("FstClient::process2(%p, %p, %p, %d\n", eff, indata, outdata, sampleframes);
+  //printf("FstClient::process2(%p, %p, %p, %d) -> %g\n", eff, indata, outdata, sampleframes, indata[0][0]);
 }
 
 
