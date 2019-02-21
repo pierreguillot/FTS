@@ -60,6 +60,8 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
   case 0xDEADBEEF:
     printf("deadbeef...\n");
     return (t_fstPtrInt)db2slider;
+  case audioMasterCurrentId:
+    return 0xDEAD;
   case audioMasterVersion:
     printf("MasterVersion\n");
     return 2400;
