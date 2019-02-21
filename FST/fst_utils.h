@@ -198,6 +198,18 @@ static void print_erect(ERect*rect) {
     printf(" = %d|%d - %d|%d", rect->top, rect->left, rect->bottom, rect->right);
   printf("\n");
 }
+static void print_pinproperties(VstPinProperties*vpp) {
+  printf("VstPinProperties @ %p", vpp);
+  if(!vpp) {
+    printf("\n");
+    return;
+  }
+  printf("\nlabel     : '%.*s'", 64, vpp->label);
+  printf("\nlshortabel: '%.*s'",  8, vpp->shortLabel);
+  printf("\narrangtype: %d", vpp->arrangementType);
+  printf("\nflags     : %d", vpp->flags);
+  printf("\n");
+}
 
 static void print_timeinfo(VstTimeInfo*vti) {
   printf("VstTimeInfo @ %p", vti);
