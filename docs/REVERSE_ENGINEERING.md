@@ -1770,19 +1770,154 @@ Bytes @28-30 have values like *0*, *3.99999*, *15.9999*, *12.9999* (in double), 
 
 The `VstTimeInfo` struct supposedly has 7 double values and 6 int32 values.
 
+To decode the struct, we start by interpreting it as a simple array of only `double` values,
+and print the values whenever the plugin receices opcode:53
+(REAPER calls this opcode about every 50ms whenever the (generic) GUI of the plugin is open).
+We are not entirely sure about the size of the structure, our first estimation of the member types would
+require 80 bytes. For safety we add some more, and check the first 96 bytes
+(but keep in mind that this means that we might also read in garbage at the end of the data).
 
-| position | field              | typical values   | type    | notes                    |
-|----------+--------------------+------------------+---------+--------------------------|
-| @00-07   | samplePos          | 78848, 90624     | double  | position in samples      |
-| @08-0f   | sampleRate         | 44100            | double  |                          |
-| @10-17   |                    | 86800677000000   | double  |                          |
-| @18-1f   | ppqPos             |                  | double  | position in beats        |
-| @20-27   | tempo              | 120              | double  |                          |
-| @28-30   | barStartPos        | 0, 3.999, 15.999 | double  |                          |
-| @30-37   | cycleStartPos      | 0                | double  | 00 00 00 00 00 00 00 00  |
-| @38-3f   | cycleEndPos        | 0, 4             | double  |                          |
-| @40-43   | timeSigNumerator   | 4, 7             | int32   |                          |
-| @44-47   | timeSigDenominator | 4, 5             | int32   |                          |
-| @48-4b   |                    | 1,2,4,5          | int32   |                          |
-| @4c-4f   |                    | 0xDEADBEEF       | magic   |                          |
-|          |                    |                  |         |                          |
+The following is what I get when playing back a short loop in a *120bpm, 4/4* project.
+The loop starts at beat `1.2.00` (first bar, second quarter note) aka half a second into the project,
+the loop end point is at `4.2.00` aka 6.5 seconds.
+
+~~~
+ 277572.0 44100.0 1.48147e+14 12.5883 120.0 12.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+ 279108.0 44100.0 1.48147e+14 12.6580 120.0 12.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+ 281156.0 44100.0 1.48147e+14 12.7508 120.0 12.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+ 282692.0 44100.0 1.48147e+14 12.8205 120.0 12.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+ 284740.0 44100.0 1.48147e+14 12.9134 120.0 12.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  22188.0 44100.0 1.48147e+14 1.00626 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  23724.0 44100.0 1.48147e+14 1.07592 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  25772.0 44100.0 1.48148e+14 1.16880 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  27308.0 44100.0 1.48148e+14 1.23846 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+ [...]
+ 262212.0 44100.0 1.48203e+14 11.8917 120.0  8.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+ 263748.0 44100.0 1.48203e+14 11.9614 120.0  8.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+ [...]
+ 283716.0 44100.0 1.48204e+14 12.8669 120.0 12.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+ 285252.0 44100.0 1.48204e+14 12.9366 120.0 12.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  22188.0 44100.0 1.48204e+14 1.00626 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  24236.0 44100.0 1.48204e+14 1.09914 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+ [...]
+  81068.0 44100.0 1.48205e+14 3.67655 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  83116.0 44100.0 1.48205e+14 3.76943 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  84652.0 44100.0 1.48205e+14 3.83909 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  86188.0 44100.0 1.48205e+14 3.90875 120.0  0.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  88236.0 44100.0 1.48205e+14 4.00163 120.0  4.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  90284.0 44100.0 1.48205e+14 4.09451 120.0  4.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  91820.0 44100.0 1.48205e+14 4.16417 120.0  4.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  93356.0 44100.0 1.48205e+14 4.23383 120.0  4.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+  95404.0 44100.0 1.48205e+14 4.32671 120.0  4.0 1.0 13.0   8.48798e-314 -1.1886e+148 3.42363e-310 1.08646e-311
+~~~
+
+Some columns have very reasonable values (e.g. columns 1, 2, 4, 5, 6, 7 and 8),
+while others are out of bounds (9, 10, 11 and 12).
+The reasonable values indicate that we used the corret type to decode the bytes.
+A value like "8.48798e-314" is hardly useful in the context of audio processing,
+so most likely these bytes just don't represent double values.
+Note that there's a clear divide between reasonable values to the left (the first 8 numbers; aka 64 bytes)
+and out-of-bound values on the right (bytes 65+).
+
+The third column (bytes @10-18) is somewhere in the middle, and requires closer inspection.
+
+Using the same project, but displaying all the values as 32bit `(signed int)`
+
+~~~
+5    1091576768  0  1088784512  -44277760    1122039678  1529826454   1076362265  0  1079902208  -11258  1075838975  0  1072693248  0  1076494336   4  4  3  -559038737  0  16134  2048  512
+6    1091584960  0  1088784512  1427722240   1122039679  1287516282   1076374439  0  1079902208  -5629   1076363263  0  1072693248  0  1076494336   4  4  4  -559038737  0  16134  1023  512
+6    1091591104  0  1088784512  -1747245056  1122039679  -1041699995  1076383569  0  1079902208  -5629   1076363263  0  1072693248  0  1076494336   4  4  4  -559038737  0  16134  1023  512
+[...]
+12   1091650496  0  1088784512  446820352    1122039682  -650965094   1076471830  0  1079902208  -5629   1076363263  0  1072693248  0  1076494336   4  4  4  -559038737  0  16134  2048  512
+12   1091658688  0  1088784512  1918820352   1122039682  -893275266   1076484004  0  1079902208  -5629   1076363263  0  1072693248  0  1076494336   4  4  4  -559038737  0  16134  1535  512
+0    1087755776  0  1088784512  -872146944   1122039682  -494749067   1072707989  0  1079902208  0       0           0  1072693248  0  1076494336   4  4  1  -559038737  0  16134  1535  512
+1    1087854080  0  1088784512  247853056    1122039683  -1948610105  1072781033  0  1079902208  0       0           0  1072693248  0  1076494336   4  4  1  -559038737  0  16134  1024  512
+[...]
+5    1089680768  0  1088784512  1337147392   1122039692  -1131689788  1074564040  0  1079902208  0       0           0  1072693248  0  1076494336   4  4  1  -559038737  0  16134  1024  512
+5    1089713536  0  1088784512  -1485819904  1122039692  -2100930480  1074612736  0  1079902208  0       0           0  1072693248  0  1076494336   4  4  1  -559038737  0  16134  1536  512
+5    1089738112  0  1088784512  -365819904   1122039692  1467106297   1074649258  0  1079902208  0       0           0  1072693248  0  1076494336   4  4  1  -559038737  0  16134  1536  512
+6    1089770880  0  1088784512  1138180096   1122039693  497865605    1074697954  0  1079902208  0       0           0  1072693248  0  1076494336   4  4  1  -559038737  0  16134  1024  512
+6    1089803648  0  1088784512  -1684787200  1122039693  -471375087   1074746649  0  1079902208  0       0           0  1072693248  0  1076494336   4  4  1  -559038737  0  16134  1536  512
+6    1089828224  0  1088784512  -564787200   1122039693  -1198305606  1074783171  0  1079902208  0       0           0  1072693248  0  1076494336   4  4  1  -559038737  0  16134  1536  512
+3    1089860992  0  1088784512  907212800    1122039694  -1083773151  1074811133  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  1024  512
+1    1089893760  0  1088784512  -1883754496  1122039694  -1568393499  1074835481  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  1535  512
+-1   1089918335  0  1088784512  -763754496   1122039694  -1931858760  1074853742  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  1535  512
+-3   1089951103  0  1088784512  708245504    1122039695  1878488188   1074878090  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  1024  512
+-6   1089983871  0  1088784512  -2114721792  1122039695  1393867840   1074902438  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  1535  512
+[...]
+-43  1090475391  0  1088784512  -1285558272  1122039700  -1580470084  1075267656  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  1024  512
+-46  1090508159  0  1088784512  186441728    1122039701  -2065090432  1075292004  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  2047  512
+-24  1090529983  0  1088784512  1690441728   1122039701  1745256516   1075316352  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  1024  512
+-25  1090542271  0  1088784512  -1484525568  1122039701  1381791255   1075334613  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  1024  512
+-26  1090558655  0  1088784512  -12525568    1122039701  897170907    1075358961  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  2047  512
+[...]
+-49  1090857663  0  1088784512  1353670656   1122039708  642784148    1075803310  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  1535  512
+-50  1090869951  0  1088784512  -1821296640  1122039708  279318887    1075821571  0  1079902208  -22518  1074790399  0  1072693248  0  1076494336   4  4  2  -559038737  0  16134  2047  512
+-51  1090886335  0  1088784512  -349296640   1122039708  2044832918   1075842447  0  1079902208  -11258  1075838975  0  1072693248  0  1076494336   4  4  3  -559038737  0  16134  1024  512
+-49  1090902719  0  1088784512  1122703360   1122039709  1802522746   1075854621  0  1079902208  -11258  1075838975  0  1072693248  0  1076494336   4  4  3  -559038737  0  16134  1535  512
+-48  1090919103  0  1088784512  -1668263936  1122039709  1560212574   1075866795  0  1079902208  -11258  1075838975  0  1072693248  0  1076494336   4  4  3  -559038737  0  16134  2048  512
+-47  1090931391  0  1088784512  -548263936   1122039709  -769003703   1075875925  0  1079902208  -11258  1075838975  0  1072693248  0  1076494336   4  4  3  -559038737  0  16134  1023  512
+~~~
+
+Let's first inspect the first 64 bytes (columns 1 till 16):
+columns 2, 9 and 13 are always *0*.
+Columns 3, 4, 10, 14, 15 and 16 don't change, so there's no real information in them. Apart from that, their values don't seem to mean anything.
+The other columns (1, 2, 5, 6, 7, 8, 11, 12) change, but i cannot make head nor tail of them.
+This is somewhat OK, as the first 64 bytes decoded nicely for `double` numbers.
+We were unsure about bytes @10-18 for double decoding, so let's inspect columns 5 and 6:
+alas!, they don't make any sense as `int32` either, so require some more inspection.
+
+The `double` decoding worked kind of nicely for the first 64 bytes and failed afterwards.
+If we look at the int32 values for bytes 65+, we see `4 4 [1-4] -559038737 0 16134`.
+At least the first 3 values are nice. If we change the metrum of the project to something weird like 3/7,
+we get `3 7 [1-8] -559038737 0 16134`.
+So the first two numbers denote the metrum.
+Playing around with the project cursor a bit and watching the third number, it seems to be a bar counter.
+
+The number `-559038737` has a (little endian) hex representation of 0xDEADBEEF and is a typical magic number.
+
+We should also havea look at the bytes @10-18, which - so far - made most sense when decoded as double.
+Because the numbers are so high (*1.48147e+14*) we devide them by 10^9.
+
+This results in the display of a number (e.g. `152197`) that increments by 1 every second.
+It doesn't matter whether the project is playing or not.
+Given that we had to scale the number by 10^-9, the real value is in nanoseconds -
+and our `VstTimeInfo` struct happens to have a `nanoSeconds` member!
+
+So far we can conclude
+~~~
+typedef struct VstTimeInfo_ {
+  double samplePos;
+  double sampleRate;
+  double nanoSeconds;
+  double ppqPos;
+  double tempo;
+  double barStartPos;
+  double cycleStartPos;
+  double cycleEndPos;
+  int timeSigNumerator;
+  int timeSigDenominator;
+  int currentBar;
+  int magic;// 0xDEADBEEF
+  //
+} VstTimeInfo;
+~~~
+
+We do not know the position (and type) of the following struct members yet:
+- `flags`
+- `smpteFrameRate`
+- `smpteOffset`
+
+The `flags` member will be a bitfield.
+JUCE assigns at least the `kVstNanosValid` to it.
+Looking up more constants with similar names, we find:
+~~~
+kVstNanosValid
+kVstBarsValid
+kVstClockValid
+kVstCyclePosValid
+kVstPpqPosValid
+kVstSmpteValid
+kVstTempoValid
+kVstTimeSigValid
+~~~
