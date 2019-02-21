@@ -76,6 +76,17 @@ hostDispatcher(0, 0xDEADBEEF, 0xDEADFOOD, 0, "SLIDER2DB", 0.f);
 I *think* that the plugin is asking for shared functions.
 At least, if we return a function pointer, the `reacomp.vst` plugin loads!
 
+we can then load the following plugins:
+- REAPER/Plugins/FX/reacomp.vst.so
+- REAPER/Plugins/FX/readelay.vst.so
+- REAPER/Plugins/FX/reagate.vst.so
+- REAPER/Plugins/FX/reasyndr.vst.so
+- REAPER/Plugins/FX/reasynth.vst.so
+- REAPER/Plugins/FX/reatune.vst.so
+- REAPER/Plugins/FX/reaverbate.vst.so
+- REAPER/Plugins/FX/reavocode.vst.so
+
+
 
 * Categories as reported by REAPER
 
