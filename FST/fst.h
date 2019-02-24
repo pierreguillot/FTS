@@ -74,6 +74,7 @@ typedef enum {
   FST_ENUM(effGetParamName, 8), // OUT:ptr(char[8]), return 0
   FST_ENUM(effSetSampleRate, 10), //IN:fvalue, return 0
   FST_ENUM(effSetBlockSize, 11), // IN:ivalue, return 0
+  FST_ENUM_EXPERIMENTAL(effMainsChanged, 12), // IN:ivalue, return 0;  (handleResumeSuspend)
 
   FST_ENUM(effIdentify, 22), // return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
   FST_ENUM(effGetChunk, 23), // IN:index, OUT:ptr(void*), return size
@@ -103,7 +104,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effEditTop),
   FST_ENUM_UNKNOWN(effEditIdle),
 
-  FST_ENUM_UNKNOWN(effMainsChanged), // IN:ivalue, return 0;  (handleResumeSuspend)
   FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
   FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
   FST_ENUM_UNKNOWN(effString2Parameter), // IN:index, IN:ptr(char*), return (hasParam#)
