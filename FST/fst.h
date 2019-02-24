@@ -4,7 +4,7 @@
 #define FST_UNKNOWN(x) x
 #define FST_ENUM(x, y) x = y
 #define FST_ENUM_EXPERIMENTAL(x, y) x = y
-#define FST_ENUM_UNKNOWN(x) x = 98765 + __LINE__
+#define FST_ENUM_UNKNOWN(x) x = 100000 + __LINE__
 
 #define kVstVersion FST_UNKNOWN(2400)
 
