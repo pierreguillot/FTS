@@ -1125,31 +1125,31 @@ E.g.
 it also calls back to the host:
 
 
-| plugin      | when | opcode | notes                                                                            |
-|-------------|------|--------|----------------------------------------------------------------------------------|
-| Protoverb   | main | 33     | after that, the VST-version is printed; in REAPER it also prints "HOST 'REAPER'" |
-| Protoverb   | main | 13     | right before, it prints "Protoverb VST telling unknown about 16 samples latency" |
-|             |      |        | (although no arguments are given to the callback)                                |
-| Protoverb   | 12   | 6      | just before the "resume()" comment is issued.                                    |
-|-------------|------|--------|----------------------------------------------------------------------------------|
-| BowEcho     | 12   | 23     | `(..., 0,     0, NULL, 0.f)` (same for *Danaides*)                               |
-| BowEcho     | 12   | 6      | `(..., 0,     1, NULL, 0.f)` (same for *Danaides*)                               |
-|-------------|------|--------|----------------------------------------------------------------------------------|
-| Digits      | 12   | 6      | `(..., 0,     1, NULL, 0.f)`                                                     |
-|-------------|------|--------|----------------------------------------------------------------------------------|
-| hypercyclic | 0    | 13     | `(..., 0,     0, NULL, 0.f)`                                                     |
-| hypercyclic | 0    | 42     | `(..., 0,     0, NULL, 0.f)`                                                     |
-| hypercyclic | 0    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]          |
-| hypercyclic | 0    | 13     | `(..., 0,     0, NULL, 0.f)`                                                     |
-| hypercyclic | 0    | 42     | `(..., 0,     0, NULL, 0.f)`                                                     |
-| hypercyclic | 0    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]          |
-| hypercyclic | 2    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]          |
-| hypercyclic | 12   | 23     | `(..., 0,     0, NULL, 0.f)`                                                     |
-| hypercyclic | 12   | 7      | `(..., 0, 65024, NULL, 0.f)`                                                     |
-| hypercyclic | 12   | 6      | `(..., 0,     1, NULL, 0.f)`                                                     |
-|-------------|------|--------|----------------------------------------------------------------------------------|
-| tonespace   |      |        | almost the same as *hypercyclic*, but with an additional final callback          |
-|             |      |        | to `FstHost::dispatcher(eff, 0, 5, 0, NULL, 0.)` whenever we iterated over params|
+| plugin      | when | opcode | notes                                                                             |
+|-------------|------|--------|-----------------------------------------------------------------------------------|
+| Protoverb   | main | 33     | after that, the VST-version is printed; in REAPER it also prints "HOST 'REAPER'"  |
+| Protoverb   | main | 13     | right before, it prints "Protoverb VST telling unknown about 16 samples latency"  |
+|             |      |        | (although no arguments are given to the callback)                                 |
+| Protoverb   | 12   | 6      | just before the "resume()" comment is issued.                                     |
+|-------------|------|--------|-----------------------------------------------------------------------------------|
+| BowEcho     | 12   | 23     | `(..., 0,     0, NULL, 0.f)` (same for *Danaides*)                                |
+| BowEcho     | 12   | 6      | `(..., 0,     1, NULL, 0.f)` (same for *Danaides*)                                |
+|-------------|------|--------|-----------------------------------------------------------------------------------|
+| Digits      | 12   | 6      | `(..., 0,     1, NULL, 0.f)`                                                      |
+|-------------|------|--------|-----------------------------------------------------------------------------------|
+| hypercyclic | 0    | 13     | `(..., 0,     0, NULL, 0.f)`                                                      |
+| hypercyclic | 0    | 42     | `(..., 0,     0, NULL, 0.f)`                                                      |
+| hypercyclic | 0    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]           |
+| hypercyclic | 0    | 13     | `(..., 0,     0, NULL, 0.f)`                                                      |
+| hypercyclic | 0    | 42     | `(..., 0,     0, NULL, 0.f)`                                                      |
+| hypercyclic | 0    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]           |
+| hypercyclic | 2    | 0      | `(..., 0,     i, NULL, f)` for i in range(numParams) and f=[0.f .. 1.f]           |
+| hypercyclic | 12   | 23     | `(..., 0,     0, NULL, 0.f)`                                                      |
+| hypercyclic | 12   | 7      | `(..., 0, 65024, NULL, 0.f)`                                                      |
+| hypercyclic | 12   | 6      | `(..., 0,     1, NULL, 0.f)`                                                      |
+|-------------|------|--------|-----------------------------------------------------------------------------------|
+| tonespace   |      |        | almost the same as *hypercyclic*, but with an additional final callback           |
+|             |      |        | to `FstHost::dispatcher(eff, 0, 5, 0, NULL, 0.)` whenever we iterated over params |
 
 
 
@@ -1172,114 +1172,114 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 
 ### JUCE effect Opcodes
 
-| effect opcode               | IN                 | OUT                     | return                | notes                        |
-|-----------------------------|--------------------|-------------------------|-----------------------|------------------------------|
-| effCanBeAutomated           | index              |                         | 0/1                   | can param#idx be automated?  |
-| effCanDo                    | ptr(char[])        |                         | 0/1/-1                |                              |
-| effOpen                     |                    |                         | 0                     |                              |
-| effClose                    |                    |                         | 0                     |                              |
-| effEditClose                |                    |                         | 0                     |                              |
-| effEditGetRect              |                    | ptr(ERect[])            | ptr                   |                              |
-| effEditDraw                 |                    |                         |                       | JUCE-ignored                 |
-| effEditIdle                 |                    |                         |                       | JUCE-ignored                 |
-| effEditMouse                |                    |                         |                       | JUCE-ignored                 |
-| effEditOpen                 | ptr(Window)        |                         |                       |                              |
-| effEditSleep                |                    |                         |                       | JUCE-ignored                 |
-| effEditTop                  |                    |                         |                       | JUCE-ignored                 |
-| effGetChunk                 | index              | ptr(void[])             | size                  |                              |
-| effSetChunk                 | index, ivalue, ptr |                         | 0                     | ivalue=size                  |
-| effGetCurrentMidiProgram    |                    |                         | -1                    |                              |
-| effGetEffectName            |                    | ptr(char[64])           | 1                     |                              |
-| effGetInputProperties       | index              | ptr(VstPinProperties[]) | 1/0                   |                              |
-| effGetOutputProperties      | index              | ptr(VstPinProperties[]) | 1/0                   |                              |
-| effGetNumMidiInputChannels  |                    |                         | 16/0                  | 16 if plugin handles MIDI    |
-| effGetNumMidiOutputChannels |                    |                         | 16/0                  | 16 if plugin handles MIDI    |
-| effGetParamDisplay          |                    | ptr(char[8])            | 0                     |                              |
-| effGetParamLabel            |                    | ptr(char[8])            | 0                     |                              |
-| effGetParamName             |                    | ptr(char[8])            | 0                     |                              |
-| effGetPlugCategory          |                    |                         | category              |                              |
-| effGetProductString         |                    | ptr(char[64])           | 1                     |                              |
-| effGetProgramNameIndexed    |                    | ptr(char[24])           | hasProgram#index      |                              |
-| effGetProgramName           |                    | ptr(char[24])           | 0                     |                              |
-| effGetProgram               |                    |                         | current_program       |                              |
-| effGetSpeakerArrangement    |                    | ivalue([]), ptr([])     | (!(hasAUX or isMidi)) | in:(SpeakerArrangement[])    |
-| effSetSpeakerArrangement    | ivalue(ptr), ptr   |                         | 0/1                   |                              |
-| effGetTailSize              |                    |                         | audiotailInSamples    |                              |
-| effGetVendorString          |                    | ptr(char[64])           | 1                     |                              |
-| effGetVendorVersion         |                    |                         | version               |                              |
-| effGetVstVersion            |                    |                         | kVstVersion           |                              |
-| effIdentify                 |                    |                         | bigEndianInt("NvEf")  | 1316373862=0x4e764566        |
-| effKeysRequired             |                    |                         | isKbdFocusRequired    |                              |
-| effMainsChanged             | ivalue             |                         | 0                     | ivalue?resume():suspend()    |
-| effProcessEvents            | ptr(VstEvents[])   |                         | isMidiProcessed       |                              |
-| effSetBlockSize             | ivalue             |                         | 0                     |                              |
-| effSetBypass                | ivalue             |                         | 0                     |                              |
-| effSetProcessPrecision      | ivalue             |                         | !isProcessing         |                              |
-| effSetProgram               | ivalue             |                         | 0                     |                              |
-| effSetProgramName           | ptr(char[])        |                         | 0                     |                              |
-| effSetSampleRate            | fvalue             |                         | 0                     |                              |
-| effSetTotalSampleToProcess  | ivalue             |                         | ivalue                |                              |
-| effString2Parameter         | index, ptr(char[]) |                         | hasParam#index        |                              |
-| effConnectInput             |                    |                         |                       | JUCE-ignored                 |
-| effConnectOutput            |                    |                         |                       | JUCE-ignored                 |
-| effIdle                     |                    |                         |                       | JUCE-ignored                 |
-| effVendorSpecific           | ALL                |                         |                       |                              |
-| effShellGetNextPlugin       |                    |                         |                       | JUCE-ignored                 |
-| effStartProcess             |                    |                         |                       | JUCE-ignored                 |
-| effStopProcess              |                    |                         |                       | JUCE-ignored                 |
+| effect opcode               | IN                 | OUT                     | return                | notes                       |
+|-----------------------------|--------------------|-------------------------|-----------------------|-----------------------------|
+| effCanBeAutomated           | index              |                         | 0/1                   | can param#idx be automated? |
+| effCanDo                    | ptr(char[])        |                         | 0/1/-1                |                             |
+| effOpen                     |                    |                         | 0                     |                             |
+| effClose                    |                    |                         | 0                     |                             |
+| effEditClose                |                    |                         | 0                     |                             |
+| effEditGetRect              |                    | ptr(ERect[])            | ptr                   |                             |
+| effEditDraw                 |                    |                         |                       | JUCE-ignored                |
+| effEditIdle                 |                    |                         |                       | JUCE-ignored                |
+| effEditMouse                |                    |                         |                       | JUCE-ignored                |
+| effEditOpen                 | ptr(Window)        |                         |                       |                             |
+| effEditSleep                |                    |                         |                       | JUCE-ignored                |
+| effEditTop                  |                    |                         |                       | JUCE-ignored                |
+| effGetChunk                 | index              | ptr(void[])             | size                  |                             |
+| effSetChunk                 | index, ivalue, ptr |                         | 0                     | ivalue=size                 |
+| effGetCurrentMidiProgram    |                    |                         | -1                    |                             |
+| effGetEffectName            |                    | ptr(char[64])           | 1                     |                             |
+| effGetInputProperties       | index              | ptr(VstPinProperties[]) | 1/0                   |                             |
+| effGetOutputProperties      | index              | ptr(VstPinProperties[]) | 1/0                   |                             |
+| effGetNumMidiInputChannels  |                    |                         | 16/0                  | 16 if plugin handles MIDI   |
+| effGetNumMidiOutputChannels |                    |                         | 16/0                  | 16 if plugin handles MIDI   |
+| effGetParamDisplay          |                    | ptr(char[8])            | 0                     |                             |
+| effGetParamLabel            |                    | ptr(char[8])            | 0                     |                             |
+| effGetParamName             |                    | ptr(char[8])            | 0                     |                             |
+| effGetPlugCategory          |                    |                         | category              |                             |
+| effGetProductString         |                    | ptr(char[64])           | 1                     |                             |
+| effGetProgramNameIndexed    |                    | ptr(char[24])           | hasProgram#index      |                             |
+| effGetProgramName           |                    | ptr(char[24])           | 0                     |                             |
+| effGetProgram               |                    |                         | current_program       |                             |
+| effGetSpeakerArrangement    |                    | ivalue([]), ptr([])     | (!(hasAUX or isMidi)) | in:(SpeakerArrangement[])   |
+| effSetSpeakerArrangement    | ivalue(ptr), ptr   |                         | 0/1                   |                             |
+| effGetTailSize              |                    |                         | audiotailInSamples    |                             |
+| effGetVendorString          |                    | ptr(char[64])           | 1                     |                             |
+| effGetVendorVersion         |                    |                         | version               |                             |
+| effGetVstVersion            |                    |                         | kVstVersion           |                             |
+| effIdentify                 |                    |                         | bigEndianInt("NvEf")  | 1316373862=0x4e764566       |
+| effKeysRequired             |                    |                         | isKbdFocusRequired    |                             |
+| effMainsChanged             | ivalue             |                         | 0                     | ivalue?resume():suspend()   |
+| effProcessEvents            | ptr(VstEvents[])   |                         | isMidiProcessed       |                             |
+| effSetBlockSize             | ivalue             |                         | 0                     |                             |
+| effSetBypass                | ivalue             |                         | 0                     |                             |
+| effSetProcessPrecision      | ivalue             |                         | !isProcessing         |                             |
+| effSetProgram               | ivalue             |                         | 0                     |                             |
+| effSetProgramName           | ptr(char[])        |                         | 0                     |                             |
+| effSetSampleRate            | fvalue             |                         | 0                     |                             |
+| effSetTotalSampleToProcess  | ivalue             |                         | ivalue                |                             |
+| effString2Parameter         | index, ptr(char[]) |                         | hasParam#index        |                             |
+| effConnectInput             |                    |                         |                       | JUCE-ignored                |
+| effConnectOutput            |                    |                         |                       | JUCE-ignored                |
+| effIdle                     |                    |                         |                       | JUCE-ignored                |
+| effVendorSpecific           | ALL                |                         |                       |                             |
+| effShellGetNextPlugin       |                    |                         |                       | JUCE-ignored                |
+| effStartProcess             |                    |                         |                       | JUCE-ignored                |
+| effStopProcess              |                    |                         |                       | JUCE-ignored                |
 
 ### JUCE host Opcodes
 
 for host opcodes (`audioMaster*`) check out *juce_VSTPluginFormat.cpp*:
 
-| host opcode                            | IN               | OUT         |           return | notes                                                           |
-|----------------------------------------+------------------+-------------+------------------+-----------------------------------------------------------------|
-| audioMasterAutomate                    | index, fvalue    | -           |                0 |                                                                 |
-| audioMasterProcessEvents               | ptr(VstEvents*)) | -           |                0 |                                                                 |
-| audioMasterGetTime                     | -                | -           |         &vsttime |                                                                 |
-| audioMasterIdle                        | -                | -           |                0 |                                                                 |
-| audioMasterSizeWindow                  | index, value     |             |                1 | setWindowSize(index,value)                                      |
-| audioMasterUpdateDisplay               | -                | -           |                0 | triggerAsyncUpdate()                                            |
-| audioMasterIOChanged                   | -                | -           |                0 | setLatencyDelay                                                 |
-| audioMasterNeedIdle                    | -                | -           |                0 | startTimer(50)                                                  |
-| audioMasterGetSampleRate               | -                | -           |       samplerate |                                                                 |
-| audioMasterGetBlockSize                | -                | -           |        blocksize |                                                                 |
-| audioMasterWantMidi                    | -                | -           |                0 | wantsMidi=true                                                  |
-| audioMasterGetDirectory                | -                | -           | (char*)directory |                                                                 |
-| audioMasterTempoAt                     | -                | -           |        10000*bpm |                                                                 |
-| audioMasterGetAutomationState          | -                | -           |        0/1/2/3/4 | 0 = not supported, 1 = off, 2 = read, 3 = write, 4 = read/write |
-| audioMasterBeginEdit                   | index            | -           |                0 | gesture                                                         |
-| audioMasterEndEdit                     | index            | -           |                0 | gesture                                                         |
-| audioMasterPinConnected                | index,value      | -           |              0/1 | 0=true; value=direction                                         |
-| audioMasterGetCurrentProcessLevel      | -                | -           |              4/0 | 4 if not realtime                                               |
-|----------------------------------------+------------------+-------------+------------------+-----------------------------------------------------------------|
-| audioMasterCanDo                       | ptr(char[])      | -           |              1/0 | 1 if we can handle feature                                      |
-| audioMasterVersion                     | -                | -           |             2400 |                                                                 |
-| audioMasterCurrentId                   | -                | -           | shellUIDToCreate | ?                                                               |
-| audioMasterGetNumAutomatableParameters | -                | -           |                0 |                                                                 |
-| audioMasterGetVendorVersion            | -                | -           |           0x0101 |                                                                 |
-| audioMasterGetVendorString             | -                | ptr(char[]) |              ptr | getHostName()                                                   |
-| audioMasterGetProductString            | -                | ptr(char[]) |              ptr | getHostName()                                                   |
-| audioMasterSetOutputSampleRate         | -                | -           |                0 |                                                                 |
-|----------------------------------------+------------------+-------------+------------------+-----------------------------------------------------------------|
-| audioMasterGetLanguage                 |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterGetOutputSpeakerArrangement |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterGetParameterQuantization    |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterGetPreviousPlug             |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterGetNextPlug                 |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterSetTime                     |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterWillReplaceOrAccumulate     |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterGetInputLatency             |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterGetOutputLatency            |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterOpenWindow                  |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterCloseWindow                 |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterSetIcon                     |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterOfflineGetCurrentMetaPass   |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterOfflineGetCurrentPass       |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterOfflineRead                 |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterOfflineStart                |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterOfflineWrite                |                  |             |                  | JUCE-ignored                                                    |
-| audioMasterVendorSpecific              |                  |             |                  | JUCE-ignored                                                    |
+| host opcode                            | IN            | OUT         | return           | notes                                                           |
+|----------------------------------------|---------------|-------------|------------------|-----------------------------------------------------------------|
+| audioMasterAutomate                    | index, fvalue | -           | 0                |                                                                 |
+| audioMasterProcessEvents               | ptr           | -           | 0                | ptr=VstEvents[]                                                 |
+| audioMasterGetTime                     | -             | -           | &vsttime         |                                                                 |
+| audioMasterIdle                        | -             | -           | 0                |                                                                 |
+| audioMasterSizeWindow                  | index, value  |             | 1                | setWindowSize(index,value)                                      |
+| audioMasterUpdateDisplay               | -             | -           | 0                | triggerAsyncUpdate()                                            |
+| audioMasterIOChanged                   | -             | -           | 0                | setLatencyDelay                                                 |
+| audioMasterNeedIdle                    | -             | -           | 0                | startTimer(50)                                                  |
+| audioMasterGetSampleRate               | -             | -           | samplerate       |                                                                 |
+| audioMasterGetBlockSize                | -             | -           | blocksize        |                                                                 |
+| audioMasterWantMidi                    | -             | -           | 0                | wantsMidi=true                                                  |
+| audioMasterGetDirectory                | -             | -           | (char*)directory |                                                                 |
+| audioMasterTempoAt                     | -             | -           | 10000*bpm        |                                                                 |
+| audioMasterGetAutomationState          | -             | -           | 0/1/2/3/4        | 0 = not supported, 1 = off, 2 = read, 3 = write, 4 = read/write |
+| audioMasterBeginEdit                   | index         | -           | 0                | gesture                                                         |
+| audioMasterEndEdit                     | index         | -           | 0                | gesture                                                         |
+| audioMasterPinConnected                | index,value   | -           | 0/1              | 0=true; value=direction                                         |
+| audioMasterGetCurrentProcessLevel      | -             | -           | 4/0              | 4 if not realtime                                               |
+|----------------------------------------|---------------|-------------|------------------|-----------------------------------------------------------------|
+| audioMasterCanDo                       | ptr(char[])   | -           | 1/0              | 1 if we can handle feature                                      |
+| audioMasterVersion                     | -             | -           | 2400             |                                                                 |
+| audioMasterCurrentId                   | -             | -           | shellUIDToCreate | ?                                                               |
+| audioMasterGetNumAutomatableParameters | -             | -           | 0                |                                                                 |
+| audioMasterGetVendorVersion            | -             | -           | 0x0101           |                                                                 |
+| audioMasterGetVendorString             | -             | ptr(char[]) | ptr              | getHostName()                                                   |
+| audioMasterGetProductString            | -             | ptr(char[]) | ptr              | getHostName()                                                   |
+| audioMasterSetOutputSampleRate         | -             | -           | 0                |                                                                 |
+|----------------------------------------|---------------|-------------|------------------|-----------------------------------------------------------------|
+| audioMasterGetLanguage                 |               |             |                  | JUCE-ignored                                                    |
+| audioMasterGetOutputSpeakerArrangement |               |             |                  | JUCE-ignored                                                    |
+| audioMasterGetParameterQuantization    |               |             |                  | JUCE-ignored                                                    |
+| audioMasterGetPreviousPlug             |               |             |                  | JUCE-ignored                                                    |
+| audioMasterGetNextPlug                 |               |             |                  | JUCE-ignored                                                    |
+| audioMasterSetTime                     |               |             |                  | JUCE-ignored                                                    |
+| audioMasterWillReplaceOrAccumulate     |               |             |                  | JUCE-ignored                                                    |
+| audioMasterGetInputLatency             |               |             |                  | JUCE-ignored                                                    |
+| audioMasterGetOutputLatency            |               |             |                  | JUCE-ignored                                                    |
+| audioMasterOpenWindow                  |               |             |                  | JUCE-ignored                                                    |
+| audioMasterCloseWindow                 |               |             |                  | JUCE-ignored                                                    |
+| audioMasterSetIcon                     |               |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineGetCurrentMetaPass   |               |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineGetCurrentPass       |               |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineRead                 |               |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineStart                |               |             |                  | JUCE-ignored                                                    |
+| audioMasterOfflineWrite                |               |             |                  | JUCE-ignored                                                    |
+| audioMasterVendorSpecific              |               |             |                  | JUCE-ignored                                                    |
 
 
 
@@ -1354,25 +1354,25 @@ for(size_t i = 0; i<64; i++) {
 
 With REAPER, this returns:
 
-| op     | result     | buf                               |
-| ------ | ---------- | ------------                      |
-| *0*    | 1          |                                   |
-| *1*    | 2400       |                                   |
-| 6      | 1          |                                   |
-| 8      | 1          |                                   |
-| *10*   | 1200000    |                                   |
-| 11     | 65536      |                                   |
-| 12     | 1          |                                   |
-| 13     | 1          |                                   |
-| 23     | 1          |                                   |
-| *32*   | 1          | Cockos                            |
-| *33*   | 1          | REAPER                            |
-| *34*   | 5965       |                                   |
-| 42     | 1          |                                   |
-| 43     | 1          |                                   |
-| 44     | 1          |                                   |
-| 48     | 1          | ~/Documents/REAPER Media/test.RPP |
-|        |            |                                   |
+| op   | result  | buf                               |
+|------|---------|-----------------------------------|
+| *0*  | 1       |                                   |
+| *1*  | 2400    |                                   |
+| 6    | 1       |                                   |
+| 8    | 1       |                                   |
+| *10* | 1200000 |                                   |
+| 11   | 65536   |                                   |
+| 12   | 1       |                                   |
+| 13   | 1       |                                   |
+| 23   | 1       |                                   |
+| *32* | 1       | Cockos                            |
+| *33* | 1       | REAPER                            |
+| *34* | 5965    |                                   |
+| 42   | 1       |                                   |
+| 43   | 1       |                                   |
+| 44   | 1       |                                   |
+| 48   | 1       | ~/Documents/REAPER Media/test.RPP |
+|      |         |                                   |
 
 This table confirms that host-opcode `33` is `audioMasterGetProductString`,
 and we learn that host-opcode `32` is `audioMasterGetVendorString`.
@@ -1410,10 +1410,10 @@ Which is probably logical, as we haven't set either of the
 If we set the various bits of `AEffect.flags` one by one (carefully leaving out #0 (editor) and #8 (synth))
 and watch which of the `processReplacing` functions are being called, we soon learn new flags:
 
-| flag                         | value   |
-|------------------------------|---------|
-| effFlagsCanReplacing         | `1<< 4` |
-| effFlagsCanDoubleReplacing   | `1<<12` |
+| flag                       | value   |
+|----------------------------|---------|
+| effFlagsCanReplacing       | `1<< 4` |
+| effFlagsCanDoubleReplacing | `1<<12` |
 
 Again, by printing out the first sample of the first channel (either as `float` or as `double`)
 we learn that we already have the order correct (`processReplacing` comes before `processDoubleReplacing`
@@ -1589,11 +1589,11 @@ and then calling opcode `3` to get that value back (as returned from the dispatc
 
 The *Protoverb* plugin prints information:
 
-| opcode      | printout                 | opcodeName |
-|-------------|--------------------------|------------|
-| 13          | "AM_VST_Editor::getRect 1200 x 600" | effEditGetRect? |
-| 14          | "AM_VST_Editor::open"    | effEditOpen? |
-| 15          | "closed editor."         | effEditClose? |
+| opcode | printout                            | opcodeName      |
+|--------|-------------------------------------|-----------------|
+| 13     | "AM_VST_Editor::getRect 1200 x 600" | effEditGetRect? |
+| 14     | "AM_VST_Editor::open"               | effEditOpen?    |
+| 15     | "closed editor."                    | effEditClose?   |
 
 Opcode `13` does not crash if we provide it a ptr to some memory,
 and it will write some address into that provided memory.
@@ -1858,21 +1858,21 @@ for(size_t opcode=0; opcode<50; opcode++) {
 
 This time this gives us the following opcodes that don't return `0x0`:
 
-| op | result |
-|----|--------|
-|  2 | 57005 (0xDEAD) |
-|  6 | 1 (0x1) |
-|  7 | 60352024 (0x398E618) |
-|  8 | 1 (0x1) |
-| 11 | 3 (0x3) |
-| 12 | 1 (0x1) |
-| 13 | 1 (0x1) |
-| 15 | 1 (0x1) |
-| 23 | 1 (0x1) |
-| 42 | 1 (0x1) |
-| 43 | 1 (0x1) |
-| 44 | 1 (0x1) |
-| 48 | 1 (0x1) |
+| op | result               |
+|----|----------------------|
+| 2  | 57005 (0xDEAD)       |
+| 6  | 1 (0x1)              |
+| 7  | 60352024 (0x398E618) |
+| 8  | 1 (0x1)              |
+| 11 | 3 (0x3)              |
+| 12 | 1 (0x1)              |
+| 13 | 1 (0x1)              |
+| 15 | 1 (0x1)              |
+| 23 | 1 (0x1)              |
+| 42 | 1 (0x1)              |
+| 43 | 1 (0x1)              |
+| 44 | 1 (0x1)              |
+| 48 | 1 (0x1)              |
 
 Opcode:2 is interesting, as it has such a low number *and* such a funny hex-representation
 (which is obviously a magic value).
