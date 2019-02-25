@@ -265,37 +265,54 @@ enum {
 };
 
 typedef enum {
-  FST_ENUM_UNKNOWN(kVstMidiType),
-  FST_ENUM_UNKNOWN(kVstSysExType)
+  FST_ENUM_EXPERIMENTAL(kVstMidiType, 1),
+  FST_ENUM_EXPERIMENTAL(kVstSysExType, 6)
 } t_fstEventType;
 
 
+/* deltaFrames: used by JUCE as "timestamp" (to sort events) */
 #define FSTEVENT_COMMON t_fstEventType type; int byteSize; int deltaFrames
 typedef struct VstEvent_ {
   FSTEVENT_COMMON;
-} FST_UNKNOWN(VstEvent);
+} VstEvent;
 
 typedef struct VstMidiEvent_ {
-  FSTEVENT_COMMON;
-  /* FIXXXME: unknown member order */
-  FST_UNKNOWN(int) noteLength;
-  FST_UNKNOWN(int) noteOffset;
+  FSTEVENT_COMMON; // @0x00-0x0b
+  /* FIXXXME: unknown member order and size */
+  /* REAPER: sets everything to 0
+   * JMZ: size is set to occupy 12bytes (on amd64) for now
+   */
+  FST_UNKNOWN(short) noteLength;
+  FST_UNKNOWN(short) noteOffset;
   FST_UNKNOWN(int) detune;
   FST_UNKNOWN(int) noteOffVelocity;
-  char midiData[4];
+#if 0
+  /*
+   * REAPER/JUCE suggest a varsized array, although it must always hold 4 bytes
+   * REAPER: byteSize=24
+   * JUCE: byteSize=sizeof(VstMidiEvent)
+   * JUCE: if(numBytes<=4)memcpy(midiData,...,numBytes)
+   */
+  unsigned char midiData[];
+#else
+  unsigned char midiData[4]; // @0x18
+#endif
 } FST_UNKNOWN(VstMidiEvent);
 typedef struct VstMidiSysexEvent_ {
   FSTEVENT_COMMON;
   /* FIXXXME: unknown member order */
-  char*sysexDump;
-  FST_UNKNOWN(int) dumpBytes;
-  FST_UNKNOWN(int) flags;
-  FST_UNKNOWN(int) resvd1, resvd2;
+  int pad;
+  int dumpBytes; // size of sysexDump
+  FST_UNKNOWN(int) flags; //?
+  FST_UNKNOWN(t_fstPtrInt) resvd1; //?
+  char*sysexDump; // heap allocated memory for sysex-data
+  FST_UNKNOWN(t_fstPtrInt) resvd2; //?
 } FST_UNKNOWN(VstMidiSysexEvent);
 
 typedef struct VstEvents_ {
   int numEvents;
-  VstEvent**events;
+  FST_UNKNOWN(char pad[8]);
+  VstEvent*events[];
 } FST_UNKNOWN(VstEvents);
 
 typedef struct VstSpeakerProperties_ {
