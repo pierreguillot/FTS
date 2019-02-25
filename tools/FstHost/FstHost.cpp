@@ -111,44 +111,6 @@ t_fstMain* load_plugin(const char* filename) {
   return (t_fstMain*)vstfun;
 }
 
-void test_reaper(AEffect*effect) {
- printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-  dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
-  dispatch_v(effect, effSetSampleRate, 0, 0, 000, 44100.000000);
-  dispatch_v(effect, effSetBlockSize, 0, 512, 000, 0.000000);
-  //  dispatch_v(effect, effGetEffectName, 0, 0, 0x7ffcf7237fc0, 0.000000);
-  //  dispatch_v(effect, effGetVendorString, 0, 0, 0x7ffcf7237fc0, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4617, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4af0, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4670, 0.000000);
-  dispatch_v(effect, effGetVstVersion, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
-  dispatch_v(effect, 71, 0, 0, 000, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4684, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4695, 0.000000);
-  dispatch_v(effect, 35, 0, 0, 000, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab46a9, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab46b7, 0.000000);
-  dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
-  //  dispatch_v(effect, effGetChunk, 0, 0, 0x7ffcf722fd10, 0.000000);
-  dispatch_v(effect, effSetProgram, 0, 1, 000, 0.000000);
-  //dispatch_v(effect, effGetProgramName, 0, 0, 0x7ffcf7237dc0, 0.000000);
-  dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
-
-  printf("==============================================\n");
-  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
-  printf("==============================================\n");
-  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
-  dispatch_v(effect, 72, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
-  dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
-  printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
-}
-
 void test_opcode3334(AEffect*effect) {
   size_t opcode = effGetInputProperties;
   VstPinProperties vpp;
@@ -355,6 +317,44 @@ void test_opcodesJUCE(AEffect*effect) {
       printf("\n");
   }
 }
+void test_reaper(AEffect*effect) {
+ printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
+  dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effSetSampleRate, 0, 0, 000, 44100.000000);
+  dispatch_v(effect, effSetBlockSize, 0, 512, 000, 0.000000);
+  //  dispatch_v(effect, effGetEffectName, 0, 0, 0x7ffcf7237fc0, 0.000000);
+  //  dispatch_v(effect, effGetVendorString, 0, 0, 0x7ffcf7237fc0, 0.000000);
+  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4617, 0.000000);
+  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4af0, 0.000000);
+  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4670, 0.000000);
+  dispatch_v(effect, effGetVstVersion, 0, 0, 000, 0.000000);
+  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
+  dispatch_v(effect, 71, 0, 0, 000, 0.000000);
+  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4684, 0.000000);
+  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4695, 0.000000);
+  dispatch_v(effect, 35, 0, 0, 000, 0.000000);
+  //  dispatch_v(effect, effCanDo, 0, 0, 0xab46a9, 0.000000);
+  //  dispatch_v(effect, effCanDo, 0, 0, 0xab46b7, 0.000000);
+  dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
+  //  dispatch_v(effect, effGetChunk, 0, 0, 0x7ffcf722fd10, 0.000000);
+  dispatch_v(effect, effSetProgram, 0, 1, 000, 0.000000);
+  //dispatch_v(effect, effGetProgramName, 0, 0, 0x7ffcf7237dc0, 0.000000);
+  dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
+
+  printf("==============================================\n");
+  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
+  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
+  printf("==============================================\n");
+  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
+  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
+  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
+  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
+  dispatch_v(effect, 72, 0, 0, 000, 0.000000);
+  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
+  printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
+}
+
 
 int test_plugin(const char*filename) {
   t_fstMain*vstmain = load_plugin(filename);
