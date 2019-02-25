@@ -59,6 +59,18 @@ static void test_opcode6266(AEffect*eff,
   //print_hex(ptr, 256);
 }
 
+static void test_opcode56(AEffect*eff,
+    t_fstInt32 opcode, int index,
+    t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  print_hex(ptr, 160);
+
+
+  char*str = (char*)ptr;
+  for(size_t i=0; i<8; i++) {
+    *str++ = 64+i%26;
+  }
+}
+
 static void test_opcode25(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
