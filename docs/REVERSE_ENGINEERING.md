@@ -1827,18 +1827,6 @@ which will have the values `64` and `8` resp.
 
 
 ## MIDI
-adding a MIDI-item in REAPER and pressing some keys
-will send plenty of messages with effect opcode `66` to a plugin.
-There's also the occasional opcode `62`:
-
-~~~
-FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
-FstClient::dispatcher(0x19b9250, 62, 0, 0, 0x7ffe232a7660, 0.000000);
-FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
-FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
-~~~
-
-## MIDI
 responding with `1` to `effCanDo receiveVstEvents` resp `effCanDo receiveVstMidiEvents`
 gives us `opcode:25` events correlating to MIDI-events (sent from a MIDI-item
 with a little sequence).
@@ -2244,4 +2232,16 @@ typedef struct VstSpeakerArrangement_ {
   int numChannels;
   VstSpeakerProperties speakers[];
 } VstSpeakerArrangement;
+~~~
+
+## effCode:66
+adding a MIDI-item in REAPER and pressing some keys
+will send plenty of messages with effect opcode `66` to a plugin.
+There's also the occasional opcode `62`:
+
+~~~
+FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
+FstClient::dispatcher(0x19b9250, 62, 0, 0, 0x7ffe232a7660, 0.000000);
+FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
+FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 ~~~
