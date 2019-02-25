@@ -5,6 +5,15 @@
 #include <stdio.h>
 #include <string>
 
+#if __x86_64__ /* urgh, does not catch other 64bit systems */
+# define FMT_PINT "llu"
+# define FMT_PINTX "llX"
+#else
+# define FMT_PINT "u"
+# define FMT_PINTX "X"
+#endif
+
+
 
 static void print_hex(void*ptr, size_t length) {
   printf("DATA@%p [%d]", ptr, length);
