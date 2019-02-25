@@ -205,12 +205,16 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   print_ptr4opcode(opcode, ptr);
   switch(opcode) {
   default: break;
+#if 1
   case 42:
     test_opcode42(eff, opcode, index, ivalue, ptr, fvalue);
     return 0;
+#endif
+#if 0
   case 56:
     test_opcode56(eff, opcode, index, ivalue, ptr, fvalue);
     return 1;
+#endif
   case 25:
     test_opcode25(eff, opcode, index, ivalue, ptr, fvalue);
     return 1;
@@ -259,6 +263,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   case 12:
       printf("opcode:12\n");
       dispatch_v(eff, 23, 0, 0, 0, 0.);
+#if 0
       do {
         static bool first=true;
         if(first) {
@@ -274,6 +279,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
         }
         first=false;
       } while(0);
+#endif
     dispatch_v(eff, 6, 0, 1, 0, 0.);
   }
   //printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, ptr, fvalue);
