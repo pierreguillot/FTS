@@ -356,6 +356,8 @@ void test_reaper(AEffect*effect) {
   //  dispatch_v(effect, effGetChunk, 0, 0, 0x7ffcf722fd10, 0.000000);
   dispatch_v(effect, effSetProgram, 0, 1, 000, 0.000000);
   //dispatch_v(effect, effGetProgramName, 0, 0, 0x7ffcf7237dc0, 0.000000);
+  test_opcode56(effect);
+
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
 
   printf("==============================================\n");
