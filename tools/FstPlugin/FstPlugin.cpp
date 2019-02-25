@@ -9,7 +9,7 @@ static AEffectDispatcherProc dispatch = 0;
 static int curProgram = 0;
 
 static float parameters[3];
-
+static ERect editorBounds = {0, 0, 320, 240};
 
 static char chunk[] = "This is the chunk for the FstPlugin.";
 
@@ -148,6 +148,9 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   case 66: case 62:
     test_opcode6266(eff, opcode, index, ivalue, ptr, fvalue);
     return 0;
+  case effEditGetRect:
+    *((ERect**)ptr) = &editorBounds;
+    return (t_fstPtrInt)&editorBounds;
   case effGetChunk:
     {
       char**strptr=(char**)ptr;
