@@ -1838,6 +1838,11 @@ FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 ~~~
 
+## MIDI
+responding with `1` to `effCanDo receiveVstEvents` resp `effCanDo receiveVstMidiEvents`
+gives us `opcode:25` events correlating to MIDI-events (sent from a MIDI-item
+with a little sequence)
+
 
 
 # some audioMaster opcodes
