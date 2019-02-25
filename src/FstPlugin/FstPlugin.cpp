@@ -136,6 +136,21 @@ static bool dispatcher_printEff(AEffect*eff,
   }
   return true;
 }
+static void print_ptr4opcode(t_fstInt32 opcode, void*const ptr) {
+  if(!ptr)return;
+  char*str = (char*)ptr;
+  switch(opcode) {
+  default: break;
+  case effEditOpen:
+    /* 'ptr' is a window-id, we cannot print it */
+    return;
+  case effGetParamName: case effGetParamDisplay: case effGetParamLabel:
+    return;
+  }
+  if(str && *str)
+    printf("\tFtsClient::dispatcher(ptr='%.*s')\n", 64, str);
+  //if(str)print_hex(str, 96);
+}
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
   if(!dispatcher_printEff(eff, opcode, index, ivalue, ptr, fvalue))return 0;
   if(ptr) {
