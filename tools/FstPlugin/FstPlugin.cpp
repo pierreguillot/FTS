@@ -140,8 +140,13 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   if(!dispatcher_printEff(eff, opcode, index, ivalue, ptr, fvalue))return 0;
   if(ptr) {
     char*str = (char*)ptr;
-    if(*str)
-      printf("\tFtsClient::dispatcher(ptr='%.*s')\n", 512, str);
+    switch(opcode) {
+    default: break;
+    case effEditOpen:
+      str=0;
+    }
+    if(str && *str)
+      printf("\tFtsClient::dispatcher(ptr='%.*s')\n", 64, str);
   }
   switch(opcode) {
   default: break;
