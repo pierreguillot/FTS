@@ -84,6 +84,29 @@ static void test_opcode25(AEffect*eff,
   dump_data(filename, ptr, 256);
 }
 
+typedef void (t_fun0)(void);
+
+static void test_opcode42(AEffect*eff,
+    t_fstInt32 opcode, int index,
+    t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  /* effGetSpeakerArrangement or effGetSpeakerArrangement */
+  /* ptr and ivalue point to VstSpeakerArrangement* */
+  VstSpeakerArrangement*iarr = (VstSpeakerArrangement*)ivalue;
+  VstSpeakerArrangement*oarr = (VstSpeakerArrangement*)ptr;
+  print_hex(iarr, 16);
+  print_hex(oarr, 16);
+  printf("JMZ| %d | 0x%X | %d |\n", iarr->type, iarr->type, iarr->numChannels);
+  printf("JMZ| %d | 0x%X | %d |\n", oarr->type, oarr->type, oarr->numChannels);
+  fflush(stdout);
+  t_fun0*f=0;
+#ifdef NUM_INPUTS
+  /* crash */
+  f();
+#endif
+}
+
+
+
 #define PRINTEFFCASE(x) \
   case x:               \
   if(x>98765)                                                           \
@@ -181,6 +204,9 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   print_ptr4opcode(opcode, ptr);
   switch(opcode) {
   default: break;
+  case 42:
+    test_opcode42(eff, opcode, index, ivalue, ptr, fvalue);
+    return 0;
   case 56:
     test_opcode56(eff, opcode, index, ivalue, ptr, fvalue);
     return 1;
@@ -296,8 +322,13 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
 
   eff->numPrograms = 5;
   eff->numParams = 3;
-  eff->numInputs = 2;
+#ifdef NUM_INPUTS
+  eff->numInputs  = NUM_INPUTS;
+  eff->numOutputs = NUM_INPUTS+1;
+#else
+  eff->numInputs  = 1;
   eff->numOutputs = 2;
+#endif
   eff->float1 = 1.;
   eff->object = eff;
   eff->uniqueID = 0xf00d;
