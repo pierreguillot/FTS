@@ -228,3 +228,33 @@ kSpeakerArrMono=0;
 |                            | 9 |       | JUCE                         |
 |                            | C |       | only reaper (except reasyn*) |
 |                            |   |       |                              |
+
+
+* effCode:56
+
+REAPER calls =opcode:56= with a =ptr= that points to a zeroed-out memory region.
+
+** size of zero-memory
+first non-zero byte @
+- 0x99, danach 4D D1 9B 99 06 CC 0C
+- 0x99, danach 6A 7B 8C 9A 80 71 F8
+- 0x99, danach FE 2A 66 F0 46 D2 02
+
+
+* 64bit vs 32bit
+
+FstClient::dispatcher(0x1ec2080, 42, 0, 32252624, 0x1ec2740, 0.000000)...  0x1ec22d0
+FstClient::dispatcher(0x9e36510, 42, 0, 172519840, 0xa487610, 0.000000)... 0xa4871a0
+
+
+dispatch4host(0x1ec2080, audioMasterGetTime, 0, 0, 0x7ffe4d90d2c0, 0.000000)
+dispatch4host: 32248472 (0x1EC1298)
+
+dispatch4host(0x9e36510, audioMasterGetTime, 0, 18443692774323650560, (nil), -nan)
+dispatch4host: 740955491651839768 (0xFFF5285800000000)
+
+
+** VstEvents
+
+- 32bit: =02000000 00 00 00 00  68F9F1ED 88F9F1ED=
+- 64bit: =02000000 00 00 00 00  00 00 00 00 00 00 00 00  806E00146C7F0000 A06E00146C7F0000=
