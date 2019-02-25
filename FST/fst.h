@@ -25,40 +25,54 @@ typedef enum {
   FST_ENUM(audioMasterGetBlockSize, 17), // return blockSize
 
   // 13: sending latency??
+  FST_ENUM_UNKNOWN(audioMasterCanDo), //IN:ptr(char*), return *ptr in {"sendVstEvents", "sizeWindow",...}
+
   FST_ENUM_UNKNOWN(audioMasterBeginEdit), // IN:index, return 0
   FST_ENUM_UNKNOWN(audioMasterEndEdit), //IN:index, return 0
-  FST_ENUM_UNKNOWN(audioMasterCanDo), //IN:ptr(char*), return *ptr in {"sendVstEvents", "sizeWindow",...}
+
   FST_ENUM_UNKNOWN(audioMasterCloseWindow), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterOpenWindow), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterSizeWindow), // IN:index(width), IN:value(height), return 1
+  FST_ENUM_UNKNOWN(audioMasterSetIcon), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterUpdateDisplay), // return 0
+
+  FST_ENUM_UNKNOWN(audioMasterGetParameterQuantization), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterGetNumAutomatableParameters),
   FST_ENUM_UNKNOWN(audioMasterGetAutomationState), // return {unsupported=0, off, read, write, readwrite}
   FST_ENUM_UNKNOWN(audioMasterGetCurrentProcessLevel), // return (!isRealtime)*4
-  FST_ENUM_UNKNOWN(audioMasterGetDirectory), // return (char*)plugindirectory
+
   FST_ENUM_UNKNOWN(audioMasterGetInputLatency), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterGetLanguage), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterGetNextPlug), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterGetNumAutomatableParameters),
   FST_ENUM_UNKNOWN(audioMasterGetOutputLatency), //?, return 0
+
+  FST_ENUM_UNKNOWN(audioMasterGetDirectory), // return (char*)plugindirectory
+  FST_ENUM_UNKNOWN(audioMasterGetLanguage), //?, return 0
+
   FST_ENUM_UNKNOWN(audioMasterGetOutputSpeakerArrangement), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterGetParameterQuantization), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterGetPreviousPlug), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterIdle), // return 0
-  FST_ENUM_UNKNOWN(audioMasterIOChanged), // return 0
-  FST_ENUM_UNKNOWN(audioMasterNeedIdle), // return 0
+
   FST_ENUM_UNKNOWN(audioMasterOfflineGetCurrentMetaPass), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterOfflineGetCurrentPass), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterOfflineRead), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterOfflineStart), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterOfflineWrite), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterOpenWindow), //?, return 0
+
+  FST_ENUM_UNKNOWN(audioMasterGetNextPlug), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterGetPreviousPlug), //?, return 0
+
+  FST_ENUM_UNKNOWN(audioMasterIdle), // return 0
+  FST_ENUM_UNKNOWN(audioMasterNeedIdle), // return 0
+
+  FST_ENUM_UNKNOWN(audioMasterIOChanged), // return 0
   FST_ENUM_UNKNOWN(audioMasterPinConnected), //IN:index, IN:ivalue(isOutput), return isValidChannel
+
   FST_ENUM_UNKNOWN(audioMasterProcessEvents), //IN:ptr(VstEvents*), return 0
-  FST_ENUM_UNKNOWN(audioMasterSetIcon), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterWantMidi), // return 0
+
   FST_ENUM_UNKNOWN(audioMasterSetOutputSampleRate),
   FST_ENUM_UNKNOWN(audioMasterSetTime), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterSizeWindow), // IN:index(width), IN:value(height), return 1
-  FST_ENUM_UNKNOWN(audioMasterUpdateDisplay), // return 0
-  FST_ENUM_UNKNOWN(audioMasterVendorSpecific), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterWantMidi), // return 0
+
   FST_ENUM_UNKNOWN(audioMasterWillReplaceOrAccumulate) //?, return 0
+
+  FST_ENUM_UNKNOWN(audioMasterVendorSpecific), //?, return 0
 } t_fstHostOpcode;;
 typedef enum {
   FST_ENUM_EXPERIMENTAL(effOpen, 0), // return 0
@@ -104,27 +118,33 @@ typedef enum {
   FST_ENUM_UNKNOWN(effEditTop),
   FST_ENUM_UNKNOWN(effEditIdle),
 
-  FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
   FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
   FST_ENUM_UNKNOWN(effString2Parameter), // IN:index, IN:ptr(char*), return (hasParam#)
+
   FST_ENUM_UNKNOWN(effGetPlugCategory), // return category
+
   FST_ENUM_UNKNOWN(effSetSpeakerArrangement),
-  FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0
-  FST_ENUM_UNKNOWN(effVendorSpecific), //
-  FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
-  FST_ENUM_UNKNOWN(effGetCurrentMidiProgram), // return -1
   FST_ENUM_UNKNOWN(effGetSpeakerArrangement), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
-  FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
-  FST_ENUM_UNKNOWN(effSetProcessPrecision), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
+
+  FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
+  FST_ENUM_UNKNOWN(effGetCurrentMidiProgram), // return -1
   FST_ENUM_UNKNOWN(effGetNumMidiInputChannels), // return 16*isMidi
   FST_ENUM_UNKNOWN(effGetNumMidiOutputChannels), // return 16*isMidi
 
-  FST_ENUM_UNKNOWN(effConnectInput),
-  FST_ENUM_UNKNOWN(effConnectOutput),
-  FST_ENUM_UNKNOWN(effIdle),
-  FST_ENUM_UNKNOWN(effShellGetNextPlugin),
+  FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0
+  FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
+  FST_ENUM_UNKNOWN(effSetProcessPrecision), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
+  FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
   FST_ENUM_UNKNOWN(effStartProcess),
   FST_ENUM_UNKNOWN(effStopProcess),
+
+  FST_ENUM_UNKNOWN(effConnectInput),
+  FST_ENUM_UNKNOWN(effConnectOutput),
+
+  FST_ENUM_UNKNOWN(effIdle),
+  FST_ENUM_UNKNOWN(effShellGetNextPlugin),
+
+  FST_ENUM_UNKNOWN(effVendorSpecific), //
 } t_fstPluginOpcode;
 enum {
   FST_ENUM(effFlagsHasEditor,          (1<<0)),
@@ -237,6 +257,7 @@ enum {
   FST_ENUM_UNKNOWN(kVstSmpte60fps),
   FST_ENUM_UNKNOWN(kVstSmpteFilm16mm),
   FST_ENUM_UNKNOWN(kVstSmpteFilm35mm),
+
   FST_ENUM_UNKNOWN(kVstTransportChanged),
   FST_ENUM_UNKNOWN(kVstTransportCycleActive),
   FST_ENUM_UNKNOWN(kVstTransportPlaying),
