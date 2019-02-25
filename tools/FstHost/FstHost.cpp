@@ -288,6 +288,22 @@ void test_opcode23(AEffect*effect) {
   //print_hex(*buffer, result);
 }
 
+void test_opcode56(AEffect*effect) {
+  size_t opcode = 56;
+
+  char*buffer[256] = {0};
+  for(size_t i=0; i<sizeof(buffer); i++)
+    buffer[i] = 0;
+
+  printf("testing OP:%d\n", opcode);
+  t_fstPtrInt result = dispatch(effect, opcode, 0, 0, buffer, 0.f);
+  printf("\tresult |\t%llu 0x%llX\n", result, result);
+  if(*buffer) {
+    printf("\tbuffer '%.*s'\n", sizeof(buffer), (char*)buffer);
+  }
+  print_hex(buffer, 256);
+}
+
 void test_opcode29(AEffect*effect) {
   for(int i=0; i<effect->numPrograms; i++) {
     size_t opcode = 29; //effGetProgramNameIndexed;
