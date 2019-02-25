@@ -56,7 +56,18 @@ void test_opcodes(AEffect*effect, size_t toopcode = 100, size_t fromopcode=0) {
 static void test_opcode6266(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  //print_hex(ptr, 256);
+}
+
+static void test_opcode25(AEffect*eff,
+    t_fstInt32 opcode, int index,
+    t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  char filename[128];
   print_hex(ptr, 256);
+  static int count = 0;
+  count++;
+  sprintf(filename, "midi/dump.%d", count);
+  dump_data(filename, ptr, 256);
 }
 
 #define PRINTEFFCASE(x) \
