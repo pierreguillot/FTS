@@ -74,6 +74,7 @@ static void test_opcode56(AEffect*eff,
 static void test_opcode25(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  return;
   print_events((VstEvents*)ptr);
   return;
   char filename[128];
