@@ -335,6 +335,7 @@ void test_opcodesJUCE(AEffect*effect) {
   }
 }
 void test_reaper(AEffect*effect) {
+  t_fstPtrInt ret=0;
   char strbuf[1024];
   printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
   dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
@@ -372,9 +373,16 @@ void test_reaper(AEffect*effect) {
   dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
 
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
-  //  dispatch_v(effect, effGetChunk, 0, 0, 0x7ffcf722fd10, 0.000000);
+
+  ret = dispatch_v(effect, effGetChunk, 0, 0, strbuf, 0.000000);
+  do {
+    void*dataptr = *((void**)strbuf);
+    print_hex(dataptr, 8);
+  } while(0);
   dispatch_v(effect, effSetProgram, 0, 1, 000, 0.000000);
-  //dispatch_v(effect, effGetProgramName, 0, 0, 0x7ffcf7237dc0, 0.000000);
+  strbuf[0] = 0;
+  dispatch_v(effect, effGetProgramName, 0, 0, strbuf, 0.000000);
+  printf("ProgramName: '%s'\n", strbuf);
   test_opcode56(effect);
 
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
