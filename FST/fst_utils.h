@@ -198,6 +198,52 @@ static void print_aeffect(AEffect*eff) {
   printf("\n\tprocessDoubleReplacingCB=%p", eff->processDoubleReplacing);
   printf("\n\n");
 }
+static void print_event(VstEvent*ev) {
+  printf("VstEvent @ %p", ev);
+  if(!ev) {
+    printf(" [%d]\n", sizeof(VstEvent));
+    return;
+  }
+  if(ev->type == kVstMidiType) {
+    VstMidiEvent*mev = (VstMidiEvent*)ev;
+    printf(" [%d]\n", sizeof(VstMidiEvent));
+
+    printf("\ttype=%d\n", mev->type);
+    printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", mev->byteSize, mev->deltaFrames);
+    printf("note: length=%d\toffset=%d\tvelocity=%d\tdetune=%d\n",
+      mev->noteLength,
+      mev->noteOffset,
+      mev->noteOffVelocity,
+      mev->detune);
+  printf("MIDI: %02x %02x %02x %02x\n"
+      , mev->midiData[0]
+      , mev->midiData[1]
+      , mev->midiData[2]
+      , mev->midiData[3]);
+  } else if (ev->type == kVstSysExType) {
+    VstMidiSysexEvent*sev = (VstMidiSysexEvent*)ev;
+    printf(" [%d]\n", sizeof(VstMidiSysexEvent));
+
+    printf("\ttype=%d\n", sev->type);
+    printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", sev->byteSize, sev->deltaFrames);
+    printf("\tflags=%d\treserved=%llu\t%llu\n",
+        sev->flags, sev->resvd1, sev->resvd2);
+    printf("\tSysEx %d bytes @ %p\n\t", sev->dumpBytes, sev->sysexDump);
+    unsigned char*data=(unsigned char*)sev->sysexDump;
+    for(int i=0; i<sev->dumpBytes; i++)
+      printf(" %02x", *data++);
+    printf("\n");
+  }
+  print_hex(ev, 64);
+}
+
+static void print_events(VstEvents*evs) {
+  printf("%d VstEvents @ %p\n", evs?evs->numEvents:0, evs);
+  if(!evs)return;
+  for(int i=0; i<evs->numEvents; i++) {
+    print_event(evs->events[i]);
+  }
+}
 
 static void print_erect(ERect*rect) {
   printf("ERect[%p]", rect);
