@@ -1176,8 +1176,8 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 |-----------------------------|---|--------------------|-------------------------|-----------------------|-----------------------------|
 | effCanBeAutomated           |   | index              |                         | 0/1                   | can param#idx be automated? |
 | effCanDo                    | 51  | ptr(char[])        |                         | 0/1/-1                |                             |
-| effOpen                     | 0  |                    |                         | 0                     |                             |
-| effClose                    | 1  |                    |                         | 0                     |                             |
+| effOpen                     | 0?  |                    |                         | 0                     |                             |
+| effClose                    | 1?  |                    |                         | 0                     |                             |
 | effEditClose                | 15  |                    |                         | 0                     |                             |
 | effEditGetRect              | 13  |                    | ptr(ERect[])            | ptr                   |                             |
 | effEditDraw                 |   |                    |                         |                       | JUCE-ignored                |
