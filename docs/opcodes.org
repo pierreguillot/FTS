@@ -96,54 +96,59 @@
 |         25 |                             | :Protoverb returns 1                                               |
 |         26 |                             | :Protoverb returns 1                                               |
 |         29 | effGetProgramNameIndexed    | :Protoverb returns 1 and ptr:"initialize"                          |
-|         33 | effGetInputProperties       | :Protoverb returns 1 and ptr:"Protoverb-In0"                  |
-|         34 | effGetOutputProperties      | :Protoverb returns 1 and ptr:"Protoverb-Out0"                 |
-|         35 |                             | :Protoverb returns 1                                          |
-|            |                             | :reacom.vst returns 1                                         |
-|            |                             | :REAPER calls with 0                                          |
-|         41 |                             | :crashes when called with (0,0,"name41",0)                    |
-|         45 | effGetEffectName            | :Protoverb returns 1 and ptr:"Protoverb"                      |
-|         47 | effGetVendorString          | :Protoverb returns 1 and ptr:"u-he"; prints getVendorString() |
-|         48 | effGetProductString         | :Protoverb returns 1 and ptr:"Protoverb 1.0.0"                |
-|         49 | effGetVendorVersion         | :Protoverb returns 0x10000                                    |
-|         51 | effCanDo                    | :Protoverb returns 0xFFFFFFFFFFFFFFFF (with ptr:"")           |
-|         58 | effGetVstVersion            | :Protoverb returns 2400 (0x960)                               |
-|         59 | effKeysRequired?            | :Protoverb prints "u-he plugin doesn't use key"               |
-|         63 |                             | :Protoverb returns  0xFFFFFFFFFFFFFFFF (with ptr:"")          |
-|         71 |                             | :REAPER calls with 0                                          |
-|         72 |                             | :REAPER calls with 0                                          |
-|      30514 |                             | :Protoverb calls hostCode:13                                  |
-| 0xdeadbeef |                             | :REAPER ask for function?                                     |
-|------------+-----------------------------+---------------------------------------------------------------|
-|            | effOpen                     |                                                               |
-|            | effClose                    |                                                               |
-|            | effGetTailSize              |                                                               |
-|            | effGetCurrentMidiProgram    |                                                               |
-|            | effGetSpeakerArrangement    |                                                               |
-|            | effGetNumMidiInputChannels  |                                                               |
-|            | effGetNumMidiOutputChannels |                                                               |
-|            |                             |                                                               |
-|            | effMainsChanged             |                                                               |
-|            | effProcessEvents            |                                                               |
-|            | effCanBeAutomated           | :takes index                                                  |
-|            | effString2Parameter         |                                                               |
-|            | effGetPlugCategory          | :JUCE RETURNS VstPlugCategory                                 |
-|            | effSetSpeakerArrangement    |                                                               |
-|            | effSetBypass                |                                                               |
-|            | effVendorSpecific           |                                                               |
-|            | effSetTotalSampleToProcess  |                                                               |
-|            | effSetProcessPrecision      |                                                               |
-|            | effConnectInput             |                                                               |
-|            | effConnectOutput            |                                                               |
-|            | effIdle                     |                                                               |
-|            | effShellGetNextPlugin       |                                                               |
-|            | effStartProcess             |                                                               |
-|            | effStopProcess              |                                                               |
-|            | effEditDraw                 |                                                               |
-|            | effEditMouse                |                                                               |
-|            | effEditSleep                |                                                               |
-|            | effEditTop                  |                                                               |
-|            | effEditIdle                 |                                                               |
+|         33 | effGetInputProperties       | :Protoverb returns 1 and ptr:"Protoverb-In0"                       |
+|         34 | effGetOutputProperties      | :Protoverb returns 1 and ptr:"Protoverb-Out0"                      |
+|         35 |                             | :REAPER calls with 0                                               |
+|            |                             | :InstaLooper returns 0                                             |
+|            |                             | :Protoverb/BowEcho/Danaides/reacom.vst returns 1                   |
+|            |                             | :Digits/hypercyclic/tonespace returns 2                            |
+|         41 |                             | :crashes when called with (0,0,"name41",0)                         |
+|         45 | effGetEffectName            | :Protoverb returns 1 and ptr:"Protoverb"                           |
+|         47 | effGetVendorString          | :Protoverb returns 1 and ptr:"u-he"; prints getVendorString()      |
+|         48 | effGetProductString         | :Protoverb returns 1 and ptr:"Protoverb 1.0.0"                     |
+|         49 | effGetVendorVersion         | :Protoverb returns 0x10000                                         |
+|         51 | effCanDo                    | :Protoverb returns 0xFFFFFFFFFFFFFFFF (with ptr:"")                |
+|         56 |                             | :REAPER calls with ptr to zeroed memory                            |
+|            |                             | :all return 0                                                      |
+|         58 | effGetVstVersion            | :Protoverb returns 2400 (0x960)                                    |
+|         59 | effKeysRequired?            | :Protoverb prints "u-he plugin doesn't use key"                    |
+|         63 |                             | :Protoverb returns  0xFFFFFFFFFFFFFFFF (with ptr:"")               |
+|         71 |                             | :REAPER calls with 0                                               |
+|            |                             | :Protoverb returns 1, rest returns 0                               |
+|         72 |                             | :REAPER calls with 0                                               |
+|            |                             | :Protoverb returns 1, rest returns 0                               |
+|      30514 |                             | :Protoverb calls hostCode:13                                       |
+| 0xdeadbeef |                             | :REAPER ask for function?                                          |
+|------------+-----------------------------+--------------------------------------------------------------------|
+|            | effOpen                     |                                                                    |
+|            | effClose                    |                                                                    |
+|            | effGetTailSize              |                                                                    |
+|            | effGetCurrentMidiProgram    |                                                                    |
+|            | effGetSpeakerArrangement    |                                                                    |
+|            | effGetNumMidiInputChannels  |                                                                    |
+|            | effGetNumMidiOutputChannels |                                                                    |
+|            |                             |                                                                    |
+|            | effMainsChanged             |                                                                    |
+|            | effProcessEvents            |                                                                    |
+|            | effCanBeAutomated           | :takes index                                                       |
+|            | effString2Parameter         |                                                                    |
+|            | effGetPlugCategory          | :JUCE RETURNS VstPlugCategory                                      |
+|            | effSetSpeakerArrangement    |                                                                    |
+|            | effSetBypass                |                                                                    |
+|            | effVendorSpecific           |                                                                    |
+|            | effSetTotalSampleToProcess  |                                                                    |
+|            | effSetProcessPrecision      |                                                                    |
+|            | effConnectInput             |                                                                    |
+|            | effConnectOutput            |                                                                    |
+|            | effIdle                     |                                                                    |
+|            | effShellGetNextPlugin       |                                                                    |
+|            | effStartProcess             |                                                                    |
+|            | effStopProcess              |                                                                    |
+|            | effEditDraw                 |                                                                    |
+|            | effEditMouse                |                                                                    |
+|            | effEditSleep                |                                                                    |
+|            | effEditTop                  |                                                                    |
+|            | effEditIdle                 |                                                                    |
 
 ** flags
 
