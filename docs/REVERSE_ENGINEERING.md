@@ -1876,6 +1876,8 @@ From the difference of the two `VstEvent` addresses, we gather, that a single `V
 (of type `VstMidiEvent`, because this is really what we are dealing with right now)
 can have a maximum size of 32 bytes.
 
+JUCE handles `VstEvents` in the `effProcessEvents` opcode, so we assign it to `opcode:25`
+
 ## VstMidiEvent
 
 Setting up a little MIDI sequence in reaper, that plays the notes `C4 G4 C5 F4` (that is `0x3c 0x43 0x48 0x41` in hex),
