@@ -62,6 +62,8 @@ static void test_opcode6266(AEffect*eff,
 static void test_opcode25(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  print_events((VstEvents*)ptr);
+  return;
   char filename[128];
   print_hex(ptr, 256);
   static int count = 0;
