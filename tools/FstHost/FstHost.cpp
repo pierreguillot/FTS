@@ -290,18 +290,19 @@ void test_opcode23(AEffect*effect) {
 
 void test_opcode56(AEffect*effect) {
   size_t opcode = 56;
-
-  char*buffer[256] = {0};
-  for(size_t i=0; i<sizeof(buffer); i++)
+  const size_t bufsize = 1024;
+  char*buffer[bufsize] = {0};
+  for(size_t i=0; i<sizeof(bufsize); i++) {
     buffer[i] = 0;
+  }
 
   printf("testing OP:%d\n", opcode);
-  t_fstPtrInt result = dispatch(effect, opcode, 0, 0, buffer, 0.f);
+  t_fstPtrInt result = dispatch_v(effect, opcode, 0, 0, buffer, 0.f);
   printf("\tresult |\t%llu 0x%llX\n", result, result);
   if(*buffer) {
-    printf("\tbuffer '%.*s'\n", sizeof(buffer), (char*)buffer);
+    printf("\tbuffer '%.*s'\n", bufsize, (char*)buffer);
   }
-  print_hex(buffer, 256);
+  print_hex(buffer, 96);
 }
 
 void test_opcode29(AEffect*effect) {
