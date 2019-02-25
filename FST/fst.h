@@ -70,9 +70,9 @@ typedef enum {
   FST_ENUM_UNKNOWN(audioMasterSetOutputSampleRate),
   FST_ENUM_UNKNOWN(audioMasterSetTime), //?, return 0
 
-  FST_ENUM_UNKNOWN(audioMasterWillReplaceOrAccumulate) //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterWillReplaceOrAccumulate), //?, return 0
 
-  FST_ENUM_UNKNOWN(audioMasterVendorSpecific), //?, return 0
+  FST_ENUM_UNKNOWN(audioMasterVendorSpecific) //?, return 0
 } t_fstHostOpcode;;
 typedef enum {
   FST_ENUM_EXPERIMENTAL(effOpen, 0), // return 0
@@ -144,7 +144,7 @@ typedef enum {
   FST_ENUM_UNKNOWN(effIdle),
   FST_ENUM_UNKNOWN(effShellGetNextPlugin),
 
-  FST_ENUM_UNKNOWN(effVendorSpecific), //
+  FST_ENUM_UNKNOWN(effVendorSpecific) //
 } t_fstPluginOpcode;
 enum {
   FST_ENUM(effFlagsHasEditor,          (1<<0)),
