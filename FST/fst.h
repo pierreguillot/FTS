@@ -94,6 +94,8 @@ typedef enum {
   FST_ENUM(effGetChunk, 23), // IN:index, OUT:ptr(void*), return size
   FST_ENUM(effSetChunk, 24), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
 
+  FST_ENUM(effProcessEvents, 25), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
+
   FST_ENUM(effGetProgramNameIndexed, 29), // IN:index, OUT:ptr(char[24], return (hasProg#)
   FST_ENUM(effGetInputProperties, 33), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
   FST_ENUM(effGetOutputProperties, 34), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
@@ -126,7 +128,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effSetSpeakerArrangement),
   FST_ENUM_UNKNOWN(effGetSpeakerArrangement), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
 
-  FST_ENUM_UNKNOWN(effProcessEvents), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
   FST_ENUM_UNKNOWN(effGetCurrentMidiProgram), // return -1
   FST_ENUM_UNKNOWN(effGetNumMidiInputChannels), // return 16*isMidi
   FST_ENUM_UNKNOWN(effGetNumMidiOutputChannels), // return 16*isMidi
