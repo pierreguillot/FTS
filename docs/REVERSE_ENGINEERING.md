@@ -2055,7 +2055,34 @@ kVstTimeSigValid
 ~~~
 
 
-# speaker setup
+# misc
+LATER move this to proper sections
+
+## effCode:50
+
+that one is weird.
+REAPER sends `opcode:50` (with `index:45` and `ivalue:80`) to a plugin
+(based on JUCE (that is: with GUI), commit 5d779855f2e1b969c2ad479fee955abfa90605ff)
+
+    plugin::dispatcher(50, 45, 80, 0x7ffe849f12f0, 0.000000)
+
+In the dump of `ptr` we see two addresses at @58 and @60,
+but it seems there are no doubles, int32 or strings in the data.
+
+The first 8 bytes are 0, so *maybe* the plugin is supposed to write some
+data (pointer) into this.
+
+I don't get the opcode when creating a plain plugin with `effFlagsHasEditor`
+
+
+## effCode:56
+
+gets called with automation, whenever the window gets focus?
+
+    FstClient::dispatcher(0x2a4c8b0, 56, 0, 0, 0x7fff4a83fb40, 0.000000)...
+
+
+## speaker setup
 
 ### AudioPluginHost
 JUCE crashes  when using a heap-allocated `VstSpeakerArrangement`,
