@@ -312,7 +312,7 @@ typedef struct VstMidiSysexEvent_ {
 
 typedef struct VstEvents_ {
   int numEvents;
-  FST_UNKNOWN(char pad[8]);
+  FST_UNKNOWN(t_fstPtrInt pad);
   VstEvent*events[];
 } FST_UNKNOWN(VstEvents);
 
