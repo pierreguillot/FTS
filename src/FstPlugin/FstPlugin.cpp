@@ -205,6 +205,12 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     snprintf((char*)ptr, 32, "%+03d", int((parameters[index]-0.5)*360+0.5));
     return 0;
   case effCanDo:
+    do {
+      if(strcmp((char*)ptr, "receiveVstEvents"))
+        return 1;
+      if(strcmp((char*)ptr, "receiveVstMidiEvents"))
+        return 1;
+    } while(0);
     return 0;
   case 12:
       printf("opcode:12\n");
