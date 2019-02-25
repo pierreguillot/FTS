@@ -2219,6 +2219,18 @@ gets called with automation, whenever the window gets focus?
     FstClient::dispatcher(0x2a4c8b0, 56, 0, 0, 0x7fff4a83fb40, 0.000000)...
 
 
+## effCode:66
+adding a MIDI-item in REAPER and pressing some keys
+will send plenty of messages with effect opcode `66` to a plugin.
+There's also the occasional opcode `62`:
+
+~~~
+FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
+FstClient::dispatcher(0x19b9250, 62, 0, 0, 0x7ffe232a7660, 0.000000);
+FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
+FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
+~~~
+
 ## speaker setup
 
 ### AudioPluginHost
@@ -2232,16 +2244,4 @@ typedef struct VstSpeakerArrangement_ {
   int numChannels;
   VstSpeakerProperties speakers[];
 } VstSpeakerArrangement;
-~~~
-
-## effCode:66
-adding a MIDI-item in REAPER and pressing some keys
-will send plenty of messages with effect opcode `66` to a plugin.
-There's also the occasional opcode `62`:
-
-~~~
-FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
-FstClient::dispatcher(0x19b9250, 62, 0, 0, 0x7ffe232a7660, 0.000000);
-FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
-FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 ~~~
