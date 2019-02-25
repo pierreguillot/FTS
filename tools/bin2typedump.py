@@ -56,7 +56,6 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 def data2strings(data, structformat, printformat="%s"):
-    result=""
     return [printformat % v[0] for v in struct.iter_unpack(structformat, data)]
 def print_data_as(data, structformat, printformat="%s"):
     datasize=struct.calcsize(structformat)
