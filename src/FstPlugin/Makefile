@@ -5,7 +5,7 @@ LIBS=
 
 default: FstPlugin.so
 
-all: FstPlugin.so FstPlugin.32.so FstPlugin.64.so
+all: FstPlugin.32.so FstPlugin.64.so
 
 FstPlugin.32.so: ARCHFLAGS=-m32
 FstPlugin.64.so: ARCHFLAGS=-m64
