@@ -181,6 +181,9 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   print_ptr4opcode(opcode, ptr);
   switch(opcode) {
   default: break;
+  case 56:
+    test_opcode56(eff, opcode, index, ivalue, ptr, fvalue);
+    return 1;
   case 25:
     test_opcode25(eff, opcode, index, ivalue, ptr, fvalue);
     return 1;
