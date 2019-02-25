@@ -1757,7 +1757,7 @@ Opcodes `33` and `34` return strings that seem to be related to input and output
 There is no obvious effect opcode that provides such strings, nor can we find anything
 in the [JUCE effect Opcodes tables](#juce-effect-opcodes).
 
-The only opcodes that deal wit in put and output are `effGetInputProperties` resp. `effGetOutputProperties`.
+The only opcodes that deal with input and output are `effGetInputProperties` resp. `effGetOutputProperties`.
 But these should return a `VstPinProperties` struct.
 
 So let us investigate the returned buffer:
