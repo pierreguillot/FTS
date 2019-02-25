@@ -1841,7 +1841,149 @@ FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 ## MIDI
 responding with `1` to `effCanDo receiveVstEvents` resp `effCanDo receiveVstMidiEvents`
 gives us `opcode:25` events correlating to MIDI-events (sent from a MIDI-item
-with a little sequence)
+with a little sequence).
+
+A typical frame received is:
+
+~~~
+00000000  02 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00000010  50 3e 00 cc 90 7f 00 00  70 3e 00 cc 90 7f 00 00
+00000020  00 00 00 00 00 00 00 00  01 00 00 00 18 00 00 00
+~~~
+
+The frame itself is at 0x7F90CC003E28, which makes it clear that we have
+two addresses at positions @10 (0x7F90CC003E50) and @18 (0x7F90CC003E70).
+
+The first address is only 40 bytes after the frame itself, which is indeed
+position @28.
+
+This looks very much like our `VstEvents` structure, with 2 events.
+The number of events is also in stored in the first 4 bytes of the structure.
+There is a bit of padding between the `numEvents` and the `events`,
+which we should investigate later (e.g. with a 32bit build):
+Since the `events` member is really a varsized array of `VstEvent*` pointers,
+we can refine our struct definition as:
+
+~~~
+typedef struct VstEvents_ {
+  int numEvents;
+  char pad[8];//?
+  VstEvent*events[];
+} VstEvents;
+~~~
+
+From the difference of the two `VstEvent` addresses, we gather, that a single `VstEvent`
+(of type `VstMidiEvent`, because this is really what we are dealing with right now)
+can have a maximum size of 32 bytes.
+
+## VstMidiEvent
+
+Setting up a little MIDI sequence in reaper, that plays the notes `C4 G4 C5 F4` (that is `0x3c 0x43 0x48 0x41` in hex),
+we can test the actual `VstMidiEvent` structure.
+
+If we play back the sequence in a loop and print the first 32 bytes of each `VstEvent`, we get something like:
+
+~~~
+[...]
+ 01  00  00  00  18  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   90  3C  7F  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  22  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   80  3C  00  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  22  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   90  43  7F  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  44  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   80  43  00  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  44  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   90  48  7F  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  66  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   80  48  00  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  66  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   90  41  7F  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  00  01  00  00  00  00  00  00  00  00  00  00  00  00  00  00   80  41  00  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   90  3C  7F  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  C3  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   80  3C  00  00  00  00  00  00
+ 01  00  00  00  18  00  00  00  C3  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00   90  43  7F  00  00  00  00  00
+ [...]
+~~~
+
+The interesting part are the last 8 bytes, where we can see the MIDI noteon (`0x90`) and noteoff (`0x80`) messages for our
+notes. The noteon velocity is apparently `0x7f` (127).
+One of the fields should be `byteSize`. If we take the MIDI-bytes into account, we have at least 27 bytes (28, if we allow 4 byte
+MIDI messages, as JUCE suggests), and at most 32 bytes (see above).
+The 5th byte of each line (`0x18` aka 24) is the only value that is close by.
+JUCE uses `sizeof(VstMidiEvent)` for filling in the `byteSize` field.
+If REAPER does the same, we lack (at least) 4 bytes.
+One possible explanation could be that the `midiData` field is declared as a varsized array `char midiData[0]` in the SDK.
+
+The `byteSize`, `deltaFrames` and `type` fields are available in `VstEvent`, `VstMidiEvent` and `VstMidiSysexEvent` structs.
+Since we can cast the latter two to `VstEvent`, the common fields will be at the very beginning.
+
+Since all events are of the same type, the `type` field should be constant for all our events, which happens to be the
+true for the very first bytes. So let's assume `kVstMidiType` to be `0x01`.
+
+Bytes at positions @8-11 very and might be the `deltaFrames` field (JUCE uses this field to sort the events chronologically).
+The remaining twelve 0-bytes in the middle need to be somehow assigned to `noteLength`, `noteOffset`, `detune` and `noteOffVelocity`.
+I don't know anything about these fields. `noteLength` and `noteOffVelocity` seem to allow scheduling noteOff events in the future.
+`noteOffVelocity` should not need more than 7bits (hey MIDI).
+
+Anyhow, here's what we have so far:
+
+~~~
+typedef struct VstEvent_ {
+  t_fstEventType type;
+  int byteSize;
+  int deltaFrames;
+} VstEvent;
+
+typedef struct VstMidiEvent_ {
+  t_fstEventType type;
+  int byteSize;
+  int deltaFrames;
+
+  /* no idea about the position and sizes of the following four members */
+  short noteLength; //?
+  short noteOffset; //?
+  int detune; //?
+  int noteOffVelocity; //?
+
+  unsigned char midiData[]; //really 4 bytes
+} VstMidiEvent;
+~~~
+
+## VstMidiSysexEvent
+
+Using REAPER's plugin, we can generate SysEx messages.
+I prepared a SysEx message `F0 01 02 03 04 03 02 01 F7` and this is the
+event that our plugin received:
+
+~~~
+06 00 00 00 30 00 00 00  00 00 00 00 00 00 00 00
+09 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+78 DB 01 14 3C 7F 00 00  00 00 00 00 00 00 00 00
+F0 01 02 03 04 03 02 01  F7 00 00 00 00 00 00 00
+~~~
+
+Aha: the first element changed to a low value as well, so `0x06` might be the value of `kVstSysExType`.
+The size is `48` bytes, which covers a pointer 0x7F3C1401DB78 at position @20.
+This address is 48 bytes after the current data frame (so right after the data frame, according to the `byteSize` field),
+and it happens to hold the sequence `F0 01 02 03 04 03 02 01 F7`, our SysEx message.
+The SysEx message is 9 bytes long (see position @10).
+The members `flags` and `resvd1` resp. `resvd2` seem to be set to all zeros,
+so we cannot determine their position.
+I guess the `reserved` fields will be at the very end, which gives us:
+
+~~~
+typedef struct VstMidiSysexEvent_ {
+  t_fstEventType type;
+  int byteSize;
+  int deltaFrames;
+  int pad; //?
+  
+  int dumpBytes;
+  int flags; //?
+  
+  t_fstPtrInt resvd1; //?
+  
+  char*sysExDump;
+  
+  t_fstPtrInt resvd2; //?
+} FST_UNKNOWN(VstMidiSysexEvent);
+~~~
+
+Sidenote: the `VstMidiSysexEvent.sysexDump` is a pointer to the data.
 
 
 
