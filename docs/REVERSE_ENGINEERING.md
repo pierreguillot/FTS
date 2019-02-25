@@ -2287,6 +2287,7 @@ gets called with automation, whenever the window gets focus?
 
     FstClient::dispatcher(0x2a4c8b0, 56, 0, 0, 0x7fff4a83fb40, 0.000000)...
 
+The address seems to be zeroed-out (at least the first 0x99 bytes)
 
 ## effCode:66
 adding a MIDI-item in REAPER and pressing some keys
