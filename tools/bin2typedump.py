@@ -40,7 +40,7 @@ def parseCmdlineArgs():
                         help="decode as 32bit signed int",
     )
     parser.add_argument("-s", "--short",
-                        dest="format", action="store_const", const=("s", "%16d"),
+                        dest="format", action="store_const", const=("h", "%8d"),
                         help="decode as 16bit signed int",
     )
     parser.add_argument("-p", "--pointer",
