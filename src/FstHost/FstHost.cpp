@@ -335,23 +335,42 @@ void test_opcodesJUCE(AEffect*effect) {
   }
 }
 void test_reaper(AEffect*effect) {
+  char strbuf[1024];
   printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
   dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
   dispatch_v(effect, effSetSampleRate, 0, 0, 000, 44100.000000);
   dispatch_v(effect, effSetBlockSize, 0, 512, 000, 0.000000);
-  //  dispatch_v(effect, effGetEffectName, 0, 0, 0x7ffcf7237fc0, 0.000000);
-  //  dispatch_v(effect, effGetVendorString, 0, 0, 0x7ffcf7237fc0, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4617, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4af0, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4670, 0.000000);
+
+  strbuf[0]=0;
+  dispatch_v(effect, effGetEffectName, 0, 0, strbuf, 0.000000);
+  printf("EffectName: %s\n", strbuf);
+  strbuf[0] = 0;
+  dispatch_v(effect, effGetVendorString, 0, 0, strbuf, 0.000000);
+  printf("VendorString: %s\n", strbuf);
+
+  snprintf(strbuf, 1023, "hasCockosNoScrollUI"); strbuf[1023] = 0;
+  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+  snprintf(strbuf, 1023, "wantsChannelCountNotifications"); strbuf[1023] = 0;
+  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+  snprintf(strbuf, 1023, "hasCockosExtensions"); strbuf[1023] = 0;
+  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+
   dispatch_v(effect, effGetVstVersion, 0, 0, 000, 0.000000);
   dispatch_v(effect, 12, 0, 1, 000, 0.000000);
   dispatch_v(effect, 71, 0, 0, 000, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4684, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab4695, 0.000000);
+
+  snprintf(strbuf, 1023, "receiveVstEvents"); strbuf[1023] = 0;
+  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+  snprintf(strbuf, 1023, "receiveVstMidiEvent"); strbuf[1023] = 0;
+  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+
   dispatch_v(effect, 35, 0, 0, 000, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab46a9, 0.000000);
-  //  dispatch_v(effect, effCanDo, 0, 0, 0xab46b7, 0.000000);
+
+  snprintf(strbuf, 1023, "sendVstEvents"); strbuf[1023] = 0;
+  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+  snprintf(strbuf, 1023, "sendVstMidiEvent"); strbuf[1023] = 0;
+  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
   //  dispatch_v(effect, effGetChunk, 0, 0, 0x7ffcf722fd10, 0.000000);
   dispatch_v(effect, effSetProgram, 0, 1, 000, 0.000000);
