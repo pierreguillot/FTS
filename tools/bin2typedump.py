@@ -20,6 +20,8 @@
 # You should have received a copy of the GNU General Public License
 # along with striem.  If not, see <http://www.gnu.org/licenses/>.
 
+import struct
+
 # cmdline arguments
 def parseCmdlineArgs():
     import argparse
@@ -49,16 +51,19 @@ def parseCmdlineArgs():
     args = parser.parse_args()
     return args
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
 def data2strings(data, structformat, printformat="%s"):
     result=""
-    import struct
     return [printformat % v[0] for v in struct.iter_unpack(structformat, data)]
 def print_data_as(data, structformat, printformat="%s"):
-    #print("printing data as '%s' (%d bytes each)" % (structformat, struct.calcsize(structformat)))
-    #import pprint
-    strings = data2strings(data, structformat, printformat)
-    #pprint.pprint(strings)
-    print("\n".join(strings))
+    datasize=struct.calcsize(structformat)
+    chunksize = max(int(16/datasize), 1)
+
+    for line in chunks(data2strings(data, structformat, printformat), chunksize):
+            print(" ".join(line))
 def _main():
     args=parseCmdlineArgs()
     for filename in args.files:
