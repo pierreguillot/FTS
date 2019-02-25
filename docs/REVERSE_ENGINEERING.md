@@ -1847,15 +1847,15 @@ position @28.
 
 This looks very much like our `VstEvents` structure, with 2 events.
 The number of events is also in stored in the first 4 bytes of the structure.
-There is a bit of padding between the `numEvents` and the `events`,
-which we should investigate later (e.g. with a 32bit build):
+There seems to be a bit of padding between `numEvents` and the `events`,
+depending on the architecture (32bit vs 64bit).
 Since the `events` member is really a varsized array of `VstEvent*` pointers,
 we can refine our struct definition as:
 
 ~~~
 typedef struct VstEvents_ {
   int numEvents;
-  char pad[8];//?
+  t_fstPtrInt pad;//?
   VstEvent*events[];
 } VstEvents;
 ~~~
