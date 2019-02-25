@@ -13,6 +13,6 @@ FstHost.64: ARCHFLAGS=-m64
 FstHost FstHost.32 FstHost.64: FstHost.cpp ../../FST/fst.h
 	$(CXX) $(FST_CPPFLAGS) $(CPPFLAGS) $(FST_CXXFLAGS) $(CXXFLAGS) $(ARCHFLAGS) $< -o $@ $(LIBS)
 
-.PHONY: clean
+.PHONY: clean all default
 clean:
 	rm -f FstHost FstHost.32 FstHost.64
