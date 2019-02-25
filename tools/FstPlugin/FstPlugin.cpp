@@ -253,9 +253,9 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->version = 666;
 
   eff->flags |= effFlagsProgramChunks;
-  eff->flags |= (1<< 4); // replacing
+  eff->flags |= effFlagsCanReplacing;
   //eff->flags |= (1<< 9);
-  eff->flags |= (1<<12); // double replacing
+  eff->flags |= effFlagsCanDoubleReplacing;
 
   eff->processReplacing = processReplacing;
   eff->processDoubleReplacing = processDoubleReplacing;
