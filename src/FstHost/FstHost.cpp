@@ -32,10 +32,10 @@ t_fstPtrInt dispatch (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue
 t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
   if(effect) {
     char opcodestr[256];
-    printf("AEffect.dispatch(%p, %s, %d, %llu, %p, %f)\n",
+    printf("AEffect.dispatch(%p, %s, %d, %" FMT_PINT ", %p, %f)\n",
         effect, effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
     t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
-    printf("AEffect.dispatch: %llu (0x%llX)\n", result, result);
+    printf("AEffect.dispatch: %" FMT_PINT " (0x%" FMT_PINTX ")\n", result, result);
     fstpause(0.5);
     return result;
   }
@@ -117,7 +117,7 @@ void test_opcode3334(AEffect*effect) {
   memset(&vpp, 0, sizeof(vpp));
   printf("\ntrying: %d\n", opcode);
   t_fstPtrInt res = dispatch (effect, opcode, 0, 0, &vpp, 0);
-  printf("returned %llu\n", res);
+  printf("returned %" FMT_PINT "\n", res);
   if(res)
     print_pinproperties(&vpp);
 
@@ -125,7 +125,7 @@ void test_opcode3334(AEffect*effect) {
   memset(&vpp, 0, sizeof(vpp));
   printf("\ntrying: %d\n", opcode);
   res = dispatch (effect, opcode, 0, 0, &vpp, 0);
-  printf("returned %llu\n", res);
+  printf("returned %" FMT_PINT "\n", res);
   if(res) {
     print_pinproperties(&vpp);
     print_hex(&vpp, 2*sizeof(vpp));
@@ -269,7 +269,7 @@ void test_setChunk(AEffect*effect) {
 
   index = 0;
   t_fstPtrInt result = dispatch(effect, effSetChunk, index, size, &data, 0.f);
-  printf("index#%d: setChunk[%d] returned %ull\n", index, (int)effSetChunk, result);
+  printf("index#%d: setChunk[%d] returned %" FMT_PINT "\n", index, (int)effSetChunk, result);
   size = dispatch(effect, effGetChunk, index, 0, &data, 0.f);
   printf("index#%d: got %d bytes @ 0x%X\n", index, size, data);
 }
@@ -281,7 +281,7 @@ void test_opcode23(AEffect*effect) {
   t_fstPtrInt*buffer[8] = {0};
   printf("testing OP:%d\n", opcode);
   t_fstPtrInt result = dispatch(effect, opcode, index, 0, buffer, 0.f);
-  printf("\tresult |\t%llu 0x%llX\n", result, result);
+  printf("\tresult |\t%" FMT_PINT " 0x%" FMT_PINTX "\n", result, result);
   if(*buffer) {
     printf("\tbuffer '%.*s'\n", 512, (char*)*buffer);
   }
@@ -298,7 +298,7 @@ void test_opcode56(AEffect*effect) {
 
   printf("testing OP:%d\n", opcode);
   t_fstPtrInt result = dispatch_v(effect, opcode, 0, 0, buffer, 0.f);
-  printf("\tresult |\t%llu 0x%llX\n", result, result);
+  printf("\tresult |\t%" FMT_PINT " 0x%" FMT_PINTX "\n", result, result);
   if(*buffer) {
     printf("\tbuffer '%.*s'\n", bufsize, (char*)buffer);
   }
@@ -310,7 +310,7 @@ void test_opcode29(AEffect*effect) {
     size_t opcode = 29; //effGetProgramNameIndexed;
     char buffer[200] = { 0 };
     t_fstPtrInt result = dispatch(effect, opcode, i, 0, buffer, 0.f);
-    printf("opcode:%d index:%d -> %llu", opcode, i, result);
+    printf("opcode:%d index:%d -> %" FMT_PINT "", opcode, i, result);
     if(*buffer) {
       printf("\tbuffer '%.*s'\n", 512, buffer);
     }
@@ -325,7 +325,7 @@ void test_opcodesJUCE(AEffect*effect) {
     if(result || *buffer)
       printf("tested %d", opcode);
     if(result)
-      printf("\t|\t%llu 0x%llX", result, result);
+      printf("\t|\t%" FMT_PINT " 0x%" FMT_PINTX "", result, result);
     if(*buffer) {
       printf("\t|\tbuffer '%.*s'", 512, buffer);
       //print_hex(buffer, 16);

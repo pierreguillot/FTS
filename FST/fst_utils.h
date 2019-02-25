@@ -235,7 +235,7 @@ static void print_event(VstEvent*ev) {
 
     printf("\ttype=%d\n", sev->type);
     printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", sev->byteSize, sev->deltaFrames);
-    printf("\tflags=%d\treserved=%llu\t%llu\n",
+    printf("\tflags=%d\treserved=%" FMT_PINT "\t%" FMT_PINT"\n",
         sev->flags, sev->resvd1, sev->resvd2);
     printf("\tSysEx %d bytes @ %p\n\t", sev->dumpBytes, sev->sysexDump);
     unsigned char*data=(unsigned char*)sev->sysexDump;
