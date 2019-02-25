@@ -1973,14 +1973,14 @@ typedef struct VstMidiSysexEvent_ {
   int byteSize;
   int deltaFrames;
   int pad; //?
-  
+
   int dumpBytes;
   int flags; //?
-  
+
   t_fstPtrInt resvd1; //?
-  
+
   char*sysExDump;
-  
+
   t_fstPtrInt resvd2; //?
 } FST_UNKNOWN(VstMidiSysexEvent);
 ~~~
