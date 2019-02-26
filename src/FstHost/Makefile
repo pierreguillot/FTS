@@ -1,6 +1,6 @@
 LIBS=-ldl -lrt
 
-FST_CPPFLAGS=-I../../FST
+FST_CPPFLAGS=-I../../FST -DFST_DONT_DEPRECATE_UNKNOWN=1
 FST_CXXFLAGS=-g -O0
 
 default: FstHost
