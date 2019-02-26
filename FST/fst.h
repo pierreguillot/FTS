@@ -31,6 +31,7 @@ typedef enum {
   FST_ENUM(audioMasterGetProductString, 33), //OUT:ptr(char[kVstMaxProductStrLen]), return ptr
   FST_ENUM(audioMasterGetVendorVersion, 34), // return 0x0101
   FST_ENUM(audioMasterGetTime, 7), // return (VstTimeInfo*)
+  FST_ENUM(audioMasterProcessEvents, 8), //IN:ptr(VstEvents*), return 0
   FST_ENUM(audioMasterTempoAt, 10), // IN:ivalue, return (10000*BPM)
   FST_ENUM(audioMasterGetSampleRate, 16), // return sampleRate
   FST_ENUM(audioMasterGetBlockSize, 17), // return blockSize
@@ -75,7 +76,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(audioMasterIOChanged), // return 0
   FST_ENUM_UNKNOWN(audioMasterPinConnected), //IN:index, IN:ivalue(isOutput), return isValidChannel
 
-  FST_ENUM_UNKNOWN(audioMasterProcessEvents), //IN:ptr(VstEvents*), return 0
   FST_ENUM_UNKNOWN(audioMasterWantMidi), // return 0
 
   FST_ENUM_UNKNOWN(audioMasterSetOutputSampleRate),
