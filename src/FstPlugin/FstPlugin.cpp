@@ -360,7 +360,6 @@ static void processDoubleReplacing(AEffect*eff, double**indata, double**outdata,
   //printf("FstClient::process2(%p, %p, %p, %d) -> %g\n", eff, indata, outdata, sampleframes, indata[0][0]);
 }
 
-
 extern "C"
 AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   dispatch = dispatch4host;
