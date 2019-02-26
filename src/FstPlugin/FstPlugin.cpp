@@ -371,13 +371,23 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->processDoubleReplacing = processDoubleReplacing;
   print_aeffect(eff);
 
-  for(size_t i = 0; i<64; i++) {
+  const char* canDos[] = { "supplyIdle",
+                           "sendVstEvents",
+                           "sendVstMidiEvent",
+                           "sendVstTimeInfo",
+                           "receiveVstEvents",
+                           "receiveVstMidiEvent",
+                           "supportShell",
+                           "sizeWindow",
+                           "shellCategory" };
+  for(size_t i = 0; i<(sizeof(canDos)/sizeof(*canDos)); i++) {
     char buf[512] = {0};
-    t_fstPtrInt res = dispatch(0, i, 0, 0, buf, 0);
+    char hostcode[512] = {0};
+    snprintf(buf, 511, canDos[i]);
+    buf[511]=0;
+    t_fstPtrInt res = dispatch(0, audioMasterCanDo, 0, 0, buf, 0);
     if(*buf)
-      printf("\t'%.*s'\n", 512, buf);
-    if(res)
-      printf("\treturned %d\n", res);
+      printf("%s['%.*s'] returned %ld\n", hostCode2string(audioMasterCanDo, hostcode, 512), 512, buf, res);
   }
   char buf[512] = {0};
   dispatch(eff, audioMasterGetProductString, 0, 0, buf, 0.f);
