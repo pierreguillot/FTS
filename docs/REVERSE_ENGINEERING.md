@@ -2249,6 +2249,20 @@ to see that it reports (after getting the MIDI routing right):
 whenever we send a MIDI message {0x90, 0x41, 0x7f, 0} (via a *valid* `VstEvents` structure)
 to `opcode:8`: Q.E.D!
 
+## audioMasterCanDo
+We already know that we can use `effCanDo` to query a plugin whether it supports a
+feature given in a string.
+There's also an `audioMasterCanDo` opcode that is supposed to work in the other direction.
+According to the JUCE sources, typical feature strings are
+`supplyIdle`, `sendVstEvents` and `sendVstMidiEvent`.
+
+To find the value of the `audioMasterCanDo` opcode, we iterate a range of opcodes
+while providing a `ptr` to a valid (and likely supported) feature string (like `sendVstEvents`),
+and record the return values.
+After that, we iterate over the same opcodes with some randomly made up (and therefore
+likely unsupported) feature string (like `fudelDudelDei`).
+Finally we compare the return values of the two iterations and find that they always returned
+the same result *except* for `opcode:37`, our likely candidate for `audioMasterCanDo`.
 
 # misc
 LATER move this to proper sections
