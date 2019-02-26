@@ -35,9 +35,9 @@ typedef enum {
   FST_ENUM(audioMasterGetVendorString, 32), //OUT:ptr(char[kVstMaxVendorStrLen]), return ptr
   FST_ENUM(audioMasterGetProductString, 33), //OUT:ptr(char[kVstMaxProductStrLen]), return ptr
   FST_ENUM(audioMasterGetVendorVersion, 34), // return 0x0101
+  FST_ENUM(audioMasterCanDo, 37), //IN:ptr(char*), return *ptr in {"sendVstEvents", "sizeWindow",...}
 
   // 13: sending latency??
-  FST_ENUM_UNKNOWN(audioMasterCanDo), //IN:ptr(char*), return *ptr in {"sendVstEvents", "sizeWindow",...}
 
   FST_ENUM_UNKNOWN(audioMasterBeginEdit), // IN:index, return 0
   FST_ENUM_UNKNOWN(audioMasterEndEdit), //IN:index, return 0
