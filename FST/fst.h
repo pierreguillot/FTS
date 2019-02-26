@@ -1,10 +1,21 @@
 #ifndef FST_fst_h_
 #define FST_fst_h_
 
+#ifdef __GNUC__
+# define FST_DEPRECATE_UNKNOWN(x) x __attribute__ ((deprecated))
+#else
+# define FST_DEPRECATE_UNKNOWN(x) x
+#endif
+
+#ifdef FST_DONT_DEPRECATE_UNKNOWN
+# undef  FST_DEPRECATE_UNKNOWN
+# define FST_DEPRECATE_UNKNOWN(x) x
+#endif
+
 #define FST_UNKNOWN(x) x
 #define FST_ENUM(x, y) x = y
-#define FST_ENUM_EXPERIMENTAL(x, y) x = y
-#define FST_ENUM_UNKNOWN(x) x = 100000 + __LINE__
+#define FST_ENUM_EXPERIMENTAL(x, y) FST_DEPRECATE_UNKNOWN(x) = y
+#define FST_ENUM_UNKNOWN(x) FST_DEPRECATE_UNKNOWN(x) = 100000 + __LINE__
 
 #define kVstVersion FST_UNKNOWN(2400)
 
