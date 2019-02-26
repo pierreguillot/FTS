@@ -209,29 +209,29 @@ static void print_event(VstEvent*ev, int hexdump) {
 
     printf("\ttype=%d\n", mev->type);
     printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", mev->byteSize, mev->deltaFrames);
-    printf("note: length=%d\toffset=%d\tvelocity=%d\tdetune=%d\n",
+    printf("\tMIDI: %02x %02x %02x %02x\n"
+           , mev->midiData[0]
+           , mev->midiData[1]
+           , mev->midiData[2]
+           , mev->midiData[3]);
+    printf("\tnote: length=%d\toffset=%d\tvelocity=%d\tdetune=%d\n",
       mev->noteLength,
       mev->noteOffset,
       mev->noteOffVelocity,
       mev->detune);
-  printf("MIDI: %02x %02x %02x %02x\n"
-      , mev->midiData[0]
-      , mev->midiData[1]
-      , mev->midiData[2]
-      , mev->midiData[3]);
   } else if (ev->type == kVstSysExType) {
     VstMidiSysexEvent*sev = (VstMidiSysexEvent*)ev;
     printf(" [%d]\n", sizeof(VstMidiSysexEvent));
 
     printf("\ttype=%d\n", sev->type);
     printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", sev->byteSize, sev->deltaFrames);
-    printf("\tflags=%d\treserved=%lu\t%lu\n",
-        sev->flags, sev->resvd1, sev->resvd2);
     printf("\tSysEx %d bytes @ %p\n\t", sev->dumpBytes, sev->sysexDump);
     unsigned char*data=(unsigned char*)sev->sysexDump;
     for(int i=0; i<sev->dumpBytes; i++)
       printf(" %02x", *data++);
     printf("\n");
+    printf("\tflags=%d\treserved=%lu\t%lu\n",
+        sev->flags, sev->resvd1, sev->resvd2);
   }
   if(hexdump)
     print_hex(ev, 64);
