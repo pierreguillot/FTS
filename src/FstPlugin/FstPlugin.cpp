@@ -86,9 +86,8 @@ static void test_opcode25(AEffect*eff,
   VstEvents*vse=(VstEvents*)ptr;
   vse = create_vstevents(midi);
   vse->events[0] = (VstEvent*)0x1;  // core-dumps: 8
-  printf("testing opcode:25 response..............\n");
-  for(size_t op=8; op < 30; op++)
-    dispatch_v(eff, op, index, ivalue, vse, fvalue);
+
+  dispatch_v(eff, audioMasterProcessEvents, index, ivalue, vse, fvalue);
 
   return;
   print_events((VstEvents*)ptr);
