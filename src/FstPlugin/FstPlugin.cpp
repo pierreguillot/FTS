@@ -105,6 +105,7 @@ typedef void (t_fun0)(void);
 static void test_opcode42(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  return;
   /* effGetSpeakerArrangement or effGetSpeakerArrangement */
   /* ptr and ivalue point to VstSpeakerArrangement* */
   VstSpeakerArrangement*iarr = (VstSpeakerArrangement*)ivalue;
