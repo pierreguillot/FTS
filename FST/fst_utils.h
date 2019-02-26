@@ -292,6 +292,19 @@ static void print_timeinfo(VstTimeInfo*vti) {
   printf("\n");
 }
 
+static VstEvents*create_vstevents(const unsigned char midi[4]) {
+  VstEvents*ves = (VstEvents*)calloc(1, sizeof(VstEvents)+sizeof(VstEvent*));
+  VstMidiEvent*ve=(VstMidiEvent*)calloc(1, sizeof(VstMidiEvent));
+  ves->numEvents = 1;
+  ves->events[0]=(VstEvent*)ve;
+  ve->type = kVstMidiType;
+  ve->byteSize = sizeof(VstMidiEvent);
+  for(size_t i=0; i<4; i++)
+    ve->midiData[i] = midi[i];
+
+  return ves;
+}
+
 
 
 #endif /* FST_FST_UTILS_H_ */
