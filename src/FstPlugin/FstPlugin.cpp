@@ -85,7 +85,6 @@ static void test_opcode25(AEffect*eff,
   unsigned char midi[4] = {0x90, 0x40, 0x7f, 0};
   VstEvents*vse=(VstEvents*)ptr;
   vse = create_vstevents(midi);
-  vse->events[0] = (VstEvent*)0x1;  // core-dumps: 8
 
   dispatch_v(eff, audioMasterProcessEvents, index, ivalue, vse, fvalue);
 
