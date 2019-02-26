@@ -2278,10 +2278,7 @@ according to JUCE, both `ivalue` and `ptr` only point both to addresses in the f
 - `effGetSpeakerArrangement`
 - `effSetSpeakerArrangement`
 
-Both contain:
-
-
-### 2 IN/2 OUT
+Both contain (for 2 IN/2 OUT)
 ~~~
 IN=OUT:
 01 00 00 00 02 00 00 00  00 00 00 00 00 00 00 00
@@ -2292,48 +2289,25 @@ IN=OUT:
 00 00 00 00 00 00 00 00  01 00 00 00 00 00 00 00
 ~~~
 
-### 4 IN/8 OUT
-~~~
-IN:
-0B 00 00 00 04 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  01 00 00 00 00 00 00 00
+The int32 at position @4-7 is the `numChannels`,
+the int32 at position @0-3 is most likely the `type`.
 
-OUT:
-17 00 00 00 08 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00  01 00 00 00 00 00 00 00
-~~~
+By setting the `numChannels` of the plugin, REAPER responds
+with following types
 
-
-### type/channels
-
-| type |            | numChannels |
-|------|------------|-------------|
-| 0    | 0x0        | 1           |
-| 1    | 0x1        | 2           |
-| 11   | 0xb        | 3           |
-| 11   | 0xb        | 4           |
-| 15   | 0xf        | 5           |
-| 15   | 0xf        | 6           |
-| 23   | 0x17       | 7           |
-| 23   | 0x17       | 8           |
-| -2   | 0xFFFFFFFE | 9           |
-| -2   | 0xFFFFFFFE | 10          |
-| -2   | 0xFFFFFFFE | 11          |
-| 28   | 0x1C       | 12          |
-| -2   | 0xFFFFFFFE | 13          |
-| -2   | 0xFFFFFFFE | 14          |
-| -2   | 0xFFFFFFFE | 15          |
-| -2   | 0xFFFFFFFE | 16          |
-| ...  | ...        | 128         |
-|      |            |             |
+| numChannels  | type |            |
+|--------------|------|------------|
+| 1            | 0    | 0x0        |
+| 2            | 1    | 0x1        |
+| 3            | 11   | 0xb        |
+| 4            | 11   | 0xb        |
+| 5            | 15   | 0xf        |
+| 6            | 15   | 0xf        |
+| 7            | 23   | 0x17       |
+| 8            | 23   | 0x17       |
+| 12           | 28   | 0x1C       |
+| all the rest | -2   | 0xFFFFFFFE |
+|              |      |            |
 
 
 ## effCode:50
