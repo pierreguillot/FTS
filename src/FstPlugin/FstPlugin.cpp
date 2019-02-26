@@ -13,6 +13,13 @@ static ERect editorBounds = {0, 0, 320, 240};
 
 static char chunk[] = "This is the chunk for the FstPlugin.";
 
+static VstEvents*s_ves;
+static VstMidiSysexEvent s_sysex;
+static VstMidiEvent s_midi;
+static unsigned char s_sysexDump[] = {0xF0, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0xF7};
+static unsigned char s_midiDump[] = {0x80, 0x40, 0x0, 0};
+
+
 void print_struct7(AEffect* effect) {
 #if 0
   auto *str = (double*)dispatch(effect, 7, 0, 65024, 0, 0.);
@@ -363,5 +370,29 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   char buf[512] = {0};
   dispatch(eff, audioMasterGetProductString, 0, 0, buf, 0.f);
   printf("masterProduct: %s\n", buf);
+
+  s_ves = (VstEvents*)calloc(1, sizeof(VstEvents)+2*sizeof(VstEvent*));
+  s_ves->numEvents = 2;
+  s_ves->events[0] = (VstEvent*)&s_midi;
+  s_ves->events[1] = (VstEvent*)&s_sysex;
+
+  memset(&s_midi, 0, sizeof(s_midi));
+  memset(&s_sysex, 0, sizeof(s_sysex));
+
+  s_midi.type = kVstMidiType;
+  s_midi.byteSize = sizeof(s_midi);
+  s_midi.deltaFrames = 1;
+  for(size_t i=0; i<4; i++)
+    s_midi.midiData[i] = s_midiDump[i];
+
+  s_sysex.type = kVstSysExType;
+  s_sysex.byteSize = sizeof(s_sysex);
+  s_sysex.deltaFrames = 0;
+  s_sysex.dumpBytes = sizeof(s_sysexDump);
+  s_sysex.sysexDump = (char*)s_sysexDump;
+
+  print_events(s_ves);
+
+
   return eff;
 }
