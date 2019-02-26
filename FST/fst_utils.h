@@ -197,7 +197,7 @@ static void print_aeffect(AEffect*eff) {
   printf("\n\tprocessDoubleReplacingCB=%p", eff->processDoubleReplacing);
   printf("\n\n");
 }
-static void print_event(VstEvent*ev) {
+static void print_event(VstEvent*ev, int hexdump) {
   printf("VstEvent @ %p", ev);
   if(!ev) {
     printf(" [%d]\n", sizeof(VstEvent));
@@ -233,7 +233,8 @@ static void print_event(VstEvent*ev) {
       printf(" %02x", *data++);
     printf("\n");
   }
-  print_hex(ev, 64);
+  if(hexdump)
+    print_hex(ev, 64);
 }
 
 static void print_events(VstEvents*evs) {
