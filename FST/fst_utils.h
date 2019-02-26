@@ -237,11 +237,11 @@ static void print_event(VstEvent*ev, int hexdump) {
     print_hex(ev, 64);
 }
 
-static void print_events(VstEvents*evs) {
+static void print_events(VstEvents*evs, int hexdump=0) {
   printf("%d VstEvents @ %p\n", evs?evs->numEvents:0, evs);
   if(!evs)return;
   for(int i=0; i<evs->numEvents; i++) {
-    print_event(evs->events[i]);
+    print_event(evs->events[i], hexdump);
   }
 }
 
