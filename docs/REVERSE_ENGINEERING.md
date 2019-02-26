@@ -1889,8 +1889,8 @@ If we play back the sequence in a loop and print the first 32 bytes of each `Vst
  [...]
 ~~~
 
-The interesting part are the last 8 bytes, where we can see the MIDI noteon (`0x90`) and noteoff (`0x80`) messages for our
-notes. The noteon velocity is apparently `0x7f` (127).
+The interesting part are the last 8 bytes, where we can see the MIDI NoteOn (`0x90`) and NoteOff (`0x80`) messages for our
+notes. The NoteOn velocity is apparently `0x7f` (127).
 One of the fields should be `byteSize`. If we take the MIDI-bytes into account, we have at least 27 bytes (28, if we allow 4 byte
 MIDI messages, as JUCE suggests), and at most 32 bytes (see above).
 The 5th byte of each line (`0x18` aka 24) is the only value that is close by.
@@ -1906,7 +1906,7 @@ true for the very first bytes. So let's assume `kVstMidiType` to be `0x01`.
 
 Bytes at positions @8-11 very and might be the `deltaFrames` field (JUCE uses this field to sort the events chronologically).
 The remaining twelve 0-bytes in the middle need to be somehow assigned to `noteLength`, `noteOffset`, `detune` and `noteOffVelocity`.
-I don't know anything about these fields. `noteLength` and `noteOffVelocity` seem to allow scheduling noteOff events in the future.
+I don't know anything about these fields. `noteLength` and `noteOffVelocity` seem to allow scheduling NoteOff events in the future.
 `noteOffVelocity` should not need more than 7bits (hey MIDI).
 
 Anyhow, here's what we have so far:
