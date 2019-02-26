@@ -191,14 +191,27 @@ static bool dispatcher_printEff(AEffect*eff,
   PRINTEFFCASE(effStopProcess);
   PRINTEFFCASE(effString2Parameter);
   PRINTEFFCASE(effVendorSpecific);
+  }
+  return true;
+}
+static bool dispatcher_skip(t_fstInt32 opcode) {
+  switch(opcode) {
   case 53:
     /* REAPER calls this permanently */
     //printf("53...\n");
     //print_struct7(eff);
-    return false;
-    break;
+    return true;
   }
-  return true;
+  return false;
+}
+static bool dispatcher_noprint(t_fstInt32 opcode) {
+  switch(opcode) {
+  case effGetParamDisplay:
+  case effGetParamLabel:
+  case effGetParamName:
+    return true;
+  }
+  return false;
 }
 static void print_ptr4opcode(t_fstInt32 opcode, void*const ptr) {
   if(!ptr)return;
@@ -216,8 +229,12 @@ static void print_ptr4opcode(t_fstInt32 opcode, void*const ptr) {
   //if(str)print_hex(str, 96);
 }
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
-  if(!dispatcher_printEff(eff, opcode, index, ivalue, ptr, fvalue))return 0;
-  print_ptr4opcode(opcode, ptr);
+  if(dispatcher_skip(opcode))
+    return 0;
+  if(!dispatcher_noprint(opcode)) {
+    dispatcher_printEff(eff, opcode, index, ivalue, ptr, fvalue);
+    print_ptr4opcode(opcode, ptr);
+  }
   switch(opcode) {
   default: break;
 #if 1
