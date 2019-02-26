@@ -334,13 +334,33 @@ void test_opcodesJUCE(AEffect*effect) {
       printf("\n");
   }
 }
+void test_opcode25(AEffect*effect) {
+  const unsigned char midi[4] = {0x90, 0x40, 0x7f, 0};
+  VstEvents*ves = create_vstevents(midi);
+  dispatch_v(effect, effProcessEvents, 0, 0, ves, 0.);
+}
+static float** makeFSamples(size_t channels, size_t frames) {
+  float**samples = new float*[channels];
+  for(size_t i=0; i<channels; i++) {
+    samples[i] = new float[frames];
+    float*samps=samples[i];
+    for(size_t j=0; j<frames; j++) {
+      samps[j] = 0.f;
+    }
+  }
+  return samples;
+}
 void test_reaper(AEffect*effect) {
   t_fstPtrInt ret=0;
   char strbuf[1024];
+  const int blockSize = 512;
+  float**insamples = makeFSamples(effect->numInputs, blockSize);
+  float**outsamples = makeFSamples(effect->numOutputs, blockSize);
+
   printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
   dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
   dispatch_v(effect, effSetSampleRate, 0, 0, 000, 44100.000000);
-  dispatch_v(effect, effSetBlockSize, 0, 512, 000, 0.000000);
+  dispatch_v(effect, effSetBlockSize, 0, blockSize, 000, 0.000000);
 
   strbuf[0]=0;
   dispatch_v(effect, effGetEffectName, 0, 0, strbuf, 0.000000);
@@ -387,6 +407,10 @@ void test_reaper(AEffect*effect) {
 
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
 
+  printf("=============PROC==============================\n");
+  effect->process(effect, insamples, outsamples, blockSize);
+  test_opcode25(effect);
+  effect->process(effect, insamples, outsamples, blockSize);
   printf("==============================================\n");
   dispatch_v(effect, 12, 0, 0, 000, 0.000000);
   dispatch_v(effect, 12, 0, 1, 000, 0.000000);
