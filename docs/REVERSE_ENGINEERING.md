@@ -1973,9 +1973,6 @@ typedef struct VstMidiSysexEvent_ {
 } FST_UNKNOWN(VstMidiSysexEvent);
 ~~~
 
-Sidenote: the `VstMidiSysexEvent.sysexDump` is a pointer to the data.
-
-
 
 # some audioMaster opcodes
 time to play get some more opcodes for the host.
