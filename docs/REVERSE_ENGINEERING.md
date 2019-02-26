@@ -1382,6 +1382,8 @@ host-opcode `34` is likely `audioMasterGetVendorVersion`.
 The opcode `48` returns the currently opened REAPER session file.
 The `audioMasterGetDirectory` might match, although REAPER returns a
 file rather than a diretory.
+More importantly, JUCE will `return` the string address
+in the `return` value, whereas REAPER writes the string into `ptr`.
 
 Opcode `10` is a weirdo number, obviously for humans (rather than computers).
 Reading up a bit on what JUCE does for the various audioMaster-opcodes,
