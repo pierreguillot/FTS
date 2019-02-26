@@ -1354,25 +1354,26 @@ for(size_t i = 0; i<64; i++) {
 
 With REAPER, this returns:
 
-| op   | result  | buf                               |
-|------|---------|-----------------------------------|
-| *0*  | 1       |                                   |
-| *1*  | 2400    |                                   |
-| 6    | 1       |                                   |
-| 8    | 1       |                                   |
-| *10* | 1200000 |                                   |
-| 11   | 65536   |                                   |
-| 12   | 1       |                                   |
-| 13   | 1       |                                   |
-| 23   | 1       |                                   |
-| *32* | 1       | Cockos                            |
-| *33* | 1       | REAPER                            |
-| *34* | 5965    |                                   |
-| 42   | 1       |                                   |
-| 43   | 1       |                                   |
-| 44   | 1       |                                   |
-| 48   | 1       | ~/Documents/REAPER Media/test.RPP |
-|      |         |                                   |
+| op   | result     | buf                               |
+|------|------------|-----------------------------------|
+| *0*  | 1          |                                   |
+| *1*  | 2400       |                                   |
+| 6    | 1          |                                   |
+| *8*  | 1          |                                   |
+| *10* | 1200000    |                                   |
+| 11   | 65536      |                                   |
+| 12   | 1          |                                   |
+| 13   | 1          |                                   |
+| 19   | 0x2800,... |                                   |
+| 23   | 1          |                                   |
+| *32* | 1          | Cockos                            |
+| *33* | 1          | REAPER                            |
+| *34* | 5965       |                                   |
+| 42   | 1          |                                   |
+| 43   | 1          |                                   |
+| 44   | 1          |                                   |
+| 48   | 1          | ~/Documents/REAPER Media/test.RPP |
+|      |            |                                   |
 
 This table confirms that host-opcode `33` is `audioMasterGetProductString`,
 and we learn that host-opcode `32` is `audioMasterGetVendorString`.
