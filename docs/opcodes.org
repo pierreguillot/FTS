@@ -13,12 +13,15 @@
 |      6 | ?                                      | :REAPER returns 1                                                            |
 |      7 | audioMasterGetTime                     | :called by hypercyclic/tonespace as response to effCode:12 with ivalue=65024 |
 |      7 | audioMasterGetTime                     | :REAPER returns an address                                                   |
-|      8 | ?                                      | :REAPER returns 1                                                            |
+|      8 | audioMasterProcessEvents               | :REAPER returns 1                                                            |
+|        |                                        | :REAPER crashes with tained VstEvents-data                                   |
 |     10 | audioMasterTempoAt                     |                                                                              |
 |     13 | ?                                      | :called with 0-args in Protoverb:main and hypercyclic:eff:12                 |
 |    13? | ?                                      | :Protoverb calls in main (and as response to effcode:30514?)                 |
 |     16 | audioMasterGetSampleRate               |                                                                              |
 |     17 | audioMasterGetBlockSize                |                                                                              |
+|     19 | ?                                      | :REAPER returns 0x2800,  0x33FF, 0x2FFF, 0x3400, 0x3000 when called...       |
+|        |                                        | :...repeatedly while handling effCode:25 (args are ignored)                  |
 |     23 | ?                                      | :called by JUCE-plugins with 0-args as response to effCode:12                |
 |     32 | audioMasterGetVendorString             |                                                                              |
 |     33 | audioMasterGetProductString            |                                                                              |
@@ -40,7 +43,6 @@
 |        | audioMasterIOChanged                   |                                                                              |
 |        | audioMasterNeedIdle                    |                                                                              |
 |        | audioMasterPinConnected                |                                                                              |
-|        | audioMasterProcessEvents               |                                                                              |
 |        | audioMasterSetOutputSampleRate         |                                                                              |
 |--------+----------------------------------------+------------------------------------------------------------------------------|
 |        | audioMasterGetLanguage                 | JUCE-ignore                                                                  |
