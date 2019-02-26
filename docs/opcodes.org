@@ -16,6 +16,8 @@
 |      8 | audioMasterProcessEvents               | :REAPER returns 1                                                            |
 |        |                                        | :REAPER crashes with tained VstEvents-data                                   |
 |     10 | audioMasterTempoAt                     |                                                                              |
+|     11 | ?                                      | :REAPER returns 0x10000 (65536)                                              |
+|     12 | ?                                      | :REAPER returns 1                                                            |
 |     13 | ?                                      | :called with 0-args in Protoverb:main and hypercyclic:eff:12                 |
 |    13? | ?                                      | :Protoverb calls in main (and as response to effcode:30514?)                 |
 |     16 | audioMasterGetSampleRate               |                                                                              |
@@ -25,19 +27,21 @@
 |     23 | ?                                      | :called by JUCE-plugins with 0-args as response to effCode:12                |
 |     32 | audioMasterGetVendorString             |                                                                              |
 |     33 | audioMasterGetProductString            |                                                                              |
-|     34 | audioMasterGetVendorVersion            | :JUCE returns 0x0101                                                         |
+|     34 | audioMasterGetVendorVersion            | :JUCE returns 0x0101 (257)                                                   |
+|     37 | audioMasterCanDo                       |                                                                              |
 |     42 | ?                                      | :Protoverb calls as response to effSetProgramName                            |
+|     48 | audioMasterGetDirectory?               | :REAPER returns filename of reaper-project file (.RPP)                       |
 |--------+----------------------------------------+------------------------------------------------------------------------------|
 |        | audioMasterWantMidi                    |                                                                              |
 |        | audioMasterCanDo                       |                                                                              |
-|        | audioMasterCurrentId                   |                                                                              |
-|        | audioMasterGetDirectory                |                                                                              |
+|        | audioMasterCurrentId?                  |                                                                              |
+|        | audioMasterGetDirectory?               |                                                                              |
 |        | audioMasterBeginEdit                   |                                                                              |
+|        | audioMasterEndEdit                     |                                                                              |
 |        | audioMasterSizeWindow                  |                                                                              |
 |        | audioMasterUpdateDisplay               |                                                                              |
-|        | audioMasterEndEdit                     |                                                                              |
-|        | audioMasterGetAutomationState          |                                                                              |
 |        | audioMasterGetCurrentProcessLevel      |                                                                              |
+|        | audioMasterGetAutomationState          |                                                                              |
 |        | audioMasterGetNumAutomatableParameters |                                                                              |
 |        | audioMasterIdle                        |                                                                              |
 |        | audioMasterIOChanged                   |                                                                              |
