@@ -78,6 +78,7 @@ static void test_opcode56(AEffect*eff,
   }
 }
 
+/* effProcessEvents: handle MIDI */
 static void test_opcode25(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
