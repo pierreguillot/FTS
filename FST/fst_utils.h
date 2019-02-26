@@ -5,16 +5,6 @@
 #include <stdio.h>
 #include <string>
 
-#if __x86_64__ /* urgh, does not catch other 64bit systems */
-# define FMT_PINT "llu"
-# define FMT_PINTX "llX"
-#else
-# define FMT_PINT "u"
-# define FMT_PINTX "X"
-#endif
-
-
-
 static void print_hex(void*ptr, size_t length) {
   printf("DATA@%p [%d]", ptr, length);
   unsigned char* data = (unsigned char*)ptr;
@@ -235,7 +225,7 @@ static void print_event(VstEvent*ev) {
 
     printf("\ttype=%d\n", sev->type);
     printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", sev->byteSize, sev->deltaFrames);
-    printf("\tflags=%d\treserved=%" FMT_PINT "\t%" FMT_PINT"\n",
+    printf("\tflags=%d\treserved=%lu\t%lu\n",
         sev->flags, sev->resvd1, sev->resvd2);
     printf("\tSysEx %d bytes @ %p\n\t", sev->dumpBytes, sev->sysexDump);
     unsigned char*data=(unsigned char*)sev->sysexDump;

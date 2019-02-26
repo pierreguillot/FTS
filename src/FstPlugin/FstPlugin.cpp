@@ -28,10 +28,10 @@ void print_struct7(AEffect* effect) {
 t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
   if(effect) {
     char opcodestr[256];
-    printf("dispatch4host(%p, %s, %d, %" FMT_PINT ", %p, %f)\n",
+    printf("dispatch4host(%p, %s, %d, %lu, %p, %f)\n",
         effect, hostCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
     t_fstPtrInt result = dispatch(effect, opcode, index, ivalue, ptr, fvalue);
-    printf("dispatch4host: %" FMT_PINT " (0x%" FMT_PINTX ")\n", result, result);
+    printf("dispatch4host: %lu (0x%lX)\n", result, result);
     return result;
   }
   return 0xBEEF;
