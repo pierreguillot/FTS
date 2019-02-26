@@ -2188,6 +2188,64 @@ kVstTempoValid
 kVstTimeSigValid
 ~~~
 
+## MIDI out
+If a plugin wants to send out MIDI data, it needs to pass the MIDI events back to the host.
+The `audioMasterProcessEvents` opcode looks like a likely candidate for this task.
+
+We had to tell the host that we want to receive MIDI data by responding positively
+to the `effCanDo` requests with `receiveVstEvents` and `receiveVstMidiEvent`.
+Likely, if we want to *send* MIDI data, we ought to respond positively to the
+question whether we can do `sendVstEvents` and `sendVstMidiEvent`.
+
+To find out the value of `audioMasterProcessEvents`, we try to find an opcode
+that can read a valid `VstEvents` struct, but crashes with an invalid struct.
+
+In a first attempt, whenever REAPER calls our plugin with `effProcessEvents`,
+we create a new `VstEvents` struct, filled with a single `VstMidiEvent`.
+We then try a number of opcodes (starting with *3*, because we already know that
+opcodes 0..2 have different purposes; ending arbitrary at 30 for now)
+
+~~~
+  VstEvents*events = (VstEvents*)calloc(1, sizeof(VstEvents)+sizeof(VstEvent*));
+  VstMidiEvent*event=(VstMidiEvent*)calloc(1, sizeof(VstMidiEvent));
+  events->numEvents = 1;
+  events->events[0]=(VstEvent*)event;
+  event->type = kVstMidiType;
+  event->byteSize = sizeof(VstMidiEvent);
+  event->midiData[0] = 0x90;
+  event->midiData[0] = 0x40;
+  event->midiData[0] = 0x7f;
+  event->midiData[0] = 0x0;
+
+  for(size_t opcode=3; opcode<30; opcode++)
+    dispatch(effect, opcode, 0, 0, events, 0.f);
+
+  // free the event/events structures!
+~~~
+
+The first run doesn't show much, except that REAPER doesn't crash with any of the tried opcodes.
+So now we taint the passed structure, by using an invalid address for the first event:
+
+~~~
+  events->events[0]=(VstEvent*)0x1;
+~~~
+
+If the host tries to access the `VstEvent` at the invalid position, it should segfault.
+The address is non-null, as the host might do a simple check about the validity of the pointer.
+
+If we iterate again over the various opcodes, we see that it crashes at `opcode:8`
+with a segmentation fault.
+
+So probably the value of `audioMasterProcessEvents` is *8*.
+
+We can confirm this, by connecting REAPER's MIDI output a MIDI monitor (e.g. `gmidimonitor`),
+to see that it reports (after getting the MIDI routing right):
+
+> Note on, E, octave 4, velocity 127
+
+whenever we send a MIDI message {0x90, 0x41, 0x7f, 0} (via a *valid* `VstEvents` structure)
+to `opcode:8`: Q.E.D!
+
 
 # misc
 LATER move this to proper sections
