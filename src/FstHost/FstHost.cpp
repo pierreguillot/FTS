@@ -132,6 +132,36 @@ void test_opcode3334(AEffect*effect) {
   }
 }
 
+static float test_setParameterS(AEffect*effect, size_t opcode, int index, char*str) {
+  dispatch_v(effect, opcode, index, 0, str, 0.f);
+  return effect->getParameter(effect, index);
+}
+
+static void test_setParameter(AEffect*effect) {
+  int index = 0;
+  float value = 0.666;
+  printf("testing get/set Parameters for %p..................\n", effect);
+  effect->setParameter(effect, index, value);
+  printf("setParameter(%d, %f)\n", index, value);
+  value = effect->getParameter(effect, index);
+  printf("getParameter(%d) -> %f\n", index, value);
+  for(size_t opcode = 9; opcode < 65536; opcode++) {
+    if(effEditOpen==opcode)continue;
+    if(effProcessEvents==opcode)continue;
+    if(42==opcode)continue;
+    if(69==opcode)continue;
+    char buf[512];
+    snprintf(buf, 511, "%s", "0.2");
+    buf[511] = 0;
+    printf("\ttesting#%d\n", opcode);
+    fflush(stdout);
+    value = test_setParameterS(effect, opcode, 0, buf);
+    printf("\t#%d: '%s' -> %f\n", opcode, buf, value);
+    fflush(stdout);
+  }
+
+}
+
 
 bool skipOpcode(size_t opcode) {
 
