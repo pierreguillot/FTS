@@ -5,6 +5,8 @@
 #include <cstring>
 #include <iostream>
 
+typedef void (t_fun0)(void);
+
 static AEffectDispatcherProc dispatch = 0;
 static int curProgram = 0;
 
@@ -24,6 +26,11 @@ void fstpause(float duration=1.0) {
   usleep(duration * 1000000.);
 }
 
+void crash() {
+  t_fun0*f=0;
+  /* crash */
+  f();
+}
 
 void print_struct7(AEffect* effect) {
 #if 0
@@ -104,8 +111,6 @@ static void test_opcode25(AEffect*eff,
   dump_data(filename, ptr, 256);
 }
 
-typedef void (t_fun0)(void);
-
 static void test_opcode42(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
@@ -119,10 +124,8 @@ static void test_opcode42(AEffect*eff,
   printf("JMZ| %d | 0x%X | %d |\n", iarr->type, iarr->type, iarr->numChannels);
   printf("JMZ| %d | 0x%X | %d |\n", oarr->type, oarr->type, oarr->numChannels);
   fflush(stdout);
-  t_fun0*f=0;
 #ifdef NUM_INPUTS
-  /* crash */
-  f();
+  crash();
 #endif
 }
 
