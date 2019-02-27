@@ -71,6 +71,26 @@ void test_opcodes(AEffect*effect, size_t toopcode = 100, size_t fromopcode=0) {
   printf("tested hosts's dispatcher with opcodes %d..%d\n", fromopcode, toopcode);
 }
 
+static void test_gettime_(AEffect*eff, t_fstInt32 flags) {
+  printf("getTime -> 0x%04X\n", flags);
+  VstTimeInfo*t=(VstTimeInfo*)dispatch(eff, audioMasterGetTime, 0, flags, 0, 0.f);
+  print_timeinfo(t);
+
+}
+
+static void test_gettime(AEffect*eff) {
+  t_fstInt32 flags = 0xFFFFFFFF;
+  //flags = 0x2E02;
+  //flags |= (1<< 8); // kVstNanosValid
+  //flags |= (1<<14); // kVstSmpteValid (Current time in SMPTE format)
+  //flags |= (1<<15); // kVstClockValid (Sample frames until next clock)
+#ifdef TIME_FLAG
+  flags = (1<<TIME_FLAG);
+#endif
+
+  test_gettime_(eff, flags);
+}
+
 
 static void test_opcode6266(AEffect*eff,
     t_fstInt32 opcode, int index,
