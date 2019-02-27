@@ -2206,7 +2206,7 @@ according to the playstate:
 here's a few examples:
 
 | @50-58      | action        |
-|-------------+---------------|
+|-------------|---------------|
 | 00 2f 00 00 | pause         |
 | 02 2f 00 00 | playing       |
 | 06 3f 00 00 | looping       |
@@ -2217,11 +2217,11 @@ here's a few examples:
 Could it be, that these bytes actually encode some flags?
 If we read the 4 bytes as int and print that in binary, we get:
 
-| binary          | description   |
-|-----------------+---------------|
-| 101111 00000000 | pause         |
-| 101111 00000010 | playing       |
-| 111111 00000110 | looping       |
+| binary          | description |
+|-----------------|-------------|
+| 101111 00000000 | pause       |
+| 101111 00000010 | playing     |
+| 111111 00000110 | looping     |
 
 there's some pattern to be observed:
 - the 2nd (least significant) bit is set when the state is playing
@@ -2233,8 +2233,8 @@ there's some pattern to be observed:
 Maybe these are `flags` that are somehow related to the transport state of the system?
 Let's do some more tests:
 
-|            binary | description   |
-|-------------------+---------------|
+| binary            | description   |
+|-------------------|---------------|
 | 00101111 00001010 | recording     |
 | 00101111 00000001 | stopping      |
 | 00101111 00000011 | starting play |
@@ -2258,7 +2258,7 @@ If we skim through the list of contants for values that might be related to the 
 we find 4 constants starting with `kVstTransport*`, that map neatly to the observed bits:
 
 | flag                       | value |
-|----------------------------+-------|
+|----------------------------|-------|
 | `kVstTransportChanged`     | 1<<0  |
 | `kVstTransportPlaying`     | 1<<1  |
 | `kVstTransportCycleActive` | 1<<2  |
@@ -2284,7 +2284,7 @@ to determine which fields of the `VstTimeInfo` struct it fills.
 Iterating setting one bit after the other while asking for the time (in the `process` callback),
 we get the following errors/warnings:
 | ivalue | binary | warning                                |
-|--------+--------+----------------------------------------|
+|--------|--------|----------------------------------------|
 | 0x0100 | 1<< 8  | "plugin asked for time in nanoseconds" |
 | 0x4000 | 1<<14  | "Current time in SMPTE format"         |
 | 0x8000 | 1<<15  | "Sample frames until next clock"       |
@@ -2292,7 +2292,7 @@ we get the following errors/warnings:
 
 A few other `ivalue`s seem to enable the setting specific members:
 | ivalue | binary | set data                            |
-|--------+--------+-------------------------------------|
+|--------|--------|-------------------------------------|
 | 0x0200 | 1<< 9  | ppqPos                              |
 | 0x0400 | 1<<10  | tempo                               |
 | 0x0800 | 1<<11  | barStartPos                         |
@@ -2301,12 +2301,12 @@ A few other `ivalue`s seem to enable the setting specific members:
 Which gives us the following values:
 
 | flag                       | value |
-|----------------------------+-------|
+|----------------------------|-------|
 | `kVstTransportChanged`     | 1<< 0 |
 | `kVstTransportPlaying`     | 1<< 1 |
 | `kVstTransportCycleActive` | 1<< 2 |
 | `kVstTransportRecording`   | 1<< 3 |
-|----------------------------+-------|
+|----------------------------|-------|
 | `kVstNanosValid`           | 1<< 8 |
 | `kVstPpqPosValid`          | 1<< 9 |
 | `kVstTempoValid`           | 1<<10 |
