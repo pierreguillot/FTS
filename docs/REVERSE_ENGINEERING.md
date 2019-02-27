@@ -39,6 +39,7 @@ all VST-related software was accessed on 2019-02-16.
 ### Hosts
 
 - Reaper: https://www.reaper.fm/download.php (reaper5965_linux_x86_64.tar.xz)
+- MrsWatson: http://teragonaudio.com/MrsWatson.html (MrsWatson-0.9.7)
 
 # Part1: unknown symbols
 
