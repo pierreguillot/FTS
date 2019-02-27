@@ -2041,7 +2041,7 @@ Bytes @28-30 have values like *0*, *3.99999*, *15.9999*, *12.9999* (in double), 
 The `VstTimeInfo` struct supposedly has 7 double values and 6 int32 values.
 
 To decode the struct, we start by interpreting it as a simple array of only `double` values,
-and print the values whenever the plugin receices opcode:53
+and print the values whenever the plugin receices `opcode:53`
 (REAPER calls this opcode about every 50ms whenever the (generic) GUI of the plugin is open).
 We are not entirely sure about the size of the structure, our first estimation of the member types would
 require 80 bytes. For safety we add some more, and check the first 96 bytes
