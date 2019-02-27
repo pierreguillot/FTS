@@ -2029,7 +2029,7 @@ Opcode:7 returns a pointer. If we print the memory at the given position, we get
 >     00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
 >     04 00 00 00 04 00 00 00  02 00 00 00 EF BE AD DE
 
-This *might* be `VstTimeInfo` struct as returned by `audioMasterGetTime`.
+This *might* be `VstTimeInfo` struct as returned by `audioMasterGetTime` (let's assume that!).
 Record that chunk multiple times (luckily the opcode:12 gets called whenever we start playback in REAPER), and inspect it.
 Bytes @08-0f (`00 00 00 00 80 88 E5 40`) are *44100* in double precision, and the `VstTimeInfo` struct has a `sampleRate`
 field, that is supposed to be `double`. That looks very promising!
