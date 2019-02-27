@@ -232,21 +232,27 @@ typedef enum {
   FST_ENUM_UNKNOWN(kSpeakerTrl),
   FST_ENUM_UNKNOWN(kSpeakerTrr)
 } t_fstSpeakerArrangementType;
+enum { /* VstTimeInfo.flags */
+  FST_ENUM(kVstTransportChanged,     (1<<0)),
+  FST_ENUM(kVstTransportPlaying,     (1<<1)),
+  FST_ENUM(kVstTransportCycleActive, (1<<2)),
+  FST_ENUM(kVstTransportRecording,   (1<<3)),
+
+  FST_ENUM(kVstNanosValid   , (1<< 8)),
+  FST_ENUM(kVstPpqPosValid  , (1<< 9)),
+  FST_ENUM(kVstTempoValid   , (1<<10)),
+  FST_ENUM(kVstBarsValid    , (1<<11)),
+  FST_ENUM(kVstCyclePosValid, (1<<12)),
+  FST_ENUM(kVstTimeSigValid , (1<<13)),
+  FST_ENUM(kVstSmpteValid   , (1<<14)),
+  FST_ENUM(kVstClockValid   , (1<<15))
+};
 enum {
 /* 197782 is where the array passed at opcode:33 overflows */
   FST_ENUM_EXPERIMENTAL(kVstMaxProductStrLen, 197782),
   FST_ENUM_EXPERIMENTAL(kVstMaxVendorStrLen, 197782),
   FST_ENUM_EXPERIMENTAL(kVstMaxLabelLen, 64),
   FST_ENUM_EXPERIMENTAL(kVstMaxShortLabelLen, 8),
-
-  FST_ENUM_UNKNOWN(kVstBarsValid),
-  FST_ENUM_UNKNOWN(kVstClockValid),
-  FST_ENUM_UNKNOWN(kVstCyclePosValid),
-  FST_ENUM_UNKNOWN(kVstNanosValid),
-  FST_ENUM_UNKNOWN(kVstPpqPosValid),
-  FST_ENUM_UNKNOWN(kVstSmpteValid),
-  FST_ENUM_UNKNOWN(kVstTempoValid),
-  FST_ENUM_UNKNOWN(kVstTimeSigValid),
 
   FST_ENUM_UNKNOWN(kVstAutomationReading),
   FST_ENUM_UNKNOWN(kVstAutomationWriting),
@@ -270,11 +276,6 @@ enum {
   FST_ENUM_UNKNOWN(kVstSmpte60fps),
   FST_ENUM_UNKNOWN(kVstSmpteFilm16mm),
   FST_ENUM_UNKNOWN(kVstSmpteFilm35mm),
-
-  FST_ENUM_UNKNOWN(kVstTransportChanged),
-  FST_ENUM_UNKNOWN(kVstTransportCycleActive),
-  FST_ENUM_UNKNOWN(kVstTransportPlaying),
-  FST_ENUM_UNKNOWN(kVstTransportRecording)
 };
 
 typedef enum {
