@@ -30,6 +30,8 @@
 |     34 | audioMasterGetVendorVersion            | :JUCE returns 0x0101 (257)                                                   |
 |     37 | audioMasterCanDo                       |                                                                              |
 |     42 | ?                                      | :Protoverb calls as response to effSetProgramName                            |
+|     43 | ?                                      | :called by JUCE-plugins with index of a GUI-changed parameter (no more args) |
+|     44 | ?                                      | :called by JUCE-plugins with index of a GUI-changed parameter (no more args) |
 |     48 | audioMasterGetDirectory?               | :REAPER returns filename of reaper-project file (.RPP)                       |
 |--------+----------------------------------------+------------------------------------------------------------------------------|
 |        | audioMasterWantMidi                    |                                                                              |
@@ -73,6 +75,7 @@
 
 ** plugin
 
+
 |     opcode | value                       | notes                                                              |
 |------------+-----------------------------+--------------------------------------------------------------------|
 |          0 |                             | :REAPER calls with 0 (at the very beginning)                       |
@@ -99,7 +102,7 @@
 |         22 | effIdentify                 | :Protoverv returns 0x4E764566                                      |
 |         23 | effGetChunk                 | :Protoverb returns 0x317 (or 0x307) and writes an address into ptr |
 |         24 | effSetChunk                 | :Protoverb returns 1                                               |
-|         25 |                             | :Protoverb returns 1                                               |
+|         25 | effProcessEvents            | :Protoverb returns 1                                               |
 |         26 |                             | :Protoverb returns 1                                               |
 |         29 | effGetProgramNameIndexed    | :Protoverb returns 1 and ptr:"initialize"                          |
 |         33 | effGetInputProperties       | :Protoverb returns 1 and ptr:"Protoverb-In0"                       |
@@ -235,3 +238,25 @@
 | audioMasterOfflineWrite                |                  |             |                  | JUCE-ignore                                                     |
 | audioMasterVendorSpecific              |                  |             |                  | JUCE-ignore                                                     |
 |                                        |                  |             |                  |                                                                 |
+
+
+* effcode:12 effMainsChanged
+
+** JUCE resume
+   - isProcessLevelOffline()
+     - hostCallback (&vstEffect, Vst2::audioMasterGetCurrentProcessLevel, 0, 0, 0, 0);
+   - deleteTempChannels()
+   - hostCallback (&vstEffect, Vst2::audioMasterWantMidi, 0, 1, 0, 0);
+   -
+
+
+23/autioMasterGetTime/6
+- 23: audioMasterGetCurrentProcessLevel
+-  6: audioMasterWantMidi
+
+
+| opcode                            | value |
+|-----------------------------------+-------|
+| effMainsChanged                   |    12 |
+| audioMasterWantMidi               |     6 |
+| audioMasterGetCurrentProcessLevel |    23 |
