@@ -421,10 +421,10 @@ typedef struct AEffect_ {
 } FST_UNKNOWN(AEffect);
 
 typedef struct ERect_ {
-  short left;
   short top;
-  short right;
+  short left;
   short bottom;
+  short right;
 } ERect;
 
 #warning TODO: documentation
