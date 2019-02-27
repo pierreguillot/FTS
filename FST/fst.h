@@ -427,5 +427,12 @@ typedef struct ERect_ {
   short bottom;
 } ERect;
 
+#warning TODO: documentation
+typedef t_fstPtrInt VstIntPtr;
+typedef t_fstInt32 VstInt32;
+
+const int kEffectMagic=0x56737450;
+
+#define CCONST(a,b,c,d) ((((unsigned char)a)<<24) + (((unsigned char)b)<<16) + (((unsigned char)c)<<8) + ((unsigned char)d))
 
 #endif /* FST_fst_h_ */
