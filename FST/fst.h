@@ -168,14 +168,15 @@ typedef enum {
 
   FST_ENUM_UNKNOWN(effVendorSpecific) //
 } t_fstPluginOpcode;
-enum {
+#warning document VstAEffectFlags
+typedef enum {
   FST_ENUM(effFlagsHasEditor,          (1<<0)),
   FST_ENUM(effFlagsCanReplacing,       (1<<4)),
   FST_ENUM(effFlagsProgramChunks,      (1<<5)),
   FST_ENUM(effFlagsIsSynth,            (1<<8)),
   FST_ENUM(effFlagsNoSoundInStop,      (1<<9)),
   FST_ENUM(effFlagsCanDoubleReplacing, (1<<12)),
-} t_fstPluginFlags;
+} VstAEffectFlags;
 typedef enum {
   FST_ENUM_UNKNOWN(kPlugCategAnalysis),
   FST_ENUM_UNKNOWN(kPlugCategEffect),
