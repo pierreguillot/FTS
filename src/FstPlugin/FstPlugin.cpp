@@ -375,8 +375,8 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->getParameter = getParameter;
   eff->setParameter = setParameter;
 
-  eff->numPrograms = 5;
-  eff->numParams = 3;
+  eff->numPrograms = 1;
+  eff->numParams = 1;
 #ifdef NUM_INPUTS
   eff->numInputs  = NUM_INPUTS;
   eff->numOutputs = NUM_INPUTS+1;
