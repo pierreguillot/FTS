@@ -2179,7 +2179,7 @@ We do not know the position (and type) of the following struct members yet:
 - `smpteOffset`
 
 The `flags` member will be a bitfield.
-JUCE assigns at least the `kVstNanosValid` to it.
+JUCE assigns at least `kVstNanosValid` to it (and `kVstAutomationWriting` resp. `kVstAutomationReading`).
 Looking up more constants with similar names, we find:
 ~~~
 kVstNanosValid
@@ -2190,7 +2190,132 @@ kVstPpqPosValid
 kVstSmpteValid
 kVstTempoValid
 kVstTimeSigValid
+kVstAutomationWriting
+kVstAutomationReading
 ~~~
+
+
+
+### more on time flags
+If we keep printing the raw data of the `VstTimeInfo` continuously
+(e.g. as response to `opcode:53`), and start/stop the playback, we notice
+something weird:
+the bytes at position @54-57 (right after the magic `0xDEADBEEF`) keep changing
+according to the playstate:
+
+here's a few examples:
+
+| @50-58      | action        |
+|-------------+---------------|
+| 00 2f 00 00 | pause         |
+| 02 2f 00 00 | playing       |
+| 06 3f 00 00 | looping       |
+| 01 2f 00 00 | stopping      |
+| 03 2f 00 00 | starting play |
+| 07 3f 00 00 | starting loop |
+
+Could it be, that these bytes actually encode some flags?
+If we read the 4 bytes as int and print that in binary, we get:
+
+| binary          | description   |
+|-----------------+---------------|
+| 101111 00000000 | pause         |
+| 101111 00000010 | playing       |
+| 111111 00000110 | looping       |
+
+there's some pattern to be observed:
+- the 2nd (least significant) bit is set when the state is playing
+- the 3rd and the 13th bit are set when looping
+- bits 4-8 and 1 are always 0
+- bits 9-12 and 14 are always 1
+
+
+Maybe these are `flags` that are somehow related to the transport state of the system?
+Let's do some more tests:
+
+|            binary | description   |
+|-------------------+---------------|
+| 00101111 00001010 | recording     |
+| 00101111 00000001 | stopping      |
+| 00101111 00000011 | starting play |
+| 00111111 00000111 | starting loop |
+
+
+The stopping/playing states can only be observed for a a single time frame,
+whenever we start (resp. stop) playback
+E.g. if we go from *paused* to *playing* (unlooped),
+we first see `10111100000000` (while the system is paused),
+when we press the space-bar (to start playing) there's a single time frame
+showing `10111100000011`, and then we see `11111100000111` while the system plays.
+
+So far we got:
+- when starting/stopping playbay the 1st (least significant) bit is set.
+- the 2nd bit is set when the (target) state is playing (looped or not)
+- the 3rd and 13th bits are set when looping
+- the 4th bit is set when recording
+
+If we skim through the list of contants for values that might be related to the transport state,
+we find 4 constants starting with `kVstTransport*`, that map neatly to the observed bits:
+
+| flag                       | value |
+|----------------------------+-------|
+| `kVstTransportChanged`     | 1<<0  |
+| `kVstTransportPlaying`     | 1<<1  |
+| `kVstTransportCycleActive` | 1<<2  |
+| `kVstTransportRecording`   | 1<<3  |
+
+That leaves us with two problems though: we still have the 13th bit that is also
+related to looping, and we have the 8 `kVst*Valid` values and 2 `kVstAutomation*`, that are supposed to be
+in the `VstTimeInfo.flags` field.
+
+There's the `kVstCyclePosValid` flag, that might occupy bit #13.
+JUCE will always assign either both `kVstCyclePosValid` and `kVstTransportCycleActive` or none.
+We have put the `kVstTransportCycleActive` in the group of the 4 least-significant bits,
+because there is it surrounded by other `kVstTransport*` bits.
+
+Most of the double-values in the `VstTimeInfo` struct made sense so far, although we haven't really
+found the fields for *SMPTE* yet; also the `nanoSeconds` field seems to be quantized to seconds.
+So I am not really sure whether `kVstNanosValid` and `kVstSmpteValid` are really set.
+
+To find out some more values, we can use a different VST-Host - `MrsWatson` - that uses the
+`ivalue` field of the callback (using the same flags as the `VstTimeInfo.flags` field)
+to determine which fields of the `VstTimeInfo` struct it fills.
+
+Iterating setting one bit after the other while asking for the time (in the `process` callback),
+we get the following errors/warnings:
+| ivalue | binary | warning                                |
+|--------+--------+----------------------------------------|
+| 0x0100 | 1<< 8  | "plugin asked for time in nanoseconds" |
+| 0x4000 | 1<<14  | "Current time in SMPTE format"         |
+| 0x8000 | 1<<15  | "Sample frames until next clock"       |
+
+
+A few other `ivalue`s seem to enable the setting specific members:
+| ivalue | binary | set data                            |
+|--------+--------+-------------------------------------|
+| 0x0200 | 1<< 9  | ppqPos                              |
+| 0x0400 | 1<<10  | tempo                               |
+| 0x0800 | 1<<11  | barStartPos                         |
+| 0x2000 | 1<<13  | timeSigNumerator/timeSigDenominator |
+
+Which gives us the following values:
+
+| flag                       | value |
+|----------------------------+-------|
+| `kVstTransportChanged`     | 1<< 0 |
+| `kVstTransportPlaying`     | 1<< 1 |
+| `kVstTransportCycleActive` | 1<< 2 |
+| `kVstTransportRecording`   | 1<< 3 |
+|----------------------------+-------|
+| `kVstNanosValid`           | 1<< 8 |
+| `kVstPpqPosValid`          | 1<< 9 |
+| `kVstTempoValid`           | 1<<10 |
+| `kVstBarsValid`            | 1<<11 |
+| `kVstCyclePosValid`        | 1<<12 |
+| `kVstTimeSigValid`         | 1<<13 |
+
+This also means, that the `VstTimeInfo.flags` field really is at position @54-57
+
 
 ## MIDI out
 If a plugin wants to send out MIDI data, it needs to pass the MIDI events back to the host.
