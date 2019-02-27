@@ -354,6 +354,8 @@ typedef struct VstTimeInfo_ {
 
   int FST_UNKNOWN(currentBar), FST_UNKNOWN(magic); // we just made these fields up, as their values seem to be neither flags nor smtp*
 
+  FST_UNKNOWN(int) pad;//?
+
   FST_UNKNOWN(int) flags;// = Vst2::kVstNanosValid //?
   FST_UNKNOWN(int) smpteFrameRate; //int32 //?
   FST_UNKNOWN(int) smpteOffset; //int32 //?
