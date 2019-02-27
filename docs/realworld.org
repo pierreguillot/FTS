@@ -256,3 +256,181 @@ dispatch4host: 740955491651839768 (0xFFF5285800000000)
 
 - 32bit: =02000000 00 00 00 00  68F9F1ED 88F9F1ED=
 - 64bit: =02000000 00 00 00 00  00 00 00 00 00 00 00 00  806E00146C7F0000 A06E00146C7F0000=
+
+
+* Time/SMTP
+
+** 30/1 fps
+
+#+BEGIN_SRC C
+VstTimeInfo @ 0x18230c8
+	flags: 0
+	smpteFrameRate: 12034
+	smpteOffset: -1
+	currentBar: 2
+	magic: 0xDEADBEEF
+#+END_SRC
+
+#+BEGIN_SRC C
+VstTimeInfo @ 0x16c50a8
+	flags: 0
+	smpteFrameRate: 12034
+	smpteOffset: -1
+	currentBar: 3
+	magic: 0xDEADBEEF
+#+END_SRC
+
+
+** fps 30/1
+#+BEGIN_SRC C
+  04 00 00 00 04 00 00 00  0B 00 00 00 EF BE AD DE
+  00 00 00 00 02 2F 00 00  FF FF FF FF 00 02 00 00
+#+END_SRC
+
+** fps 24/1
+#+BEGIN_SRC C
+  04 00 00 00 04 00 00 00  08 00 00 00 EF BE AD DE
+  00 00 00 00 02 2F 00 00  FF FF FF FF 00 02 00 00
+#+END_SRC
+
+** fps 25/1
+#+BEGIN_SRC C
+  04 00 00 00 04 00 00 00  02 00 00 00 EF BE AD DE
+  00 00 00 00 02 2F 00 00  FF FF FF FF 00 02 00 00
+#+END_SRC
+
+#+BEGIN_SRC C
+#+END_SRC
+
+
+** flags
+
+| flags       |     flags(bin) | description   |
+|-------------+----------------+---------------|
+| 00 2f 00 00 | 10111100000000 | pause         |
+| 02 2f 00 00 | 10111100000010 | playing       |
+| 0a 2f 00 00 | 10111100001010 | recording     |
+| 06 3f 00 00 | 11111100000110 | looping       |
+| 01 2f 00 00 | 10111100000001 | stopping      |
+| 03 2f 00 00 | 10111100000011 | starting play |
+| 07 3f 00 00 | 11111100000111 | starting loop |
+
+| flags(bin)      | description   |
+|-----------------+---------------|
+| 101111 00000000 | pause         |
+| 101111 00000010 | playing       |
+| 111111 00000110 | looping       |
+| 101111 00000001 | stopping      |
+| 101111 00000011 | starting play |
+| 111111 00000111 | starting loop |
+| 101111 00001010 | recording     |
+|                 |               |
+
+| flags                      | value |
+|----------------------------+-------|
+| `kVstTransportChanged`     | 1<<0  |
+| `kVstTransportPlaying`     | 1<<1  |
+| `kVstTransportCycleActive` | 1<<2  |
+| `kVstTransportRecording`   | 1<<3  |
+|                            |       |
+
+| flag              | valid   |
+|-------------------+---------|
+| kVstCyclePosValid | looping |
+| kVstBarsValid     | yes     |
+| kVstPpqPosValid   | yes     |
+| kVstTempoValid    | yes     |
+| kVstTimeSigValid  | yes     |
+| kVstClockValid    | ?       |
+| kVstNanosValid    | ?       |
+| kVstSmpteValid    | ?-      |
+|                   |         |
+
+
+* MrWatson
+
+# plugin asked for time in nanoseconds
+# Plugin requested position in bars, but not PPQ
+
+|   flag | binary | warning                                |
+|--------+--------+----------------------------------------|
+| 0x0100 | 1<< 8  | "plugin asked for time in nanoseconds" |
+| 0x0200 | 1<< 9  | flags=0x0203; ppqPos                   |
+| 0x0400 | 1<<10  | flags=0x0403; tempo                    |
+| 0x0800 | 1<<11  | flags=0x0803; barStartPos              |
+| 0x2000 | 1<<13  | flags=0x2003; timeSig...               |
+| 0x4000 | 1<<14  | "Current time in SMPTE format"         |
+| 0x8000 | 1<<15  | "Sample frames until next clock"       |
+
+|   flag | binary | @54-57 | set data                            |
+|--------+--------+--------+-------------------------------------|
+| 0x0200 | 1<< 9  | 0x0203 | ppqPos                              |
+| 0x0400 | 1<<10  | 0x0403 | tempo                               |
+| 0x0800 | 1<<11  | 0x0803 | barStartPos                         |
+| 0x2000 | 1<<13  | 0x2003 | timeSigNumerator/timeSigDenominator |
+|        |        |        |                                     |
+
+| flag                       | value |
+|----------------------------+-------|
+| `kVstTransportChanged`     | 1<< 0 |
+| `kVstTransportPlaying`     | 1<< 1 |
+| `kVstTransportCycleActive` | 1<< 2 |
+| `kVstTransportRecording`   | 1<< 3 |
+|----------------------------+-------|
+|                            | 1<< 8 |
+|                            | 1<< 9 |
+|                            | 1<<10 |
+|                            | 1<<11 |
+| `kVstTransportCycleActive` | 1<<12 |
+|                            | 1<<13 |
+|                            |       |
+** Protoverb
+
+#+BEGIN_BLOCK
+Protoverb VST telling MrsWatson about 16 samples latency
+UNSUPPORTED FEATURE: VST master opcode audioMasterIOChanged
+  This feature is not yet supported. Please help us out and submit a patch! :)
+  Project website: https://github.com/teragonaudio/mrswatson
+  Support email: support@teragonaudio.com
+- 00061952 000181 Finished processing input source
+#+END_BLOCK
+
+where FstHost tells us:
+
+#+BEGIN_BLOCK
+sending latency to host... 16
+Protoverb VST telling FstProduct? about 16 samples latency
+FstHost::dispatcher[0](13, 0, 0, (nil), 0.000000)
+	dyspatcher(0x5611057e4bf0, 13, 0, 0, (nil), 0.000000);
+#+END_BLOCK
+
+** BowEcho/Danaides
+
+#+BEGIN_BLOCK
+UNSUPPORTED FEATURE: Current time in SMPTE format
+  This feature is not yet supported. Please help us out and submit a patch! :)
+  Project website: https://github.com/teragonaudio/mrswatson
+  Support email: support@teragonaudio.com
+#+END_BLOCK
+
+** tonespace
+
+#+BEGIN_BLOCK
+- 00000000 000000 Opening VST2.x plugin '/Net/iem/Benutzer/zmoelnig/src/iem/FST/tmp/vst64/hypercyclic/hypercyclic.so'
+UNSUPPORTED FEATURE: Current time in SMPTE format
+  This feature is not yet supported. Please help us out and submit a patch! :)
+  Project website: https://github.com/teragonaudio/mrswatson
+  Support email: support@teragonaudio.com
+#+END_BLOCK
+
+** hypercyclic
+
+#+BEGIN_BLOCK
+- 00000000 000000 Opening VST2.x plugin '/Net/iem/Benutzer/zmoelnig/src/iem/FST/tmp/vst64/hypercyclic/hypercyclic.so'
+unknown display value id=D
+unknown display value id=B
+UNSUPPORTED FEATURE: Current time in SMPTE format
+  This feature is not yet supported. Please help us out and submit a patch! :)
+  Project website: https://github.com/teragonaudio/mrswatson
+  Support email: support@teragonaudio.com
+#+END_BLOCK
