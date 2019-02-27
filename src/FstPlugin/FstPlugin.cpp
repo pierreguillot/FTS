@@ -345,7 +345,8 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
         first=false;
       } while(0);
 #endif
-    dispatch_v(eff, 6, 0, 1, 0, 0.);
+      dispatch_v(eff, 6, 0, 1, 0, 0.);
+      break;
   }
   //printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, ptr, fvalue);
   //printf("JMZ\n");
