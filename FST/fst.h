@@ -364,7 +364,9 @@ typedef struct VstTimeInfo_ {
 
   int FST_UNKNOWN(currentBar), FST_UNKNOWN(magic); // we just made these fields up, as their values seem to be neither flags nor smtp*
 
-  FST_UNKNOWN(int) pad;//?
+#warning document origin samplesToNextClock
+  /* this used to be 'pad' */
+  FST_UNKNOWN(int) samplesToNextClock;//?
 
   FST_UNKNOWN(int) flags;// = Vst2::kVstNanosValid //?
   FST_UNKNOWN(int) smpteFrameRate; //int32 //?
@@ -413,7 +415,8 @@ typedef struct AEffect_ {
 
   float float1;
   void* object;
-  t_fstPtrInt pad3;
+  #warning document AEffect.user
+  void*user;
   t_fstInt32 uniqueID; // @112
   t_fstInt32 version;
 
