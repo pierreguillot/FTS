@@ -284,7 +284,23 @@ static void print_timeinfo(VstTimeInfo*vti) {
   FST_UTILS__VTI_g(vti, cycleEndPos);
   FST_UTILS__VTI_d(vti, timeSigNumerator);
   FST_UTILS__VTI_d(vti, timeSigDenominator);
-  FST_UTILS__VTI_d(vti, flags);
+  FST_UTILS__VTI_x(vti, flags);
+  int flags = vti->flags;
+#define FST_UTILS__VTI_FLAGS(ti, f) do {flags &= ~f; if(ti->flags & f)printf("\n\t\t%s", #f);} while (0)
+  FST_UTILS__VTI_FLAGS(vti, kVstTransportChanged);
+  FST_UTILS__VTI_FLAGS(vti, kVstTransportPlaying);
+  FST_UTILS__VTI_FLAGS(vti, kVstTransportCycleActive);
+  FST_UTILS__VTI_FLAGS(vti, kVstTransportRecording);
+  FST_UTILS__VTI_FLAGS(vti, kVstNanosValid);
+  FST_UTILS__VTI_FLAGS(vti, kVstPpqPosValid);
+  FST_UTILS__VTI_FLAGS(vti, kVstTempoValid);
+  FST_UTILS__VTI_FLAGS(vti, kVstBarsValid);
+  FST_UTILS__VTI_FLAGS(vti, kVstCyclePosValid);
+  FST_UTILS__VTI_FLAGS(vti, kVstTimeSigValid);
+  FST_UTILS__VTI_FLAGS(vti, kVstSmpteValid);
+  FST_UTILS__VTI_FLAGS(vti, kVstClockValid);
+  if(flags)printf("\n\t\tremainder: 0x%04X", flags);
+
   FST_UTILS__VTI_d(vti, smpteFrameRate);
   FST_UTILS__VTI_d(vti, smpteOffset);
 
