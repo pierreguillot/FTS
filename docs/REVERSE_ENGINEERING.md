@@ -2527,6 +2527,9 @@ It seems that *Protoverb* doesn't support more than 2 channels.
 `effGetSeakerArrangement` is most likely close by (`41` or `43`),
 A simple test would first set the speaker-arrangment, and then try to query it back.
 According to JUCE, the plugin should return `1` in case of success.
+The calling convention is slightly different from `effSetSpeakerArrangement`, as `ptr` and `ivalue`
+hold addresses of pointer-sized memory regions, where the plugin is supposed to write
+the addresses of the `VstSpeakerArrangement` structs to (cf. JUCE code).
 
 ~~~C
   for(size_t opcode=40; opcode<45; opcode++) {
