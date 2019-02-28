@@ -157,8 +157,8 @@ typedef enum {
   FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
   FST_ENUM_UNKNOWN(effSetProcessPrecision), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
   FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
-  FST_ENUM_UNKNOWN(effStartProcess),
-  FST_ENUM_UNKNOWN(effStopProcess),
+  FST_ENUM_EXPERIMENTAL(effStartProcess, 71),
+  FST_ENUM_EXPERIMENTAL(effStopProcess, 72),
 
   FST_ENUM_UNKNOWN(effConnectInput),
   FST_ENUM_UNKNOWN(effConnectOutput),
