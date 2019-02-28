@@ -159,7 +159,29 @@ static void test_setParameter(AEffect*effect) {
     printf("\t#%d: '%s' -> %f\n", opcode, buf, value);
     fflush(stdout);
   }
+}
 
+static void test_opcode42(AEffect*effect) {
+  printf("testing speaker arrangement\n");
+  VstSpeakerArrangement setarr[10], getarr[10];
+  for(size_t i=0; i<10; i++) memset(setarr+i, 0, sizeof(VstSpeakerArrangement));
+  setarr[0].type = setarr[1].type = 0x1;
+  setarr[0].numChannels = 2;
+  setarr[1].numChannels = 2;
+  dispatch_v(effect, 42, 0, (t_fstPtrInt)(setarr+0), (setarr+1), 0.f);
+  print_hex(setarr+0, 8);
+  print_hex(setarr+1, 8);
+
+  printf("-----------------------------\n");
+  for(size_t opcode=69; opcode<70; opcode++) {
+    VstSpeakerArrangement *arrptr[2] = {0,0};
+    if(42 == opcode)continue;
+    if(effGetEffectName==opcode)continue; if(effGetVendorString==opcode)continue; if(effGetProductString==opcode)continue;
+    dispatch_v(effect, opcode, 0, (t_fstPtrInt)(arrptr+0), arrptr+1, 0.f);
+    print_hex(arrptr[0], 8);
+    print_hex(arrptr[1], 8);
+  }
+  printf("tested speaker arrangement\n");
 }
 
 
@@ -403,6 +425,7 @@ void test_reaper(AEffect*effect) {
   dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
   snprintf(strbuf, 1023, "wantsChannelCountNotifications"); strbuf[1023] = 0;
   dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+  test_opcode42(effect);
   snprintf(strbuf, 1023, "hasCockosExtensions"); strbuf[1023] = 0;
   dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
 
