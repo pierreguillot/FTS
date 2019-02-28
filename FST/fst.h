@@ -41,10 +41,11 @@ typedef enum {
   FST_ENUM(audioMasterGetVendorVersion, 34), // return 0x0101
   FST_ENUM(audioMasterCanDo, 37), //IN:ptr(char*), return *ptr in {"sendVstEvents", "sizeWindow",...}
 
-  // 13: sending latency??
+  FST_ENUM(audioMasterBeginEdit, 43), // IN:index, return 0
+  FST_ENUM(audioMasterEndEdit, 44), //IN:index, return 0
 
-  FST_ENUM_UNKNOWN(audioMasterBeginEdit), // IN:index, return 0
-  FST_ENUM_UNKNOWN(audioMasterEndEdit), //IN:index, return 0
+
+  // 13: sending latency??
 
   FST_ENUM_UNKNOWN(audioMasterCloseWindow), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterOpenWindow), //?, return 0
