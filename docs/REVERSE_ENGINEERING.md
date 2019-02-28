@@ -253,7 +253,7 @@ We play the above game again, and get:
 
 ~~~C
 typedef struct VstSpeakerProperties_ {
-  FST_UNKNOWN(int) type;
+  int type;
 } VstSpeakerProperties;
 ~~~
 
