@@ -279,7 +279,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     return 1;
 #endif
   case 25:
-    test_opcode25(eff, opcode, index, ivalue, ptr, fvalue);
+    //test_opcode25(eff, opcode, index, ivalue, ptr, fvalue);
     return 1;
   case 66: case 62:
     test_opcode6266(eff, opcode, index, ivalue, ptr, fvalue);
