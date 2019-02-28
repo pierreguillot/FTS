@@ -1219,9 +1219,9 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effGetVendorVersion         | 49  |                    |                         | version               |                             |
 | effGetVstVersion            | 58  |                    |                         | kVstVersion           |                             |
 | effIdentify                 | 22  |                    |                         | bigEndianInt("NvEf")  | 1316373862=0x4e764566       |
-| effKeysRequired             | 59? |                    |                         | isKbdFocusRequired    |                             |
+| effKeysRequired             |     |                    |                         | isKbdFocusRequired    |                             |
 | effMainsChanged             | 12? | ivalue             |                         | 0                     | ivalue?resume():suspend()   |
-| effProcessEvents            |     | ptr(&VstEvents)    |                         | isMidiProcessed       |                             |
+| effProcessEvents            | 25  | ptr(&VstEvents)    |                         | isMidiProcessed       |                             |
 | effSetBlockSize             | 11  | ivalue             |                         | 0                     |                             |
 | effSetBypass                |     | ivalue             |                         | 0                     |                             |
 | effSetProcessPrecision      |     | ivalue             |                         | !isProcessing         |                             |
