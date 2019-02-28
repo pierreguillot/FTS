@@ -2474,7 +2474,7 @@ according to JUCE, both `ivalue` and `ptr` only point both to addresses in the f
 - `effGetSpeakerArrangement`
 - `effSetSpeakerArrangement`
 
-Both contain (for 2 IN/2 OUT)
+Both addresses contain (for 2 IN/2 OUT)
 ~~~
 IN=OUT:
 01 00 00 00 02 00 00 00  00 00 00 00 00 00 00 00
@@ -2491,7 +2491,7 @@ the int32 at position @0-3 is most likely the `type`.
 By setting the `numChannels` of the plugin, REAPER responds
 with following types
 
-| numChannels  | type |            |
+| numChannels  | type | type(hex)  |
 |--------------|------|------------|
 | 1            | 0    | 0x0        |
 | 2            | 1    | 0x1        |
