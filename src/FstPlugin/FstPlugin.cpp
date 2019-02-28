@@ -147,6 +147,9 @@ static void test_opcode42(AEffect*eff,
 #endif
 }
 
+static void test_processLevel(AEffect*eff) {
+  dispatch_v(eff, audioMasterGetCurrentProcessLevel, 0, 0, 0, 0.);
+}
 
 
 #define PRINTEFFCASE(x) \
