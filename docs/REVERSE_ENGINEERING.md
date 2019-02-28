@@ -2562,6 +2562,31 @@ Interestingly, *Protoverb* will now react to `opcode:69`, returning the same dat
 So we probably have just found `effGetSeakerArrangement` as well.
 
 
+# Part: AudioPluginHost
+With many opcodes working, we can start testing on a larger scale.
+
+A good start is by compiling some slighly larger application ourself, e.g. the *AudioPluginHost* that comes with JUCE.
+
+Once started we can load the *Protoverb* plugin, to see that a number of yet unknown opcodes are called in both directions:
+
+~~~ C
+host2plugin(effKeysRequired, 0, 0, (nil), 0.000000);
+host2plugin(effCanBeAutomated, 0, 0, (nil), 0.000000);
+host2plugin(effGetPlugCategory, 0, 0, (nil), 0.000000);
+host2plugin(effStartProcess, 0, 0, (nil), 0.000000);
+host2plugin(effStopProcess, 0, 0, (nil), 0.000000);
+host2plugin(effConnectInput, 0, 1, (nil), 0.000000);
+host2plugin(effConnectOutput, 0, 1, (nil), 0.000000);
+[...]
+plugin2host(13, 0, 0, (nil), 0.000000);
+plugin2host(15, 640, 575, (nil), 0.000000);
+plugin2host(42, 0, 0, (nil), 0.000000);
+~~~
+
+A low hanging fruit is the `hostCode:15` which is called with `index:640` and `ivalue:575`.
+Esp. the `index` looks suspiciously like some image/window dimension, which leads us to
+the `audioMasterSizeWindow` opcode.
+
 # misc
 LATER move this to proper sections
 
