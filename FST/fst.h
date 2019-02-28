@@ -28,26 +28,27 @@ typedef enum {
   FST_ENUM(audioMasterAutomate, 0), // IN:index, IN:fvalue, return 0
   FST_ENUM(audioMasterVersion, 1), // return 2400
   FST_ENUM_EXPERIMENTAL(audioMasterCurrentId, 2), // return shellUIDToCreate
-  FST_ENUM_EXPERIMENTAL(audioMasterWantMidi, 6), // return 0
+  FST_ENUM(audioMasterWantMidi, 6), // return 0
   FST_ENUM(audioMasterGetTime, 7), // return (VstTimeInfo*)
   FST_ENUM(audioMasterProcessEvents, 8), //IN:ptr(VstEvents*), return 0
   FST_ENUM(audioMasterTempoAt, 10), // IN:ivalue, return (10000*BPM)
   FST_ENUM(audioMasterGetSampleRate, 16), // return sampleRate
+  FST_ENUM(audioMasterSizeWindow, 15), // IN:index(width), IN:value(height), return 1
   FST_ENUM(audioMasterGetBlockSize, 17), // return blockSize
-  FST_ENUM_EXPERIMENTAL(audioMasterGetCurrentProcessLevel, 23), // return (!isRealtime)*4
+  FST_ENUM(audioMasterGetCurrentProcessLevel, 23), // return (!isRealtime)*4
   FST_ENUM(audioMasterGetVendorString, 32), //OUT:ptr(char[kVstMaxVendorStrLen]), return ptr
   FST_ENUM(audioMasterGetProductString, 33), //OUT:ptr(char[kVstMaxProductStrLen]), return ptr
   FST_ENUM(audioMasterGetVendorVersion, 34), // return 0x0101
   FST_ENUM(audioMasterCanDo, 37), //IN:ptr(char*), return *ptr in {"sendVstEvents", "sizeWindow",...}
 
-  // 13: sending latency??
+  FST_ENUM(audioMasterBeginEdit, 43), // IN:index, return 0
+  FST_ENUM(audioMasterEndEdit, 44), //IN:index, return 0
 
-  FST_ENUM_UNKNOWN(audioMasterBeginEdit), // IN:index, return 0
-  FST_ENUM_UNKNOWN(audioMasterEndEdit), //IN:index, return 0
+
+  // 13: sending latency??
 
   FST_ENUM_UNKNOWN(audioMasterCloseWindow), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterOpenWindow), //?, return 0
-  FST_ENUM_UNKNOWN(audioMasterSizeWindow), // IN:index(width), IN:value(height), return 1
   FST_ENUM_UNKNOWN(audioMasterSetIcon), //?, return 0
   FST_ENUM_UNKNOWN(audioMasterUpdateDisplay), // return 0
 
@@ -92,8 +93,8 @@ typedef enum {
   FST_ENUM_UNKNOWN(fst_audioMasterLast)
 } t_fstHostOpcode;;
 typedef enum {
-  FST_ENUM_EXPERIMENTAL(effOpen, 0), // return 0
-  FST_ENUM_EXPERIMENTAL(effClose, 1), // return 0
+  FST_ENUM(effOpen, 0), // return 0
+  FST_ENUM(effClose, 1), // return 0
   FST_ENUM(effSetProgram, 2), // IN:ivalue, return 0
   FST_ENUM(effGetProgram, 3), // return current_program
   FST_ENUM(effSetProgramName, 4), //IN:ptr(char*), return 0
@@ -105,7 +106,7 @@ typedef enum {
   FST_ENUM(effGetParamName, 8), // OUT:ptr(char[8]), return 0
   FST_ENUM(effSetSampleRate, 10), //IN:fvalue, return 0
   FST_ENUM(effSetBlockSize, 11), // IN:ivalue, return 0
-  FST_ENUM_EXPERIMENTAL(effMainsChanged, 12), // IN:ivalue, return 0;  (handleResumeSuspend)
+  FST_ENUM(effMainsChanged, 12), // IN:ivalue, return 0;  (handleResumeSuspend)
 
   FST_ENUM(effEditGetRect, 13), //OUT:ptr(ERect*), return ptr
   FST_ENUM(effEditOpen, 14),
@@ -152,12 +153,12 @@ typedef enum {
   FST_ENUM_UNKNOWN(effGetNumMidiInputChannels), // return 16*isMidi
   FST_ENUM_UNKNOWN(effGetNumMidiOutputChannels), // return 16*isMidi
 
-  FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0
+  FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0; effCanDo("bypass")
   FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
   FST_ENUM_UNKNOWN(effSetProcessPrecision), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
   FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
-  FST_ENUM_UNKNOWN(effStartProcess),
-  FST_ENUM_UNKNOWN(effStopProcess),
+  FST_ENUM_EXPERIMENTAL(effStartProcess, 71),
+  FST_ENUM_EXPERIMENTAL(effStopProcess, 72),
 
   FST_ENUM_UNKNOWN(effConnectInput),
   FST_ENUM_UNKNOWN(effConnectOutput),
@@ -292,8 +293,8 @@ enum {
 };
 
 typedef enum {
-  FST_ENUM_EXPERIMENTAL(kVstMidiType, 1),
-  FST_ENUM_EXPERIMENTAL(kVstSysExType, 6)
+  FST_ENUM(kVstMidiType, 1),
+  FST_ENUM(kVstSysExType, 6)
 } t_fstEventType;
 
 
