@@ -2466,7 +2466,7 @@ LATER move this to proper sections
 ## effCode:42
 
 ~~~
-FstClient::dispatcher(0x1ec2080, 42, 0, 32252624, 0x1ec2740, 0.000000); //  ivalue=0x1ec22d0
+FstClient::dispatcher(0x1ec2080, 42, 0,  32252624, 0x1ec2740, 0.000000);// ivalue=0x1ec22d0
 FstClient::dispatcher(0x9e36510, 42, 0, 172519840, 0xa487610, 0.000000);// ivalue=0xa4871a0
 ~~~
 
