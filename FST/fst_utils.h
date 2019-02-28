@@ -37,12 +37,14 @@ static void print_binary(inttype data, const char*suffix="") {
   printf("%s", suffix);
 }
 
-#define FST_UTILS__OPCODESTR(x)                 \
-  case x:                                       \
-    if(x>98765)break;                           \
-    snprintf(output, length, "%s", #x);         \
-    output[length-1] = 0;                       \
-    return output
+#define FST_UTILS__OPCODESTR(x)                   \
+  case x:                                         \
+  if(x>100000)                                    \
+    snprintf(output, length, "%d[%s?]", x, #x);   \
+  else                                            \
+    snprintf(output, length, "%s[%d]", #x, x);    \
+  output[length-1] = 0;                           \
+  return output
 
 static char*effCode2string(size_t opcode, char*output, size_t length) {
   switch(opcode) {
