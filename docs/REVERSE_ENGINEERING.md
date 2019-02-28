@@ -2505,6 +2505,9 @@ with following types
 | all the rest | -2   | 0xFFFFFFFE |
 |              |      |            |
 
+Since the values are filled in by REAPER, it's likely that `effcode:42` is `effSetSpeakerArrangement`.
+`effGetSeakerArrangement` is most likely close by (`41` or `43`).
+
 
 ## effCode:50
 
