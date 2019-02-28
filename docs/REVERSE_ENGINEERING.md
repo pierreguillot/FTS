@@ -2516,7 +2516,48 @@ with following types
 |              |      |            |
 
 Since the values are filled in by REAPER, it's likely that `effcode:42` is `effSetSpeakerArrangement`.
-`effGetSeakerArrangement` is most likely close by (`41` or `43`).
+This is somewhat confirmed by *Protoverb*, that prints out
+
+>     resulting in SpeakerArrangement $numIns - $numOuts
+
+with $numIns and $numOuts replaced by 0, 1 or 2, depending on the chosen speaker arrangement.
+It seems that *Protoverb* doesn't support more than 2 channels.
+
+
+`effGetSeakerArrangement` is most likely close by (`41` or `43`),
+A simple test would first set the speaker-arrangment, and then try to query it back.
+According to JUCE, the plugin should return `1` in case of success.
+
+~~~C
+  for(size_t opcode=40; opcode<45; opcode++) {
+    VstSpeakerArrangement *arrptr[2] = {0,0};
+    if(42 == opcode)continue;
+    dispatch_v(effect, opcode, 0, (t_fstPtrInt)(arrptr+0), (arrptr+1), 0.f);
+    print_hex(arrptr[0], 32);
+    print_hex(arrptr[1], 32);
+  }
+~~~
+
+Unfortunately, this is not very successfull.
+Only `opcode:44` returns 1 for *some* plugins, but none write data into our `VstSpeakerArrangement` struct.
+
+| plugin    | opcode | result |
+|-----------|--------|--------|
+|Danaides   | 44     | 1      |
+|BowEcho    | 44     | 1      |
+|hypercyclic| 44     | 1      |
+|tonespace  | 44     | 1      |
+|Protoverb  | *      | 0      |
+|Digits     | *      | 0      |
+|InstaLooper| *      | 0      |
+
+
+If we try a bigger range of opcodes (e.g. 0..80), we need to skip the opcodes 45, 47 and 48 (`effGet*String`)
+to prevent crashes.
+
+Interestingly, *Protoverb* will now react to `opcode:69`, returning the same data we just set via opcode:42.
+So we probably have just found `effGetSeakerArrangement` as well.
+
 
 # misc
 LATER move this to proper sections
