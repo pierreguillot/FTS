@@ -10,7 +10,7 @@ typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
 
 #include <unistd.h>
 void fstpause(float duration=1.0) {
-  sleep(1);
+  usleep(duration * 1000000);
 }
 
 float db2slider(float f) {
