@@ -113,14 +113,13 @@ static void test_opcode56(AEffect*eff,
 static void test_opcode25(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+
   unsigned char midi[4] = {0x90, 0x40, 0x7f, 0};
   VstEvents*vse=(VstEvents*)ptr;
   vse = create_vstevents(midi);
 
   dispatch_v(eff, audioMasterProcessEvents, index, ivalue, vse, fvalue);
 
-  return;
-  print_events((VstEvents*)ptr);
   return;
   char filename[128];
   print_hex(ptr, 256);
