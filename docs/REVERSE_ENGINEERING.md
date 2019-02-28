@@ -233,9 +233,18 @@ but alas, C++ does not allow to implicitely cast `int` to `enum`, so we need to 
 typedef struct VstSpeakerArrangement_ {
   int type;
   int numChannels;
-  VstSpeakerProperties*speakers;
+  VstSpeakerProperties speakers[];
 } VstSpeakerArrangement;
 ~~~
+
+#### sidenote: varsized arrays
+The `VstSpeakerArrangement.speakers` could be pointer (`VstSpeakerProperties*` or an array `VstSpeakerProperties[]`).
+Because they are often used almost synonymously, my first attempt used a pointer.
+Much later, i tried compiling and *running* JUCE's AudioPluginHost and it would spectacularily segfault
+when allocating memory for `VstSpeakerArrangement` and assigning values to it.
+It turned out, that using a var-sized array instead of the pointer fixes this issue.
+
+the `type var[]` syntax is C99, for older C-implementations use `type var[0]` instead.
 
 
 ### VstSpeakerProperties
@@ -2532,19 +2541,4 @@ FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 FstClient::dispatcher(0x19b9250, 62, 0, 0, 0x7ffe232a7660, 0.000000);
 FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
-~~~
-
-## speaker setup
-
-### AudioPluginHost
-JUCE crashes  when using a heap-allocated `VstSpeakerArrangement`,
-the reason being that the a pointer `VstSpeakerProperties` is not
-necessarily a varsized arrays. instead we should use:
-
-~~~
-typedef struct VstSpeakerArrangement_ {
-  int type;
-  int numChannels;
-  VstSpeakerProperties speakers[];
-} VstSpeakerArrangement;
 ~~~
