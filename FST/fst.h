@@ -153,7 +153,7 @@ typedef enum {
   FST_ENUM_UNKNOWN(effGetNumMidiInputChannels), // return 16*isMidi
   FST_ENUM_UNKNOWN(effGetNumMidiOutputChannels), // return 16*isMidi
 
-  FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0
+  FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0; effCanDo("bypass")
   FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
   FST_ENUM_UNKNOWN(effSetProcessPrecision), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
   FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
