@@ -2581,14 +2581,33 @@ host2plugin(effConnectOutput, 0, 1, (nil), 0.000000);
 plugin2host(13, 0, 0, (nil), 0.000000);
 plugin2host(15, 640, 575, (nil), 0.000000);
 plugin2host(42, 0, 0, (nil), 0.000000);
+plugin2host(43, 3, 0, (nil), 0.000000)
+plugin2host(44, 3, 0, (nil), 0.000000)
 ~~~
 
 A low hanging fruit is the `hostCode:15` which is called with `index:640` and `ivalue:575`.
 Esp. the `index` looks suspiciously like some image/window dimension, which leads us to
 the `audioMasterSizeWindow` opcode.
 
+Another one is `hostCode:43` (and it's twin `hostCode:44`), which is called whenever a controller
+is changed in the plugin's GUI: `hostCode:43` is issued when a fader/... is "touched", and
+`hostCode:44` is called when it's released. The `index` parameter changes with the controller
+(so it's likely the *parameter index*).
+In the [JUCE host opcode table](#juce-host-opcodes), there's the `audioMasterBeginEdit` and `audioMasterEndEdit`
+pair that fits nicely.
+
+| opcode                |    |
+|-----------------------|----|
+| audioMasterSizeWindow | 15 |
+| audioMasterBeginEdit  | 43 |
+| audioMasterEndEdit    | 44 |
+
+
 # misc
 LATER move this to proper sections
+
+## effCanBeAutomated
+called for each parameter
 
 
 ## effCode:50
@@ -2614,7 +2633,8 @@ gets called with automation, whenever the window gets focus?
 
     FstClient::dispatcher(0x2a4c8b0, 56, 0, 0, 0x7fff4a83fb40, 0.000000)...
 
-The address seems to be zeroed-out (at least the first 0x99 bytes)
+The address seems to be zeroed-out (at least the first 0x99 bytes).
+The index is the parameter index currently being automated...
 
 ## effCode:66
 adding a MIDI-item in REAPER and pressing some keys
