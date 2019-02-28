@@ -111,7 +111,6 @@ typedef enum {
   FST_ENUM(effEditOpen, 14),
   FST_ENUM(effEditClose, 15), // return 0
 
-
   FST_ENUM(effIdentify, 22), // return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302
   FST_ENUM(effGetChunk, 23), // IN:index, OUT:ptr(void*), return size
   FST_ENUM(effSetChunk, 24), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
@@ -122,6 +121,7 @@ typedef enum {
   FST_ENUM(effGetInputProperties, 33), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
   FST_ENUM(effGetOutputProperties, 34), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
 
+  FST_ENUM(effSetSpeakerArrangement, 42), // IN:ivalue(VstSpeakerArrangement*in) IN:ptr(VstSpeakerArrangement*out)
 
   FST_ENUM(effGetEffectName, 45), // OUT:ptr(char[64]), return 1
   FST_ENUM(effGetVendorString, 47), // OUT:ptr(char[64]), return 1
@@ -130,7 +130,12 @@ typedef enum {
 
   FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
   FST_ENUM(effGetVstVersion, 58), // return kVstVersion
-  FST_ENUM_EXPERIMENTAL(effKeysRequired, 59), // return ((bool)KeyboardFocusRequireq
+
+  FST_ENUM(effGetSpeakerArrangement, 69), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
+
+
+  FST_ENUM_UNKNOWN(effKeysRequired), // return ((bool)KeyboardFocusRequireq; 59??
+
 
   FST_ENUM_UNKNOWN(effEditDraw),
   FST_ENUM_UNKNOWN(effEditMouse),
@@ -142,9 +147,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effString2Parameter), // IN:index, IN:ptr(char*), return (hasParam#)
 
   FST_ENUM_UNKNOWN(effGetPlugCategory), // return category
-
-  FST_ENUM_UNKNOWN(effSetSpeakerArrangement),
-  FST_ENUM_UNKNOWN(effGetSpeakerArrangement), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
 
   FST_ENUM_UNKNOWN(effGetCurrentMidiProgram), // return -1
   FST_ENUM_UNKNOWN(effGetNumMidiInputChannels), // return 16*isMidi

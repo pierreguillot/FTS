@@ -233,9 +233,18 @@ but alas, C++ does not allow to implicitely cast `int` to `enum`, so we need to 
 typedef struct VstSpeakerArrangement_ {
   int type;
   int numChannels;
-  VstSpeakerProperties*speakers;
+  VstSpeakerProperties speakers[];
 } VstSpeakerArrangement;
 ~~~
+
+#### sidenote: varsized arrays
+The `VstSpeakerArrangement.speakers` could be pointer (`VstSpeakerProperties*` or an array `VstSpeakerProperties[]`).
+Because they are often used almost synonymously, my first attempt used a pointer.
+Much later, i tried compiling and *running* JUCE's AudioPluginHost and it would spectacularily segfault
+when allocating memory for `VstSpeakerArrangement` and assigning values to it.
+It turned out, that using a var-sized array instead of the pointer fixes this issue.
+
+the `type var[]` syntax is C99, for older C-implementations use `type var[0]` instead.
 
 
 ### VstSpeakerProperties
@@ -244,7 +253,7 @@ We play the above game again, and get:
 
 ~~~C
 typedef struct VstSpeakerProperties_ {
-  FST_UNKNOWN(int) type;
+  int type;
 } VstSpeakerProperties;
 ~~~
 
@@ -1210,9 +1219,9 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effGetVendorVersion         | 49  |                    |                         | version               |                             |
 | effGetVstVersion            | 58  |                    |                         | kVstVersion           |                             |
 | effIdentify                 | 22  |                    |                         | bigEndianInt("NvEf")  | 1316373862=0x4e764566       |
-| effKeysRequired             | 59? |                    |                         | isKbdFocusRequired    |                             |
+| effKeysRequired             |     |                    |                         | isKbdFocusRequired    |                             |
 | effMainsChanged             | 12? | ivalue             |                         | 0                     | ivalue?resume():suspend()   |
-| effProcessEvents            |     | ptr(&VstEvents)    |                         | isMidiProcessed       |                             |
+| effProcessEvents            | 25  | ptr(&VstEvents)    |                         | isMidiProcessed       |                             |
 | effSetBlockSize             | 11  | ivalue             |                         | 0                     |                             |
 | effSetBypass                |     | ivalue             |                         | 0                     |                             |
 | effSetProcessPrecision      |     | ivalue             |                         | !isProcessing         |                             |
@@ -2451,23 +2460,31 @@ likely unsupported) feature string (like `fudelDudelDei`).
 Finally we compare the return values of the two iterations and find that they always returned
 the same result *except* for `opcode:37`, our likely candidate for `audioMasterCanDo`.
 
-# misc
-LATER move this to proper sections
+## Speaker Arrangments
 
-## effCode:42
-
+Running our test plugin in REAPER, we can also calls to `effcode:42` in the startup phase.
 ~~~
-FstClient::dispatcher(0x1ec2080, 42, 0, 32252624, 0x1ec2740, 0.000000); //  ivalue=0x1ec22d0
-FstClient::dispatcher(0x9e36510, 42, 0, 172519840, 0xa487610, 0.000000);// ivalue=0xa4871a0
+FstClient::dispatcher(0x1ec2080, 42, 0,  32252624, 0x1ec2740, 0.000000);
 ~~~
 
-according to JUCE, both `ivalue` and `ptr` only point both to addresses in the following opcodes:
+in another run this is:
+~~~
+FstClient::dispatcher(0x9e36510, 42, 0, 172519840, 0xa487610, 0.000000);
+~~~
+
+The `ivalue` is a bit strange, unless it is printed in hex (`0x1ec22d0` resp . `0xa4871a0`),
+where it becomes apparent that this is really another address (just compare the hex representation
+to the the `ptr` value; there difference is 1136, which is practically nothing in address space)!
+
+According to [JUCE](#juce-effect-opcodes), there are only very few opcodes
+where both `ivalue` and `ptr` point both to addresses:
 - `effGetSpeakerArrangement`
 - `effSetSpeakerArrangement`
 
-Both contain (for 2 IN/2 OUT)
+Here is a dump of the first 96 bytes of the data found at those addresses
+(the data is the same on both addresses,
+at least if our plugin is configured with 2 IN and 2 OUT channels):
 ~~~
-IN=OUT:
 01 00 00 00 02 00 00 00  00 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
@@ -2478,11 +2495,13 @@ IN=OUT:
 
 The int32 at position @4-7 is the `numChannels`,
 the int32 at position @0-3 is most likely the `type`.
+I have no explanation for the value at position @58,
+it's probably just uninitialized data.
 
 By setting the `numChannels` of the plugin, REAPER responds
 with following types
 
-| numChannels  | type |            |
+| numChannels  | type | type(hex)  |
 |--------------|------|------------|
 | 1            | 0    | 0x0        |
 | 2            | 1    | 0x1        |
@@ -2495,6 +2514,56 @@ with following types
 | 12           | 28   | 0x1C       |
 | all the rest | -2   | 0xFFFFFFFE |
 |              |      |            |
+
+Since the values are filled in by REAPER, it's likely that `effcode:42` is `effSetSpeakerArrangement`.
+This is somewhat confirmed by *Protoverb*, that prints out
+
+>     resulting in SpeakerArrangement $numIns - $numOuts
+
+with $numIns and $numOuts replaced by 0, 1 or 2, depending on the chosen speaker arrangement.
+It seems that *Protoverb* doesn't support more than 2 channels.
+
+
+`effGetSeakerArrangement` is most likely close by (`41` or `43`),
+A simple test would first set the speaker-arrangment, and then try to query it back.
+According to JUCE, the plugin should return `1` in case of success.
+The calling convention is slightly different from `effSetSpeakerArrangement`, as `ptr` and `ivalue`
+hold addresses of pointer-sized memory regions, where the plugin is supposed to write
+the addresses of the `VstSpeakerArrangement` structs to (cf. JUCE code).
+
+~~~C
+  for(size_t opcode=40; opcode<45; opcode++) {
+    VstSpeakerArrangement *arrptr[2] = {0,0};
+    if(42 == opcode)continue;
+    dispatch_v(effect, opcode, 0, (t_fstPtrInt)(arrptr+0), (arrptr+1), 0.f);
+    print_hex(arrptr[0], 32);
+    print_hex(arrptr[1], 32);
+  }
+~~~
+
+Unfortunately, this is not very successfull.
+Only `opcode:44` returns 1 for *some* plugins, but none write data into our `VstSpeakerArrangement` struct.
+
+| plugin    | opcode | result |
+|-----------|--------|--------|
+|Danaides   | 44     | 1      |
+|BowEcho    | 44     | 1      |
+|hypercyclic| 44     | 1      |
+|tonespace  | 44     | 1      |
+|Protoverb  | *      | 0      |
+|Digits     | *      | 0      |
+|InstaLooper| *      | 0      |
+
+
+If we try a bigger range of opcodes (e.g. 0..80), we need to skip the opcodes 45, 47 and 48 (`effGet*String`)
+to prevent crashes.
+
+Interestingly, *Protoverb* will now react to `opcode:69`, returning the same data we just set via opcode:42.
+So we probably have just found `effGetSeakerArrangement` as well.
+
+
+# misc
+LATER move this to proper sections
 
 
 ## effCode:50
@@ -2532,19 +2601,4 @@ FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 FstClient::dispatcher(0x19b9250, 62, 0, 0, 0x7ffe232a7660, 0.000000);
 FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
-~~~
-
-## speaker setup
-
-### AudioPluginHost
-JUCE crashes  when using a heap-allocated `VstSpeakerArrangement`,
-the reason being that the a pointer `VstSpeakerProperties` is not
-necessarily a varsized arrays. instead we should use:
-
-~~~
-typedef struct VstSpeakerArrangement_ {
-  int type;
-  int numChannels;
-  VstSpeakerProperties speakers[];
-} VstSpeakerArrangement;
 ~~~
