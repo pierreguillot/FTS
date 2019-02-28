@@ -377,13 +377,14 @@ VstTimeInfo @ 0x16c50a8
 | `kVstTransportCycleActive` | 1<< 2 |
 | `kVstTransportRecording`   | 1<< 3 |
 |----------------------------+-------|
-|                            | 1<< 8 |
-|                            | 1<< 9 |
-|                            | 1<<10 |
-|                            | 1<<11 |
-| `kVstTransportCycleActive` | 1<<12 |
-|                            | 1<<13 |
-|                            |       |
+| `kVstNanosValid`           | 1<< 8 |
+| `kVstPpqPosValid`          | 1<< 9 |
+| `kVstTempoValid`           | 1<<10 |
+| `kVstBarsValid`            | 1<<11 |
+| `kVstCyclePosValid`        | 1<<12 |
+| `kVstTimeSigValid`         | 1<<13 |
+
+
 ** Protoverb
 
 #+BEGIN_BLOCK
