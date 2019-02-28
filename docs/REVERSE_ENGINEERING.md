@@ -2460,23 +2460,31 @@ likely unsupported) feature string (like `fudelDudelDei`).
 Finally we compare the return values of the two iterations and find that they always returned
 the same result *except* for `opcode:37`, our likely candidate for `audioMasterCanDo`.
 
-# misc
-LATER move this to proper sections
+## Speaker Arrangments
 
-## effCode:42
-
+Running our test plugin in REAPER, we can also calls to `effcode:42` in the startup phase.
 ~~~
-FstClient::dispatcher(0x1ec2080, 42, 0,  32252624, 0x1ec2740, 0.000000);// ivalue=0x1ec22d0
-FstClient::dispatcher(0x9e36510, 42, 0, 172519840, 0xa487610, 0.000000);// ivalue=0xa4871a0
+FstClient::dispatcher(0x1ec2080, 42, 0,  32252624, 0x1ec2740, 0.000000);
 ~~~
 
-according to JUCE, both `ivalue` and `ptr` only point both to addresses in the following opcodes:
+in another run this is:
+~~~
+FstClient::dispatcher(0x9e36510, 42, 0, 172519840, 0xa487610, 0.000000);
+~~~
+
+The `ivalue` is a bit strange, unless it is printed in hex (`0x1ec22d0` resp . `0xa4871a0`),
+where it becomes apparent that this is really another address (just compare the hex representation
+to the the `ptr` value; there difference is 1136, which is practically nothing in address space)!
+
+According to [JUCE](#juce-effect-opcodes), there are only very few opcodes
+where both `ivalue` and `ptr` point both to addresses:
 - `effGetSpeakerArrangement`
 - `effSetSpeakerArrangement`
 
-Both addresses contain (for 2 IN/2 OUT)
+Here is a dump of the first 96 bytes of the data found at those addresses
+(the data is the same on both addresses,
+at least if our plugin is configured with 2 IN and 2 OUT channels):
 ~~~
-IN=OUT:
 01 00 00 00 02 00 00 00  00 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
@@ -2487,6 +2495,8 @@ IN=OUT:
 
 The int32 at position @4-7 is the `numChannels`,
 the int32 at position @0-3 is most likely the `type`.
+I have no explanation for the value at position @58,
+it's probably just uninitialized data.
 
 By setting the `numChannels` of the plugin, REAPER responds
 with following types
@@ -2507,6 +2517,9 @@ with following types
 
 Since the values are filled in by REAPER, it's likely that `effcode:42` is `effSetSpeakerArrangement`.
 `effGetSeakerArrangement` is most likely close by (`41` or `43`).
+
+# misc
+LATER move this to proper sections
 
 
 ## effCode:50
