@@ -130,8 +130,12 @@ typedef enum {
 
   FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
   FST_ENUM(effGetVstVersion, 58), // return kVstVersion
-  FST_ENUM_EXPERIMENTAL(effKeysRequired, 59), // return ((bool)KeyboardFocusRequireq
+
   FST_ENUM(effGetSpeakerArrangement, 69), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
+
+
+  FST_ENUM_UNKNOWN(effKeysRequired), // return ((bool)KeyboardFocusRequireq; 59??
+
 
   FST_ENUM_UNKNOWN(effEditDraw),
   FST_ENUM_UNKNOWN(effEditMouse),
