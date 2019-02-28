@@ -258,7 +258,7 @@ static void print_ptr4opcode(t_fstInt32 opcode, void*const ptr) {
   //if(str)print_hex(str, 96);
 }
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
-  if(53==opcode)    test_gettime(eff);
+  if(25==opcode)      test_processLevel(eff);
 
   if(dispatcher_skip(opcode))
     return 0;
