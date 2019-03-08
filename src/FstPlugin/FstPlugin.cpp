@@ -319,13 +319,14 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     return 0;
   case effCanDo:
     do {
-      if(strcmp((char*)ptr, "receiveVstEvents"))
+      printf("canDo '%s'?\n", (char*)ptr);
+      if(!strcmp((char*)ptr, "receiveVstEvents"))
         return 1;
-      if(strcmp((char*)ptr, "receiveVstMidiEvents"))
+      if(!strcmp((char*)ptr, "receiveVstMidiEvents"))
         return 1;
-      if(strcmp((char*)ptr, "sendVstEvents"))
+      if(!strcmp((char*)ptr, "sendVstEvents"))
         return 1;
-      if(strcmp((char*)ptr, "sendVstMidiEvents"))
+      if(!strcmp((char*)ptr, "sendVstMidiEvents"))
         return 1;
     } while(0);
     return 0;
