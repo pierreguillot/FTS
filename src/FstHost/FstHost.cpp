@@ -416,6 +416,10 @@ void test_reaper(AEffect*effect) {
 
   printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
   dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
+  dispatch_v(effect, 35, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
+  return;
+  fflush(stdout);
   dispatch_v(effect, effSetSampleRate, 0, 0, 000, 44100.000000);
   dispatch_v(effect, effSetBlockSize, 0, blockSize, 000, 0.000000);
 
