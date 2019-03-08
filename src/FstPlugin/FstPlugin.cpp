@@ -340,7 +340,6 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     } while(0);
     return 0;
   case 12:
-      printf("opcode:12\n");
       dispatch_v(eff, 23, 0, 0, 0, 0.);
 #if 0
       do {
@@ -500,6 +499,7 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
 
   print_events(s_ves);
 
+  printf("=====================================\n\n\n");
 
   return eff;
 }
