@@ -137,6 +137,8 @@ typedef enum {
 
   FST_ENUM_EXPERIMENTAL(effStartProcess, 71),
   FST_ENUM_EXPERIMENTAL(effStopProcess, 72),
+  FST_ENUM(effSetProcessPrecision, 77), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
+
 
   FST_ENUM_UNKNOWN(effKeysRequired), // return ((bool)KeyboardFocusRequireq; 59??
 
@@ -158,7 +160,6 @@ typedef enum {
 
   FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0; effCanDo("bypass")
   FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
-  FST_ENUM_UNKNOWN(effSetProcessPrecision), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
   FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
 
   FST_ENUM_UNKNOWN(effConnectInput),
@@ -276,9 +277,6 @@ enum {
   FST_ENUM_UNKNOWN(kVstPinIsStereo),
   FST_ENUM_UNKNOWN(kVstPinUseSpeaker),
 
-  FST_ENUM_UNKNOWN(kVstProcessPrecision32),
-  FST_ENUM_UNKNOWN(kVstProcessPrecision64),
-
   FST_ENUM_UNKNOWN(kVstSmpte239fps),
   FST_ENUM_UNKNOWN(kVstSmpte24fps),
   FST_ENUM_UNKNOWN(kVstSmpte249fps),
@@ -291,6 +289,11 @@ enum {
   FST_ENUM_UNKNOWN(kVstSmpte60fps),
   FST_ENUM_UNKNOWN(kVstSmpteFilm16mm),
   FST_ENUM_UNKNOWN(kVstSmpteFilm35mm),
+};
+
+enum {
+  FST_ENUM_EXPERIMENTAL(kVstProcessPrecision32, 0),
+  FST_ENUM(kVstProcessPrecision64, 1),
 };
 
 typedef enum {
