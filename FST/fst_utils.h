@@ -117,7 +117,7 @@ static char*effCode2string(size_t opcode, char*output, size_t length) {
   snprintf(output, length, "%d", opcode);
   return output;
 }
-static char*hostCode2string(size_t opcode, char*output, size_t length) {
+static char*hostCode2string(t_fstPtrInt opcode, char*output, size_t length) {
   switch(opcode) {
     FST_UTILS__OPCODESTR(audioMasterAutomate);
     FST_UTILS__OPCODESTR(audioMasterVersion);
