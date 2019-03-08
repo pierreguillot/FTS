@@ -45,11 +45,15 @@ void print_struct7(AEffect* effect) {
 }
 
 t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  bool doprint=true;
   if(effect) {
-    char opcodestr[256];
-    printf("dispatch4host(%p, %s, %d, %lu, %p, %f)\n",  effect, hostCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
+    if(doprint) {
+      char opcodestr[256];
+      printf("FstClient::snd2host(%p, %s, %d, %lu, %p, %f) => ",  effect, hostCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
+    }
     t_fstPtrInt result = dispatch(effect, opcode, index, ivalue, ptr, fvalue);
-    printf("dispatch4host: %lu (0x%lX)\n", result, result);
+    if(doprint)
+      printf("FstClient::snd2host: %lu (0x%lX)\n", result, result);
     return result;
   }
   return 0xBEEF;
@@ -341,7 +345,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
       dispatch_v(eff, 6, 0, 1, 0, 0.);
       break;
   }
-  //printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, ptr, fvalue);
+  //printf("FstClient::dispatch(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, ptr, fvalue);
   //printf("JMZ\n");
 
   return 0;
@@ -375,7 +379,7 @@ static float getParameter(AEffect*eff, int index) {
 }
 static void process(AEffect*eff, float**indata, float**outdata, int sampleframes) {
 #if 0
-  printf("FstClient::process(%p, %p, %p, %d) -> %f\n", eff, indata, outdata, sampleframes, indata[0][0]);
+  printf("FstClient::process0(%p, %p, %p, %d) -> %f\n", eff, indata, outdata, sampleframes, indata[0][0]);
   test_gettime(eff);
 #endif
 }
