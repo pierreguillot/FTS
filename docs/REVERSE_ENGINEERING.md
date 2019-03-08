@@ -552,6 +552,106 @@ The opcodes for the plugin start with `eff*` (but not `effFlags*`),
 the opcodes for the host start with `audioMaster*`.
 
 
+
+
+
+# Part2.1: tricks to make our live easier
+
+## fake values
+
+to make our lice a bit easier, we want to make sure to be able to differentiate between
+real opcodes (the values we somehow detected from our reverse engineering effords) and
+fake opcodes (those where we only know the name, but have no clue about their actual value).
+
+The simplest way is to just assign values to the fake opcodes that we are pretty sure are wrong
+and that most likely won't clash with *any* valid opcodes.
+
+For starters, we put the values in some rather high range (e.g. starting at `100000`).
+If the valid opcodes are grouped around 0 (like proper enums), they shouldn't interfere.
+If they use magic numbers instead, they might interfere, but we'll have to deal with that once we are there.
+Uusually enumerations just keep incrementing their values automatically (unless overridden by the programmer),
+which makes it somewhat hard to map a given fake value back to an opcode name.
+A nice idea is to encode the line-number into the fake opcode value, using a little helper macro:
+
+~~~C
+#define FST_ENUM(x, y) x = y
+#define FST_ENUM_UNKNOWN(x) x = 100000 + __LINE__
+
+/* ... */
+enum {
+    FST_ENUM(someKnownOpcode, 42),
+    FST_ENUM_UNKNOWN(someUnknownOpcode)
+}
+~~~
+
+In the above example, if we ever encounter an opcode (e.g.) `100241`,
+we just have to open our header-file, go to line `241` (`100241-100000`) and see what fake opcode we actually tried to send.
+
+## dispatcher printout
+
+We want to watch how the host calls a plugin, so we add debugging printout to the dispatcher function of our plugin:
+
+~~~C
+static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+    printf("dispatcher(%p, %ld, %d, %ld, %p, %f);",
+        effect, opcode, index, ivalue, ptr, fvalue);
+    /* do the actual work */
+    return 0;
+}
+~~~
+
+This will give use output like:
+
+~~~
+dispatcher(0xEFFECT, 42, 0, 0, 0xPOINTER, 0.000000);
+~~~
+
+Similar on the host side.
+
+## opcode->name mapping
+
+Computers are good at numbers, but humans are usually better with symbols.
+So instead of seeing `opcodes:42` (as defined in the example above), we would rather see `someKnownOpcode`.
+
+We can do that with some little helper function (implemented with a helper macro):
+
+~~~C
+#define FST_UTILS__OPCODESTR(x)                   \
+  case x:                                         \
+  if(x>100000)                                    \
+    snprintf(output, length, "%d[%s?]", x, #x);   \
+  else                                            \
+    snprintf(output, length, "%s[%d]", #x, x);    \
+  output[length-1] = 0;                           \
+  return output
+
+static char*effCode2string(size_t opcode, char*output, size_t length) {
+  switch(opcode) {
+    default: break;
+    FST_UTILS__OPCODESTR(effOpcodeFoo);
+    FST_UTILS__OPCODESTR(effOpcodeBar);
+    /* repeat for all effOpcodes */
+  }
+  snprintf(output, length, "%d", opcode);
+  return output;
+}
+~~~
+
+Now instead of printing the numeric value of an opcode, we can instead print a symbol:
+
+~~~C
+    char opcodestr[512];
+    printf("dispatcher(%p, %s, %d, %ld, %p, %f);",
+        effect, effCode2string(opcode, opcodestr, 512), index, ivalue, ptr, fvalue);
+~~~
+
+which will give us a much more readable:
+
+~~~
+dispatcher(0xEFFECT, someKnownOpcode[42], 0, 0, 0xPOINTER, 0.000000);
+~~~
+
+
 # Part3: AEffect
 So let's try our code against some real plugins/hosts.
 We start with some freely available plugin from a proper commercial plugin vendor,
