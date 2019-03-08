@@ -2585,6 +2585,8 @@ plugin2host(43, 3, 0, (nil), 0.000000)
 plugin2host(44, 3, 0, (nil), 0.000000)
 ~~~
 
+## audioMasterSizeWindow, audioMasterBeginEdit, audioMasterEndEdit
+
 A low hanging fruit is the `hostCode:15` which is called with `index:640` and `ivalue:575`.
 Esp. the `index` looks suspiciously like some image/window dimension, which leads us to
 the `audioMasterSizeWindow` opcode.
