@@ -128,6 +128,7 @@ typedef enum {
   FST_ENUM(effGetVendorString, 47), // OUT:ptr(char[64]), return 1
   FST_ENUM(effGetProductString, 48), // OUT:ptr(char[64]), return 1
   FST_ENUM(effGetVendorVersion, 49), // return version
+  FST_ENUM(effVendorSpecific, 50), // behaviour defined by vendor...
 
   FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
   FST_ENUM(effGetVstVersion, 58), // return kVstVersion
@@ -170,7 +171,7 @@ typedef enum {
   FST_ENUM_UNKNOWN(effBeginSetProgram),
   FST_ENUM_UNKNOWN(effEndSetProgram),
 
-  FST_ENUM_UNKNOWN(effVendorSpecific) //
+  FST_ENUM_UNKNOWN(fst_effLast) // the last opcode
 } t_fstPluginOpcode;
 #warning document VstAEffectFlags
 typedef enum {
