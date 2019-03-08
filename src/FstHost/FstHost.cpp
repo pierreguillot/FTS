@@ -58,7 +58,6 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
   }
   switch(opcode) {
   case 0xDEADBEEF:
-    printf("deadbeef...\n");
     return (t_fstPtrInt)db2slider;
   case audioMasterCurrentId:
     return 0xDEAD;
@@ -488,7 +487,7 @@ int test_plugin(const char*filename) {
   if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
   //dump_data(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
-  print_aeffect(effect);
+  //print_aeffect(effect);
   test_reaper(effect); return 0;
   //test_opcode29(effect); return 0;
   //test_opcode3334(effect); return 0;
