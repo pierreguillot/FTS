@@ -3,8 +3,6 @@ FST_CXXFLAGS=-g -O0 -fPIC
 
 LIBS=
 
-default: FstPlugin.so
-
 archs: FstPlugin.32.so FstPlugin.64.so
 
 FstPlugin.32.so: ARCHFLAGS=-m32
