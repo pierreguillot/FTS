@@ -435,3 +435,26 @@ UNSUPPORTED FEATURE: Current time in SMPTE format
   Project website: https://github.com/teragonaudio/mrswatson
   Support email: support@teragonaudio.com
 #+END_BLOCK
+
+
+* vstplugin~
+
+| opcode                      | ? |
+|-----------------------------+---|
+| audioMasterIdle             |   |
+|-----------------------------+---|
+| effEditIdle                 |   |
+| effBeginSetProgram          |   |
+| effEndSetProgram            |   |
+| effGetNumMidiInputChannels  |   |
+| effGetNumMidiOutputChannels |   |
+| effGetTailSize              |   |
+| effSetBypass                |   |
+| effSetProcessPrecision      |   |
+| effString2Parameter         |   |
+|-----------------------------+---|
+| kVstAutomationReading       |   |
+| kVstAutomationWriting       |   |
+| kVstProcessPrecision32      |   |
+| kVstProcessPrecision64      |   |
+|                             |   |
