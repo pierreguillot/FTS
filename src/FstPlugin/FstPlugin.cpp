@@ -91,21 +91,28 @@ static void test_gettime(AEffect*eff) {
 }
 
 
-static void test_opcode6266(AEffect*eff,
+static int test_opcode66(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  /* this opcodes set the names of they keys of the virtual MIDI-keyboard in REAPER... */
   //printf("opcode:%d\n", opcode);
   //print_numbers((int*)ptr, 2);
   char*str=(char*)ptr + 8;
   int*iptr=(int*)ptr;
-  printf("KEY: %d\t%d\n", iptr[0], iptr[1]);
+  //printf("KEY: %d\t%d\n", iptr[0], iptr[1]);
   snprintf(str, 16, "key[%d]%d", iptr[0], iptr[1]);
   for(size_t i=0; i<32; i++) {
-
     //str[i+8]=i+64;
   }
+  return 0;
 }
-
+static int test_opcode62(AEffect*eff,
+    t_fstInt32 opcode, int index,
+    t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  print_hex(ptr, 128);
+  snprintf((char*)ptr, 128, "OPCODE62");
+  return 100;
+}
 static void test_opcode56(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
@@ -240,10 +247,10 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   case effProcessEvents:
     //test_opcode25(eff, opcode, index, ivalue, ptr, fvalue);
     return 1;
-    //case 62:
+  case 62:
+    return test_opcode62(eff, opcode, index, ivalue, ptr, fvalue);
   case 66:
-    test_opcode6266(eff, opcode, index, ivalue, ptr, fvalue);
-    return 0;
+    return test_opcode66(eff, opcode, index, ivalue, ptr, fvalue);
   case effEditGetRect:
     *((ERect**)ptr) = &editorBounds;
     return (t_fstPtrInt)&editorBounds;
