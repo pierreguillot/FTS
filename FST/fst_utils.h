@@ -18,7 +18,7 @@ static void print_hex(void*ptr, size_t length) {
   printf("\n");
 }
 
-void dump_data(const char*basename, const void*data, size_t length) {
+static void dump_data(const char*basename, const void*data, size_t length) {
   const char*ptr = (const char*)data;
   std::string filename = std::string(basename);
   filename+=".bin";
