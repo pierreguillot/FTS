@@ -126,6 +126,7 @@
 |         71 |                             | :REAPER calls with 0                                               |
 |            |                             | :Protoverb returns 1, rest returns 0                               |
 |         72 |                             | :REAPER calls with 0                                               |
+|         77 | effSetProcessPrecision      | :REAPER calls with 1                                               |
 |            |                             | :Protoverb returns 1, rest returns 0                               |
 |      30514 |                             | :Protoverb calls hostCode:13                                       |
 | 0xdeadbeef |                             | :REAPER ask for function?                                          |
@@ -146,7 +147,6 @@
 |            | effSetSpeakerArrangement    |                                                                    |
 |            | effSetBypass                |                                                                    |
 |            | effSetTotalSampleToProcess  |                                                                    |
-|            | effSetProcessPrecision      |                                                                    |
 |            | effConnectInput             |                                                                    |
 |            | effConnectOutput            |                                                                    |
 |            | effIdle                     |                                                                    |
