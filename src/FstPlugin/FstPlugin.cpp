@@ -91,6 +91,23 @@ static void test_gettime(AEffect*eff) {
 }
 
 
+static int test_opcode35(AEffect*eff) {
+#ifdef FST_CATEGORY
+  return FST_CATEGORY;
+#endif
+  return 8;
+}
+
+static int test_opcode70(AEffect*eff, char*ptr) {
+  static int count = 0;
+  count++;
+  if(count < 5) {
+    snprintf(ptr, 128, "shell%d", count);
+    return count;
+  }
+  return 0;
+}
+
 static int test_opcode66(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
@@ -228,6 +245,10 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
 
   switch(opcode) {
   default: break;
+  case 35:
+    return test_opcode35(eff);
+  case 70:
+    return test_opcode70(eff, (char*)ptr);
   case effGetVendorString:
     snprintf((char*)ptr, 16, "SuperVendor");
     return 1;
