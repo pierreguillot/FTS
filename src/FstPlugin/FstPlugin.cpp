@@ -262,8 +262,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   if(25==opcode)      test_processLevel(eff);
   //if(53==opcode)    test_gettime(eff);
 
-  if(dispatcher_skip(opcode))
-    return 0;
+  if(dispatcher_skip(opcode))return 0;
   if(!dispatcher_noprint(opcode)) {
     dispatcher_printEff(eff, opcode, index, ivalue, ptr, fvalue);
     print_ptr4opcode(opcode, ptr);
