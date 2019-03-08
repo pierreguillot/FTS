@@ -121,6 +121,7 @@ typedef enum {
   FST_ENUM(effGetProgramNameIndexed, 29), // IN:index, OUT:ptr(char[24], return (hasProg#)
   FST_ENUM(effGetInputProperties, 33), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
   FST_ENUM(effGetOutputProperties, 34), //IN:index, OUT:ptr(VstPinProperties*), return 1|0
+  FST_ENUM(effGetPlugCategory, 35), // return category
 
   FST_ENUM(effSetSpeakerArrangement, 42), // IN:ivalue(VstSpeakerArrangement*in) IN:ptr(VstSpeakerArrangement*out)
 
@@ -135,6 +136,7 @@ typedef enum {
 
   FST_ENUM(effGetSpeakerArrangement, 69), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
 
+  FST_ENUM(effShellGetNextPlugin, 70),
   FST_ENUM_EXPERIMENTAL(effStartProcess, 71),
   FST_ENUM_EXPERIMENTAL(effStopProcess, 72),
   FST_ENUM(effSetProcessPrecision, 77), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
@@ -152,8 +154,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
   FST_ENUM_UNKNOWN(effString2Parameter), // IN:index, IN:ptr(char*), return (hasParam#)
 
-  FST_ENUM_UNKNOWN(effGetPlugCategory), // return category
-
   FST_ENUM_UNKNOWN(effGetCurrentMidiProgram), // return -1
   FST_ENUM_UNKNOWN(effGetNumMidiInputChannels), // return 16*isMidi
   FST_ENUM_UNKNOWN(effGetNumMidiOutputChannels), // return 16*isMidi
@@ -166,7 +166,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effConnectOutput),
 
   FST_ENUM_UNKNOWN(effIdle),
-  FST_ENUM_UNKNOWN(effShellGetNextPlugin),
 
 #warning document origin of eff*SetProgram
   FST_ENUM_UNKNOWN(effBeginSetProgram),
@@ -184,16 +183,17 @@ typedef enum {
   FST_ENUM(effFlagsCanDoubleReplacing, (1<<12)),
 } VstAEffectFlags;
 typedef enum {
-  FST_ENUM_UNKNOWN(kPlugCategAnalysis),
-  FST_ENUM_UNKNOWN(kPlugCategEffect),
-  FST_ENUM_UNKNOWN(kPlugCategGenerator),
-  FST_ENUM_UNKNOWN(kPlugCategMastering),
-  FST_ENUM_UNKNOWN(kPlugCategRestoration),
-  FST_ENUM_UNKNOWN(kPlugCategRoomFx),
-  FST_ENUM_UNKNOWN(kPlugCategShell),
-  FST_ENUM_UNKNOWN(kPlugCategSpacializer),
-  FST_ENUM_UNKNOWN(kPlugCategSynth),
-  FST_ENUM_UNKNOWN(kPlugSurroundFx)
+  FST_ENUM_EXPERIMENTAL(kPlugCategEffect, 1),
+  FST_ENUM(kPlugCategSynth, 2),
+  FST_ENUM(kPlugCategAnalysis, 3),
+  FST_ENUM(kPlugCategMastering, 4),
+  FST_ENUM(kPlugCategSpacializer, 5),
+  FST_ENUM(kPlugCategRoomFx, 6),
+  FST_ENUM(kPlugSurroundFx, 7),
+  FST_ENUM(kPlugCategRestoration, 8),
+
+  FST_ENUM(kPlugCategShell, 10),
+  FST_ENUM(kPlugCategGenerator, 11),
 } VstPlugCategory;
 
 typedef enum {
