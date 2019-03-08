@@ -270,6 +270,12 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   }
   switch(opcode) {
   default: break;
+  case effGetVendorString:
+    snprintf((char*)ptr, 16, "SuperVendor");
+    return 1;
+  case effGetEffectName:
+    snprintf((char*)ptr, 16, "SuperEffect");
+    return 1;
 #if 1
   case effSetSpeakerArrangement:
     test_opcode42(eff, opcode, index, ivalue, ptr, fvalue);
