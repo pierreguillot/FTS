@@ -116,6 +116,7 @@
 |         47 | effGetVendorString          | :Protoverb returns 1 and ptr:"u-he"; prints getVendorString()      |
 |         48 | effGetProductString         | :Protoverb returns 1 and ptr:"Protoverb 1.0.0"                     |
 |         49 | effGetVendorVersion         | :Protoverb returns 0x10000                                         |
+|         50 | effVendorSpecific           | :REAPER only calls this is 'hasCockosExtensions' is supported      |
 |         51 | effCanDo                    | :Protoverb returns 0xFFFFFFFFFFFFFFFF (with ptr:"")                |
 |         56 |                             | :REAPER calls with ptr to zeroed memory                            |
 |            |                             | :all return 0                                                      |
@@ -144,7 +145,6 @@
 |            | effGetPlugCategory          | :JUCE RETURNS VstPlugCategory                                      |
 |            | effSetSpeakerArrangement    |                                                                    |
 |            | effSetBypass                |                                                                    |
-|            | effVendorSpecific           |                                                                    |
 |            | effSetTotalSampleToProcess  |                                                                    |
 |            | effSetProcessPrecision      |                                                                    |
 |            | effConnectInput             |                                                                    |
