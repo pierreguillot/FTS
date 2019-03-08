@@ -416,7 +416,7 @@ void test_reaper(AEffect*effect) {
 
   printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
   dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 35, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effGetPlugCategory, 0, 0, 000, 0.000000);
   dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
   return;
   fflush(stdout);
@@ -436,13 +436,13 @@ void test_reaper(AEffect*effect) {
   test_effCanDo(effect, "hasCockosExtensions");
 
   dispatch_v(effect, effGetVstVersion, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
-  dispatch_v(effect, 71, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effMainsChanged, 0, 1, 000, 0.000000);
+  dispatch_v(effect, effStartProcess, 0, 0, 000, 0.000000);
 
   test_effCanDo(effect, "receiveVstEvents");
   test_effCanDo(effect, "receiveVstMidiEvents");
 
-  dispatch_v(effect, 35, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effGetPlugCategory, 0, 0, 000, 0.000000);
 
   test_effCanDo(effect, "sendVstEvents");
   test_effCanDo(effect, "sendVstMidiEvents");
@@ -469,15 +469,14 @@ void test_reaper(AEffect*effect) {
   test_opcode25(effect);
   effect->process(effect, insamples, outsamples, blockSize);
   printf("==============================================\n");
-  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
+  dispatch_v(effect, effMainsChanged, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effMainsChanged, 0, 1, 000, 0.000000);
   printf("==============================================\n");
-  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 1, 000, 0.000000);
-  dispatch_v(effect, 72, 0, 0, 000, 0.000000);
-  dispatch_v(effect, 12, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effMainsChanged, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effMainsChanged, 0, 1, 000, 0.000000);
+  dispatch_v(effect, effMainsChanged, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effMainsChanged, 0, 1, 000, 0.000000);
+  dispatch_v(effect, effStopProcess, 0, 0, 000, 0.000000);
   dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
   printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 }
