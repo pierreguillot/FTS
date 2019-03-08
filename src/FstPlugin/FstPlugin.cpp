@@ -46,6 +46,13 @@ void print_struct7(AEffect* effect) {
 
 t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
   bool doprint=true;
+  switch(opcode) {
+  default:
+    doprint=true;
+    break;
+  case audioMasterGetCurrentProcessLevel:
+    doprint=false;
+  }
   if(effect) {
     if(doprint) {
       char opcodestr[256];
