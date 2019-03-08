@@ -439,7 +439,6 @@ UNSUPPORTED FEATURE: Current time in SMPTE format
 
 * vstplugin~
 
-
 ** TODO
 | opcode                      | ? |
 |-----------------------------+---|
@@ -457,8 +456,6 @@ UNSUPPORTED FEATURE: Current time in SMPTE format
 | kVstAutomationReading       |   |
 | kVstAutomationWriting       |   |
 
-
-
 ** DONE
 | opcode                 |   |
 |------------------------+---|
@@ -469,3 +466,23 @@ UNSUPPORTED FEATURE: Current time in SMPTE format
 | kVstProcessPrecision32 |   |
 | kVstProcessPrecision64 |   |
 |                        |   |
+
+
+* AudioPluginHost
+
+** TODO
+| opcode            | value |
+|-------------------+-------|
+| effCanBeAutomated |       |
+| effConnectInput   |       |
+| effConnectOutput  |       |
+
+
+* REAPER
+
+** TODO
+| opcode | value | commen                   |
+|--------+-------+--------------------------|
+| eff??? |    19 | immer abwechselnd mit 53 |
+| eff??? |    53 |                          |
+|        |       |                          |
