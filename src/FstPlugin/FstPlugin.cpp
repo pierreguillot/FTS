@@ -276,6 +276,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     dispatcher_printEff(eff, opcode, index, ivalue, ptr, fvalue);
     print_ptr4opcode(opcode, ptr);
   }
+
   switch(opcode) {
   default: break;
   case effGetVendorString:

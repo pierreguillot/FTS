@@ -74,9 +74,10 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
     for(size_t i=0; i<kVstMaxProductStrLen; i++) {
       ((char*)ptr)[i] = 64+i%60;
     }
-#endif
     strncpy((char*)ptr, "FstProduct?", kVstMaxProductStrLen);
     return 1;
+#endif
+    break;
   case audioMasterGetVendorString:
     printf("GetVendor?String\n");
     strncpy((char*)ptr, "FstVendor?", kVstMaxVendorStrLen);
@@ -454,6 +455,8 @@ void test_reaper(AEffect*effect) {
   strbuf[0] = 0;
   dispatch_v(effect, effGetProgramName, 0, 0, strbuf, 0.000000);
   printf("ProgramName: '%s'\n", strbuf);
+  fflush(stderr);  fflush(stdout);
+  fstpause(2.);
   test_opcode56(effect);
 
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
