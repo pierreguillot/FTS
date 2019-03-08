@@ -2728,12 +2728,8 @@ Most likely these two numbers are indeed the `eff*Process` opcodes:
 | effStartProcess | 71 |
 | effStopProcess  | 72 |
 
-# misc
-LATER move this to proper sections
 
-## effCanBeAutomated
-called for each parameter
-
+# Part: more enums
 
 ## effVendorSpecific
 
@@ -2910,6 +2906,13 @@ The value of `kVstProcessPrecision32` can only be guessed. Intuitively, I would 
 | kVstProcessPrecision32 | 0 (?) |
 | kVstProcessPrecision64 | 1     |
 |                        |       |
+
+# misc
+LATER move this to proper sections
+
+## effCanBeAutomated
+called for each parameter
+
 
 ## effCode:56
 
