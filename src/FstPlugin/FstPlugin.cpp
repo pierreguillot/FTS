@@ -160,76 +160,17 @@ static void test_processLevel(AEffect*eff) {
   dispatch_v(eff, audioMasterGetCurrentProcessLevel, 0, 0, 0, 0.);
 }
 
-
-#define PRINTEFFCASE(x) \
-  case x:               \
-  if(x>98765)                                                           \
-    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, x, index, ivalue, ptr, fvalue); \
-  else                                                                  \
-    printf("FstClient::dispatcher(%p, %s, %d, %d, %p, %f)\n", eff, #x, index, ivalue, ptr, fvalue); \
-  break;
-
 static bool dispatcher_printEff(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
-  switch(opcode) {
-  default:
-    printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)...\n", eff, opcode, index, ivalue, ptr, fvalue);
-    break;
-  PRINTEFFCASE(effCanBeAutomated);
-  PRINTEFFCASE(effCanDo);
-  PRINTEFFCASE(effClose);
-  PRINTEFFCASE(effConnectInput);
-  PRINTEFFCASE(effConnectOutput);
-  PRINTEFFCASE(effEditClose);
-  PRINTEFFCASE(effEditDraw);
-  PRINTEFFCASE(effEditGetRect);
-  PRINTEFFCASE(effEditIdle);
-  PRINTEFFCASE(effEditMouse);
-  PRINTEFFCASE(effEditOpen);
-  PRINTEFFCASE(effEditSleep);
-  PRINTEFFCASE(effEditTop);
-  PRINTEFFCASE(effGetChunk);
-  PRINTEFFCASE(effGetCurrentMidiProgram);
-  PRINTEFFCASE(effGetEffectName);
-  PRINTEFFCASE(effGetInputProperties);
-  PRINTEFFCASE(effGetNumMidiInputChannels);
-  PRINTEFFCASE(effGetNumMidiOutputChannels);
-  PRINTEFFCASE(effGetOutputProperties);
-  PRINTEFFCASE(effGetParamDisplay);
-  PRINTEFFCASE(effGetParamLabel);
-  PRINTEFFCASE(effGetParamName);
-  PRINTEFFCASE(effGetPlugCategory);
-  PRINTEFFCASE(effGetProductString);
-  PRINTEFFCASE(effGetProgram);
-  PRINTEFFCASE(effGetProgramName);
-  PRINTEFFCASE(effGetProgramNameIndexed);
-  PRINTEFFCASE(effGetSpeakerArrangement);
-  PRINTEFFCASE(effGetTailSize);
-  PRINTEFFCASE(effGetVendorString);
-  PRINTEFFCASE(effGetVendorVersion);
-  PRINTEFFCASE(effGetVstVersion);
-  PRINTEFFCASE(effIdentify);
-  PRINTEFFCASE(effIdle);
-  PRINTEFFCASE(effKeysRequired);
-  PRINTEFFCASE(effMainsChanged);
-  PRINTEFFCASE(effOpen);
-  PRINTEFFCASE(effProcessEvents);
-  PRINTEFFCASE(effSetBlockSize);
-  PRINTEFFCASE(effSetBypass);
-  PRINTEFFCASE(effSetChunk);
-  PRINTEFFCASE(effSetProcessPrecision);
-  PRINTEFFCASE(effSetProgram);
-  PRINTEFFCASE(effSetProgramName);
-  PRINTEFFCASE(effSetSampleRate);
-  PRINTEFFCASE(effSetSpeakerArrangement);
-  PRINTEFFCASE(effSetTotalSampleToProcess);
-  PRINTEFFCASE(effShellGetNextPlugin);
-  PRINTEFFCASE(effStartProcess);
-  PRINTEFFCASE(effStopProcess);
-  PRINTEFFCASE(effString2Parameter);
-  PRINTEFFCASE(effVendorSpecific);
-  }
+  char opcodestr[512];
+#if 0
+  printf("FstClient::dispatch(%p, %s, %d, %ld, %p, %f);\n",
+         eff, effCode2string(opcode, opcodestr, 512), index, ivalue, ptr, fvalue);
+#else
+  printf("FstClient::dispatch(%s, %d, %ld, %p, %f);\n",
+         effCode2string(opcode, opcodestr, 512), index, ivalue, ptr, fvalue);
+#endif
   return true;
 }
 static bool dispatcher_skip(t_fstInt32 opcode) {
