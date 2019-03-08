@@ -271,7 +271,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   switch(opcode) {
   default: break;
 #if 1
-  case 42:
+  case effSetSpeakerArrangement:
     test_opcode42(eff, opcode, index, ivalue, ptr, fvalue);
     return 0;
 #endif
@@ -280,7 +280,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
     test_opcode56(eff, opcode, index, ivalue, ptr, fvalue);
     return 1;
 #endif
-  case 25:
+  case effProcessEvents:
     //test_opcode25(eff, opcode, index, ivalue, ptr, fvalue);
     return 1;
   case 66: case 62:
