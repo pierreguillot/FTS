@@ -439,6 +439,8 @@ UNSUPPORTED FEATURE: Current time in SMPTE format
 
 * vstplugin~
 
+
+** TODO
 | opcode                      | ? |
 |-----------------------------+---|
 | audioMasterIdle             |   |
@@ -450,11 +452,20 @@ UNSUPPORTED FEATURE: Current time in SMPTE format
 | effGetNumMidiOutputChannels |   |
 | effGetTailSize              |   |
 | effSetBypass                |   |
-| effSetProcessPrecision      |   |
 | effString2Parameter         |   |
 |-----------------------------+---|
 | kVstAutomationReading       |   |
 | kVstAutomationWriting       |   |
-| kVstProcessPrecision32      |   |
-| kVstProcessPrecision64      |   |
-|                             |   |
+
+
+
+** DONE
+| opcode                 |   |
+|------------------------+---|
+|                        |   |
+|------------------------+---|
+| effSetProcessPrecision |   |
+|------------------------+---|
+| kVstProcessPrecision32 |   |
+| kVstProcessPrecision64 |   |
+|                        |   |
