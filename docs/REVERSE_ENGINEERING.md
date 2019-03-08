@@ -2907,6 +2907,153 @@ The value of `kVstProcessPrecision32` can only be guessed. Intuitively, I would 
 | kVstProcessPrecision64 | 1     |
 |                        |       |
 
+
+## effGetPlugCategory
+
+The `effGetPlugCategory` is closely related to the following constants,
+which a call to this opcode is supposed to return:
+
+~~~
+kPlugCategEffect
+kPlugCategSynth
+kPlugCategAnalysis
+kPlugCategMastering
+kPlugCategSpacializer
+kPlugCategRoomFx
+kPlugSurroundFx
+kPlugCategRestoration
+kPlugCategGenerator
+
+kPlugCategShell
+~~~
+
+REAPER offers a categorization of plugins that includes categories like
+`Delay`, `Surround`, `Synth`, `Tone Generator`...
+While the categories are not the same, there is a significant overlap (and of course the title "Categories")
+which makes me think that the two are related.
+However, so far none of our plugins (neither our self-created plugins, nor the commercially available ones we use for testing)
+is categorised at all.
+
+Anyhow: once we have the `effGetPlugCategory` it should be pretty easy to find out the `kPlugCateg` values by
+iterating over values `0..n` and see how REAPER categorizes the plugin.
+But how do we get the opcode?
+
+Somebody in the [Cockos forum](https://forum.cockos.com/archive/index.php/t-165245.html)
+mentioned, that REAPER would call this opcode when *scanning* for plugins, pretty soon after
+issuing `effOpen`:
+
+~~~
+effOpen
+// ...looks at various elements of AEffect
+effGetPlugCategory
+effGetVendorString
+[...]
+~~~
+
+That was a nice hint, because issuing a `Clear cache/re-scan` in REAPER's Preferences gives us:
+
+~~~
+dispatch(effOpen, 0, 0, (nil), 0.000000);
+dispatch(35, 0, 0, (nil), 0.000000);
+dispatch(effGetVendorString, 0, 0, 0xF00, 0.000000);
+dispatch(effGetEffectName,   0, 0, 0xBA8, 0.000000);
+dispatch(effClose, 0, 0, (nil), 0.000000);
+~~~
+
+... suggesting that `effGetPlugCategory` really is `35`.
+
+So I tried returning a non-0 value on this opcode (starting with `1`), but the plugin is still not categorised :-(.
+But let's try other values:
+- returning `2` suddenly categorises the plugin as *Synth*. This is promising
+(if it weren't for the `effFlagsIsSynth` flag that might allow the same)!
+- continuing to return different values, we see that `3` would make REAPER show the plugin in the (newly created) *Analysis* category.
+Now it seems like we are indeed on the right track.
+
+Playing around we get the following REAPER categories for various return values:
+
+
+| return | category       |
+|--------|----------------|
+| 2      | Synth          |
+| 3      | Analysis       |
+| 4      | Mastering      |
+| 5      | Spatial        |
+| 6      | Room           |
+| 7      | Surround       |
+| 8      | Restoration    |
+| 11     | Tone Generator |
+|        |                |
+
+The return values `1` and `9` (and `0`) leave the plugin in the previous category (whichever that was),
+so it seems these return values are ignored by REAPER and the host just uses some cached values.
+If the plugin returns `10`, it is *not listed* at all in the list of available plugins.
+
+The REAPER categories match nicely with the `kPlugCateg*` constants we need to find:
+
+|                       |    |
+|-----------------------|----|
+| kPlugCategSynth       | 2  |
+| kPlugCategAnalysis    | 3  |
+| kPlugCategMastering   | 4  |
+| kPlugCategSpacializer | 5  |
+| kPlugCategRoomFx      | 6  |
+| kPlugSurroundFx       | 7  |
+| kPlugCategRestoration | 8  |
+| kPlugCategGenerator   | 11 |
+
+
+We haven't found any values for `kPlugCategEffect` and `kPlugCategShell` yet.
+
+Looking at *juce_VSTPluginFormat.cpp* there are two notable things:
+- `kPlugCategEffect` is the first in a `switch/case` group, that is pretty much ordered in the very same way as the
+`kPlugCateg*` values we already know (`kPlugCategShell` is missing from that `switch/case` group)
+- if the category is `kPlugCategShell`, JUCE will call the `effShellGetNextPlugin` opcode repeatedly
+  to get *shellEffectName*s for the "shell plugin's subtypes".
+
+The first observation *might* hint that the value for `kPlugCategEffect` is `1`.
+
+The second observation can be combined with another obersvation: when a plugin returns `10` for `opcode:35`,
+REAPER will later issue `opcode:70` instead of `effGetEffectName`.
+So `kPlugCategShell` would be `10`, and `effShellGetNextPlugin` would be `70`.
+
+We can confirm this assumption by returning the proper values for the opcodes `35` and `70`:
+
+~~~C
+    switch(opcode) {
+    case 35:
+        return 10;
+    case 70: {
+        static int count = 0;
+        count++;
+        if(count < 5) {
+            snprintf(ptr, 128, "shell%d", count);
+            return count;
+        }
+    }
+        return 0;
+~~~
+
+... which will give use 4 plugins `shell1`..`shell4` in REAPER.
+
+So to conclude, we have the following new values:
+
+| `effGetPlugCategory`    | 35 |
+| `effShellGetNextPlugin` | 70 |
+|-------------------------|----|
+| `kPlugCategEffect`      | 1? |
+| `kPlugCategSynth`       | 2  |
+| `kPlugCategAnalysis`    | 3  |
+| `kPlugCategMastering`   | 4  |
+| `kPlugCategSpacializer` | 5  |
+| `kPlugCategRoomFx`      | 6  |
+| `kPlugSurroundFx`       | 7  |
+| `kPlugCategRestoration` | 8  |
+| ??                      | 9  |
+| `kPlugCategShell`       | 10 |
+| `kPlugCategGenerator`   | 11 |
+
+
+
 # misc
 LATER move this to proper sections
 
