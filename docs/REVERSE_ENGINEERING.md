@@ -2775,3 +2775,11 @@ FstClient::dispatcher(0x19b9250, 62, 0, 0, 0x7ffe232a7660, 0.000000);
 FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 FstClient::dispatcher(0x19b9250, 66, 0, 0, 0xeae040, 0.000000);
 ~~~
+### effCode:66
+the pointer is an address to a memory region,
+where the first 4 bytes are 0,
+and the 2nd 4 bytes are an int32 between 34 and 72.
+the numbers seem to be the visible notes on the virtual MIDI keyboard.
+
+### effCode:62
+how did i trigger this?
