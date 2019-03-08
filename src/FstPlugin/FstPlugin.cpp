@@ -450,7 +450,7 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->uniqueID = 0xf00d;
   eff->version = 666;
 
-  eff->flags |= effFlagsProgramChunks;
+  //eff->flags |= effFlagsProgramChunks;
   eff->flags |= effFlagsCanReplacing;
   //eff->flags |= (1<< 9);
   eff->flags |= effFlagsCanDoubleReplacing;
