@@ -134,6 +134,8 @@ typedef enum {
 
   FST_ENUM(effGetSpeakerArrangement, 69), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
 
+  FST_ENUM_EXPERIMENTAL(effStartProcess, 71),
+  FST_ENUM_EXPERIMENTAL(effStopProcess, 72),
 
   FST_ENUM_UNKNOWN(effKeysRequired), // return ((bool)KeyboardFocusRequireq; 59??
 
@@ -157,8 +159,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
   FST_ENUM_UNKNOWN(effSetProcessPrecision), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
   FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
-  FST_ENUM_EXPERIMENTAL(effStartProcess, 71),
-  FST_ENUM_EXPERIMENTAL(effStopProcess, 72),
 
   FST_ENUM_UNKNOWN(effConnectInput),
   FST_ENUM_UNKNOWN(effConnectOutput),
