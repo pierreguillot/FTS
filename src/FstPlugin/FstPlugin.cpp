@@ -248,6 +248,7 @@ static bool dispatcher_noprint(t_fstInt32 opcode) {
   case effGetParamLabel:
   case effGetParamName:
   case effProcessEvents:
+  case effVendorSpecific:
     return true;
   }
   return false;
