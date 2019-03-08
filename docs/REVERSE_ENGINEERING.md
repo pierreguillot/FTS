@@ -2755,6 +2755,55 @@ dispatcher(effect,effVendorSpecific,effGetEffectName,0x50,&ptr,0.0f);
 We already know that `effGetEffectName` is *45*, and `0x50` is *80*,
 and *that* is exactly how REAPER is using `opcode:50`
 
+## effSetProcessPrecision
+
+When running a plugin in a self-compiled JUCE `AudioPluginHost`,
+almost all effCodes our host would like to call in a plugin, have a proper value.
+
+The exceptions are:
+
+~~~
+effCanBeAutomated
+effConnectInput
+effConnectOutput
+effGetPlugCategory
+effSetProcessPrecision
+~~~
+
+Let's tackle those.
+
+According to *juce_VSTPluginFormat.cpp*, the `effSetProcessPrecision` is called,
+if the plugin supports double-precision. It is then called with `kVstProcessPrecision64`
+resp `kVstProcessPrecision32` (depending on whether the host wants to do single or double
+precision.)
+
+Maybe REAPER does something similar, so let's check.
+One of the few remaining opcodes that REAPER calls in our simple plugin
+and that have non-0 arguments (namely `ivalue:1`), is `effcode:77`:
+
+~~~
+dispatcher(effect, 77, 0, 1, (nil), 0.000000);
+~~~
+
+If we compile our plugin without double-precision support (`eff->flags &= ~effFlagsCanDoubleReplacing`),
+`opcode:77` does not get called!
+So it seems that indeed `effSetProcessPrecision` is `77`.
+
+Now the `ivalue` is supposed to be `kVstProcessPrecision64` or `kVstProcessPrecision32`.
+REAPER uses double precision (we know that because the `processDoubleReplacing` callback is called with audio data),
+and uses `ivalue:1`, so that is most likely the value of  `kVstProcessPrecision64`.
+
+The value of `kVstProcessPrecision32` can only be guessed. Intuitively, I would suggest `0`
+(so the opcode could be used as a boolean-like on/off switch for double precision rendering)
+
+| opcode                 | value |
+|------------------------|-------|
+| effSetProcessPrecision | 77    |
+|------------------------|-------|
+| kVstProcessPrecision32 | 0 (?) |
+| kVstProcessPrecision64 | 1     |
+|                        |       |
+
 ## effCode:56
 
 gets called with automation, whenever the window gets focus?
