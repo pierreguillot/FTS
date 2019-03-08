@@ -94,7 +94,16 @@ static void test_gettime(AEffect*eff) {
 static void test_opcode6266(AEffect*eff,
     t_fstInt32 opcode, int index,
     t_fstPtrInt ivalue, void* const ptr, float fvalue) {
-  //print_hex(ptr, 256);
+  //printf("opcode:%d\n", opcode);
+  //print_numbers((int*)ptr, 2);
+  char*str=(char*)ptr + 8;
+  int*iptr=(int*)ptr;
+  printf("KEY: %d\t%d\n", iptr[0], iptr[1]);
+  snprintf(str, 16, "key[%d]%d", iptr[0], iptr[1]);
+  for(size_t i=0; i<32; i++) {
+
+    //str[i+8]=i+64;
+  }
 }
 
 static void test_opcode56(AEffect*eff,
@@ -288,7 +297,8 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
   case effProcessEvents:
     //test_opcode25(eff, opcode, index, ivalue, ptr, fvalue);
     return 1;
-  case 66: case 62:
+    //case 62:
+  case 66:
     test_opcode6266(eff, opcode, index, ivalue, ptr, fvalue);
     return 0;
   case effEditGetRect:
