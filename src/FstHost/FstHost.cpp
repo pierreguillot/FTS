@@ -477,6 +477,7 @@ void test_reaper(AEffect*effect) {
   dispatch_v(effect, effMainsChanged, 0, 0, 000, 0.000000);
   dispatch_v(effect, effMainsChanged, 0, 1, 000, 0.000000);
   dispatch_v(effect, effStopProcess, 0, 0, 000, 0.000000);
+  dispatch_v(effect, effMainsChanged, 0, 0, 000, 0.000000);
   dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
   printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 }
