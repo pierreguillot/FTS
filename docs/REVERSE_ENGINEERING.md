@@ -2604,6 +2604,22 @@ pair that fits nicely.
 | audioMasterBeginEdit  | 43 |
 | audioMasterEndEdit    | 44 |
 
+## effStartProcess/effStopProcess
+*AudioPluginHost* calls `effStartProcess` right after the plugin has been initialised
+(and before it starts calling the `process` callbacks).
+When shutting down *AudioPluginHost* the `effStopProcess` opcode is called
+(after the last call to the `process` callback).
+We can probably safely assume, that the opcodes will be close to each other (adjacent numbers).
+
+Comparing this to what *REAPER* does when calling our fake plugin,
+we notice that there are the opcodes `71` and `72` that are used in a similar way.
+
+Most likely these two numbers are indeed the `eff*Process` opcodes:
+
+| opcode          |    |
+|-----------------|----|
+| effStartProcess | 71 |
+| effStopProcess  | 72 |
 
 # misc
 LATER move this to proper sections
