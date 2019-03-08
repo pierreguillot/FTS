@@ -2858,6 +2858,7 @@ dispatcher(effect,effVendorSpecific,effGetEffectName,0x50,&ptr,0.0f);
 We already know that `effGetEffectName` is *45*, and `0x50` is *80*,
 and *that* is exactly how REAPER is using `opcode:50`
 
+
 ## effSetProcessPrecision
 
 When running a plugin in a self-compiled JUCE `AudioPluginHost`,
