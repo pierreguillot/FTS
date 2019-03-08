@@ -2628,22 +2628,132 @@ LATER move this to proper sections
 called for each parameter
 
 
-## effCode:50
+## effVendorSpecific
 
 that one is weird.
-REAPER sends `opcode:50` (with `index:45` and `ivalue:80`) to a plugin
-(based on JUCE (that is: with GUI), commit 5d779855f2e1b969c2ad479fee955abfa90605ff)
+If we compile a plugin based on JUCE and load it into REAPER,
+we notice tat REAPER sends `opcode:50` (with `index:45` and `ivalue:80`)
+once the FX window (with the effect) is opened for a track.
 
     plugin::dispatcher(50, 45, 80, 0x7ffe849f12f0, 0.000000)
 
 In the dump of `ptr` we see two addresses at @58 and @60,
 but it seems there are no doubles, int32 or strings in the data.
-
 The first 8 bytes are 0, so *maybe* the plugin is supposed to write some
 data (pointer) into this.
 
-I don't get the opcode when creating a plain plugin with `effFlagsHasEditor`
+What's more, REAPER does *not* send this opcode,
+when we create a plain (none-JUCE based) plugin (even if it has the `effFlagsHasEditor` set).
+So the JUCE plugins must do something to provoke REAPER to send this opcode:
 
+If we hack our JUCE-based plugin to print out each opcode sent from REAPER
+before it starts sending `opcode:50` (because obviously REAPER has to know that
+it can send this opcode before it starts doing so), we get the following
+(on the right side we see what the plugin returns for each command):
+
+~~~ C
+// initialisation
+host2plugin(effOpen, 0, 0, NULL, 0.000000)                               => 0
+host2plugin(effSetSampleRate, 0, 0, NULL, 44100.000000)                  => 0
+host2plugin(effSetBlockSize, 0, 512, NULL, 0.000000)                     => 0
+host2plugin(effGetEffectName, 0, 0, <out>, 0.000000)                     => 1
+host2plugin(effGetVendorString, 0, 0, <out>, 0.000000)                   => 1
+host2plugin(effCanDo, 0, 0, "hasCockosNoScrollUI", 0.000000)             => 0
+host2plugin(effCanDo, 0, 0, "wantsChannelCountNotifications", 0.000000)  => 0
+host2plugin(effCanDo, 0, 0, "hasCockosExtensions", 0.000000)             => 0xBEEF0000
+host2plugin(effGetVstVersion, 0, 0, NULL, 0.000000)                      => 2400
+host2plugin(effMainsChanged, 0, 1, NULL, 0.000000)                       => 0
+host2plugin(effStartProcess, 0, 0, NULL, 0.000000)                       => 0
+host2plugin(effCanDo, 0, 0, "receiveVstEvents", 0.000000)                => 0xFFFFFFFF
+host2plugin(effCanDo, 0, 0, "receiveVstMidiEvent", 0.000000)             => 0xFFFFFFFF
+host2plugin(35, 0, 0, NULL, 0.000000)                                    => 0
+host2plugin(effCanDo, 0, 0, "sendVstEvents", 0.000000)                   => 0xFFFFFFFF
+host2plugin(effCanDo, 0, 0, "sendMidiVstEvents", 0.000000)               => 0xFFFFFFFF
+host2plugin(35, 0, 0, NULL, 0.000000)                                    => 0
+host2plugin(effGetProgram, 0, 0, NULL, 0.000000)                         => 0
+host2plugin(effGetChunk, 0, 0, <out>, 0.000000)                          => 0
+host2plugin(effGetProgramName, 0, 0, <out>, 0.000000)                    => 0
+host2plugin(effCanDo, 0, 0, "cockosLoadingConfigAsParameters", 0.000000) => 0
+host2plugin(effGetProgram, 0, 0, NULL, 0.000000)                         => 0
+host2plugin(effGetChunk, 0, 0, <out>, 0.000000)                          => 0
+host2plugin(effGetProgramName, 0, 0, <out>, 0.000000)                    => 0
+// initialisation done; if we now open the FX window we get:
+host2plugin(50, 45, 80, <ptr>, 0.000000)
+/* [...] */
+~~~
+
+So we create a fake plugin (*not* JUCE-based!) that responds to most opcodes with `0`
+and doesn't really do anything.
+In order to make REAPER do the same as with JUCE-plugins (that is: send an `opcode:50` command),
+we must mimick the behaviour of the JUCE plugin (making REAPER think it is really the same).
+
+We do this incrementally:
+~~~C
+t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+    switch(opcode) {
+    case effGetVstVersion:
+        return 2400;
+    case effGetVendorString:
+        snprintf((char*)ptr, 16, "SuperVendor");
+        return 1;
+    case effGetEffectName:
+        snprintf((char*)ptr, 16, "SuperEffect");
+        return 1;
+    default:
+        break;
+    }
+    return 0;
+}
+~~~
+
+There's no real effect here (which is expected; REAPER would be really weird if it changed behaviour based on effect *names*).
+
+So let's add some more opcodes:
+
+~~~C
+    case effCanDo:
+        if(!strcmp((char*)ptr, "receiveVstEvents"))
+            return 0xFFFFFFFF;
+        if(!strcmp((char*)ptr, "receiveVstMidiEvents"))
+            return 0xFFFFFFFF;
+        if(!strcmp((char*)ptr, "sendVstEvents"))
+            return 0xFFFFFFFF;
+        if(!strcmp((char*)ptr, "sendVstMidiEvents"))
+            return 0xFFFFFFFF;
+        if(!strcmp((char*)ptr, "hasCockosExtensions"))
+            return 0xBEEF0000;
+        return 0;
+~~~
+
+Oha! Suddenly REAPER sends plenty of `opcode:50` commands:
+
+~~~
+host2plugin(50, 0xDEADBEF0,  0, 0x7ffe7aa23c30, 0.000000);
+host2plugin(50, 45,         80, 0x7ffe7aa23a50, 0.000000);
+host2plugin(50, 0xDEADBEF0,  0, 0x7ffe7aa23d10, 0.000000);
+host2plugin(50, 45,         80, 0x7ffe7aa23b30, 0.000000);
+host2plugin(50, 7,           0, 0x7ffe7aa33f60, 0.500000);
+host2plugin(50, 0xDEADBEF0,  0, 0x7f3c85f32150, 0.000000);
+~~~
+
+Disabling the `effCanDo` features selectively, it becomes apparent that REAPER
+will start sending this opcode only if we reply to `hasCockosExtensions` with `0xBEEF0000`.
+
+Now "Cockos" is the name of the REAPER *vendor*, and `opcode:50` is only sent if
+we claim to support the *Cockos* extensions.
+*Maybe* this is a *vendor specific* opcode, e.g. `effVendorSpecific`?.
+This idea is supported by the neighbouring opcodes: e.g. `opcode:49` is `effGetVendorVersion`.
+
+Also a quick internet search for `effVendorSpecific+hasCockosExtensions` directs us to
+the [Cockos Extensions to VST SDK](https://www.reaper.fm/sdk/vst/vst_ext.php).
+One of the extensions documented there is
+
+~~~
+dispatcher(effect,effVendorSpecific,effGetEffectName,0x50,&ptr,0.0f);
+~~~
+
+We already know that `effGetEffectName` is *45*, and `0x50` is *80*,
+and *that* is exactly how REAPER is using `opcode:50`
 
 ## effCode:56
 
