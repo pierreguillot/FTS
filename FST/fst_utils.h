@@ -37,6 +37,17 @@ static void print_binary(inttype data, const char*suffix="") {
   printf("%s", suffix);
 }
 
+#include <iostream>
+template <class type>
+static void print_numbers(type*data, size_t length) {
+  while(length--) {
+    std::cout << " " << *data++;
+    if(!(length % 16))  std::cout << std::endl;
+  }
+  std::cout << std::endl;
+}
+
+
 #define FST_UTILS__OPCODESTR(x)                   \
   case x:                                         \
   if(x>100000)                                    \
