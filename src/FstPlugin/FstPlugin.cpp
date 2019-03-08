@@ -454,7 +454,6 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
 
   //eff->flags |= effFlagsProgramChunks;
   eff->flags |= effFlagsCanReplacing;
-  //eff->flags |= (1<< 9);
   eff->flags |= effFlagsCanDoubleReplacing;
 
   //eff->flags |= effFlagsHasEditor;
