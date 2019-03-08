@@ -111,6 +111,11 @@ t_fstMain* load_plugin(const char* filename) {
   return (t_fstMain*)vstfun;
 }
 
+void test_effCanDo(AEffect*effect, const char*feature) {
+  printf("canDo: %s?\n", feature);
+  dispatch_v(effect, effCanDo, 0, 0, (void*)feature, 0.000000);
+}
+
 void test_opcode3334(AEffect*effect) {
   size_t opcode = effGetInputProperties;
   VstPinProperties vpp;
@@ -421,29 +426,22 @@ void test_reaper(AEffect*effect) {
   dispatch_v(effect, effGetVendorString, 0, 0, strbuf, 0.000000);
   printf("VendorString: %s\n", strbuf);
 
-  snprintf(strbuf, 1023, "hasCockosNoScrollUI"); strbuf[1023] = 0;
-  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
-  snprintf(strbuf, 1023, "wantsChannelCountNotifications"); strbuf[1023] = 0;
-  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
-  test_opcode42(effect);
-  snprintf(strbuf, 1023, "hasCockosExtensions"); strbuf[1023] = 0;
-  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+  test_effCanDo(effect, "hasCockosNoScrollUI");
+  test_effCanDo(effect, "wantsChannelCountNotifications");
+  //test_opcode42(effect);
+  test_effCanDo(effect, "hasCockosExtensions");
 
   dispatch_v(effect, effGetVstVersion, 0, 0, 000, 0.000000);
   dispatch_v(effect, 12, 0, 1, 000, 0.000000);
   dispatch_v(effect, 71, 0, 0, 000, 0.000000);
 
-  snprintf(strbuf, 1023, "receiveVstEvents"); strbuf[1023] = 0;
-  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
-  snprintf(strbuf, 1023, "receiveVstMidiEvent"); strbuf[1023] = 0;
-  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+  test_effCanDo(effect, "receiveVstEvents");
+  test_effCanDo(effect, "receiveVstMidiEvents");
 
   dispatch_v(effect, 35, 0, 0, 000, 0.000000);
 
-  snprintf(strbuf, 1023, "sendVstEvents"); strbuf[1023] = 0;
-  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
-  snprintf(strbuf, 1023, "sendVstMidiEvent"); strbuf[1023] = 0;
-  dispatch_v(effect, effCanDo, 0, 0, strbuf, 0.000000);
+  test_effCanDo(effect, "sendVstEvents");
+  test_effCanDo(effect, "sendVstMidiEvents");
 
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
 
