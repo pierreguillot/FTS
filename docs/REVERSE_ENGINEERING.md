@@ -651,6 +651,13 @@ which will give us a much more readable:
 dispatcher(0xEFFECT, someKnownOpcode[42], 0, 0, 0xPOINTER, 0.000000);
 ~~~
 
+If we encounter an unknown opcode, we will notice immediately:
+
+~~~
+dispatcher(0xEFFECT, 666, 0, 0, 0xEVIL, 0.000000);
+~~~
+
+
 
 # Part3: AEffect
 So let's try our code against some real plugins/hosts.
