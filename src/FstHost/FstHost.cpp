@@ -80,11 +80,9 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
 #endif
     break;
   case audioMasterGetVendorString:
-    printf("GetVendor?String\n");
     strncpy((char*)ptr, "FstVendor?", kVstMaxVendorStrLen);
     return 1;
   case 42:
-    printf("42?\n");
     return 0;
   default:
     printf("\tdyspatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, value, ptr, opt);
