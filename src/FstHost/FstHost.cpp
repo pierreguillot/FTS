@@ -507,12 +507,14 @@ int test_plugin(const char*filename) {
   //dump_data(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
   //print_aeffect(effect);
-  test_reaper(effect); return 0;
+  //test_reaper(effect); return 0;
   //test_opcode29(effect); return 0;
   //test_opcode3334(effect); return 0;
   //test_opcodesJUCE(effect);
-
   //test_opcodes(effect, 78);
+
+  test_unknown(effect);
+
   return 0;
 }
 
