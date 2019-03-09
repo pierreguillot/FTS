@@ -457,25 +457,32 @@ UNSUPPORTED FEATURE: Current time in SMPTE format
 | kVstAutomationWriting       |   |
 
 ** DONE
-| opcode                 |   |
-|------------------------+---|
-|                        |   |
-|------------------------+---|
-| effSetProcessPrecision |   |
-|------------------------+---|
-| kVstProcessPrecision32 |   |
-| kVstProcessPrecision64 |   |
-|                        |   |
+| opcode                 |    |
+|------------------------+----|
+|                        |    |
+|------------------------+----|
+| effSetProcessPrecision | 77 |
+|------------------------+----|
+| kVstProcessPrecision32 |  0 |
+| kVstProcessPrecision64 |  1 |
+|                        |    |
 
 
 * AudioPluginHost
 
 ** TODO
-| opcode            | value |
-|-------------------+-------|
-| effCanBeAutomated |       |
-| effConnectInput   |       |
-| effConnectOutput  |       |
+| opcode            | value | notes   |
+|-------------------+-------+---------|
+| effCanBeAutomated |       |         |
+| effConnectInput   |       |         |
+| effConnectOutput  |       |         |
+| effKeysRequired   |       |         |
+| effSetBypass      |       | BowEcho |
+|-------------------+-------+---------|
+| audioHost???      |     3 |         |
+| audioHost???      |    13 |         |
+| audioHost???      |    42 |         |
+
 
 
 * REAPER
@@ -485,4 +492,20 @@ UNSUPPORTED FEATURE: Current time in SMPTE format
 |--------+-------+--------------------------|
 | eff??? |    19 | immer abwechselnd mit 53 |
 | eff??? |    53 |                          |
-|        |       |                          |
+|--------+-------+--------------------------|
+|        |    56 |                          |
+|        |    62 |                          |
+
+
+* FstHost
+
+| opcode                      | value |   return | plugins |
+|-----------------------------+-------+----------+---------|
+|                             |    26 |        1 | *       |
+|                             |    44 |        1 | JUCE    |
+| effGetCurrentMidiProgram?   |    63 |       -1 | *       |
+| effSetTotalSampleToProcess? |    73 | <ivalue> |         |
+|                             |    78 |        1 | Digits  |
+|                             |       |          |         |
+
+
