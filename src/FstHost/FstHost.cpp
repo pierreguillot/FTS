@@ -8,6 +8,8 @@
 
 typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
 
+char effectname[1024];
+
 #include <unistd.h>
 void fstpause(float duration=1.0) {
   usleep(duration * 1000000);
@@ -32,8 +34,8 @@ t_fstPtrInt dispatch (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue
 t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
   if(effect) {
     char opcodestr[256];
-    printf("AEffect.dispatch(%p, %s, %d, %lu, %p, %f)\n",
-        effect, effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
+    printf("AEffect.dispatch(%s, %s, %d, %lu, %p, %f)\n",
+        effectname, effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
     t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
     printf("AEffect.dispatch: %lu (0x%lX)\n", result, result);
     fstpause(0.5);
@@ -505,6 +507,7 @@ int test_plugin(const char*filename) {
   if(!vstmain)return printf("'%s' was not loaded\n", filename);
   AEffect*effect = vstmain(&dispatcher);
   printf("instantiated effect %p\n", effect);
+  snprintf(effectname, 1024, filename);
   if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
   //dump_data(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
