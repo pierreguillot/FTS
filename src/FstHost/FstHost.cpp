@@ -407,6 +407,23 @@ static float** makeFSamples(size_t channels, size_t frames) {
   }
   return samples;
 }
+
+
+void test_unknown(AEffect*effect) {
+  dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
+  for(t_fstPtrInt opcode=2; opcode<128; opcode++) {
+    char buffer[1024];
+    for(size_t i=0; i<1024; i++)buffer[i]=0;
+    if(!effKnown(opcode))
+      dispatch_v(effect, opcode, 100, 666, buffer, 0);
+    //print_hex(buffer, 64);
+  }
+
+  dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
+}
+
+
+
 void test_reaper(AEffect*effect) {
   t_fstPtrInt ret=0;
   char strbuf[1024];
