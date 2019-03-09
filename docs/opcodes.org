@@ -78,8 +78,8 @@
 
 |     opcode | value                       | notes                                                              |
 |------------+-----------------------------+--------------------------------------------------------------------|
-|          0 |                             | :REAPER calls with 0 (at the very beginning)                       |
-|          1 |                             | :CRASH                                                             |
+|          0 | effOpen                     | :REAPER calls with 0 (at the very beginning)                       |
+|          1 | effClose                    | :CRASH                                                             |
 |            |                             | :REAPER calls with 0 (at the very end)                             |
 |          2 | effSetProgram               | set program# via ivalue                                            |
 |          3 | effGetProgram               | returns current program#                                           |
@@ -91,7 +91,7 @@
 |          9 |                             |                                                                    |
 |         10 | effSetSampleRate            | :Protoverb prints "AM_AudioMan::reset()"                           |
 |         11 | effSetBlockSize             |                                                                    |
-|         12 |                             | :Protoverb does resume/reset and calls hostCode:6                  |
+|         12 | effMainsChanged             | :Protoverb does resume/reset and calls hostCode:6                  |
 |            |                             | :Digits calls hostCode:6                                           |
 |            |                             | :BowEcho/Danaides calls hostCode:23+6                              |
 |            |                             | :hypercyclic/tonespace calls hostCode:23+7+6                       |
@@ -131,8 +131,6 @@
 |      30514 |                             | :Protoverb calls hostCode:13                                       |
 | 0xdeadbeef |                             | :REAPER ask for function?                                          |
 |------------+-----------------------------+--------------------------------------------------------------------|
-|            | effOpen                     |                                                                    |
-|            | effClose                    |                                                                    |
 |            | effGetTailSize              |                                                                    |
 |            | effGetCurrentMidiProgram    |                                                                    |
 |            | effGetSpeakerArrangement    |                                                                    |
