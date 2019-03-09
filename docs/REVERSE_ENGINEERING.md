@@ -1305,7 +1305,7 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effEditTop                  |     |                    |                         |                       | JUCE-ignored                |
 | effGetChunk                 | 23  | index              | ptr(void[])             | size                  |                             |
 | effSetChunk                 | 24  | index, ivalue, ptr |                         | 0                     | ivalue=size                 |
-| effGetCurrentMidiProgram    |     |                    |                         | -1                    |                             |
+| effGetCurrentMidiProgram    | 63? |                    |                         | -1                    |                             |
 | effGetEffectName            | 45  |                    | ptr(char[64])           | 1                     |                             |
 | effGetInputProperties       | 33  | index              | ptr(VstPinProperties[]) | 1/0                   |                             |
 | effGetOutputProperties      | 34  | index              | ptr(VstPinProperties[]) | 1/0                   |                             |
@@ -1314,13 +1314,13 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effGetParamDisplay          | 7   |                    | ptr(char[8])            | 0                     |                             |
 | effGetParamLabel            | 6   |                    | ptr(char[8])            | 0                     |                             |
 | effGetParamName             | 8   |                    | ptr(char[8])            | 0                     |                             |
-| effGetPlugCategory          |     |                    |                         | category              |                             |
+| effGetPlugCategory          | 35  |                    |                         | category              |                             |
 | effGetProductString         | 48  |                    | ptr(char[64])           | 1                     |                             |
 | effGetProgramNameIndexed    | 29  |                    | ptr(char[24])           | hasProgram#index      |                             |
 | effGetProgramName           | 5   |                    | ptr(char[24])           | 0                     |                             |
 | effGetProgram               | 3   |                    |                         | current_program       |                             |
-| effGetSpeakerArrangement    |     |                    | ivalue([]), ptr([])     | (!(hasAUX or isMidi)) | in:(SpeakerArrangement[])   |
-| effSetSpeakerArrangement    |     | ivalue(ptr), ptr   |                         | 0/1                   |                             |
+| effGetSpeakerArrangement    | 69  |                    | ivalue([]), ptr([])     | (!(hasAUX or isMidi)) | in:(SpeakerArrangement[])   |
+| effSetSpeakerArrangement    | 42  | ivalue(ptr), ptr   |                         | 0/1                   |                             |
 | effGetTailSize              |     |                    |                         | audiotailInSamples    |                             |
 | effGetVendorString          | 47  |                    | ptr(char[64])           | 1                     |                             |
 | effGetVendorVersion         | 49  |                    |                         | version               |                             |
@@ -1331,19 +1331,19 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effProcessEvents            | 25  | ptr(&VstEvents)    |                         | isMidiProcessed       |                             |
 | effSetBlockSize             | 11  | ivalue             |                         | 0                     |                             |
 | effSetBypass                |     | ivalue             |                         | 0                     |                             |
-| effSetProcessPrecision      |     | ivalue             |                         | !isProcessing         |                             |
+| effSetProcessPrecision      | 77  | ivalue             |                         | !isProcessing         |                             |
 | effSetProgram               | 2   | ivalue             |                         | 0                     |                             |
 | effSetProgramName           | 4   | ptr(char[])        |                         | 0                     |                             |
 | effSetSampleRate            | 10  | fvalue             |                         | 0                     |                             |
-| effSetTotalSampleToProcess  |     | ivalue             |                         | ivalue                |                             |
+| effSetTotalSampleToProcess  | 73? | ivalue             |                         | ivalue                |                             |
 | effString2Parameter         |     | index, ptr(char[]) |                         | hasParam#index        |                             |
 | effConnectInput             |     |                    |                         |                       | JUCE-ignored                |
 | effConnectOutput            |     |                    |                         |                       | JUCE-ignored                |
 | effIdle                     |     |                    |                         |                       | JUCE-ignored                |
-| effVendorSpecific           |     | ALL                |                         |                       |                             |
-| effShellGetNextPlugin       |     |                    |                         |                       | JUCE-ignored                |
-| effStartProcess             |     |                    |                         |                       | JUCE-ignored                |
-| effStopProcess              |     |                    |                         |                       | JUCE-ignored                |
+| effVendorSpecific           | 50  | ALL                |                         |                       |                             |
+| effShellGetNextPlugin       | 70  |                    |                         |                       | JUCE-ignored                |
+| effStartProcess             | 71  |                    |                         |                       | JUCE-ignored                |
+| effStopProcess              | 72  |                    |                         |                       | JUCE-ignored                |
 
 ### JUCE host Opcodes
 
@@ -1352,25 +1352,25 @@ for host opcodes (`audioMaster*`) check out *juce_VSTPluginFormat.cpp*:
 | host opcode                            |    | IN            | OUT         | return            | notes                                                           |
 |----------------------------------------|----|---------------|-------------|-------------------|-----------------------------------------------------------------|
 | audioMasterAutomate                    | 0  | index, fvalue | -           | 0                 |                                                                 |
-| audioMasterProcessEvents               |    | ptr           | -           | 0                 | ptr=VstEvents[]                                                 |
+| audioMasterProcessEvents               | 8  | ptr           | -           | 0                 | ptr=VstEvents[]                                                 |
 | audioMasterGetTime                     | 7  | -             | -           | &vsttime          |                                                                 |
 | audioMasterIdle                        |    | -             | -           | 0                 |                                                                 |
-| audioMasterSizeWindow                  |    | index, value  |             | 1                 | setWindowSize(index,value)                                      |
+| audioMasterSizeWindow                  | 15 | index, value  |             | 1                 | setWindowSize(index,value)                                      |
 | audioMasterUpdateDisplay               |    | -             | -           | 0                 | triggerAsyncUpdate()                                            |
 | audioMasterIOChanged                   |    | -             | -           | 0                 | setLatencyDelay                                                 |
 | audioMasterNeedIdle                    |    | -             | -           | 0                 | startTimer(50)                                                  |
 | audioMasterGetSampleRate               | 16 | -             | -           | samplerate        |                                                                 |
 | audioMasterGetBlockSize                | 17 | -             | -           | blocksize         |                                                                 |
-| audioMasterWantMidi                    |    | -             | -           | 0                 | wantsMidi=true                                                  |
+| audioMasterWantMidi                    | 6  | -             | -           | 0                 | wantsMidi=true                                                  |
 | audioMasterGetDirectory                |    | -             | -           | (char[])directory |                                                                 |
 | audioMasterTempoAt                     | 10 | -             | -           | 10000*bpm         |                                                                 |
 | audioMasterGetAutomationState          |    | -             | -           | 0/1/2/3/4         | 0 = not supported, 1 = off, 2 = read, 3 = write, 4 = read/write |
-| audioMasterBeginEdit                   |    | index         | -           | 0                 | gesture                                                         |
-| audioMasterEndEdit                     |    | index         | -           | 0                 | gesture                                                         |
+| audioMasterBeginEdit                   | 43 | index         | -           | 0                 | gesture                                                         |
+| audioMasterEndEdit                     | 44 | index         | -           | 0                 | gesture                                                         |
 | audioMasterPinConnected                |    | index,value   | -           | 0/1               | 0=true; value=direction                                         |
-| audioMasterGetCurrentProcessLevel      |    | -             | -           | 4/0               | 4 if not realtime                                               |
+| audioMasterGetCurrentProcessLevel      | 23 | -             | -           | 4/0               | 4 if not realtime                                               |
 |----------------------------------------|----|---------------|-------------|-------------------|-----------------------------------------------------------------|
-| audioMasterCanDo                       |    | ptr(char[])   | -           | 1/0               | 1 if we can handle feature                                      |
+| audioMasterCanDo                       | 37 | ptr(char[])   | -           | 1/0               | 1 if we can handle feature                                      |
 | audioMasterVersion                     | 1  | -             | -           | 2400              |                                                                 |
 | audioMasterCurrentId                   | 2? | -             | -           | shellUIDToCreate  | ?                                                               |
 | audioMasterGetNumAutomatableParameters |    | -             | -           | 0                 |                                                                 |
