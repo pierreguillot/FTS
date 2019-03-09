@@ -169,6 +169,69 @@ static char*hostCode2string(t_fstPtrInt opcode, char*output, size_t length) {
   return output;
 }
 
+static int effKnown(t_fstPtrInt opcode) {
+  if(opcode>=100000)
+    return 0;
+  switch(opcode) {
+    case effCanBeAutomated:
+    case effCanDo:
+    case effClose:
+    case effConnectInput:
+    case effConnectOutput:
+    case effEditClose:
+    case effEditDraw:
+    case effEditGetRect:
+    case effEditIdle:
+    case effEditMouse:
+    case effEditOpen:
+    case effEditSleep:
+    case effEditTop:
+    case effGetChunk:
+    case effGetCurrentMidiProgram:
+    case effGetEffectName:
+    case effGetInputProperties:
+    case effGetNumMidiInputChannels:
+    case effGetNumMidiOutputChannels:
+    case effGetOutputProperties:
+    case effGetParamDisplay:
+    case effGetParamLabel:
+    case effGetParamName:
+    case effGetPlugCategory:
+    case effGetProductString:
+    case effGetProgram:
+    case effGetProgramName:
+    case effGetProgramNameIndexed:
+    case effGetSpeakerArrangement:
+    case effGetTailSize:
+    case effGetVendorString:
+    case effGetVendorVersion:
+    case effGetVstVersion:
+    case effIdentify:
+    case effIdle:
+    case effKeysRequired:
+    case effMainsChanged:
+    case effOpen:
+    case effProcessEvents:
+    case effSetBlockSize:
+    case effSetBypass:
+    case effSetChunk:
+    case effSetProcessPrecision:
+    case effSetProgram:
+    case effSetProgramName:
+    case effSetSampleRate:
+    case effSetSpeakerArrangement:
+    case effSetTotalSampleToProcess:
+    case effShellGetNextPlugin:
+    case effStartProcess:
+    case effStopProcess:
+    case effString2Parameter:
+    case effVendorSpecific:
+      return 1;
+  default: break;
+  }
+  return 0;
+}
+
 static void print_aeffect(AEffect*eff) {
   printf("AEffect @ %p", eff);
   if(!eff)return;
