@@ -107,6 +107,7 @@
 |         29 | effGetProgramNameIndexed    | :Protoverb returns 1 and ptr:"initialize"                          |
 |         33 | effGetInputProperties       | :Protoverb returns 1 and ptr:"Protoverb-In0"                       |
 |         34 | effGetOutputProperties      | :Protoverb returns 1 and ptr:"Protoverb-Out0"                      |
+|         35 | effGetPlugCategory          | :JUCE RETURNS VstPlugCategory                                      |
 |         35 |                             | :REAPER calls with 0                                               |
 |            |                             | :InstaLooper returns 0                                             |
 |            |                             | :Protoverb/BowEcho/Danaides/reacom.vst returns 1                   |
@@ -137,11 +138,8 @@
 |            | effGetNumMidiInputChannels  |                                                                    |
 |            | effGetNumMidiOutputChannels |                                                                    |
 |            |                             |                                                                    |
-|            | effMainsChanged             |                                                                    |
-|            | effProcessEvents            |                                                                    |
 |            | effCanBeAutomated           | :takes index                                                       |
 |            | effString2Parameter         |                                                                    |
-|            | effGetPlugCategory          | :JUCE RETURNS VstPlugCategory                                      |
 |            | effSetSpeakerArrangement    |                                                                    |
 |            | effSetBypass                |                                                                    |
 |            | effSetTotalSampleToProcess  |                                                                    |
