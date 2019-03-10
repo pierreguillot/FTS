@@ -3055,6 +3055,74 @@ So to conclude, we have the following new values:
 
 
 
+
+## effGetCurrentMidiProgram / effSetTotalSampleToProcess
+It's starting to get harder harvesting new opcodes.
+
+We can do another attempt at sending yet-unknown opcodes to our
+test plugins and note those were the plugins return non-0 values.
+
+Something like:
+
+~~~
+static int effKnown(t_fstPtrInt opcode) {
+  if(opcode>=100000)
+    return 0;
+  switch(opcode) {
+    case effCanBeAutomated:
+    case effCanDo:
+    case effClose:
+    case effConnectInput:
+    case effConnectOutput:
+    /* continue for all known opcodes */
+    // ...
+    case effVendorSpecific:
+      return 1;
+    default break;
+  }
+  return 0;
+
+void test(AEffect*effect) {
+  int index = 0;
+  t_fstPtrInt ivalue = 0;
+  dispatch(effect, effOpen, 0, 0, 0, 0.0);
+  for(size_t opcode=2; opcode<128; opcode++)
+    if(!effKnown(opcode))
+       dispatch(effect, opcode, index, ivalue, 0, 0.f);
+  dispatch(effect, effClose, 0, 0, 0, 0.0);
+}
+~~~
+
+This gives us the following opcodes:
+
+| value | return | plugins            |
+|-------|--------|--------------------|
+| 26    | 1      | ALL plugins        |
+| 44    | 1      | JUCE-based plugins |
+| 63    | -1     | ALL plugins        |
+| 78    | 1      | Digits             |
+|       |        |                    |
+
+If we set the `index` to something non-0 and compare the returned values, we don't notice any differences.
+If we set the `ivalue` to something non-0 and compare the returned values, we get another opcode,
+that seemingly returns the `ivalue` itself:
+
+| value | return   | plugins     |
+|-------|----------|-------------|
+| 73    | <ivalue> | ALL plugins |
+|       |          |             |
+
+The [JUCE effect opcode table](#juce-effect-opcodes) lists only
+two opcodes that return `-1` (and `effCanDo` is already known, leaving `effGetCurrentMidiProgram`).
+It also has a single opcode that returns the `ivalue` as is, which is `effSetTotalSampleToProcess`, so we know have:
+
+| opcode                     | value |
+|----------------------------|-------|
+| effGetCurrentMidiProgram   | 63    |
+| effSetTotalSampleToProcess | 73    |
+|                            |       |
+
+
 # misc
 LATER move this to proper sections
 
