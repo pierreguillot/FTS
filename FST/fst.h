@@ -133,12 +133,14 @@ typedef enum {
 
   FST_ENUM(effCanDo, 51), //IN:ptr(char*), returns 0|1|-1
   FST_ENUM(effGetVstVersion, 58), // return kVstVersion
+  FST_ENUM_EXPERIMENTAL(effGetCurrentMidiProgram, 63), // return -1
 
   FST_ENUM(effGetSpeakerArrangement, 69), // OUT:ivalue(VstSpeakerArrangement*in) OUT:ptr(VstSpeakerArrangement*out), return (!(hasAUX || isMidi))
 
   FST_ENUM(effShellGetNextPlugin, 70),
   FST_ENUM_EXPERIMENTAL(effStartProcess, 71),
   FST_ENUM_EXPERIMENTAL(effStopProcess, 72),
+  FST_ENUM(effSetTotalSampleToProcess, 73), // return ivalue
   FST_ENUM(effSetProcessPrecision, 77), //IN:ivalue(kVstProcessPrecision64,..), return !isProcessing
 
 
@@ -154,13 +156,11 @@ typedef enum {
   FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
   FST_ENUM_UNKNOWN(effString2Parameter), // IN:index, IN:ptr(char*), return (hasParam#)
 
-  FST_ENUM_UNKNOWN(effGetCurrentMidiProgram), // return -1
   FST_ENUM_UNKNOWN(effGetNumMidiInputChannels), // return 16*isMidi
   FST_ENUM_UNKNOWN(effGetNumMidiOutputChannels), // return 16*isMidi
 
   FST_ENUM_UNKNOWN(effSetBypass), //IN:ivalue, return 0; effCanDo("bypass")
   FST_ENUM_UNKNOWN(effGetTailSize), // return audiotailInSamples
-  FST_ENUM_UNKNOWN(effSetTotalSampleToProcess), // return ivalue
 
   FST_ENUM_UNKNOWN(effConnectInput),
   FST_ENUM_UNKNOWN(effConnectOutput),
