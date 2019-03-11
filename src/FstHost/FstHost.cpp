@@ -440,16 +440,21 @@ static float** makeFSamples(size_t channels, size_t frames) {
 
 
 void test_unknown(AEffect*effect) {
-  dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
+  char opcodestr[256];
+  dispatch_v0(effect, effOpen, 0, 0, 000, 0.000000);
+  fstpause(0.5);
+  int index = 0;
+  t_fstPtrInt ivalue = 0;
+  void*ptr = 0;
+  float fvalue = 0;
   for(t_fstPtrInt opcode=2; opcode<128; opcode++) {
-    char buffer[1024];
-    for(size_t i=0; i<1024; i++)buffer[i]=0;
-    if(!effKnown(opcode))
-      dispatch_v(effect, opcode, 100, 666, buffer, 0);
-    //print_hex(buffer, 64);
+    if(effKnown(opcode))
+      continue;
+    dispatch_v1(effect, opcode, index, ivalue, ptr, fvalue);
   }
 
-  dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
+  fstpause(0.5);
+  dispatch_v0(effect, effClose, 0, 0, 000, 0.000000);
 }
 
 
