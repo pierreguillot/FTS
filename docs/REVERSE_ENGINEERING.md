@@ -3123,6 +3123,65 @@ It also has a single opcode that returns the `ivalue` as is, which is `effSetTot
 |                            |       |
 
 
+# effString2Parameter
+The `effString2Parameter` is most likely uesd for setting a parameter via a string representation.
+A simple routine to find the opcode value is to send a string with some numeric value to all unknown opcodes,
+and read back the parameter (e.g. as a string representation via `effGetParamDisplay`).
+If the read back parameter has changed (not necessarily to the value we sent it, but in relation to previous printouts),
+we probably have found the `effString2Parameter` opcode:
+
+~~~C
+  dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
+  for(t_fstPtrInt opcode=2; opcode<128; opcode++) {
+    int index = 0;
+    if(effKnown(opcode))
+      continue;
+    char buffer[1024];
+    char outbuffer[1024];
+    outbuffer[0] = buffer[0] = 0;
+    snprintf(buffer, 1024, "0.666");
+    dispatch_v(effect, opcode, index, 0, buffer, 0.);
+    effect->dispatcher(effect, effGetParamDisplay, index, 0, outbuffer, 0.);
+    if(*outbuffer)printf("param:%02d: %s\n", index, outbuffer);
+  }
+  dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
+~~~
+
+Unfortunately for none of our test plugins
+(*BowEcho*, *Danaides*, *Digits*, *InstaLooper*, *Protoverb*, *hypercyclic*, *tonespace*)
+the read back value changes for any of the tested opcodes.
+
+Luckily, a friend of mine pointed me to another set of free-as-in-beer plugins, the [GVST](https://www.gvst.co.uk/index.htm) set.
+
+## kVstMaxVendorStrLen
+Loading the above plugin in a fake host, we get immediate segfaults when trying to write vendor string,
+using our estimate of `kVstMaxVendorStrLen` (197782).
+Gradually lowering the maximum length of the vendor string, the first value where it doesn't crash is `130`.
+This is a much more reasonable length thatn *197782*, although `128` would be even more plausible.
+Lets used that last value for `kVstMaxVendorStrLen` (and `kVstMaxProductStrLen` as well).
+
+## effString2Parameter
+If we now try run the above snippet to test for `effString2Parameter`, the returned parameter value changes with
+`opcode:27`:
+
+~~~
+dispatch(21, 0, 0, "0.666", 0.000000) => 0; param[0] = "10"
+dispatch(26, 0, 0, "0.666", 0.000000) => 1; param[0] = "10"
+dispatch(27, 0, 0, "0.666", 0.000000) => 1; param[0] = "1"
+dispatch(28, 0, 0, "0.666", 0.000000) => 0; param[0] = "1"
+~~~
+
+We can also test with some bigger value in the string:
+~~~
+dispatch(21, 0, 0, "39", 0.000000) => 0; param[0] = "10"
+dispatch(26, 0, 0, "39", 0.000000) => 1; param[0] = "10"
+dispatch(27, 0, 0, "39", 0.000000) => 1; param[0] = "39"
+dispatch(28, 0, 0, "39", 0.000000) => 0; param[0] = "39"
+~~~
+
+So we have learned that `effString2Parameter` is `27`.
+(`opcode:26` returns `1`, like any other plugin we have seen so far.)
+
 # misc
 LATER move this to proper sections
 
