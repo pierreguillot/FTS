@@ -35,6 +35,7 @@ all VST-related software was accessed on 2019-02-16.
 - Digits: http://www.extentofthejam.com/
 - Hypercyclic: http://www.mucoder.net/en/hypercyclic/
 - Tonespace: http://www.mucoder.net/en/tonespace/
+- GVST: https://www.gvst.co.uk/index.htm
 
 ### Hosts
 
