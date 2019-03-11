@@ -44,6 +44,36 @@ t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ival
   return 0xDEAD;
 }
 
+t_fstPtrInt dispatch_v1 (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  if(effect) {
+    char opcodestr[256];
+    t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
+    if(result)
+      printf("AEffect.dispatch(%s, %s, %d, %lu, %p, %f) => %d\n"
+             , effectname
+             , effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue
+             , result
+        );
+    return result;
+  }
+  return 0xDEAD;
+}
+
+t_fstPtrInt dispatch_v0 (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  if(effect) {
+    char opcodestr[256];
+    t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
+    printf("AEffect.dispatch(%s, %s, %d, %lu, %p, %f) => %d\n"
+           , effectname
+           , effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue
+           , result
+      );
+    return result;
+  }
+  return 0xDEAD;
+}
+
+
 t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt value, void*ptr, float opt) {
   char sbuf[256] = {0};
   printf("FstHost::dispatcher[%d]", effect?effect->resvd2:-1);
