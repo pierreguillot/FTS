@@ -266,8 +266,9 @@ enum { /* VstTimeInfo.flags */
 };
 enum {
 /* 197782 is where the array passed at opcode:33 overflows */
-  FST_ENUM_EXPERIMENTAL(kVstMaxProductStrLen, 197782),
-  FST_ENUM_EXPERIMENTAL(kVstMaxVendorStrLen, 197782),
+/* GVST/GChorus crashes with kVstMaxVendorStrLen>130 */
+  FST_ENUM_EXPERIMENTAL(kVstMaxProductStrLen, 128),
+  FST_ENUM_EXPERIMENTAL(kVstMaxVendorStrLen, 128),
   FST_ENUM_EXPERIMENTAL(kVstMaxLabelLen, 64),
   FST_ENUM_EXPERIMENTAL(kVstMaxShortLabelLen, 8),
 
