@@ -189,6 +189,9 @@ typedef enum {
 
   FST_ENUM(kPlugCategShell, 10),
   FST_ENUM(kPlugCategGenerator, 11),
+
+#warning document origin of kPlugCategOfflineProcess
+  FST_ENUM_UNKNOWN(kPlugCategOfflineProcess)
 } VstPlugCategory;
 
 typedef enum {
