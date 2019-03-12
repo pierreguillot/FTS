@@ -232,6 +232,62 @@ static int effKnown(t_fstPtrInt opcode) {
   return 0;
 }
 
+static int hostKnown(t_fstPtrInt opcode) {
+  if(opcode>=100000)
+    return 0;
+  switch(opcode) {
+    case audioMasterAutomate:
+    case audioMasterVersion:
+    case audioMasterCurrentId:
+    case audioMasterWantMidi:
+    case audioMasterGetTime:
+    case audioMasterProcessEvents:
+    case audioMasterTempoAt:
+    case audioMasterGetSampleRate:
+    case audioMasterSizeWindow:
+    case audioMasterGetBlockSize:
+    case audioMasterGetCurrentProcessLevel:
+    case audioMasterGetVendorString:
+    case audioMasterGetProductString:
+    case audioMasterGetVendorVersion:
+    case audioMasterCanDo:
+    case audioMasterBeginEdit:
+    case audioMasterEndEdit:
+    case audioMasterCloseWindow:
+    case audioMasterOpenWindow:
+    case audioMasterSetIcon:
+    case audioMasterUpdateDisplay:
+    case audioMasterGetParameterQuantization:
+    case audioMasterGetNumAutomatableParameters:
+    case audioMasterGetAutomationState:
+    case audioMasterGetInputLatency:
+    case audioMasterGetOutputLatency:
+    case audioMasterGetDirectory:
+    case audioMasterGetLanguage:
+    case audioMasterGetOutputSpeakerArrangement:
+    case audioMasterOfflineGetCurrentMetaPass:
+    case audioMasterOfflineGetCurrentPass:
+    case audioMasterOfflineRead:
+    case audioMasterOfflineStart:
+    case audioMasterOfflineWrite:
+    case audioMasterGetNextPlug:
+    case audioMasterGetPreviousPlug:
+    case audioMasterIdle:
+    case audioMasterNeedIdle:
+    case audioMasterIOChanged:
+    case audioMasterPinConnected:
+    case audioMasterSetOutputSampleRate:
+    case audioMasterSetTime:
+    case audioMasterWillReplaceOrAccumulate:
+    case audioMasterVendorSpecific:
+    case audioMasterOpenFileSelector:
+    case audioMasterCloseFileSelector:
+      return 1;
+  default: break;
+  }
+  return 0;
+}
+
 static void print_aeffect(AEffect*eff) {
   printf("AEffect @ %p", eff);
   if(!eff)return;
