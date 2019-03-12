@@ -3199,6 +3199,12 @@ gets called with automation, whenever the window gets focus?
 The address seems to be zeroed-out (at least the first 0x99 bytes).
 The index is the parameter index currently being automated...
 
+
+### effCode:62
+how did i trigger this?
+
+5*16 (80) bytes == 0x00
+
 ## effCode:66
 adding a MIDI-item in REAPER and pressing some keys
 will send plenty of messages with effect opcode `66` to a plugin.
@@ -3215,10 +3221,3 @@ the pointer is an address to a memory region,
 where the first 4 bytes are 0,
 and the 2nd 4 bytes are an int32 between 34 and 72.
 the numbers seem to be the visible notes on the virtual MIDI keyboard.
-
-
-
-### effCode:62
-how did i trigger this?
-
-5*16 (80) bytes == 0x00
