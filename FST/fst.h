@@ -117,7 +117,7 @@ typedef enum {
   FST_ENUM(effSetChunk, 24), // IN:index, IN:ivalue(size), IN:ptr(void*), return 0
 
   FST_ENUM(effProcessEvents, 25), // IN:ptr(VstEvents*), return ((bool)MidiProcessed
-
+  FST_ENUM(effCanBeAutomated, 26), // (can parameter# be automated) IN:index, return 0
   FST_ENUM(effString2Parameter, 27), // IN:index, IN:ptr(char*), return (hasParam#)
 
   FST_ENUM(effGetProgramNameIndexed, 29), // IN:index, OUT:ptr(char[24], return (hasProg#)
@@ -154,8 +154,6 @@ typedef enum {
   FST_ENUM_UNKNOWN(effEditSleep),
   FST_ENUM_UNKNOWN(effEditTop),
   FST_ENUM_UNKNOWN(effEditIdle),
-
-  FST_ENUM_UNKNOWN(effCanBeAutomated), // (can parameter# be automated) IN:index, return 0
 
   FST_ENUM_UNKNOWN(effGetNumMidiInputChannels), // return 16*isMidi
   FST_ENUM_UNKNOWN(effGetNumMidiOutputChannels), // return 16*isMidi
