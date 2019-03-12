@@ -3295,3 +3295,25 @@ the pointer is an address to a memory region,
 where the first 4 bytes are 0,
 and the 2nd 4 bytes are an int32 between 34 and 72.
 the numbers seem to be the visible notes on the virtual MIDI keyboard.
+
+
+## even more symbols
+
+|                | symbol                         | project    |
+|----------------|--------------------------------|------------|
+| opcode         | effBeginSetProgram             | vstplugin~ |
+| opcode         | effEndSetProgram               | vstplugin~ |
+|----------------|--------------------------------|------------|
+| constant       | kEffectMagic                   | vstplugin~ |
+| constant       | kPlugCategOfflineProcess       | vstplugin~ |
+| constant       | kSpeakerUndefined              | vstplugin~ |
+| constant       | kSpeakerM                      | vstplugin~ |
+|----------------|--------------------------------|------------|
+| member         | VstTimeInfo.samplesToNextClock | vstplugin~ |
+| member         | AEffect.user                   | vstplugin~ |
+|----------------|--------------------------------|------------|
+| type           | VstAEffectFlags                | vstplugin~ |
+| type           | VstIntPtr                      | vstplugin~ |
+| type           | VstInt32                       | vstplugin~ |
+|----------------|--------------------------------|------------|
+| function/macro | CCONST                         | vstplugin~ |
