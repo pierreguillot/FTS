@@ -3183,6 +3183,70 @@ dispatch(28, 0, 0, "39", 0.000000) => 0; param[0] = "39"
 So we have learned that `effString2Parameter` is `27`.
 (`opcode:26` returns `1`, like any other plugin we have seen so far.)
 
+## effCanBeAutomated
+
+We now have another set of plugins to test (the `GVST` set).
+In order to make testing a bit easier, I wrote a little "proxy plugin" (see `src/FstProxy/`)
+that takes an ordinary plugin file via the `FST_PROXYPLUGIN` environment variable.
+When instantiating the proxy plugin, it will return an instance of the plugin
+found in the `FST_PROXYPLUGIN` file, but will re-write the `AEffect.dispatcher` function
+and the host-dispatcher (as passed to `VstPlugMain`), so we can add some additional
+printout, to see how a real-world plugin communicates with a real-world host.
+
+Something like the following:
+
+~~~
+static
+t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  AEffectDispatcherProc h2p = s_host2plugin[effect];
+  char effbuf[256] = {0};
+  printf("Fst::host2plugin(%s, %d, %ld, %p, %f)",
+         effCode2string(opcode, effbuf, 255),
+         index, ivalue, ptr, fvalue);
+  t_fstPtrInt result = h2p(effect, opcode, index, ivalue, ptr, fvalue);
+  printf(" => %ld\n", result);
+  fflush(stdout);
+  return result;
+}
+~~~
+
+Unfortunately this doesn't reveal *very* much.
+I discovered the following unknown effect opcodes:
+
+~~~
+Fst::host2plugin(19, 0, 0, (nil), 0.000000) => 0
+Fst::host2plugin(26, 0, 0, (nil), 0.000000) => 1
+Fst::host2plugin(26, 1, 0, (nil), 0.000000) => 1
+Fst::host2plugin(53, 0, 0, (nil), 0.000000) => 0
+Fst::host2plugin(56, 2, 0, 0xPTR, 0.000000) => 0
+Fst::host2plugin(62, 0, 0, 0xPTR, 0.000000) => 0
+Fst::host2plugin(66, 0, 0, 0xPTR, 0.000000) => 0
+~~~
+
+And the following unknown audioMaster opcodes:
+
+~~~
+Fst::plugin2host(13, 0, 0, (nil), 0.000000) -> 1
+Fst::plugin2host(42, 0, 0, (nil), 0.000000) -> 1
+~~~
+
+On closer inspection, we see `effCode:26` is called with an index up to `AEffect.numParams`.
+REAPER only calls this opcode, before opening a dialog window where we can select an parameter to
+be automated.
+
+Looking up the [JUCE table](#juce-effect-opcodes), there's only one effect opcode (we know of)
+that takes an index (and which we don't know yet): `effCanBeAutomated`.
+Since the opcode is called when REAPER does something with automation, it is even more likely that this is the correct name.
+
+However, in our minimal fake plugin, this opcode doesn't really get called.
+Probably we don't reply correctly to some prior opcode.
+
+Anyhow, we can hack our proxy plugin, to respond to `effCpde:26` with `1` only for indices less than (e.g.) `5`.
+Doing that with a plugin that has more parameters (e.g. `GVST/GSynth` has 30 parameters),
+REAPER will reduce the selection choice for parameters to be automated to the first five.
+
+So indeed, `effCanBeAutomated` seems to have the value `26`.
+
 # misc
 LATER move this to proper sections
 
