@@ -1,7 +1,6 @@
 #include "fst.h"
 #include "fst_utils.h"
 #include <stdio.h>
-#include <dlfcn.h>
 
 #include <string>
 #include <string.h>
@@ -11,8 +10,6 @@
 static std::map<AEffect*, AEffectDispatcherProc>s_host2plugin;
 static std::map<AEffect*, AEffectDispatcherProc>s_plugin2host;
 static AEffectDispatcherProc s_plug2host;
-
-typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
 
 static
 t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
@@ -26,6 +23,15 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
     printf("getEffectName\n");
     snprintf((char*)ptr, 16, "ProxyEffect");
     return 1;
+  case effCanDo:
+    printf("Fst::pluginCanDo '%s'\n", (char*)ptr);
+    break;
+  case 26:
+    printf("OPCODE26: %d\n", index);
+    return (index<5);
+  case 56:
+    print_hex(ptr, 256);
+    break;
   default:
     break;
   }
@@ -39,6 +45,12 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
 #ifdef FST_EFFKNOWN
   doPrint = !effKnown(opcode);
 #endif
+  switch(opcode) {
+  default: break;
+  case effVendorSpecific:
+    doPrint = false;
+    break;
+  }
   if(doPrint) {
     char effbuf[256] = {0};
     printf("Fst::host2plugin(%s, %d, %ld, %p, %f)",
@@ -46,6 +58,13 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
            index, ivalue, ptr, fvalue);
   }
   t_fstPtrInt result = h2p(effect, opcode, index, ivalue, ptr, fvalue);
+  switch(opcode) {
+  default: break;
+  case 56:
+    print_hex(ptr, 256);
+    break;
+  }
+
   if(doPrint) {
     printf(" => %ld\n", result);
     fflush(stdout);
@@ -88,18 +107,6 @@ t_fstPtrInt plugin2host (AEffect* effect, int opcode, int index, t_fstPtrInt iva
   return result;
 }
 
-static
-t_fstMain* load_plugin(const char* filename) {
-  void*handle = dlopen(filename, RTLD_NOW | RTLD_GLOBAL);
-  void*vstfun = 0;
-  printf("Fst::loading %s as %p\n", filename, handle);
-  if(!handle){printf("\t%s\n", dlerror()); return 0; }
-  if(!vstfun)vstfun=dlsym(handle, "VSTPluginMain");
-  if(!vstfun)vstfun=dlsym(handle, "main");
-  if(!vstfun)dlclose(handle);
-  printf("Fst::loaded '%s' @ %p: %p\n", filename, handle, vstfun);
-  return (t_fstMain*)vstfun;
-}
 
 extern "C"
 AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
@@ -107,7 +114,7 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   if(!pluginfile)return 0;
   s_plug2host = dispatch4host;
 
-  t_fstMain*plugMain = load_plugin(pluginfile);
+  t_fstMain*plugMain = fstLoadPlugin(pluginfile);
   printf("plugMain: %p\n", plugMain);
   if(!plugMain)return 0;
 
