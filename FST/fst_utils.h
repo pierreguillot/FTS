@@ -305,9 +305,12 @@ static void print_aeffect(AEffect*eff) {
   printf("\n\tnumInputs=%d", eff->numInputs);
   printf("\n\tnumOutputs=%d", eff->numOutputs);
 
-  printf("\n\tflags="); print_binary(eff->flags);
-#define FST_UTILS__FLAG(x) if(effFlags##x)                  \
-    {if(effFlags##x & eff->flags)printf("\n\t      %s", #x);}   \
+  int flags = eff->flags;
+  printf("\n\tflags="); print_binary(flags);
+#define FST_UTILS__FLAG(x) if(effFlags##x) {                      \
+    if(effFlags##x & flags)printf("\n\t      %s", #x);            \
+    flags &= ~effFlags##x;                                        \
+  }                                                               \
   else printf("\n\t      ???%s???", #x)
 
   FST_UTILS__FLAG(HasEditor);
@@ -316,6 +319,10 @@ static void print_aeffect(AEffect*eff) {
   FST_UTILS__FLAG(CanReplacing);
   FST_UTILS__FLAG(NoSoundInStop);
   FST_UTILS__FLAG(ProgramChunks);
+  if(flags) {
+    printf("\n\t      ");
+    print_binary(flags);
+  }
 
   printf("\n\tresvd1=0x%X", eff->resvd1);
   printf("\n\tresvd2=0x%X", eff->resvd2);
