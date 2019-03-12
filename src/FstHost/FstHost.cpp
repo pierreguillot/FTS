@@ -100,14 +100,11 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
     printf("automate parameter[%d] to %f\n", index, opt);
     break;
   case audioMasterGetProductString:
-    printf("GetProduct?String\n");
-#if 0
     for(size_t i=0; i<kVstMaxProductStrLen; i++) {
       ((char*)ptr)[i] = 64+i%60;
     }
     strncpy((char*)ptr, "FstProduct?", kVstMaxProductStrLen);
     return 1;
-#endif
     break;
   case audioMasterGetVendorString:
     strncpy((char*)ptr, "FstVendor?", kVstMaxVendorStrLen);
