@@ -86,10 +86,6 @@ typedef enum {
 
   FST_ENUM_UNKNOWN(audioMasterVendorSpecific), //?, return 0
 
-  #warning document audioMaster*FileSelector
-  FST_ENUM_UNKNOWN(audioMasterOpenFileSelector),
-  FST_ENUM_UNKNOWN(audioMasterCloseFileSelector),
-
   FST_ENUM_UNKNOWN(fst_audioMasterLast)
 } t_fstHostOpcode;;
 typedef enum {
