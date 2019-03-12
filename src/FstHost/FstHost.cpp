@@ -1,7 +1,12 @@
 #include "fst.h"
 #include "fst_utils.h"
 #include <stdio.h>
-#include <dlfcn.h>
+
+#ifdef _WIN32
+# include <windows.h>
+#else
+# include <dlfcn.h>
+#endif
 
 #include <string>
 #include <string.h>
@@ -126,16 +131,25 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
 }
 
 t_fstMain* load_plugin(const char* filename) {
+  t_fstMain*vstfun = 0;
+#ifdef _WIN32
+  HINSTANCE handle = LoadLibrary(filename);
+  printf("loading %s as %p\n", filename, handle);
+  if(!handle){printf("\tfailed!\n"); return 0; }
+  if(!vstfun)vstfun=(t_fstMain*)GetProcAddress(handle, "VSTPluginMain");
+  if(!vstfun)vstfun=(t_fstMain*)GetProcAddress(handle, "main");
+  if(!vstfun)FreeLibrary(handle);
+#else
   void*handle = dlopen(filename, RTLD_NOW | RTLD_GLOBAL);
-  void*vstfun = 0;
   printf("loading %s as %p\n", filename, handle);
   if(!handle){printf("\t%s\n", dlerror()); return 0; }
-  if(!vstfun)vstfun=dlsym(handle, "VSTPluginMain");
-  if(!vstfun)vstfun=dlsym(handle, "main");
+  if(!vstfun)vstfun=(t_fstMain*)dlsym(handle, "VSTPluginMain");
+  if(!vstfun)vstfun=(t_fstMain*)dlsym(handle, "main");
   if(!vstfun)dlclose(handle);
+#endif
   printf("loaded '%s' @ %p: %p\n", filename, handle, vstfun);
   fstpause(1.);
-  return (t_fstMain*)vstfun;
+  return vstfun;
 }
 
 void test_effCanDo(AEffect*effect, const char*feature) {
