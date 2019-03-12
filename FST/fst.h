@@ -21,7 +21,12 @@
 #define kVstVersion FST_UNKNOWN(2400)
 
 #define VSTCALLBACK
+
+#if defined(_WIN32) && defined(__x86_64__)
+typedef long long t_fstPtrInt; /* pointer sized int */
+#else
 typedef long t_fstPtrInt; /* pointer sized int */
+#endif
 typedef int t_fstInt32; /* 32bit int */
 
 typedef enum {
