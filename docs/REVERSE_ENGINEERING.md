@@ -3189,6 +3189,10 @@ LATER move this to proper sections
 ## effCanBeAutomated
 called for each parameter
 
+## effCode:26
+with `index` for each parameter, GVST returns `1`.
+This opcode is sent when clicking on the automation button in REAPER, that opens up
+a list of parameters which can be automated.
 
 ## effCode:56
 
