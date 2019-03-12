@@ -2,8 +2,20 @@
 #define FST_FST_UTILS_H_
 
 #include "fst.h"
+
+#ifdef _WIN32
+# include <windows.h>
+#else
+# include <dlfcn.h>
+#endif
+
 #include <stdio.h>
 #include <string>
+
+#include <unistd.h>
+void fstpause(float duration=1.0) {
+  usleep(duration * 1000000);
+}
 
 static void print_hex(void*ptr, size_t length) {
   printf("DATA@%p [%d]", ptr, length);
@@ -460,5 +472,28 @@ static VstEvents*create_vstevents(const unsigned char midi[4]) {
 }
 
 
+typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
+static
+t_fstMain* fstLoadPlugin(const char* filename) {
+  t_fstMain*vstfun = 0;
+#ifdef _WIN32
+  HINSTANCE handle = LoadLibrary(filename);
+  printf("loading %s as %p\n", filename, handle);
+  if(!handle){printf("\tfailed!\n"); return 0; }
+  if(!vstfun)vstfun=(t_fstMain*)GetProcAddress(handle, "VSTPluginMain");
+  if(!vstfun)vstfun=(t_fstMain*)GetProcAddress(handle, "main");
+  if(!vstfun)FreeLibrary(handle);
+#else
+  void*handle = dlopen(filename, RTLD_NOW | RTLD_GLOBAL);
+  printf("loading %s as %p\n", filename, handle);
+  if(!handle){printf("\t%s\n", dlerror()); return 0; }
+  if(!vstfun)vstfun=(t_fstMain*)dlsym(handle, "VSTPluginMain");
+  if(!vstfun)vstfun=(t_fstMain*)dlsym(handle, "main");
+  if(!vstfun)dlclose(handle);
+#endif
+  printf("loaded '%s' @ %p: %p\n", filename, handle, vstfun);
+  fstpause(1.);
+  return vstfun;
+}
 
 #endif /* FST_FST_UTILS_H_ */

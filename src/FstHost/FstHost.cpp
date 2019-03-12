@@ -11,14 +11,7 @@
 #include <string>
 #include <string.h>
 
-typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
-
 char effectname[1024];
-
-#include <unistd.h>
-void fstpause(float duration=1.0) {
-  usleep(duration * 1000000);
-}
 
 float db2slider(float f) {
   return f;
@@ -128,28 +121,6 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
     break;
   }
   return 0;
-}
-
-t_fstMain* load_plugin(const char* filename) {
-  t_fstMain*vstfun = 0;
-#ifdef _WIN32
-  HINSTANCE handle = LoadLibrary(filename);
-  printf("loading %s as %p\n", filename, handle);
-  if(!handle){printf("\tfailed!\n"); return 0; }
-  if(!vstfun)vstfun=(t_fstMain*)GetProcAddress(handle, "VSTPluginMain");
-  if(!vstfun)vstfun=(t_fstMain*)GetProcAddress(handle, "main");
-  if(!vstfun)FreeLibrary(handle);
-#else
-  void*handle = dlopen(filename, RTLD_NOW | RTLD_GLOBAL);
-  printf("loading %s as %p\n", filename, handle);
-  if(!handle){printf("\t%s\n", dlerror()); return 0; }
-  if(!vstfun)vstfun=(t_fstMain*)dlsym(handle, "VSTPluginMain");
-  if(!vstfun)vstfun=(t_fstMain*)dlsym(handle, "main");
-  if(!vstfun)dlclose(handle);
-#endif
-  printf("loaded '%s' @ %p: %p\n", filename, handle, vstfun);
-  fstpause(1.);
-  return vstfun;
 }
 
 void test_effCanDo(AEffect*effect, const char*feature) {
@@ -542,9 +513,8 @@ void test_reaper(AEffect*effect) {
   printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 }
 
-
 int test_plugin(const char*filename) {
-  t_fstMain*vstmain = load_plugin(filename);
+  t_fstMain*vstmain = fstLoadPlugin(filename);
   if(!vstmain)return printf("'%s' was not loaded\n", filename);
   AEffect*effect = vstmain(&dispatcher);
   printf("instantiated effect %p\n", effect);
