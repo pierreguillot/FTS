@@ -6,54 +6,47 @@
 #include <string>
 #include <string.h>
 
+#include <map>
+
+
+static std::map<AEffect*, AEffectDispatcherProc>s_host2plugin;
+static std::map<AEffect*, AEffectDispatcherProc>s_plugin2host;
+static AEffectDispatcherProc s_plug2host;
+
 typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
-
-
-typedef struct FstProxy_ {
-  AEffectDispatcherProc host2plugin;
-  AEffectDispatcherProc plugin2host;
-} FstProxy_t;
-static FstProxy_t*s_proxy = 0;
 
 static
 t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
-  if(!effect)
+  AEffectDispatcherProc h2p = s_host2plugin[effect];
+  if(!h2p)
     return 0xDEAD;
 
-  FstProxy_t*proxy = (FstProxy_t*)effect->object;
-  if(proxy && proxy->host2plugin) {
-    char effbuf[256] = {0};
-    printf("Fst::host2plugin(%s, %d, %ld, %p, %f)",
-           hostCode2string(opcode, effbuf, 255),
-           index, ivalue, ptr, fvalue);
-    t_fstPtrInt result = proxy->host2plugin(effect, opcode, index, ivalue, ptr, fvalue);
-    printf(" => %ld\n", result);
-    return result;
-  }
-  return 0xDEAD;
+
+  char effbuf[256] = {0};
+  printf("Fst::host2plugin(%s, %d, %ld, %p, %f)",
+         effCode2string(opcode, effbuf, 255),
+         index, ivalue, ptr, fvalue);
+  t_fstPtrInt result = h2p(effect, opcode, index, ivalue, ptr, fvalue);
+  printf(" => %ld\n", result);
+  return result;
 }
 
 static
 t_fstPtrInt plugin2host (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
-  if(!effect)
-    return 0xDEAD;
+  AEffectDispatcherProc p2h = s_plugin2host[effect];
 
-  FstProxy_t*proxy = (FstProxy_t*)effect->object;
-  if(!proxy) {
-    proxy = s_proxy;
-    effect->object = proxy;
-  }
-  if(!proxy->host2plugin) {
-    proxy->host2plugin = effect->dispatcher;
+  if(!p2h)p2h = s_plug2host;
+  if(effect && !s_host2plugin[effect]) {
+    s_host2plugin[effect] = effect->dispatcher;
     effect->dispatcher = host2plugin;
   }
 
   char effbuf[256] = {0};
   printf("Fst::plugin2host(%s, %d, %ld, %p, %f)",
-         effCode2string(opcode, effbuf, 255),
+         hostCode2string(opcode, effbuf, 255),
          index, ivalue, ptr, fvalue);
-  t_fstPtrInt result = proxy->plugin2host(effect, opcode, index, ivalue, ptr, fvalue);
-  printf(" => %ld\n", result);
+  t_fstPtrInt result = p2h(effect, opcode, index, ivalue, ptr, fvalue);
+  printf(" -> %ld\n", result);
   return result;
 }
 
@@ -76,12 +69,16 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   if(!pluginfile)return 0;
   t_fstMain*plugMain = load_plugin(pluginfile);
   if(!plugMain)return 0;
-  FstProxy_t*proxy = new FstProxy_t;
-  s_proxy = proxy;
-  proxy->plugin2host = dispatch4host;
 
-  AEffect*eff = plugMain(plugin2host);
-  eff->object = proxy;
-  proxy->host2plugin = eff->dispatcher;
-  eff->dispatcher = host2plugin;
+  s_plug2host = dispatch4host;
+  AEffect*plug = plugMain(plugin2host);
+  if(!plug)
+    return plug;
+
+  s_plugin2host[plug] = dispatch4host;
+  if(plug->dispatcher != host2plugin) {
+    s_host2plugin[plug] = plug->dispatcher;
+    plug->dispatcher = dispatch4host;
+  }
+  return plug;
 }
