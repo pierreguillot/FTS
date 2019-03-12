@@ -229,6 +229,7 @@ typedef enum {
   FST_ENUM_UNKNOWN(kSpeakerLfe),
   FST_ENUM_UNKNOWN(kSpeakerLfe2),
   FST_ENUM_UNKNOWN(kSpeakerLs),
+  FST_ENUM_UNKNOWN(kSpeakerM),
   FST_ENUM_UNKNOWN(kSpeakerR),
   FST_ENUM_UNKNOWN(kSpeakerRc),
   FST_ENUM_UNKNOWN(kSpeakerRs),
@@ -241,7 +242,9 @@ typedef enum {
   FST_ENUM_UNKNOWN(kSpeakerTm),
   FST_ENUM_UNKNOWN(kSpeakerTrc),
   FST_ENUM_UNKNOWN(kSpeakerTrl),
-  FST_ENUM_UNKNOWN(kSpeakerTrr)
+  FST_ENUM_UNKNOWN(kSpeakerTrr),
+  FST_ENUM_UNKNOWN(kSpeakerUndefined),
+  FST_ENUM_UNKNOWN(fst_kSpeakerLast)
 } t_fstSpeakerArrangementType;
 enum { /* VstTimeInfo.flags */
   FST_ENUM(kVstTransportChanged,     (1<<0)),
