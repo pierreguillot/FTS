@@ -1294,10 +1294,10 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 |-----------------------------|-----|--------------------|-------------------------|-----------------------|-----------------------------|
 | effCanBeAutomated           |     | index              |                         | 0/1                   | can param#idx be automated? |
 | effCanDo                    | 51  | ptr(char[])        |                         | 0/1/-1                |                             |
-| effOpen                     | 0?  |                    |                         | 0                     |                             |
-| effClose                    | 1?  |                    |                         | 0                     |                             |
-| effEditClose                | 15  |                    |                         | 0                     |                             |
-| effEditGetRect              | 13  |                    | ptr(ERect[])            | ptr                   |                             |
+| effOpen                     | 0?  | -                  | -                       | 0                     |                             |
+| effClose                    | 1?  | -                  | -                       | 0                     |                             |
+| effEditClose                | 15  | -                  |                         | 0                     |                             |
+| effEditGetRect              | 13  | -                  | ptr(ERect[])            | ptr                   |                             |
 | effEditDraw                 |     |                    |                         |                       | JUCE-ignored                |
 | effEditIdle                 |     |                    |                         |                       | JUCE-ignored                |
 | effEditMouse                |     |                    |                         |                       | JUCE-ignored                |
@@ -1306,42 +1306,42 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effEditTop                  |     |                    |                         |                       | JUCE-ignored                |
 | effGetChunk                 | 23  | index              | ptr(void[])             | size                  |                             |
 | effSetChunk                 | 24  | index, ivalue, ptr |                         | 0                     | ivalue=size                 |
-| effGetCurrentMidiProgram    | 63? |                    |                         | -1                    |                             |
-| effGetEffectName            | 45  |                    | ptr(char[64])           | 1                     |                             |
+| effGetCurrentMidiProgram    | 63? | -                  | -                       | -1                    |                             |
+| effGetEffectName            | 45  | -                  | ptr(char[64])           | 1                     |                             |
 | effGetInputProperties       | 33  | index              | ptr(VstPinProperties[]) | 1/0                   |                             |
 | effGetOutputProperties      | 34  | index              | ptr(VstPinProperties[]) | 1/0                   |                             |
-| effGetNumMidiInputChannels  |     |                    |                         | 16/0                  | 16 if plugin handles MIDI   |
-| effGetNumMidiOutputChannels |     |                    |                         | 16/0                  | 16 if plugin handles MIDI   |
-| effGetParamDisplay          | 7   |                    | ptr(char[8])            | 0                     |                             |
-| effGetParamLabel            | 6   |                    | ptr(char[8])            | 0                     |                             |
-| effGetParamName             | 8   |                    | ptr(char[8])            | 0                     |                             |
-| effGetPlugCategory          | 35  |                    |                         | category              |                             |
-| effGetProductString         | 48  |                    | ptr(char[64])           | 1                     |                             |
-| effGetProgramNameIndexed    | 29  |                    | ptr(char[24])           | hasProgram#index      |                             |
-| effGetProgramName           | 5   |                    | ptr(char[24])           | 0                     |                             |
-| effGetProgram               | 3   |                    |                         | current_program       |                             |
-| effGetSpeakerArrangement    | 69  |                    | ivalue([]), ptr([])     | (!(hasAUX or isMidi)) | in:(SpeakerArrangement[])   |
-| effSetSpeakerArrangement    | 42  | ivalue(ptr), ptr   |                         | 0/1                   |                             |
-| effGetTailSize              |     |                    |                         | audiotailInSamples    |                             |
-| effGetVendorString          | 47  |                    | ptr(char[64])           | 1                     |                             |
-| effGetVendorVersion         | 49  |                    |                         | version               |                             |
-| effGetVstVersion            | 58  |                    |                         | kVstVersion           |                             |
-| effIdentify                 | 22  |                    |                         | bigEndianInt("NvEf")  | 1316373862=0x4e764566       |
-| effKeysRequired             |     |                    |                         | isKbdFocusRequired    |                             |
-| effMainsChanged             | 12? | ivalue             |                         | 0                     | ivalue?resume():suspend()   |
-| effProcessEvents            | 25  | ptr(&VstEvents)    |                         | isMidiProcessed       |                             |
-| effSetBlockSize             | 11  | ivalue             |                         | 0                     |                             |
-| effSetBypass                |     | ivalue             |                         | 0                     |                             |
-| effSetProcessPrecision      | 77  | ivalue             |                         | !isProcessing         |                             |
-| effSetProgram               | 2   | ivalue             |                         | 0                     |                             |
-| effSetProgramName           | 4   | ptr(char[])        |                         | 0                     |                             |
-| effSetSampleRate            | 10  | fvalue             |                         | 0                     |                             |
-| effSetTotalSampleToProcess  | 73? | ivalue             |                         | ivalue                |                             |
-| effString2Parameter         |     | index, ptr(char[]) |                         | hasParam#index        |                             |
+| effGetNumMidiInputChannels  |     | -                  |                         | 16/0                  | 16 if plugin handles MIDI   |
+| effGetNumMidiOutputChannels |     | -                  |                         | 16/0                  | 16 if plugin handles MIDI   |
+| effGetParamDisplay          | 7   | index              | ptr(char[8])            | 0                     |                             |
+| effGetParamLabel            | 6   | index              | ptr(char[8])            | 0                     |                             |
+| effGetParamName             | 8   | index              | ptr(char[8])            | 0                     |                             |
+| effGetPlugCategory          | 35  | -                  |                         | category              |                             |
+| effGetProductString         | 48  | -                  | ptr(char[64])           | 1                     |                             |
+| effGetProgramNameIndexed    | 29  | index              | ptr(char[24])           | hasProgram#index      |                             |
+| effGetProgramName           | 5   | -                  | ptr(char[24])           | 0                     |                             |
+| effGetProgram               | 3   | -                  | -                       | current_program       |                             |
+| effGetSpeakerArrangement    | 69  | -                  | ivalue([]), ptr([])     | (!(hasAUX or isMidi)) | in:(SpeakerArrangement[])   |
+| effSetSpeakerArrangement    | 42  | ivalue(ptr), ptr   | -                       | 0/1                   |                             |
+| effGetTailSize              |     | -                  | -                       | audiotailInSamples    |                             |
+| effGetVendorString          | 47  | -                  | ptr(char[64])           | 1                     |                             |
+| effGetVendorVersion         | 49  | -                  | -                       | version               |                             |
+| effGetVstVersion            | 58  | -                  | -                       | kVstVersion           |                             |
+| effIdentify                 | 22  | -                  | -                       | bigEndianInt("NvEf")  | 1316373862=0x4e764566       |
+| effKeysRequired             |     | -                  | -                       | isKbdFocusRequired    |                             |
+| effMainsChanged             | 12? | ivalue             | -                       | 0                     | ivalue?resume():suspend()   |
+| effProcessEvents            | 25  | ptr(&VstEvents)    | -                       | isMidiProcessed       |                             |
+| effSetBlockSize             | 11  | ivalue             | -                       | 0                     |                             |
+| effSetBypass                |     | ivalue             | -                       | 0                     |                             |
+| effSetProcessPrecision      | 77  | ivalue             | -                       | !isProcessing         |                             |
+| effSetProgram               | 2   | ivalue             | -                       | 0                     |                             |
+| effSetProgramName           | 4   | ptr(char[])        | -                       | 0                     |                             |
+| effSetSampleRate            | 10  | fvalue             | -                       | 0                     |                             |
+| effSetTotalSampleToProcess  | 73? | ivalue             | -                       | ivalue                |                             |
+| effString2Parameter         | 27  | index, ptr(char[]) | -                       | !isLegacy(param[i])   |                             |
 | effConnectInput             |     |                    |                         |                       | JUCE-ignored                |
 | effConnectOutput            |     |                    |                         |                       | JUCE-ignored                |
 | effIdle                     |     |                    |                         |                       | JUCE-ignored                |
-| effVendorSpecific           | 50  | ALL                |                         |                       |                             |
+| effVendorSpecific           | 50  | ???                | ???                     | ???                   |                             |
 | effShellGetNextPlugin       | 70  |                    |                         |                       | JUCE-ignored                |
 | effStartProcess             | 71  |                    |                         |                       | JUCE-ignored                |
 | effStopProcess              | 72  |                    |                         |                       | JUCE-ignored                |
