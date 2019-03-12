@@ -3242,11 +3242,17 @@ However, in our minimal fake plugin, this opcode doesn't really get called.
 Probably we don't reply correctly to some prior opcode.
 
 Anyhow, we can hack our proxy plugin, to respond to `effCpde:26` with `1` only for indices less than (e.g.) `5`.
-Doing that with a plugin that has more parameters (e.g. `GVST/GSynth` has 30 parameters),
+Doing that with a plugin that has more parameters (e.g. *GVST/GSinth* has 30 parameters),
 REAPER will reduce the selection choice for parameters to be automated to the first five.
 
 So indeed, `effCanBeAutomated` seems to have the value `26`.
 
+So why does REAPER query this opcode for the *GSynth* plugin, but not for our own fake plugin?
+Comparing the return values of the *GSinth* plugin with our own, there are not many differences.
+However *GSinth* returns `2400` for the `effGetVstVersion` opcode, whereas our own plugin
+returns the default `0`.
+If we make it return `2400` as well, REAPER starts asking with `effCanBeAutomated`.
+So it seems that this opcode was only introduced later, and requires the plugin to support a minimum version of the API.
 # misc
 LATER move this to proper sections
 
