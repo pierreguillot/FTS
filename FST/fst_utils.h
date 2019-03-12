@@ -280,8 +280,6 @@ static int hostKnown(t_fstPtrInt opcode) {
     case audioMasterSetTime:
     case audioMasterWillReplaceOrAccumulate:
     case audioMasterVendorSpecific:
-    case audioMasterOpenFileSelector:
-    case audioMasterCloseFileSelector:
       return 1;
   default: break;
   }
