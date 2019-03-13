@@ -602,17 +602,19 @@ static VstEvents*create_vstevents(const unsigned char midi[4]) {
 }
 
 static
-t_fstPtrInt dispatch_effect (const char*name,
+t_fstPtrInt dispatch_effect (const char*name, AEffectDispatcherProc dispatchcb,
                              AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
   if(effect) {
     char effname[64];
     snprintf(effname, 64, "%p", effect);
     const char*effectname = name?name:effname;
     char opcodestr[256];
+    if(!dispatchcb)
+      dispatchcb = effect->dispatcher;
     printf("Fst::host2plugin(%s, %s, %d, %lu, %p, %f)\n",
         effectname, effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
     print_effPtr(effect, opcode, index, ivalue, ptr, fvalue, 1);
-    t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
+    t_fstPtrInt result = dispatchcb(effect, opcode, index, ivalue, ptr, fvalue);
     printf("Fst::host2plugin: %lu (0x%lX)\n", result, result);
     print_effPtr(effect, opcode, index, ivalue, ptr, fvalue, 2, result);
     fflush(stdout);
