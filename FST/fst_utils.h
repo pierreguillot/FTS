@@ -615,7 +615,7 @@ t_fstPtrInt dispatch_effect (const char*name,
     t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
     printf("Fst::host2plugin: %lu (0x%lX)\n", result, result);
     print_effPtr(effect, opcode, index, ivalue, ptr, fvalue, 2, result);
-    fstpause(0.5);
+    fflush(stdout);
     return result;
   }
   return 0xDEAD;
@@ -633,6 +633,7 @@ t_fstPtrInt dispatch_host (const char*name, AEffectDispatcherProc dispatchcb,
   t_fstPtrInt result = dispatchcb(effect, opcode, index, ivalue, ptr, fvalue);
   printf("Fst::plugin2host: %lu (0x%lX)\n", result, result);
   print_hostPtr(effect, opcode, index, ivalue, ptr, fvalue, 2, result);
+  fflush(stdout);
   return result;
 }
 
