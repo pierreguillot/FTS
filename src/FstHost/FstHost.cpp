@@ -115,7 +115,6 @@ t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt valu
 }
 
 void test_effCanDo(AEffect*effect, const char*feature) {
-  printf("canDo: %s?\n", feature);
   dispatch_v(effect, effCanDo, 0, 0, (void*)feature, 0.000000);
 }
 
@@ -447,10 +446,8 @@ void test_reaper(AEffect*effect) {
 
   strbuf[0]=0;
   dispatch_v(effect, effGetEffectName, 0, 0, strbuf, 0.000000);
-  printf("EffectName: %s\n", strbuf);
   strbuf[0] = 0;
   dispatch_v(effect, effGetVendorString, 0, 0, strbuf, 0.000000);
-  printf("VendorString: %s\n", strbuf);
 
   test_effCanDo(effect, "hasCockosNoScrollUI");
   test_effCanDo(effect, "wantsChannelCountNotifications");
@@ -472,14 +469,9 @@ void test_reaper(AEffect*effect) {
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
 
   ret = dispatch_v(effect, effGetChunk, 0, 0, strbuf, 0.000000);
-  do {
-    void*dataptr = *((void**)strbuf);
-    print_hex(dataptr, 8);
-  } while(0);
   dispatch_v(effect, effSetProgram, 0, 1, 000, 0.000000);
   strbuf[0] = 0;
   dispatch_v(effect, effGetProgramName, 0, 0, strbuf, 0.000000);
-  printf("ProgramName: '%s'\n", strbuf);
   fflush(stderr);  fflush(stdout);
   fstpause(2.);
   test_opcode56(effect);
