@@ -525,7 +525,7 @@ static void print_effPtr(AEffect* effect,
     default: break;
     case effGetChunk:
       printf("\tchunk: ");
-      print_hex(ptr, direction);
+      print_hex(ptr, retval);
       break;
     case effGetParamLabel:
     case effGetParamDisplay:
@@ -544,6 +544,8 @@ static void print_effPtr(AEffect* effect,
     case effGetOutputProperties:
       print_pinproperties((VstPinProperties*)ptr);
       break;
+    case effEditGetRect:
+      print_erect((ERect*)ptr, "\t");
     }
   }
 }
@@ -636,6 +638,7 @@ t_fstPtrInt dispatch_host (const char*name, AEffectDispatcherProc dispatchcb,
   t_fstPtrInt result = dispatchcb(effect, opcode, index, ivalue, ptr, fvalue);
   printf("Fst::plugin2host: %lu (0x%lX)\n", result, result);
   print_hostPtr(effect, opcode, index, ivalue, ptr, fvalue, 2, result);
+
   fflush(stdout);
   return result;
 }
