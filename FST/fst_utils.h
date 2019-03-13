@@ -547,6 +547,47 @@ static void print_effPtr(AEffect* effect,
   }
 }
 
+/* direction 1: incoming (pre dispatcher)
+ * direction 2: outgoing (post dispatcher)
+ * retval: return-value for post-dispatcher calls
+ */
+static void print_hostPtr(AEffect* effect,
+                          int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue,
+                          int direction, t_fstPtrInt retval=0) {
+  bool incoming = direction?(direction|1):true;
+  bool outgoing = direction?(direction|2):true;
+  if(incoming) {
+    switch(opcode) {
+    default: break;
+    case audioMasterProcessEvents:
+      printf("\tevents: ");
+      print_events((VstEvents*)ptr);
+      break;
+    case audioMasterCanDo:
+      printf("\tcanDo: %s?\n", (char*)ptr);
+      break;
+    }
+  }
+  if(outgoing) {
+    switch(opcode) {
+    default: break;
+    case audioMasterGetTime:
+      print_timeinfo((VstTimeInfo*)retval);
+      return;
+    case audioMasterGetDirectory:
+      printf("\t'%s'\n", (char*)retval);
+      break;
+      break;
+    case audioMasterGetVendorString:
+    case audioMasterGetProductString:
+      printf("\t'%s'\n", (char*)ptr);
+      break;
+    }
+  }
+}
+
+
+
 static VstEvents*create_vstevents(const unsigned char midi[4]) {
   VstEvents*ves = (VstEvents*)calloc(1, sizeof(VstEvents)+sizeof(VstEvent*));
   VstMidiEvent*ve=(VstMidiEvent*)calloc(1, sizeof(VstMidiEvent));
@@ -578,6 +619,21 @@ t_fstPtrInt dispatch_effect (const char*name,
     return result;
   }
   return 0xDEAD;
+}
+static
+t_fstPtrInt dispatch_host (const char*name, AEffectDispatcherProc dispatchcb,
+                           AEffect*effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  char effname[64];
+  snprintf(effname, 64, "%p", effect);
+  const char*effectname = name?name:effname;
+  char opcodestr[256];
+  printf("Fst.plugin2host(%s, %s, %d, %lu, %p, %f)\n",
+         effectname, hostCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
+  print_hostPtr(effect, opcode, index, ivalue, ptr, fvalue, 1);
+  t_fstPtrInt result = dispatchcb(effect, opcode, index, ivalue, ptr, fvalue);
+  printf("Fst.plugin2host: %lu (0x%lX)\n", result, result);
+  print_hostPtr(effect, opcode, index, ivalue, ptr, fvalue, 2, result);
+  return result;
 }
 
 typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
