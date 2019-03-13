@@ -346,36 +346,37 @@ static void print_aeffect(AEffect*eff) {
   printf("\n\tprocessDoubleReplacingCB=%p", eff->processDoubleReplacing);
   printf("\n\n");
 }
-static void print_event(VstEvent*ev, int hexdump) {
-  printf("VstEvent @ %p", ev);
+static void print_event(VstEvent*ev, int hexdump, const char*prefix="") {
+  printf("%sVstEvent @ %p", prefix, ev);
   if(!ev) {
     printf(" [%d]\n", sizeof(VstEvent));
     return;
   }
   if(ev->type == kVstMidiType) {
     VstMidiEvent*mev = (VstMidiEvent*)ev;
-    printf(" [%d]\n", sizeof(VstMidiEvent));
+    printf("%s [%d]\n", prefix, sizeof(VstMidiEvent));
 
-    printf("\ttype=%d\n", mev->type);
-    printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", mev->byteSize, mev->deltaFrames);
-    printf("\tMIDI: %02x %02x %02x %02x\n"
+    printf("%s", prefix); printf("\ttype=%d\n", mev->type);
+    printf("%s", prefix); printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", mev->byteSize, mev->deltaFrames);
+    printf("%s", prefix); printf("\tMIDI: %02x %02x %02x %02x\n"
            , mev->midiData[0]
            , mev->midiData[1]
            , mev->midiData[2]
            , mev->midiData[3]);
-    printf("\tnote: length=%d\toffset=%d\tvelocity=%d\tdetune=%d\n",
+    printf("%s", prefix); printf("\tnote: length=%d\toffset=%d\tvelocity=%d\tdetune=%d\n",
       mev->noteLength,
       mev->noteOffset,
       mev->noteOffVelocity,
       mev->detune);
   } else if (ev->type == kVstSysExType) {
     VstMidiSysexEvent*sev = (VstMidiSysexEvent*)ev;
-    printf(" [%d]\n", sizeof(VstMidiSysexEvent));
+    printf("%s", prefix); printf(" [%d]\n", sizeof(VstMidiSysexEvent));
 
-    printf("\ttype=%d\n", sev->type);
-    printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", sev->byteSize, sev->deltaFrames);
-    printf("\tSysEx %d bytes @ %p\n\t", sev->dumpBytes, sev->sysexDump);
+    printf("%s", prefix); printf("\ttype=%d\n", sev->type);
+    printf("%s", prefix); printf("\tbyteSize=%d\n\tdeltaFrames=%d\n", sev->byteSize, sev->deltaFrames);
+    printf("%s", prefix); printf("\tSysEx %d bytes @ %p\n\t", sev->dumpBytes, sev->sysexDump);
     unsigned char*data=(unsigned char*)sev->sysexDump;
+    printf("%s", prefix);
     for(int i=0; i<sev->dumpBytes; i++)
       printf(" %02x", *data++);
     printf("\n");
@@ -386,16 +387,16 @@ static void print_event(VstEvent*ev, int hexdump) {
     print_hex(ev, 64);
 }
 
-static void print_events(VstEvents*evs, int hexdump=0) {
-  printf("%d VstEvents @ %p\n", evs?evs->numEvents:0, evs);
+static void print_events(VstEvents*evs, int hexdump=0, const char*prefix="") {
+  printf("%s%d VstEvents @ %p\n", prefix, evs?evs->numEvents:0, evs);
   if(!evs)return;
   for(int i=0; i<evs->numEvents; i++) {
-    print_event(evs->events[i], hexdump);
+    print_event(evs->events[i], hexdump, prefix);
   }
 }
 
-static void print_erect(ERect*rect) {
-  printf("ERect[%p]", rect);
+static void print_erect(ERect*rect, const char*prefix="") {
+  printf("%sERect[%p]", prefix, rect);
   if(rect)
     printf(" = %d|%d - %d|%d", rect->top, rect->left, rect->bottom, rect->right);
   printf("\n");
