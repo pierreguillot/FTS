@@ -438,8 +438,6 @@ We have to `#define` it, rather than use an `enum` for it...
 with the changes in place, we can now compile JUCE's AudioPluginProcessor.
 it's still a long way to make it actually work...
 
-
-
 # Part2: how the plugin interfaces with the host
 For now, we have resolved all the names of the API to some more or less random values.
 We also have discovered a few complex types (`struct`s), and while we know the names
@@ -1292,7 +1290,7 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 
 | effect opcode               |     | IN                 | OUT                     | return                | notes                       |
 |-----------------------------|-----|--------------------|-------------------------|-----------------------|-----------------------------|
-| effCanBeAutomated           |     | index              |                         | 0/1                   | can param#idx be automated? |
+| effCanBeAutomated           | 26  | index              |                         | 0/1                   | can param#idx be automated? |
 | effCanDo                    | 51  | ptr(char[])        |                         | 0/1/-1                |                             |
 | effOpen                     | 0?  | -                  | -                       | 0                     |                             |
 | effClose                    | 1?  | -                  | -                       | 0                     |                             |
@@ -3256,13 +3254,7 @@ So it seems that this opcode was only introduced later, and requires the plugin 
 # misc
 LATER move this to proper sections
 
-## effCanBeAutomated
-called for each parameter
 
-## effCode:26
-with `index` for each parameter, GVST returns `1`.
-This opcode is sent when clicking on the automation button in REAPER, that opens up
-a list of parameters which can be automated.
 
 ## effCode:56
 
