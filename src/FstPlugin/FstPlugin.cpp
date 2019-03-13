@@ -147,6 +147,15 @@ static void test_opcode56(AEffect*eff,
   print_hex(ptr, 160);
 }
 
+static int test_opcode26(AEffect*eff,
+                         t_fstInt32 opcode, int index,
+                         t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  int result = (index<2);
+  printf("OPCODE26[%d]: %d\n", index, result);
+  fflush(stdout);
+  return result;
+}
+
 /* effProcessEvents: handle MIDI */
 static void test_opcode25(AEffect*eff,
     t_fstInt32 opcode, int index,
@@ -242,7 +251,7 @@ static void print_ptr4opcode(t_fstInt32 opcode, void*const ptr) {
 static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
   if(25==opcode)      test_processLevel(eff);
   //if(53==opcode)    test_gettime(eff);
-
+  if(26==opcode)      return test_opcode26(eff, opcode, index, ivalue, ptr, fvalue);
   if(dispatcher_skip(opcode))return 0;
   if(!dispatcher_noprint(opcode)) {
     dispatcher_printEff(eff, opcode, index, ivalue, ptr, fvalue);
@@ -251,6 +260,9 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
 
   switch(opcode) {
   default: break;
+    //case effGetVstVersion: return 2400;
+  case 26:
+    return test_opcode26(eff, opcode, index, ivalue, ptr, fvalue);
   case 35:
     return test_opcode35(eff);
   case 70:
@@ -320,9 +332,11 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
         return 1;
       if(!strcmp((char*)ptr, "sendVstMidiEvents"))
         return 1;
+#if 0
       if(!strcmp((char*)ptr, "hasCockosExtensions")) {
         return 0xBEEF0000;
       }
+#endif
     } while(0);
     return 0;
   case 12:
@@ -414,7 +428,7 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->setParameter = setParameter;
 
   eff->numPrograms = 1;
-  eff->numParams = 1;
+  eff->numParams = 3;
 #ifdef NUM_INPUTS
   eff->numInputs  = NUM_INPUTS;
   eff->numOutputs = NUM_INPUTS+1;
@@ -431,7 +445,7 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->flags |= effFlagsCanReplacing;
   eff->flags |= effFlagsCanDoubleReplacing;
 
-  //eff->flags |= effFlagsHasEditor;
+  eff->flags |= effFlagsHasEditor;
 
   eff->processReplacing = processReplacing;
   eff->processDoubleReplacing = processDoubleReplacing;
