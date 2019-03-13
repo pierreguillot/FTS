@@ -489,7 +489,7 @@ static void print_timeinfo(VstTimeInfo*vti) {
  */
 static void print_effPtr(AEffect* effect,
                          int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue,
-                         int direction, int retval=0) {
+                         int direction, t_fstPtrInt retval=0) {
   return;
   if(!ptr)
     return;
