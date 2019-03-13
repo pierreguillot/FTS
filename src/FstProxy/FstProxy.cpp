@@ -9,6 +9,7 @@
 
 static std::map<AEffect*, AEffectDispatcherProc>s_host2plugin;
 static std::map<AEffect*, AEffectDispatcherProc>s_plugin2host;
+static std::map<AEffect*, std::string>s_pluginname;
 static AEffectDispatcherProc s_plug2host;
 
 static
@@ -112,6 +113,15 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
     s_host2plugin[plug] = plug->dispatcher;
     plug->dispatcher = dispatch4host;
   }
+
+  char pluginname[512] = {0};
+  s_host2plugin[plug](plug, effGetEffectName, 0, 0, pluginname, 0);
+  if(*pluginname)
+    s_pluginname[plug] = pluginname;
+  else
+    s_pluginname[plug] = pluginfile;
+
+  s_plugin2host[plug] = dispatch4host;
   print_aeffect(plug);
   fflush(stdout);
   return plug;
