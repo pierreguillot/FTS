@@ -609,11 +609,11 @@ t_fstPtrInt dispatch_effect (const char*name,
     snprintf(effname, 64, "%p", effect);
     const char*effectname = name?name:effname;
     char opcodestr[256];
-    printf("AEffect.dispatch(%s, %s, %d, %lu, %p, %f)\n",
+    printf("Fst::host2plugin(%s, %s, %d, %lu, %p, %f)\n",
         effectname, effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
     print_effPtr(effect, opcode, index, ivalue, ptr, fvalue, 1);
     t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
-    printf("AEffect.dispatch: %lu (0x%lX)\n", result, result);
+    printf("Fst::host2plugin: %lu (0x%lX)\n", result, result);
     print_effPtr(effect, opcode, index, ivalue, ptr, fvalue, 2, result);
     fstpause(0.5);
     return result;
@@ -627,11 +627,11 @@ t_fstPtrInt dispatch_host (const char*name, AEffectDispatcherProc dispatchcb,
   snprintf(effname, 64, "%p", effect);
   const char*effectname = name?name:effname;
   char opcodestr[256];
-  printf("Fst.plugin2host(%s, %s, %d, %lu, %p, %f)\n",
+  printf("Fst::plugin2host(%s, %s, %d, %lu, %p, %f)\n",
          effectname, hostCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
   print_hostPtr(effect, opcode, index, ivalue, ptr, fvalue, 1);
   t_fstPtrInt result = dispatchcb(effect, opcode, index, ivalue, ptr, fvalue);
-  printf("Fst.plugin2host: %lu (0x%lX)\n", result, result);
+  printf("Fst::plugin2host: %lu (0x%lX)\n", result, result);
   print_hostPtr(effect, opcode, index, ivalue, ptr, fvalue, 2, result);
   return result;
 }
