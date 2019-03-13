@@ -101,11 +101,9 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   s_plug2host = dispatch4host;
 
   t_fstMain*plugMain = fstLoadPlugin(pluginfile);
-  printf("plugMain: %p\n", plugMain);
   if(!plugMain)return 0;
 
   AEffect*plug = plugMain(plugin2host);
-  printf("%p(%p) -> %p\n", plugMain, plugin2host, plug);
   if(!plug)
     return plug;
 
