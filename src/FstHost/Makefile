@@ -8,7 +8,7 @@ archs: FstHost.32 FstHost.64
 FstHost.32: ARCHFLAGS=-m32
 FstHost.64: ARCHFLAGS=-m64
 
-FstHost FstHost.32 FstHost.64: FstHost.cpp ../../FST/fst.h
+FstHost FstHost.32 FstHost.64: FstHost.cpp ../../FST/fst.h ../../FST/fst_utils.h
 	$(CXX) $(FST_CPPFLAGS) $(CPPFLAGS) $(FST_CXXFLAGS) $(CXXFLAGS) $(ARCHFLAGS) $< -o $@ $(LIBS)
 
 .PHONY: clean archs default
