@@ -51,23 +51,17 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
     doPrint = false;
     break;
   }
+  t_fstPtrInt result = 0;
   if(doPrint) {
-    char effbuf[256] = {0};
-    printf("Fst::host2plugin(%s, %d, %ld, %p, %f)",
-           effCode2string(opcode, effbuf, 255),
-           index, ivalue, ptr, fvalue);
+    dispatch_effect(0, h2p, effect, opcode, index, ivalue, ptr, fvalue);
+  } else {
+    result = h2p(effect, opcode, index, ivalue, ptr, fvalue);
   }
-  t_fstPtrInt result = h2p(effect, opcode, index, ivalue, ptr, fvalue);
   switch(opcode) {
   default: break;
   case 56:
     print_hex(ptr, 256);
     break;
-  }
-
-  if(doPrint) {
-    printf(" => %ld\n", result);
-    fflush(stdout);
   }
   return result;
 }
@@ -93,16 +87,11 @@ t_fstPtrInt plugin2host (AEffect* effect, int opcode, int index, t_fstPtrInt iva
     doPrint = false;
     break;
   }
+  t_fstPtrInt result = -1;
   if(doPrint) {
-    char effbuf[256] = {0};
-    printf("Fst::plugin2host(%s, %d, %ld, %p, %f)",
-           hostCode2string(opcode, effbuf, 255),
-           index, ivalue, ptr, fvalue);
-  }
-  t_fstPtrInt result = p2h(effect, opcode, index, ivalue, ptr, fvalue);
-  if(doPrint) {
-    printf(" -> %ld\n", result);
-    fflush(stdout);
+    result = dispatch_host(0, p2h, effect, opcode, index, ivalue, ptr, fvalue);
+  } else {
+    result = p2h(effect, opcode, index, ivalue, ptr, fvalue);
   }
   return result;
 }
