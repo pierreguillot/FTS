@@ -23,9 +23,6 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
     printf("getEffectName\n");
     snprintf((char*)ptr, 16, "ProxyEffect");
     return 1;
-  case effCanDo:
-    printf("Fst::pluginCanDo '%s'\n", (char*)ptr);
-    break;
   case 26:
     printf("OPCODE26: %d\n", index);
     return (index<5);
