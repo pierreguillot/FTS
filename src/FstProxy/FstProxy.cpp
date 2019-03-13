@@ -38,6 +38,9 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
     printf("Fst::host2plugin:: NO CALLBACK!\n");
     return 0xDEAD;
   }
+  const char*pluginname = 0;
+  if(effect)
+    pluginname = s_pluginname[effect].c_str();
 
   bool doPrint = true;
 #ifdef FST_EFFKNOWN
@@ -51,7 +54,7 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
   }
   t_fstPtrInt result = 0;
   if(doPrint) {
-    dispatch_effect(0, h2p, effect, opcode, index, ivalue, ptr, fvalue);
+    dispatch_effect(pluginname, h2p, effect, opcode, index, ivalue, ptr, fvalue);
   } else {
     result = h2p(effect, opcode, index, ivalue, ptr, fvalue);
   }
@@ -74,6 +77,9 @@ t_fstPtrInt plugin2host (AEffect* effect, int opcode, int index, t_fstPtrInt iva
     s_host2plugin[effect] = effect->dispatcher;
     effect->dispatcher = host2plugin;
   }
+  const char*pluginname = 0;
+  if(effect)
+    pluginname = s_pluginname[effect].c_str();
 
   bool doPrint = true;
 #ifdef FST_HOSTKNOWN
@@ -87,7 +93,7 @@ t_fstPtrInt plugin2host (AEffect* effect, int opcode, int index, t_fstPtrInt iva
   }
   t_fstPtrInt result = -1;
   if(doPrint) {
-    result = dispatch_host(0, p2h, effect, opcode, index, ivalue, ptr, fvalue);
+    result = dispatch_host(pluginname, p2h, effect, opcode, index, ivalue, ptr, fvalue);
   } else {
     result = p2h(effect, opcode, index, ivalue, ptr, fvalue);
   }
