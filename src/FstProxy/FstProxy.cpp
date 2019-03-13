@@ -114,10 +114,10 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   if(!plug)
     return plug;
 
-  s_plugin2host[plug] = dispatch4host;
+  printf("plugin.dispatcher '%p' -> '%p'\n", plug->dispatcher, host2plugin);
   if(plug->dispatcher != host2plugin) {
     s_host2plugin[plug] = plug->dispatcher;
-    plug->dispatcher = dispatch4host;
+    plug->dispatcher = host2plugin;
   }
 
   char pluginname[512] = {0};
