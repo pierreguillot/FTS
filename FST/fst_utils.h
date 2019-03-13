@@ -491,8 +491,8 @@ static void print_timeinfo(VstTimeInfo*vti) {
 static void print_effPtr(AEffect* effect,
                          int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue,
                          int direction, t_fstPtrInt retval=0) {
-  bool incoming = direction?(direction|1):true;
-  bool outgoing = direction?(direction|2):true;
+  bool incoming = direction?(direction&1):true;
+  bool outgoing = direction?(direction&2):true;
   if(incoming) {
     switch(opcode) {
     default: break;
