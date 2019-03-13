@@ -413,6 +413,31 @@ static void print_pinproperties(VstPinProperties*vpp) {
   printf("\n");
 }
 
+static char*speakerArrangement2string(size_t type, char*output, size_t length) {
+  snprintf(output, length, "%d", type);
+  output[length-1]=0;
+  return output;
+}
+static char*speaker2string(VstSpeakerProperties*props, char*output, size_t length) {
+  output[0]=0;
+  if(props)
+    snprintf(output, length, "%d", props->type);
+  output[length-1]=0;
+  return output;
+}
+
+static void print_speakerarrangement(const char*name, VstSpeakerArrangement*vpp) {
+  char buf[512];
+  printf("SpeakerArrangement[%s] @ %p: %s", name, vpp, (vpp?speakerArrangement2string(vpp->type, buf, 512):0));
+  if(!vpp)
+    return;
+  for(int i=0; i < vpp->numChannels; i++) {
+    printf("\n\t#%d: %s", i, speaker2string(&(vpp->speakers[i]), buf, 512));
+  }
+  printf("\n");
+}
+
+
 static void print_timeinfo(VstTimeInfo*vti) {
   printf("VstTimeInfo @ %p", vti);
   if(!vti) {
@@ -458,6 +483,73 @@ static void print_timeinfo(VstTimeInfo*vti) {
   printf("\n");
 }
 
+/* direction 1: incoming (pre dispatcher)
+ * direction 2: outgoing (post dispatcher)
+ * retval: return-value for post-dispatcher calls
+ */
+static void print_effPtr(AEffect* effect,
+                         int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue,
+                         int direction, int retval=0) {
+  return;
+  if(!ptr)
+    return;
+  bool incoming = direction?(direction|1):true;
+  bool outgoing = direction?(direction|2):true;
+  if(incoming) {
+    switch(opcode) {
+    default: break;
+    case effCanDo:
+      printf("\tcanDo: %s?\n", (char*)ptr);
+      break;
+    case effEditOpen:
+      printf("\twindowId: %p\n", ptr);
+      break;
+    case effSetChunk:
+      printf("\tchunk: ");
+      print_hex(ptr, ivalue);
+      break;
+    case effSetSpeakerArrangement:
+      printf("\tinput", (VstSpeakerArrangement*)ivalue);
+      printf("\toutput", (VstSpeakerArrangement*)ptr);
+      break;
+    case effProcessEvents:
+      printf("\tevents: ");
+      print_events((VstEvents*)ptr);
+      break;
+    case effString2Parameter:
+    case effSetProgramName:
+      printf("\t'%s'\n", (char*)ptr);
+      break;
+    }
+  }
+  if(outgoing) {
+    switch(opcode) {
+    default: break;
+    case effGetChunk:
+      printf("\tchunk: ");
+      print_hex(ptr, direction);
+      break;
+    case effGetParamLabel:
+    case effGetParamDisplay:
+    case effGetParamName:
+    case effGetProductString:
+    case effGetProgramNameIndexed:
+    case effGetProgramName:
+    case effGetVendorString:
+      printf("\t'%s'\n", (char*)ptr);
+      break;
+    case effGetSpeakerArrangement:
+      print_speakerarrangement("input", (VstSpeakerArrangement*)ivalue);
+      print_speakerarrangement("output", (VstSpeakerArrangement*)ptr);
+      break;
+    case effGetInputProperties:
+    case effGetOutputProperties:
+      print_pinproperties((VstPinProperties*)ptr);
+      break;
+    }
+  }
+}
+
 static VstEvents*create_vstevents(const unsigned char midi[4]) {
   VstEvents*ves = (VstEvents*)calloc(1, sizeof(VstEvents)+sizeof(VstEvent*));
   VstMidiEvent*ve=(VstMidiEvent*)calloc(1, sizeof(VstMidiEvent));
@@ -471,6 +563,25 @@ static VstEvents*create_vstevents(const unsigned char midi[4]) {
   return ves;
 }
 
+static
+t_fstPtrInt dispatch_effect (const char*name,
+                             AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+  if(effect) {
+    char effname[64];
+    snprintf(effname, 64, "%p", effect);
+    const char*effectname = name?name:effname;
+    char opcodestr[256];
+    printf("AEffect.dispatch(%s, %s, %d, %lu, %p, %f)\n",
+        effectname, effCode2string(opcode, opcodestr, 255), index, ivalue, ptr, fvalue);
+    print_effPtr(effect, opcode, index, ivalue, ptr, fvalue, 1);
+    t_fstPtrInt result = effect->dispatcher(effect, opcode, index, ivalue, ptr, fvalue);
+    printf("AEffect.dispatch: %lu (0x%lX)\n", result, result);
+    print_effPtr(effect, opcode, index, ivalue, ptr, fvalue, 2, result);
+    fstpause(0.5);
+    return result;
+  }
+  return 0xDEAD;
+}
 
 typedef AEffect* (t_fstMain)(AEffectDispatcherProc);
 static
