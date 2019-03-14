@@ -241,7 +241,8 @@ typedef enum {
   FST_EFFECT_CATEGORY(Generator, 11),
 
 #warning document origin of kPlugCategOfflineProcess
-  FST_EFFECT_CATEGORY_UNKNOWN(OfflineProcess)
+  FST_EFFECT_CATEGORY_UNKNOWN(OfflineProcess),
+
   fst_categoryLast /* last enum */
 } t_fstEffectCategories;
 
