@@ -24,6 +24,7 @@
 #ifndef FST_fst_h_
 #define FST_fst_h_
 
+#define FST_VERSION 104
 
 
 /* helper macros for marking values as compatible with the original SDK */
