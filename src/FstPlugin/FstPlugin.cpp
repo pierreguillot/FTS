@@ -21,11 +21,6 @@ static VstMidiEvent s_midi;
 static unsigned char s_sysexDump[] = {0xF0, 0x01, 0x02, 0x03, 0x04, 0x03, 0x02, 0x01, 0xF7};
 static unsigned char s_midiDump[] = {0x80, 0x40, 0x0, 0};
 
-#include <unistd.h>
-void fstpause(float duration=1.0) {
-  usleep(duration * 1000000.);
-}
-
 void crash() {
   t_fun0*f=0;
   /* crash */
