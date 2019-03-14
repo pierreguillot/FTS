@@ -13,7 +13,7 @@
 #include <string>
 
 #include <unistd.h>
-void fstpause(float duration=1.0) {
+static void fstpause(float duration=1.0) {
   usleep(duration * 1000000);
 }
 
