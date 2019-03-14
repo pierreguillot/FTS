@@ -20,10 +20,19 @@
  * You should have received a copy of the GNU General Public License
  * along with striem.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #ifndef FST_fst_h_
 #define FST_fst_h_
 
+
+
+/* helper macros for marking values as compatible with the original SDK */
+
 #ifdef __GNUC__
+/* constants that have not yet been discovered are marked as 'deprecated'
+ * in order to get a notification during build
+ * constants we are not sure about, are marked with an EXPERIMENTAL macro
+ */
 # define FST_DEPRECATE_UNKNOWN(x) x __attribute__ ((deprecated))
 #else
 # define FST_DEPRECATE_UNKNOWN(x) x
