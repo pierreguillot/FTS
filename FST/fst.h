@@ -22,24 +22,25 @@
 #define FST_ENUM_UNKNOWN(x) FST_DEPRECATE_UNKNOWN(x) = 100000 + __LINE__
 
 /* name mangling */
-#define FST_HOST_ENUM(x, y) audioMaster##x = y
-#define FST_HOST_ENUM_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( audioMaster##x, y)
-#define FST_HOST_ENUM_UNKNOWN(x) FST_ENUM_UNKNOWN( audioMaster##x)
-#define FST_EFFECT_ENUM(x, y) eff##x = y
-#define FST_EFFECT_ENUM_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( eff##x, y)
-#define FST_EFFECT_ENUM_UNKNOWN(x) FST_ENUM_UNKNOWN( eff##x)
-#define FST_EFFECT_CATEGORY(x, y) kPlugCateg##x = y
-#define FST_EFFECT_CATEGORY_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( kPlugCateg##x, y)
-#define FST_EFFECT_CATEGORY_UNKNOWN(x) FST_ENUM_UNKNOWN( kPlugCateg##x)
-#define FST_EFFECT_FLAG(x, y) effFlags##x = (1<<y)
-#define FST_SPEAKER(x, y) kSpeaker##x = y
-#define FST_SPEAKER_UNKNOWN(x) FST_ENUM_UNKNOWN( kSpeaker##x)
-#define FST_CONST(x, y) k##x = y
-#define FST_CONSTANT(x, y) kVst##x = y
-#define FST_CONSTANT_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( kVst##x, y)
-#define FST_CONSTANT_UNKNOWN(x) FST_ENUM_UNKNOWN( kVst##x)
-#define FST_TYPE(x) Vst##x
-#define FST_TYPE_UNKNOWN(x) FST_UNKNOWN(Vst##x)
+
+# define FST_HOST_OPCODE(x, y) audioMaster##x = y
+# define FST_HOST_OPCODE_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( audioMaster##x, y)
+# define FST_HOST_OPCODE_UNKNOWN(x) FST_ENUM_UNKNOWN( audioMaster##x)
+# define FST_EFFECT_OPCODE(x, y) eff##x = y
+# define FST_EFFECT_OPCODE_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( eff##x, y)
+# define FST_EFFECT_OPCODE_UNKNOWN(x) FST_ENUM_UNKNOWN( eff##x)
+# define FST_EFFECT_CATEGORY(x, y) kPlugCateg##x = y
+# define FST_EFFECT_CATEGORY_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( kPlugCateg##x, y)
+# define FST_EFFECT_CATEGORY_UNKNOWN(x) FST_ENUM_UNKNOWN( kPlugCateg##x)
+# define FST_EFFECT_FLAG(x, y) effFlags##x = (1<<y)
+# define FST_SPEAKER(x, y) kSpeaker##x = y
+# define FST_SPEAKER_UNKNOWN(x) FST_ENUM_UNKNOWN( kSpeaker##x)
+# define FST_CONST(x, y) k##x = y
+# define FST_CONSTANT(x, y) kVst##x = y
+# define FST_CONSTANT_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( kVst##x, y)
+# define FST_CONSTANT_UNKNOWN(x) FST_ENUM_UNKNOWN( kVst##x)
+# define FST_TYPE(x) Vst##x
+# define FST_TYPE_UNKNOWN(x) FST_UNKNOWN(Vst##x)
 
 #define kVstVersion 2400
 
@@ -53,148 +54,146 @@ typedef long t_fstPtrInt; /* pointer sized int */
 typedef int t_fstInt32; /* 32bit int */
 
 typedef enum {
-  FST_HOST_ENUM(Automate, 0), /* IN:index, IN:fvalue, return 0 */
-  FST_HOST_ENUM(Version, 1), /* return 2400 */
-  FST_HOST_ENUM_EXPERIMENTAL(CurrentId, 2), /* return shellUIDToCreate */
-  FST_HOST_ENUM(WantMidi, 6), /* return 0 */
-  FST_HOST_ENUM(GetTime, 7), /* return (fstTimeInfo*) */
-  FST_HOST_ENUM(ProcessEvents, 8), /* IN:ptr(fstEvents*), return 0 */
-  FST_HOST_ENUM(TempoAt, 10), /* IN:ivalue, return (10000*BPM) */
-  FST_HOST_ENUM(SizeWindow, 15), /* IN:index(width), IN:value(height), return 1 */
-  FST_HOST_ENUM(GetSampleRate, 16), /* return sampleRate */
-  FST_HOST_ENUM(GetBlockSize, 17), /* return blockSize */
-  FST_HOST_ENUM(GetCurrentProcessLevel, 23), /* return (!isRealtime)*4 */
-  FST_HOST_ENUM(GetVendorString, 32), /* OUT:ptr(char[MaxVendorStrLen]), return ptr */
-  FST_HOST_ENUM(GetProductString, 33), /* OUT:ptr(char[MaxProductStrLen]), return ptr */
-  FST_HOST_ENUM(GetVendorVersion, 34), /* return 0x0101 */
-  FST_HOST_ENUM(CanDo, 37), /* IN:ptr(char*), return *ptr in {"sendFstEvents", "sizeWindow",...} */
-
-  FST_HOST_ENUM(BeginEdit, 43), /* IN:index, return 0 */
-  FST_HOST_ENUM(EndEdit, 44), /* IN:index, return 0 */
-
-
+  FST_HOST_OPCODE(Automate, 0), /* IN:index, IN:fvalue, return 0 */
+  FST_HOST_OPCODE(Version, 1), /* return 2400 */
+  FST_HOST_OPCODE_EXPERIMENTAL(CurrentId, 2), /* return shellUIDToCreate */
+  FST_HOST_OPCODE(WantMidi, 6), /* return 0 */
+  FST_HOST_OPCODE(GetTime, 7), /* return (fstTimeInfo*) */
+  FST_HOST_OPCODE(ProcessEvents, 8), /* IN:ptr(fstEvents*), return 0 */
+  FST_HOST_OPCODE(TempoAt, 10), /* IN:ivalue, return (10000*BPM) */
   /* 13: sending latency?? */
+  FST_HOST_OPCODE(SizeWindow, 15), /* IN:index(width), IN:value(height), return 1 */
+  FST_HOST_OPCODE(GetSampleRate, 16), /* return sampleRate */
+  FST_HOST_OPCODE(GetBlockSize, 17), /* return blockSize */
+  FST_HOST_OPCODE(GetCurrentProcessLevel, 23), /* return (!isRealtime)*4 */
+  FST_HOST_OPCODE(GetVendorString, 32), /* OUT:ptr(char[MaxVendorStrLen]), return ptr */
+  FST_HOST_OPCODE(GetProductString, 33), /* OUT:ptr(char[MaxProductStrLen]), return ptr */
+  FST_HOST_OPCODE(GetVendorVersion, 34), /* return 0x0101 */
+  FST_HOST_OPCODE(CanDo, 37), /* IN:ptr(char*), return *ptr in {"sendFstEvents", "sizeWindow",...} */
 
-  FST_HOST_ENUM_UNKNOWN(CloseWindow), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(OpenWindow), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(SetIcon), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(UpdateDisplay), /* return 0 */
+  FST_HOST_OPCODE(BeginEdit, 43), /* IN:index, return 0 */
+  FST_HOST_OPCODE(EndEdit, 44), /* IN:index, return 0 */
 
-  FST_HOST_ENUM_UNKNOWN(GetParameterQuantization), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(GetNumAutomatableParameters),
-  FST_HOST_ENUM_UNKNOWN(GetAutomationState), /* return {unsupported=0, off, read, write, readwrite} */
+  FST_HOST_OPCODE_UNKNOWN(CloseWindow), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(OpenWindow), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(SetIcon), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(UpdateDisplay), /* return 0 */
 
-  FST_HOST_ENUM_UNKNOWN(GetInputLatency), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(GetOutputLatency), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(GetParameterQuantization), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(GetNumAutomatableParameters),
+  FST_HOST_OPCODE_UNKNOWN(GetAutomationState), /* return {unsupported=0, off, read, write, readwrite} */
 
-  FST_HOST_ENUM_UNKNOWN(GetDirectory), /* return (char*)plugindirectory */
-  FST_HOST_ENUM_UNKNOWN(GetLanguage), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(GetInputLatency), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(GetOutputLatency), /* ?, return 0 */
 
-  FST_HOST_ENUM_UNKNOWN(GetOutputSpeakerArrangement), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(GetDirectory), /* return (char*)plugindirectory */
+  FST_HOST_OPCODE_UNKNOWN(GetLanguage), /* ?, return 0 */
 
-  FST_HOST_ENUM_UNKNOWN(OfflineGetCurrentMetaPass), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(OfflineGetCurrentPass), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(OfflineRead), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(OfflineStart), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(OfflineWrite), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(GetOutputSpeakerArrangement), /* ?, return 0 */
 
-  FST_HOST_ENUM_UNKNOWN(GetNextPlug), /* ?, return 0 */
-  FST_HOST_ENUM_UNKNOWN(GetPreviousPlug), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(OfflineGetCurrentMetaPass), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(OfflineGetCurrentPass), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(OfflineRead), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(OfflineStart), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(OfflineWrite), /* ?, return 0 */
 
-  FST_HOST_ENUM_UNKNOWN(Idle), /* return 0 */
-  FST_HOST_ENUM_UNKNOWN(NeedIdle), /* return 0 */
+  FST_HOST_OPCODE_UNKNOWN(GetNextPlug), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(GetPreviousPlug), /* ?, return 0 */
 
-  FST_HOST_ENUM_UNKNOWN(IOChanged), /* return 0 */
-  FST_HOST_ENUM_UNKNOWN(PinConnected), /* IN:index, IN:ivalue(isOutput), return isValidChannel */
+  FST_HOST_OPCODE_UNKNOWN(Idle), /* return 0 */
+  FST_HOST_OPCODE_UNKNOWN(NeedIdle), /* return 0 */
 
-  FST_HOST_ENUM_UNKNOWN(SetOutputSampleRate),
-  FST_HOST_ENUM_UNKNOWN(SetTime), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(IOChanged), /* return 0 */
+  FST_HOST_OPCODE_UNKNOWN(PinConnected), /* IN:index, IN:ivalue(isOutput), return isValidChannel */
 
-  FST_HOST_ENUM_UNKNOWN(WillReplaceOrAccumulate), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(SetOutputSampleRate),
+  FST_HOST_OPCODE_UNKNOWN(SetTime), /* ?, return 0 */
 
-  FST_HOST_ENUM_UNKNOWN(VendorSpecific), /* ?, return 0 */
+  FST_HOST_OPCODE_UNKNOWN(WillReplaceOrAccumulate), /* ?, return 0 */
 
-  fst_audioMasterLast /* last element */
+  FST_HOST_OPCODE_UNKNOWN(VendorSpecific), /* ?, return 0 */
+
+  fst_audioMasterLast /* last enum */
 } t_fstHostOpcode;;
 typedef enum {
-  FST_EFFECT_ENUM(Open, 0), /* return 0 */
-  FST_EFFECT_ENUM(Close, 1), /* return 0 */
-  FST_EFFECT_ENUM(SetProgram, 2), /* IN:ivalue, return 0 */
-  FST_EFFECT_ENUM(GetProgram, 3), /* return current_program */
-  FST_EFFECT_ENUM(SetProgramName, 4), /* IN:ptr(char*), return 0 */
-  FST_EFFECT_ENUM(GetProgramName, 5), /* OUT:ptr(char[24]), return 0 */
+  FST_EFFECT_OPCODE(Open, 0), /* return 0 */
+  FST_EFFECT_OPCODE(Close, 1), /* return 0 */
+  FST_EFFECT_OPCODE(SetProgram, 2), /* IN:ivalue, return 0 */
+  FST_EFFECT_OPCODE(GetProgram, 3), /* return current_program */
+  FST_EFFECT_OPCODE(SetProgramName, 4), /* IN:ptr(char*), return 0 */
+  FST_EFFECT_OPCODE(GetProgramName, 5), /* OUT:ptr(char[24]), return 0 */
 
   /* JUCE says that MaxParamStrLen is 8, but hosts allow a bit more (24) */
-  FST_EFFECT_ENUM(GetParamLabel, 6), /* OUT:ptr(char[8]), return 0 */
-  FST_EFFECT_ENUM(GetParamDisplay, 7), /* OUT:ptr(char[8]), return 0 */
-  FST_EFFECT_ENUM(GetParamName, 8), /* OUT:ptr(char[8]), return 0 */
-  FST_EFFECT_ENUM(SetSampleRate, 10), /* IN:fvalue, return 0 */
-  FST_EFFECT_ENUM(SetBlockSize, 11), /* IN:ivalue, return 0 */
-  FST_EFFECT_ENUM(MainsChanged, 12), /* IN:ivalue, return 0;  (handleResumeSuspend) */
+  FST_EFFECT_OPCODE(GetParamLabel, 6), /* OUT:ptr(char[8]), return 0 */
+  FST_EFFECT_OPCODE(GetParamDisplay, 7), /* OUT:ptr(char[8]), return 0 */
+  FST_EFFECT_OPCODE(GetParamName, 8), /* OUT:ptr(char[8]), return 0 */
+  FST_EFFECT_OPCODE(SetSampleRate, 10), /* IN:fvalue, return 0 */
+  FST_EFFECT_OPCODE(SetBlockSize, 11), /* IN:ivalue, return 0 */
+  FST_EFFECT_OPCODE(MainsChanged, 12), /* IN:ivalue, return 0;  (handleResumeSuspend) */
 
-  FST_EFFECT_ENUM(EditGetRect, 13), /* OUT:ptr(ERect*), return ptr */
-  FST_EFFECT_ENUM(EditOpen, 14),
-  FST_EFFECT_ENUM(EditClose, 15), /* return 0 */
+  FST_EFFECT_OPCODE(EditGetRect, 13), /* OUT:ptr(ERect*), return ptr */
+  FST_EFFECT_OPCODE(EditOpen, 14),
+  FST_EFFECT_OPCODE(EditClose, 15), /* return 0 */
 
-  FST_EFFECT_ENUM(Identify, 22), /* return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302 */
-  FST_EFFECT_ENUM(GetChunk, 23), /* IN:index, OUT:ptr(void*), return size */
-  FST_EFFECT_ENUM(SetChunk, 24), /* IN:index, IN:ivalue(size), IN:ptr(void*), return 0 */
+  FST_EFFECT_OPCODE(Identify, 22), /* return ByteOrder::bigEndianInt ("NvEf") 1316373862 or 1715828302 */
+  FST_EFFECT_OPCODE(GetChunk, 23), /* IN:index, OUT:ptr(void*), return size */
+  FST_EFFECT_OPCODE(SetChunk, 24), /* IN:index, IN:ivalue(size), IN:ptr(void*), return 0 */
 
-  FST_EFFECT_ENUM(ProcessEvents, 25), /* IN:ptr(fstEvents*), return ((bool)MidiProcessed */
-  FST_EFFECT_ENUM(CanBeAutomated, 26), /* (can parameter# be automated) IN:index, return 0 */
-  FST_EFFECT_ENUM(String2Parameter, 27), /* IN:index, IN:ptr(char*), return (hasParam#) */
+  FST_EFFECT_OPCODE(ProcessEvents, 25), /* IN:ptr(fstEvents*), return ((bool)MidiProcessed */
+  FST_EFFECT_OPCODE(CanBeAutomated, 26), /* (can parameter# be automated) IN:index, return 0 */
+  FST_EFFECT_OPCODE(String2Parameter, 27), /* IN:index, IN:ptr(char*), return (hasParam#) */
 
-  FST_EFFECT_ENUM(GetProgramNameIndexed, 29), /* IN:index, OUT:ptr(char[24], return (hasProg#) */
-  FST_EFFECT_ENUM(GetInputProperties, 33), /* IN:index, OUT:ptr(fstPinProperties*), return 1|0 */
-  FST_EFFECT_ENUM(GetOutputProperties, 34), /* IN:index, OUT:ptr(fstPinProperties*), return 1|0 */
-  FST_EFFECT_ENUM(GetPlugCategory, 35), /* return category */
+  FST_EFFECT_OPCODE(GetProgramNameIndexed, 29), /* IN:index, OUT:ptr(char[24], return (hasProg#) */
+  FST_EFFECT_OPCODE(GetInputProperties, 33), /* IN:index, OUT:ptr(fstPinProperties*), return 1|0 */
+  FST_EFFECT_OPCODE(GetOutputProperties, 34), /* IN:index, OUT:ptr(fstPinProperties*), return 1|0 */
+  FST_EFFECT_OPCODE(GetPlugCategory, 35), /* return category */
 
-  FST_EFFECT_ENUM(SetSpeakerArrangement, 42), /* IN:ivalue(fstSpeakerArrangement*in) IN:ptr(fstSpeakerArrangement*out) */
+  FST_EFFECT_OPCODE(SetSpeakerArrangement, 42), /* IN:ivalue(fstSpeakerArrangement*in) IN:ptr(fstSpeakerArrangement*out) */
 
-  FST_EFFECT_ENUM(GetEffectName, 45), /* OUT:ptr(char[64]), return 1 */
-  FST_EFFECT_ENUM(GetVendorString, 47), /* OUT:ptr(char[64]), return 1 */
-  FST_EFFECT_ENUM(GetProductString, 48), /* OUT:ptr(char[64]), return 1 */
-  FST_EFFECT_ENUM(GetVendorVersion, 49), /* return version */
-  FST_EFFECT_ENUM(VendorSpecific, 50), /* behaviour defined by vendor... */
+  FST_EFFECT_OPCODE(GetEffectName, 45), /* OUT:ptr(char[64]), return 1 */
+  FST_EFFECT_OPCODE(GetVendorString, 47), /* OUT:ptr(char[64]), return 1 */
+  FST_EFFECT_OPCODE(GetProductString, 48), /* OUT:ptr(char[64]), return 1 */
+  FST_EFFECT_OPCODE(GetVendorVersion, 49), /* return version */
+  FST_EFFECT_OPCODE(VendorSpecific, 50), /* behaviour defined by vendor... */
 
-  FST_EFFECT_ENUM(CanDo, 51), /* IN:ptr(char*), returns 0|1|-1 */
-  FST_EFFECT_ENUM(GetVstVersion, 58), /* return kVstVersion */
-  FST_EFFECT_ENUM_EXPERIMENTAL(GetCurrentMidiProgram, 63), /* return -1 */
+  FST_EFFECT_OPCODE(CanDo, 51), /* IN:ptr(char*), returns 0|1|-1 */
+  FST_EFFECT_OPCODE(GetVstVersion, 58), /* return kVstVersion */
+  FST_EFFECT_OPCODE_EXPERIMENTAL(GetCurrentMidiProgram, 63), /* return -1 */
 
-  FST_EFFECT_ENUM(GetSpeakerArrangement, 69), /* OUT:ivalue(fstSpeakerArrangement*in) OUT:ptr(fstSpeakerArrangement*out), return (!(hasAUX || isMidi)) */
+  FST_EFFECT_OPCODE(GetSpeakerArrangement, 69), /* OUT:ivalue(fstSpeakerArrangement*in) OUT:ptr(fstSpeakerArrangement*out), return (!(hasAUX || isMidi)) */
 
-  FST_EFFECT_ENUM(ShellGetNextPlugin, 70),
-  FST_EFFECT_ENUM_EXPERIMENTAL(StartProcess, 71),
-  FST_EFFECT_ENUM_EXPERIMENTAL(StopProcess, 72),
-  FST_EFFECT_ENUM(SetTotalSampleToProcess, 73), /* return ivalue */
-  FST_EFFECT_ENUM(SetProcessPrecision, 77), /* IN:ivalue(ProcessPrecision64,..), return !isProcessing */
-
-
-  FST_EFFECT_ENUM_UNKNOWN(KeysRequired), /* return ((bool)KeyboardFocusRequireq; 59?? */
+  FST_EFFECT_OPCODE(ShellGetNextPlugin, 70),
+  FST_EFFECT_OPCODE_EXPERIMENTAL(StartProcess, 71),
+  FST_EFFECT_OPCODE_EXPERIMENTAL(StopProcess, 72),
+  FST_EFFECT_OPCODE(SetTotalSampleToProcess, 73), /* return ivalue */
+  FST_EFFECT_OPCODE(SetProcessPrecision, 77), /* IN:ivalue(ProcessPrecision64,..), return !isProcessing */
 
 
-  FST_EFFECT_ENUM_UNKNOWN(EditDraw),
-  FST_EFFECT_ENUM_UNKNOWN(EditMouse),
-  FST_EFFECT_ENUM_UNKNOWN(EditSleep),
-  FST_EFFECT_ENUM_UNKNOWN(EditTop),
-  FST_EFFECT_ENUM_UNKNOWN(EditIdle),
+  FST_EFFECT_OPCODE_UNKNOWN(KeysRequired), /* return ((bool)KeyboardFocusRequireq; 59?? */
 
-  FST_EFFECT_ENUM_UNKNOWN(GetNumMidiInputChannels), /* return 16*isMidi */
-  FST_EFFECT_ENUM_UNKNOWN(GetNumMidiOutputChannels), /* return 16*isMidi */
 
-  FST_EFFECT_ENUM_UNKNOWN(SetBypass), /* IN:ivalue, return 0; effCanDo("bypass") */
-  FST_EFFECT_ENUM_UNKNOWN(GetTailSize), /* return audiotailInSamples */
+  FST_EFFECT_OPCODE_UNKNOWN(EditDraw),
+  FST_EFFECT_OPCODE_UNKNOWN(EditMouse),
+  FST_EFFECT_OPCODE_UNKNOWN(EditSleep),
+  FST_EFFECT_OPCODE_UNKNOWN(EditTop),
+  FST_EFFECT_OPCODE_UNKNOWN(EditIdle),
 
-  FST_EFFECT_ENUM_UNKNOWN(ConnectInput),
-  FST_EFFECT_ENUM_UNKNOWN(ConnectOutput),
+  FST_EFFECT_OPCODE_UNKNOWN(GetNumMidiInputChannels), /* return 16*isMidi */
+  FST_EFFECT_OPCODE_UNKNOWN(GetNumMidiOutputChannels), /* return 16*isMidi */
 
-  FST_EFFECT_ENUM_UNKNOWN(Idle),
+  FST_EFFECT_OPCODE_UNKNOWN(SetBypass), /* IN:ivalue, return 0; effCanDo("bypass") */
+  FST_EFFECT_OPCODE_UNKNOWN(GetTailSize), /* return audiotailInSamples */
+
+  FST_EFFECT_OPCODE_UNKNOWN(ConnectInput),
+  FST_EFFECT_OPCODE_UNKNOWN(ConnectOutput),
+
+  FST_EFFECT_OPCODE_UNKNOWN(Idle),
 
 #warning document origin of eff*SetProgram
-  FST_EFFECT_ENUM_UNKNOWN(BeginSetProgram),
-  FST_EFFECT_ENUM_UNKNOWN(EndSetProgram),
+  FST_EFFECT_OPCODE_UNKNOWN(BeginSetProgram),
+  FST_EFFECT_OPCODE_UNKNOWN(EndSetProgram),
 
-  fst_effLast, /* the last opcode */
+  fst_effLast, /* the enum */
 } t_fstPluginOpcode;
 
 #warning document fstAEffectFlags (?)
