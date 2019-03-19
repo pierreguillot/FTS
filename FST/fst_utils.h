@@ -507,8 +507,8 @@ static void print_effPtr(AEffect* effect,
       print_hex(ptr, ivalue);
       break;
     case effSetSpeakerArrangement:
-      printf("\tinput", (VstSpeakerArrangement*)ivalue);
-      printf("\toutput", (VstSpeakerArrangement*)ptr);
+      print_speakerarrangement("input>", (VstSpeakerArrangement*)ivalue);
+      print_speakerarrangement("output>", (VstSpeakerArrangement*)ptr);
       break;
     case effProcessEvents:
       printf("\tevents: ");
@@ -537,8 +537,8 @@ static void print_effPtr(AEffect* effect,
       printf("\t'%s'\n", (char*)ptr);
       break;
     case effGetSpeakerArrangement:
-      print_speakerarrangement("input", (VstSpeakerArrangement*)ivalue);
-      print_speakerarrangement("output", (VstSpeakerArrangement*)ptr);
+      print_speakerarrangement("input<", ((VstSpeakerArrangement**)ivalue)[0]);
+      print_speakerarrangement("output<", ((VstSpeakerArrangement**)ptr)[0]);
       break;
     case effGetInputProperties:
     case effGetOutputProperties:
