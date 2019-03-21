@@ -94,6 +94,13 @@ t_fstPtrInt plugin2host (AEffect* effect, int opcode, int index, t_fstPtrInt iva
   }
   t_fstPtrInt result = -1;
   if(doPrint) {
+    if(0xDEADBEEF ==opcode) {
+      if (0xDEADF00D == index) {
+        printf("\t0xDEADFEED/0xDEADF00D '%s'\n", ptr);
+      } else
+        printf("\t0x%X/0x%X\n", opcode, index);
+    }
+
     result = dispatch_host(pluginname, p2h, effect, opcode, index, ivalue, ptr, fvalue);
   } else {
     result = p2h(effect, opcode, index, ivalue, ptr, fvalue);
