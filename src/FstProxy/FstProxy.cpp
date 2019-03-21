@@ -104,6 +104,7 @@ t_fstPtrInt plugin2host (AEffect* effect, int opcode, int index, t_fstPtrInt iva
 
 extern "C"
 AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
+  char pluginname[512] = {0};
   char*pluginfile = getenv("FST_PROXYPLUGIN");
   if(!pluginfile)return 0;
   s_plug2host = dispatch4host;
@@ -121,7 +122,6 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
     plug->dispatcher = host2plugin;
   }
 
-  char pluginname[512] = {0};
   s_host2plugin[plug](plug, effGetEffectName, 0, 0, pluginname, 0);
   if(*pluginname)
     s_pluginname[plug] = pluginname;
