@@ -48,6 +48,7 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
 #endif
   switch(opcode) {
   default: break;
+  case effGetChunk: case effSetChunk:
   case effVendorSpecific:
     doPrint = false;
     break;
