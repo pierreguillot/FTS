@@ -249,7 +249,7 @@ the `type var[]` syntax is C99, for older C-implementations use `type var[0]` in
 
 
 ### VstSpeakerProperties
-resolving `VstSpeakerArrangement`, leaves us with a new type `VstSpeakerProperties`.
+Resolving `VstSpeakerArrangement`, leaves us with a new type `VstSpeakerProperties`.
 We play the above game again, and get:
 
 ~~~C
