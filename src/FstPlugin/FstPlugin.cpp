@@ -327,6 +327,8 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
         return 1;
       if(!strcmp((char*)ptr, "sendVstMidiEvents"))
         return 1;
+      if(!strcmp((char*)ptr, "wantsChannelCountNotifications"))
+        return 1;
 #if 0
       if(!strcmp((char*)ptr, "hasCockosExtensions")) {
         return 0xBEEF0000;
