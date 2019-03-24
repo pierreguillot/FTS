@@ -2572,6 +2572,7 @@ the same result *except* for `opcode:37`, our likely candidate for `audioMasterC
 ## Speaker Arrangments
 
 Running our test plugin in REAPER, we can also calls to `effcode:42` in the startup phase.
+
 ~~~
 FstClient::dispatcher(0x1ec2080, 42, 0,  32252624, 0x1ec2740, 0.000000);
 ~~~
