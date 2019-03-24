@@ -3267,7 +3267,7 @@ The index is the parameter index currently being automated...
 
 
 ### effCode:62
-how did i trigger this?
+This is called when the MIDI-dialog get's opened (right before effCode:66; but only once)
 
 5*16 (80) bytes == 0x00
 
