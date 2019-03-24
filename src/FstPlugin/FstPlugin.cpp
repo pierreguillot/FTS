@@ -363,7 +363,9 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
 
   return 0;
 }
-
+static t_fstPtrInt dispatchme(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+  return dispatch_effect ("FstPlugin", dispatcher, eff, opcode, index, ivalue, ptr, fvalue);
+}
 static void find_audioMasterSizeWindow() {
   for(size_t opcode = 0; opcode<100; opcode++) {
     char hostcode[512] = {0};
@@ -419,7 +421,7 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   AEffect* eff = new AEffect;
   memset(eff, 0, sizeof(AEffect));
   eff->magic = 0x56737450;
-  eff->dispatcher = dispatcher;
+  eff->dispatcher = dispatchme;
   eff->process = process;
   eff->getParameter = getParameter;
   eff->setParameter = setParameter;
