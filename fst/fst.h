@@ -66,6 +66,7 @@
 # define FST_EFFECT_CATEGORY_UNKNOWN(x) FST_ENUM_UNKNOWN( kPlugCateg##x)
 # define FST_EFFECT_FLAG(x, y) effFlags##x = (1<<y)
 # define FST_SPEAKER(x, y) kSpeaker##x = y
+# define FST_SPEAKER_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( kSpeaker##x, y)
 # define FST_SPEAKER_UNKNOWN(x) FST_ENUM_UNKNOWN( kSpeaker##x)
 # define FST_CONST(x, y) k##x = y
 # define FST_CONSTANT(x, y) kVst##x = y
