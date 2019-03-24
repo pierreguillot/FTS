@@ -2762,6 +2762,12 @@ So we can at least be pretty confident of the values of `kSpeakerArrMono`, `kSpe
 `kSpeakerArr102` & `kSpeakerArrUserDefined`.
 
 
+### Amendment: wantsChannelCountNotifications
+
+REAPER doesn't *always* call the `effSetSpeakerArrangement`.
+It seems the plugin must return `1` for the `effCanDo` opcode with a value of `wantsChannelCountNotifications`
+in order to receive this opcode (which kind of makes sense).
+
 
 # Part: AudioPluginHost
 With many opcodes working, we can start testing on a larger scale.
