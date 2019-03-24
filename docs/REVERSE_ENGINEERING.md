@@ -258,6 +258,9 @@ typedef struct VstSpeakerProperties_ {
 } VstSpeakerProperties;
 ~~~
 
+This is highly unlikely: a struct with only a single member would usually be just replaced by the member itself.
+So the `VstSpeakerProperties` will *most likely* have more members, of which we don't know the names nor types.
+
 ### VstPlugCategory
 A value of this type is compared to `kPlugCategShell`, so we typedef the enumeration
 with the `kPlug*` names to `VstPlugCategory`.
