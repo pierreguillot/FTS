@@ -2587,6 +2587,8 @@ where both `ivalue` and `ptr` point both to addresses:
 - `effGetSpeakerArrangement`
 - `effSetSpeakerArrangement`
 
+Both opcodes get pointers to `VstSpeakerArrangement`.
+
 Here is a dump of the first 96 bytes of the data found at those addresses
 (the data is the same on both addresses,
 at least if our plugin is configured with 2 IN and 2 OUT channels):
@@ -2666,6 +2668,96 @@ to prevent crashes.
 
 Interestingly, *Protoverb* will now react to `opcode:69`, returning the same data we just set via opcode:42.
 So we probably have just found `effGetSeakerArrangement` as well.
+
+### Speaker Arrangment Types
+
+So what do we know about the `VstSpeakerArrangement.type` field?
+In [VstSpeakerArrangement](#vstspeakerarrangement), we found out that this
+member is really of type `t_fstSpeakerArrangementType`, that has (so far) symbolic names starting with `kSpeakerArr*`.
+JUCE uses the following names matching this pattern (in a regex notation):
+
+| VST name                             | JUCE name    |
+|--------------------------------------|--------------|
+| `kSpeakerArrEmpty`                   | disabled     |
+| `kSpeakerArrMono`                    | mono         |
+| `kSpeakerArrStereo`                  | stereo       |
+| `kSpeakerArrStereoCLfe`              |              |
+| `kSpeakerArrStereoCenter`            |              |
+| `kSpeakerArrStereoSide`              |              |
+| `kSpeakerArrStereoSurround`          |              |
+| `kSpeakerArrUserDefined`             |              |
+| `kSpeakerArr[34678][01](Cine,Music)` |              |
+| `kSpeakerArr30Cine`                  | LCR          |
+| `kSpeakerArr30Music`                 | LRS          |
+| `kSpeakerArr40Cine`                  | LCRS         |
+| `kSpeakerArr60Cine`                  | 6.0          |
+| `kSpeakerArr61Cine`                  | 6.1          |
+| `kSpeakerArr60Music`                 | 6.0Music     |
+| `kSpeakerArr61Music`                 | 6.1Music     |
+| `kSpeakerArr70Music`                 | 7.0          |
+| `kSpeakerArr70Cine`                  | 7.0SDDS      |
+| `kSpeakerArr71Music`                 | 7.1          |
+| `kSpeakerArr71Cine`                  | 7.1SDDS      |
+| `kSpeakerArr40Music`                 | quadraphonic |
+| `kSpeakerArr50`                      | 5.0          |
+| `kSpeakerArr51`                      | 5.1          |
+| `kSpeakerArr102`                     |              |
+
+
+Comparing these names to [what REAPER fills in for various channel counts](#speaker-arrangments),
+we can at least make some simple guesses.
+We repeat the table from above:
+
+| numChannels  | type |
+|--------------|------|
+| 1            | 0    |
+| 2            | 1    |
+| 3            | 11   |
+| 4            | 11   |
+| 5            | 15   |
+| 6            | 15   |
+| 7            | 23   |
+| 8            | 23   |
+| 12           | 28   |
+| all the rest | -2   |
+|              |      |
+
+Mono is a single channel, Stereo needs two channels, for which REAPER fills in `0` and `1` (`kSpeakerArrMono` resp `kSpeakerArrStereo`).
+That's a bit unconventional: personally I would have used `0` for `kSpeakerArrEmpty`, and `1` and `2` for Mono and Stereo.
+
+Unfortunately, REAPER doesn't report anything for 0 channels, so we don't know that value of `kSpeakerArrEmpty`.
+I also don't really understand why we always get pairwise assignments for the next 6 number of channels.
+E.g. assigning `11` to both 3 and 4 channels would make sense
+if there was a speaker-arrangement for 4 channels (e.g. quadrophony aka `kSpeakerArr40Music`),
+but none for 3 channels (so REAPER just assumes some "degraded" arrangement).
+But we do have `kSpeakerArr30Music`, which should serve 3 channels just fine.
+It's probably safe to assume that REAPER does the "degraded" arrangement thing nevertheless.
+It's tricky to get the correct assignment though, since we have so many variants with the same
+number of channels.
+E.g. 6 channels could be `kSpeakerArr51`, `kSpeakerArr60Music` and `kSpeakerArr60Cine`.
+
+There's also the catch-all type *-2*. Given the `kSpeakerArr*` names we know so far, `kSpeakerArrUserDefined` might be this catch-all.
+The value for `kSpeakerArrEmpty` might be "special" as well (and therefore not be assigned some ordered value like, say, *7*) -
+it could well be *-1*, but we don't have any evidence of that yet.
+
+Here's some possible assignments (the names for 3, 5 & 7 channels are in parentheses, as the type has the same value as arrangement with one more channel):
+
+| numChannels  | type (value) | type (name)                                                                            |
+|--------------|--------------|----------------------------------------------------------------------------------------|
+| 1            | 0            | `kSpeakerArrMono`                                                                      |
+| 2            | 1            | `kSpeakerArrStereo`                                                                    |
+| 3            | 11           | (`kSpeakerArr30Music`, `kSpeakerArr30Cine`)                                            |
+| 4            | 11           | `kSpeakerArr31Music`, `kSpeakerArr31Cine`, `kSpeakerArr40Music`, `kSpeakerArr40Cine`   |
+| 5            | 15           | (`kSpeakerArr41Music`, `kSpeakerArr41Cine`, `kSpeakerArr50Music`)                      |
+| 6            | 15           | `kSpeakerArr51`, `kSpeakerArr60Music`, `kSpeakerArr60Cine`                             |
+| 7            | 23           | (`kSpeakerArr61Music`, `kSpeakerArr61Cine`, `kSpeakerArr70Music`, `kSpeakerArr70Cine`) |
+| 8            | 23           | `kSpeakerArr71Music`, `kSpeakerArr71Cine`, `kSpeakerArr80Music`, `kSpeakerArr80Cine`   |
+| 12           | 28           | `kSpeakerArr102`                                                                       |
+| all the rest | -2           | `kSpeakerArrUserDefined`                                                               |
+
+So we can at least be pretty confident of the values of `kSpeakerArrMono`, `kSpeakerArrStereo`,
+`kSpeakerArr102` & `kSpeakerArrUserDefined`.
+
 
 
 # Part: AudioPluginHost
