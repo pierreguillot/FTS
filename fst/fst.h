@@ -319,6 +319,8 @@ enum { /* fstTimeInfo.flags */
   FST_FLAG(TransportPlaying,     1),
   FST_FLAG(TransportCycleActive, 2),
   FST_FLAG(TransportRecording,   3),
+  FST_FLAG_UNKNOWN(AutomationReading),
+  FST_FLAG_UNKNOWN(AutomationWriting),
 
   FST_FLAG(NanosValid   ,  8),
   FST_FLAG(PpqPosValid  ,  9),
@@ -336,9 +338,6 @@ enum {
   FST_CONSTANT_EXPERIMENTAL(MaxVendorStrLen, 128),
   FST_CONSTANT_EXPERIMENTAL(MaxLabelLen, 64),
   FST_CONSTANT_EXPERIMENTAL(MaxShortLabelLen, 8),
-
-  FST_CONSTANT_UNKNOWN(AutomationReading),
-  FST_CONSTANT_UNKNOWN(AutomationWriting),
 
   FST_CONSTANT_UNKNOWN(PinIsActive),
   FST_CONSTANT_UNKNOWN(PinIsStereo),
