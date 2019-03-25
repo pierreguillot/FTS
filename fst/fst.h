@@ -318,19 +318,19 @@ typedef enum {
   fst_speakerLast /* last enum */
 } t_fstSpeakerArrangementType;
 enum { /* fstTimeInfo.flags */
-  FST_CONSTANT(TransportChanged,     (1<<0)),
-  FST_CONSTANT(TransportPlaying,     (1<<1)),
-  FST_CONSTANT(TransportCycleActive, (1<<2)),
-  FST_CONSTANT(TransportRecording,   (1<<3)),
+  FST_FLAG(TransportChanged,     0),
+  FST_FLAG(TransportPlaying,     1),
+  FST_FLAG(TransportCycleActive, 2),
+  FST_FLAG(TransportRecording,   3),
 
-  FST_CONSTANT(NanosValid   , (1<< 8)),
-  FST_CONSTANT(PpqPosValid  , (1<< 9)),
-  FST_CONSTANT(TempoValid   , (1<<10)),
-  FST_CONSTANT(BarsValid    , (1<<11)),
-  FST_CONSTANT(CyclePosValid, (1<<12)),
-  FST_CONSTANT(TimeSigValid , (1<<13)),
-  FST_CONSTANT(SmpteValid   , (1<<14)),
-  FST_CONSTANT(ClockValid   , (1<<15))
+  FST_FLAG(NanosValid   ,  8),
+  FST_FLAG(PpqPosValid  ,  9),
+  FST_FLAG(TempoValid   , 10),
+  FST_FLAG(BarsValid    , 11),
+  FST_FLAG(CyclePosValid, 12),
+  FST_FLAG(TimeSigValid , 13),
+  FST_FLAG(SmpteValid   , 14),
+  FST_FLAG(ClockValid   , 15)
 };
 enum {
 /* 197782 is where the array passed at opcode:33 overflows */
