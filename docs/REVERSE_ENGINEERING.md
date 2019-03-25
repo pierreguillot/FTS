@@ -3353,6 +3353,74 @@ However *GSinth* returns `2400` for the `effGetVstVersion` opcode, whereas our o
 returns the default `0`.
 If we make it return `2400` as well, REAPER starts asking with `effCanBeAutomated`.
 So it seems that this opcode was only introduced later, and requires the plugin to support a minimum version of the API.
+
+
+# Summary
+
+So far we have discovered quite a few opcodes (and constants):
+
+
+Trying to compile JUCE plugins or plugin-hosts, we still miss a considerable number,
+mostly `audioMaster*` opcodes:
+
+| names used by JUCE                       |
+|------------------------------------------|
+| `audioMaster(Open,Close)Window`          |
+| `audioMasterGetAutomationState`          |
+| `audioMasterGetDirectory`                |
+| `audioMasterGet(In,Out)putLatency`       |
+| `audioMasterGetLanguage`                 |
+| `audioMasterGetNumAutomatableParameters` |
+| `audioMasterGetOutputSpeakerArrangement` |
+| `audioMasterGetParameterQuantization`    |
+| `audioMasterGet(Next,Previous)Plug`      |
+| `audioMasterIOChanged`                   |
+| `audioMasterIdle`                        |
+| `audioMasterNeedIdle`                    |
+| `audioMasterOffline*`                    |
+| `audioMasterPinConnected`                |
+| `audioMasterSetIcon`                     |
+| `audioMasterSetOutputSampleRate`         |
+| `audioMasterSetTime`                     |
+| `audioMasterUpdateDisplay`               |
+| `audioMasterVendorSpecific`              |
+| `audioMasterWillReplaceOrAccumulate`     |
+|------------------------------------------|
+| `effConnectInput`/ `effConnectOutput`    |
+| `effEdit(Draw,Idle,Mouse,Sleep,Top)`     |
+| `effGetNumMidi(In,Out)putChannels`       |
+| `effGetTailSize`                         |
+| `effIdle`                                |
+| `effKeysRequired`                        |
+| `effSetBypass`                           |
+|------------------------------------------|
+| `kSpeakerArr*`                           |
+| `kSpeaker*`                              |
+| `kVstAutomationReading`                  |
+| `kVstAutomationWriting`                  |
+| `kVstPinIsActive`                        |
+| `kVstPinIsStereo`                        |
+| `kVstPinUseSpeaker`                      |
+| `kVstSmpte.*`                            |
+|                                          |
+
+On the other hand, running using a self-compiled plugin in a commercial DAW (like REAPER)
+or using commercial plugins in a self-compiled plugin host, we only encounter very few opcodes
+that we don't know yet:
+
+|------------|----|
+| audioHost* | 3  |
+| audioHost* | 13 |
+| audioHost* | 42 |
+|------------|----|
+| eff*       | 19 |
+| eff*       | 53 |
+| eff*       | 56 |
+| eff*       | 62 |
+| eff*       | 66 |
+| eff*       |    |
+
+
 # misc
 LATER move this to proper sections
 
