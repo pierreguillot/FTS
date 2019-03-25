@@ -231,7 +231,6 @@ typedef enum {
   fst_effLast, /* the enum */
 } t_fstPluginOpcode;
 
-#warning document fstAEffectFlags (?)
 typedef enum {
   FST_EFFECT_FLAG(HasEditor,           0),
   FST_EFFECT_FLAG(CanReplacing,        4),
