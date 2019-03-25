@@ -3490,7 +3490,6 @@ the numbers seem to be the visible notes on the virtual MIDI keyboard.
 | opcode         | effEndSetProgram               | vstplugin~ |
 |----------------|--------------------------------|------------|
 | constant       | kEffectMagic                   | vstplugin~ |
-| constant       | kPlugCategOfflineProcess       | vstplugin~ |
 | constant       | kSpeakerUndefined              | vstplugin~ |
 | constant       | kSpeakerM                      | vstplugin~ |
 |----------------|--------------------------------|------------|
