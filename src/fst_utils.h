@@ -460,22 +460,23 @@ static void print_timeinfo(VstTimeInfo*vti) {
   FST_UTILS__VTI_d(vti, timeSigNumerator);
   FST_UTILS__VTI_d(vti, timeSigDenominator);
   FST_UTILS__VTI_x(vti, flags);
+
   int flags = vti->flags;
-#define FST_UTILS__VTI_FLAGS(ti, f) do {flags &= ~f; if(ti->flags & f)printf("\n\t\t%s", #f);} while (0)
-  FST_UTILS__VTI_FLAGS(vti, kVstTransportChanged);
-  FST_UTILS__VTI_FLAGS(vti, kVstTransportPlaying);
-  FST_UTILS__VTI_FLAGS(vti, kVstTransportCycleActive);
-  FST_UTILS__VTI_FLAGS(vti, kVstTransportRecording);
-  FST_UTILS__VTI_FLAGS(vti, kVstAutomationReading);
-  FST_UTILS__VTI_FLAGS(vti, kVstAutomationWriting);
-  FST_UTILS__VTI_FLAGS(vti, kVstNanosValid);
-  FST_UTILS__VTI_FLAGS(vti, kVstPpqPosValid);
-  FST_UTILS__VTI_FLAGS(vti, kVstTempoValid);
-  FST_UTILS__VTI_FLAGS(vti, kVstBarsValid);
-  FST_UTILS__VTI_FLAGS(vti, kVstCyclePosValid);
-  FST_UTILS__VTI_FLAGS(vti, kVstTimeSigValid);
-  FST_UTILS__VTI_FLAGS(vti, kVstSmpteValid);
-  FST_UTILS__VTI_FLAGS(vti, kVstClockValid);
+#define FST_UTILS__VTI_FLAGS(flags, f) do {if(flags & f)printf("\n\t\t%s", #f); flags &= ~f;} while (0)
+  FST_UTILS__VTI_FLAGS(flags, kVstTransportChanged);
+  FST_UTILS__VTI_FLAGS(flags, kVstTransportPlaying);
+  FST_UTILS__VTI_FLAGS(flags, kVstTransportCycleActive);
+  FST_UTILS__VTI_FLAGS(flags, kVstTransportRecording);
+  FST_UTILS__VTI_FLAGS(flags, kVstAutomationReading);
+  FST_UTILS__VTI_FLAGS(flags, kVstAutomationWriting);
+  FST_UTILS__VTI_FLAGS(flags, kVstNanosValid);
+  FST_UTILS__VTI_FLAGS(flags, kVstPpqPosValid);
+  FST_UTILS__VTI_FLAGS(flags, kVstTempoValid);
+  FST_UTILS__VTI_FLAGS(flags, kVstBarsValid);
+  FST_UTILS__VTI_FLAGS(flags, kVstCyclePosValid);
+  FST_UTILS__VTI_FLAGS(flags, kVstTimeSigValid);
+  FST_UTILS__VTI_FLAGS(flags, kVstSmpteValid);
+  FST_UTILS__VTI_FLAGS(flags, kVstClockValid);
   if(flags)printf("\n\t\tremainder: 0x%04X", flags);
 
   FST_UTILS__VTI_d(vti, smpteFrameRate);
