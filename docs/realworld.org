@@ -37,7 +37,7 @@ effect->dispatcher(effMainsChanged, 0, 1, (nil), 0.000000);
 effect->dispatcher(effStartProcess, 0, 0, (nil), 0.000000);
 effect->dispatcher(effCanDo, 0, 0, 0xab4684, 0.000000);
 effect->dispatcher(effCanDo, 0, 0, 0xab4695, 0.000000);
-effect->dispatcher(35, 0, 0, (nil), 0.000000);
+effect->dispatcher(effGetPlugCategory, 0, 0, (nil), 0.000000);
 effect->dispatcher(effCanDo, 0, 0, 0xab46a9, 0.000000);
 effect->dispatcher(effCanDo, 0, 0, 0xab46b7, 0.000000);
 effect->dispatcher(effGetProgram, 0, 0, (nil), 0.000000);
@@ -47,16 +47,16 @@ effect->dispatcher(effGetProgramName, 0, 0, 0x7ffcf7237dc0, 0.000000);
 effect->dispatcher(effGetProgram, 0, 0, (nil), 0.000000);
 
 /* start playback */
-effect->dispatcher(12, 0, 0, (nil), 0.000000);
-effect->dispatcher(12, 0, 1, (nil), 0.000000);
+effect->dispatcher(effMainsChanged, 0, 0, (nil), 0.000000);
+effect->dispatcher(effMainsChanged, 0, 1, (nil), 0.000000);
 
 /* de-init */
-effect->dispatcher(12, 0, 0, (nil), 0.000000);
-effect->dispatcher(12, 0, 1, (nil), 0.000000);
-effect->dispatcher(12, 0, 0, (nil), 0.000000);
-effect->dispatcher(12, 0, 1, (nil), 0.000000);
-effect->dispatcher(72, 0, 0, (nil), 0.000000);
-effect->dispatcher(12, 0, 0, (nil), 0.000000);
+effect->dispatcher(effMainsChanged, 0, 0, (nil), 0.000000);
+effect->dispatcher(effMainsChanged, 0, 1, (nil), 0.000000);
+effect->dispatcher(effMainsChanged, 0, 0, (nil), 0.000000);
+effect->dispatcher(effMainsChanged, 0, 1, (nil), 0.000000);
+effect->dispatcher(StopProcess, 0, 0, (nil), 0.000000);
+effect->dispatcher(effMainsChanged, 0, 0, (nil), 0.000000);
 effect->dispatcher(effClose, 0, 0, (nil), 0.000000);
 #+END_SRC
 
