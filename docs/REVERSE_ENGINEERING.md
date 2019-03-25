@@ -3390,7 +3390,7 @@ Trying to compile JUCE plugins or plugin-hosts, we still miss a considerable num
 | `kVstPinIsActive`                        |
 | `kVstPinIsStereo`                        |
 | `kVstPinUseSpeaker`                      |
-| `kVstSmpte.*`                            |
+| `kVstSmpte*`                            |
 |                                          |
 
 On the other hand, running using a self-compiled plugin in a commercial DAW (like REAPER)
