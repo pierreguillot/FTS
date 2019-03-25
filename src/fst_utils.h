@@ -466,6 +466,8 @@ static void print_timeinfo(VstTimeInfo*vti) {
   FST_UTILS__VTI_FLAGS(vti, kVstTransportPlaying);
   FST_UTILS__VTI_FLAGS(vti, kVstTransportCycleActive);
   FST_UTILS__VTI_FLAGS(vti, kVstTransportRecording);
+  FST_UTILS__VTI_FLAGS(vti, kVstAutomationReading);
+  FST_UTILS__VTI_FLAGS(vti, kVstAutomationWriting);
   FST_UTILS__VTI_FLAGS(vti, kVstNanosValid);
   FST_UTILS__VTI_FLAGS(vti, kVstPpqPosValid);
   FST_UTILS__VTI_FLAGS(vti, kVstTempoValid);
