@@ -1298,8 +1298,8 @@ to find out which parameters are used (and how) for a given opcode, and how valu
 | effOpen                     | 0?  | -                  | -                       | 0                     |                             |
 | effClose                    | 1?  | -                  | -                       | 0                     |                             |
 | effEditClose                | 15  | -                  |                         | 0                     |                             |
-| effEditGetRect              | 13  | -                  | ptr(ERect[])            | ptr                   |                             |
-| effEditDraw                 |     |                    |                         |                       | JUCE-ignored                |
+| effEditGetRect              | 13  | -                  | ptr(&ERect)             | ptr                   |                             |
+| effEditDraw                 |     | ptr(&ERect)        |                         |                       | JUCE-ignored                |
 | effEditIdle                 |     |                    |                         |                       | JUCE-ignored                |
 | effEditMouse                |     |                    |                         |                       | JUCE-ignored                |
 | effEditOpen                 | 14  | ptr(Window)        |                         |                       |                             |
