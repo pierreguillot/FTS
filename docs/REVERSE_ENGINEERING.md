@@ -3360,31 +3360,20 @@ So it seems that this opcode was only introduced later, and requires the plugin 
 So far we have discovered quite a few opcodes (and constants):
 
 
-Trying to compile JUCE plugins or plugin-hosts, we still miss a considerable number,
-mostly `audioMaster*` opcodes:
+Trying to compile JUCE plugins or plugin-hosts, we still miss a considerable number
+(leaving those out that JUCE handles with a no-op):
 
 | names used by JUCE                       |
 |------------------------------------------|
-| `audioMaster(Open,Close)Window`          |
 | `audioMasterGetAutomationState`          |
 | `audioMasterGetDirectory`                |
-| `audioMasterGet(In,Out)putLatency`       |
-| `audioMasterGetLanguage`                 |
 | `audioMasterGetNumAutomatableParameters` |
-| `audioMasterGetOutputSpeakerArrangement` |
-| `audioMasterGetParameterQuantization`    |
-| `audioMasterGet(Next,Previous)Plug`      |
 | `audioMasterIOChanged`                   |
 | `audioMasterIdle`                        |
 | `audioMasterNeedIdle`                    |
-| `audioMasterOffline*`                    |
 | `audioMasterPinConnected`                |
-| `audioMasterSetIcon`                     |
 | `audioMasterSetOutputSampleRate`         |
-| `audioMasterSetTime`                     |
 | `audioMasterUpdateDisplay`               |
-| `audioMasterVendorSpecific`              |
-| `audioMasterWillReplaceOrAccumulate`     |
 |------------------------------------------|
 | `effConnectInput`/ `effConnectOutput`    |
 | `effEdit(Draw,Idle,Mouse,Sleep,Top)`     |
