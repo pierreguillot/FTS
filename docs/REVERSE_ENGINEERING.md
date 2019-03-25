@@ -2569,7 +2569,7 @@ likely unsupported) feature string (like `fudelDudelDei`).
 Finally we compare the return values of the two iterations and find that they always returned
 the same result *except* for `opcode:37`, our likely candidate for `audioMasterCanDo`.
 
-## Speaker Arrangments
+## Speaker Arrangements
 
 Running our test plugin in REAPER, we can also calls to `effcode:42` in the startup phase.
 
@@ -2637,7 +2637,7 @@ It seems that *Protoverb* doesn't support more than 2 channels.
 
 
 `effGetSeakerArrangement` is most likely close by (`41` or `43`),
-A simple test would first set the speaker-arrangment, and then try to query it back.
+A simple test would first set the speaker-arrangement, and then try to query it back.
 According to JUCE, the plugin should return `1` in case of success.
 The calling convention is slightly different from `effSetSpeakerArrangement`, as `ptr` and `ivalue`
 hold addresses of pointer-sized memory regions, where the plugin is supposed to write
@@ -2673,7 +2673,7 @@ to prevent crashes.
 Interestingly, *Protoverb* will now react to `opcode:69`, returning the same data we just set via opcode:42.
 So we probably have just found `effGetSeakerArrangement` as well.
 
-### Speaker Arrangment Types
+### Speaker Arrangement Types
 
 So what do we know about the `VstSpeakerArrangement.type` field?
 In [VstSpeakerArrangement](#vstspeakerarrangement), we found out that this
@@ -2708,7 +2708,7 @@ JUCE uses the following names matching this pattern (in a regex notation):
 | `kSpeakerArr102`                     |              |
 
 
-Comparing these names to [what REAPER fills in for various channel counts](#speaker-arrangments),
+Comparing these names to [what REAPER fills in for various channel counts](#speaker-arrangements),
 we can at least make some simple guesses.
 We repeat the table from above:
 
