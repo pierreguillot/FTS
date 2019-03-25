@@ -2431,8 +2431,16 @@ Which gives us the following values:
 | `kVstBarsValid`            | 1<<11 |
 | `kVstCyclePosValid`        | 1<<12 |
 | `kVstTimeSigValid`         | 1<<13 |
+|----------------------------|-------|
+| `kVstAutomationReading`    | ??    |
+| `kVstAutomationWriting`    | ??    |
 
-This also means, that the `VstTimeInfo.flags` field really is at position @54-57
+This also means, that the `VstTimeInfo.flags` field really is at position @54-57.
+
+The `kVstAutomation*` flags are unknown, but probably occupy bits 4, 5, 6 or 7
+(the names sound as if they were related to system state, like the `kVstTransport*` flags
+that occupy the lowbyte;
+as opposed to the flags related to timestamp validity, in the highbyte.)
 
 
 ## MIDI out
