@@ -3155,6 +3155,32 @@ So to conclude, we have the following new values:
 | `kPlugCategGenerator`   | 11 |
 
 
+Scanning through the JUCE sources for strings like `kPlugCategEffect`, we find a list of
+strings in in the *Projucer* sources (`jucer_Project.cpp`):
+
+- `kPlugCategUnknown` (!)
+- `kPlugCategEffect`
+- `kPlugCategSynth`
+- `kPlugCategAnalysis`
+- `kPlugCategMastering`
+- `kPlugCategSpacializer`
+- `kPlugCategRoomFx`
+- `kPlugSurroundFx`
+- `kPlugCategRestoration`
+- `kPlugCategOfflineProcess` (!)
+- `kPlugCategShell`
+- `kPlugCategGenerator`
+
+So there's two more categories ("Unknown" and "OffliceProcess").
+
+If we compare the list (in the same order as found in the Projucer sources) with the values we already found above,
+we see that they align nicely.
+`kPlugCategOfflineProcess` just falls between `kPlugCategRestoration` and `kPlugCategShell`,
+where we haven't found a name for the value *9* yet.
+Sorting `kPlugCategUnknown` before `kPlugCategEffect` (aka *1*) would give us *0*, which also makes some sense:
+
+| `kPlugCategUnknown`        | 0 |
+| `kPlugCategOfflineProcess` | 9 |
 
 
 ## effGetCurrentMidiProgram / effSetTotalSampleToProcess
