@@ -241,6 +241,7 @@ typedef enum {
   FST_EFFECT_FLAG(CanDoubleReplacing, 12),
 } t_fstEffectFlags;
 typedef enum {
+  FST_EFFECT_CATEGORY_EXPERIMENTAL(Unknown, 0),
   FST_EFFECT_CATEGORY_EXPERIMENTAL(Effect, 1),
   FST_EFFECT_CATEGORY(Synth, 2),
   FST_EFFECT_CATEGORY(Analysis, 3),
@@ -249,12 +250,9 @@ typedef enum {
   FST_EFFECT_CATEGORY(RoomFx, 6),
   FST_CONST(PlugSurroundFx, 7), /* hmpf, what a stupid name */
   FST_EFFECT_CATEGORY(Restoration, 8),
-
+  FST_EFFECT_CATEGORY(OfflineProcess, 9),
   FST_EFFECT_CATEGORY(Shell, 10),
   FST_EFFECT_CATEGORY(Generator, 11),
-
-#warning document origin of kPlugCategOfflineProcess
-  FST_EFFECT_CATEGORY_UNKNOWN(OfflineProcess),
 
   fst_categoryLast /* last enum */
 } t_fstEffectCategories;
