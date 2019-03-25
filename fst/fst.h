@@ -72,6 +72,8 @@
 # define FST_CONSTANT(x, y) kVst##x = y
 # define FST_CONSTANT_EXPERIMENTAL(x, y) FST_ENUM_EXPERIMENTAL( kVst##x, y)
 # define FST_CONSTANT_UNKNOWN(x) FST_ENUM_UNKNOWN( kVst##x)
+# define FST_FLAG(x, y) kVst##x = (1<<y)
+# define FST_FLAG_UNKNOWN(x, y) kVst##x = 0
 # define FST_TYPE(x) Vst##x
 # define FST_TYPE_UNKNOWN(x) FST_UNKNOWN(Vst##x)
 
