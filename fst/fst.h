@@ -257,7 +257,7 @@ typedef enum {
 } t_fstEffectCategories;
 
 typedef enum {
-  FST_SPEAKER_EXPERIMENTAL(ArrEmpty, -1),
+  FST_SPEAKER(ArrEmpty, -1),
   FST_SPEAKER(ArrMono, 0),
   FST_SPEAKER(ArrStereo, 1),
   FST_SPEAKER_UNKNOWN(ArrStereoSurround),
