@@ -340,9 +340,9 @@ enum {
   FST_CONSTANT_EXPERIMENTAL(MaxShortLabelLen, 8),
 
   /* used as t_fstPinProperties.flags */
-  FST_CONSTANT_UNKNOWN(PinIsActive),
-  FST_CONSTANT_UNKNOWN(PinIsStereo),
-  FST_CONSTANT_UNKNOWN(PinUseSpeaker),
+  FST_FLAG_UNKNOWN(PinIsActive),
+  FST_FLAG_UNKNOWN(PinUseSpeaker),
+  FST_FLAG_UNKNOWN(PinIsStereo),
 
   /* used as: t_fstTimeInfo.smpteFrameRate */
   FST_CONSTANT_UNKNOWN(Smpte239fps),
