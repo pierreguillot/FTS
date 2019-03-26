@@ -533,14 +533,14 @@ int test_plugin(const char*filename) {
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
   dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
   //print_aeffect(effect);
-  test_reaper(effect); return 0;
+  //test_reaper(effect); return 0;
   //test_opcode29(effect); return 0;
   //test_opcode3334(effect); return 0;
   //test_opcodesJUCE(effect);
   //test_opcodes(effect, 78);
 
   //test_unknown(effect);
-  //test_SpeakerArrangement(effect);
+  test_SpeakerArrangement1(effect);
   dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
   return 0;
 }
