@@ -3389,6 +3389,216 @@ If we make it return `2400` as well, REAPER starts asking with `effCanBeAutomate
 So it seems that this opcode was only introduced later, and requires the plugin to support a minimum version of the API.
 
 
+# Speaker Arrangement revisited
+We still haven't found out the details of the speaker arrangement structs.
+
+So far, we know the `effGetSpeakerArrangement` and `effSetSpeakerArrangement` opcodes, which return (resp. take)
+pointers to the `VstSpeakerArrangement`, which in turn includes an array of type `VstSpeakerProperties`.
+
+We currently only know of a single member (`type`) of the `VstSpeakerProperties` struct, which is certainly wrong
+(a struct only makes sense if there are more members. creating an array of this struct requires it to have a
+fixed size, so the struct cannot be extended "later".)
+
+We already know the positions of `VstSpeakerArrangement.type` resp. `.numChannels`, but don't really know whether
+there are more members in this struct (so we don't know the exact position of the `.speakers` member).
+However, we do now that the `.speakers` member contains `.numChannels` instances of `VstSpeakerProperties`.
+
+~~~C
+typedef struct VstSpeakerProperties_ {
+  /* misses members; order undefined */
+  int type;
+} VstSpeakerProperties;
+
+typedef struct VstSpeakerArrangement_ {
+  int type;
+  int numChannels;
+  /* missing members? */
+  VstSpeakerProperties speakers[];
+} VstSpeakerArrangement;
+~~~
+
+When we [first discovered](#speaker-arrangement) some details of the Speaker Arrangement,
+we noticed non-null values a position @58, which we concluded might be uninitalized data.
+
+We can easily test this assumption: since `VstSpeakerProperties` is at least 4 bytes large
+(assuming that it's `type` member is a 32bit `int` like all other types we have seen so far),
+and REAPER can handle up to 64 channels, we can force the full size of `speakers[]` to 256 bytes
+(64 * 4), which is way beyong the 88 bytes of position @58.
+
+Printing the first 512 bytes a 64channel plugin receives with the `effSetSpeakerArrangement` opcode, gives:
+
+~~~
+0000	  FE FF FF FF 40 00 00 00  00 00 00 00 00 00 00 00
+0010	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0020	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0030	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0040	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0050	  00 00 00 00 00 00 00 00  01 00 00 00 00 00 00 00
+0060	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0070	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0080	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0090	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00a0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00b0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00c0	  00 00 00 00 00 00 00 00  02 00 00 00 00 00 00 00
+00d0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00e0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00f0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0100	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0110	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0120	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0130	  00 00 00 00 00 00 00 00  01 00 00 00 00 00 00 00
+0140	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0150	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0160	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0170	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0180	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0190	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01a0	  00 00 00 00 00 00 00 00  02 00 00 00 00 00 00 00
+01b0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01c0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01d0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01e0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01f0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+~~~
+
+This is interesting as we still have a value (`01`) at position @58 -
+which according to the math we did above cannot be "uninitalized memory".
+
+If we set the number of channels our plugin can process to *2*, we get the following instead:
+
+~~~
+0000	  01 00 00 00 02 00 00 00  00 00 00 00 00 00 00 00
+0010	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0020	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0030	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0040	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0050	  00 00 00 00 00 00 00 00  01 00 00 00 00 00 00 00
+0060	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0070	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0080	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0090	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00a0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00b0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00c0	  00 00 00 00 00 00 00 00  02 00 00 00 00 00 00 00
+00d0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00e0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+00f0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0100	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0110	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0120	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0130	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0140	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0150	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0160	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0170	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0180	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0190	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01a0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01b0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01c0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01d0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01e0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+01f0	  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+~~~
+
+Apart from the differing first 8 bytes (that's the `.type` and `.numChannels`
+members, which we already established to be differing), we can *also* see some
+pattern:
+
+The 2-channel plugin gets values `01` and `02` at the positions @58 resp @c8 and after that only zeros,
+whereas the 64-channel version has four alternating `01` and `02` values until the printout ends.
+Could it be that we are actually seeing `VstSpeakerProperties` that are not only occupying 4 bytes but rather
+112 bytes in length (112 being the difference between @c8 and @58)?
+
+So printing 8192 bytes (which should cover 64 channels if each really takes 112 bytes), we observe:
+
+| channels | 112-bytes pattern                                         | garbage     |
+|----------|-----------------------------------------------------------|-------------|
+| 2        | `01`@58, `02`@c8                                          | after @468  |
+| 64       | alternating `01`/`02` from @58 to @1be8, every 0x70 bytes | after @1f88 |
+| 3        | `01`@58, `02`@c8, `03`@138                                | after @4da  |
+|          |                                                           |             |
+
+After a certain point the data is densly filled with non-null bytes, which probably really is "uninitialized memory" (aka "garbage").
+
+The important part to notice is that the position difference between the first lonely byte @58 and the last one (@c8, @138, @1be8)
+is always `112 * (numChannels-1)`.
+So we can conclude, that the `VstSpeakerProperties` has a size of 112 bytes (of which we know that 4 bytes contain the `type` member).
+If we assume that the `VstSpeakerArrangment.speakers` array starts immediately after the first 8 bytes,
+the `VstSpeakerProperties.type` cannot be at the beginning or the end of the `VstSpeakerProperties`,
+but is located at some 80 bytes offset.
+There's no real evidence for *any* position of the `type` field.
+Since the surrounding bytes don't carry information (at least when filled in by REAPER), we just pick one randomly.
+There's also no real evidence whether the stray non-null bytes actually *are* the `type` member,
+but since this is the only member of which we know and the only bytes that carry some information, the guess is probably correct.
+
+
+~~~C
+typedef struct VstSpeakerProperties_ {
+  /* misses members; order undefined */
+  char _padding1[80];
+  int type;
+  char _padding2[28];
+} VstSpeakerProperties;
+
+typedef struct VstSpeakerArrangement_ {
+  int type;
+  int numChannels;
+  /* missing members? */
+  VstSpeakerProperties speakers[];
+} VstSpeakerArrangement;
+~~~
+
+Creating 65 plugins with varying channel count (from 0 to 64) and printing the `VstSpeakerProperties.type` for each channel,
+we get:
+
+| `VstSpeakerArrangement.numChannels` | `VstSpeakerArrangement.type` | `VstSpeakerProperties.type` |
+|-------------------------------------|------------------------------|-----------------------------|
+| 00                                  | -1                           | -                           |
+| 01                                  | 0                            | 0                           |
+| 02                                  | 1                            | 1,2                         |
+| 03                                  | 11                           | 1,2,3                       |
+| 04                                  | 11                           | 1,2,1,2                     |
+| 05                                  | 15                           | 1,2,1,2,3                   |
+| 06                                  | 15                           | 1,2,1,2,1,2                 |
+| 07                                  | 23                           | 1,2,1,2,1,2,3               |
+| 08                                  | 23                           | 1,2,1,2,1,2,1,2             |
+| 09                                  | -2                           | 1,2,1,2,1,2,1,2,3           |
+| 10                                  | -2                           | 1,2,1,2,1,2,1,2,1,2         |
+| 11                                  | -2                           | 1,2,1,2,1,2,1,2,1,2,3       |
+| 12                                  | 28                           | 1,2,1,2,1,2,1,2,1,2,1,2     |
+| odd                                 | -2                           | 1,2,...,1,2,3               |
+| even                                | -2                           | 1,2,...,1,2,1,2             |
+|                                     |                              |                             |
+
+The 108 unknown bytes in each `VstSpeakerProperties` struct are always `0x00`.
+So the `VstSpeakerProperties.type` is always pairs of `1` and `2`,
+and if the number of speakers is odd, the leftover (last) speaker has a type `3`.
+
+JUCE (juce_audio_plugin_client/VST/juce_VST_Wrapper.cpp) assigns values like
+`kSpeakerL`, `kSpeakerR` or `kSpeakerLfe` to the `VstSpeakerProperties.type` member.
+Obviously, REAPER doesn't make full use of these values (at least not in my configuration).
+The values `1` and `2` are probably `kSpeakerL` resp. `kSpeakerR`.
+The value `3` could be `kSpeakerC`, `kSpeakerLfe` or `kSpeakerS`, but it's hard to say.
+The value `0` (only seen with the mono setup, tenatively `kSpeakerArrMono`) would be some mono channel,
+either `kSpeakerC` or - following the naming pattern of the Left/Right channels and
+[confirmed to exist by some random googling](http://convolver.sourceforge.net/vst.html)
+`kSpeakerM`.
+>
+>
+> I am not sure this still make sense, because the new release API, I think all use cases are "covered" now:
+
+As a sidenote, we also see now that a plugin without channels has a `VstSpeakerArrangement.type` of *-1*,
+which is most likely `kSpeakerArrEmpty` (something we already guessed above, but had no backing yet).
+
+| name               | value |
+|--------------------|-------|
+| `kSpeakerArrEmpty` | -1    |
+| `kSpeakerL`        | 1     |
+| `kSpeakerR`        | 2     |
+
+
 # Summary
 
 So far we have discovered quite a few opcodes (and constants):
