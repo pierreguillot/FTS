@@ -3641,7 +3641,7 @@ Obviously, REAPER doesn't make full use of these values (at least not in my conf
 The values `1` and `2` are probably `kSpeakerL` resp. `kSpeakerR`.
 The value `3` could be `kSpeakerC`, `kSpeakerLfe` or `kSpeakerS`, but it's hard to say.
 The value `0` (only seen with the mono setup, tenatively `kSpeakerArrMono`) would be some mono channel,
-either `kSpeakerC` or - following the naming pattern of the Left/Right channels and
+either `kSpeakerC` or of `kSpeakerUndefined` or - following the naming pattern of the Left/Right channels and
 [confirmed to exist by some random googling](http://convolver.sourceforge.net/vst.html)
 `kSpeakerM`.
 
