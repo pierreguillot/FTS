@@ -148,6 +148,13 @@ typedef enum {
 
   FST_HOST_OPCODE_UNKNOWN(VendorSpecific), /* ?, return 0 */
 
+  /* the following opcodes are used by MrsWatson */
+  FST_HOST_OPCODE_UNKNOWN(OpenFileSelector),
+  FST_HOST_OPCODE_UNKNOWN(CloseFileSelector),
+  FST_HOST_OPCODE_UNKNOWN(EditFile),
+  FST_HOST_OPCODE_UNKNOWN(GetChunkFile),
+  FST_HOST_OPCODE_UNKNOWN(GetInputSpeakerArrangement),
+
   fst_audioMasterLast /* last enum */
 } t_fstHostOpcode;;
 typedef enum {
@@ -310,7 +317,7 @@ typedef enum {
   FST_SPEAKER_UNKNOWN(Trr),
   FST_SPEAKER_UNKNOWN(Lfe2),
 
-#warning origin of kSpeakerUndefined
+#warning origin of kSpeakerM
   FST_SPEAKER_UNKNOWN(Undefined),
   fst_speakerLast /* last enum */
 } t_fstSpeakerArrangementType;
@@ -338,6 +345,14 @@ enum {
   FST_CONSTANT_EXPERIMENTAL(MaxVendorStrLen, 128),
   FST_CONSTANT_EXPERIMENTAL(MaxLabelLen, 64),
   FST_CONSTANT_EXPERIMENTAL(MaxShortLabelLen, 8),
+  FST_CONSTANT(MaxProgNameLen, 25), // effGetProgramName
+
+  /* returned by audioMasterGetAutomationState: */
+  FST_FLAG_UNKNOWN(AutomationUnsupported),
+  /* returned by audioMasterGetCurrentProcessLevel: */
+  FST_CONSTANT_UNKNOWN(ProcessLevelUnknown),
+  /* returned by audioMasterGetLanguage: */
+  FST_CONSTANT_UNKNOWN(LangEnglish),
 
   /* used as t_fstPinProperties.flags */
   FST_FLAG_UNKNOWN(PinIsActive),
@@ -497,7 +512,6 @@ typedef struct _fstEffect {
 
   float float1;
   void* object;
-  #warning document AEffect.user
   void*user;
   t_fstInt32 uniqueID; /* @112 */
   t_fstInt32 version;
@@ -527,7 +541,6 @@ typedef t_fstEffectFlags FST_TYPE(AEffectFlags);
 typedef t_fstEffect AEffect;
 typedef t_fstRectangle ERect;
 
-#warning TODO: documentation
 typedef t_fstPtrInt VstIntPtr;
 typedef t_fstInt32 VstInt32;
 
