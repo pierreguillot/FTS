@@ -1751,6 +1751,15 @@ This can easily be confirmed by a little test program that first changes the pro
 to a known value (using a plugin that actually has that many programs!) via `effSetProgram`,
 and then calling opcode `3` to get that value back (as returned from the dispatcher).
 
+*MrsWatson* uses the `kVstMaxProgNameLen` to allocate memory for the string returned by
+`effGetProgramName`. OTOH, JUCE just will allocate 264 bytes when used as a host,
+but when acting as a plugin it will only copy the 24+1 bytes (including the terminating `\0`).
+For `effSetProgramName`, JUCE will only send 24 bytes.
+REAPER will crash if we attempt to write more than 265 bytes into the program name string.
+
+Most likely `kVstMaxProgNameLen` is just 24 characters. and hosts traditionally accept more,
+in case a plugin misbehaves.
+
 
 ## effEdit*
 
