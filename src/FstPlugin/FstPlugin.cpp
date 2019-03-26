@@ -103,7 +103,7 @@ static int test_opcode35(AEffect*eff) {
 #ifdef FST_CATEGORY
   return FST_CATEGORY;
 #endif
-  return 8;
+  return kPlugSurroundFx;
 }
 
 static int test_opcode70(AEffect*eff, char*ptr) {
@@ -432,10 +432,10 @@ AEffect*VSTPluginMain(AEffectDispatcherProc dispatch4host) {
   eff->numParams = 3;
 #ifdef NUM_INPUTS
   eff->numInputs  = NUM_INPUTS;
-  eff->numOutputs = NUM_INPUTS+1;
+  eff->numOutputs = NUM_INPUTS;
 #else
-  eff->numInputs  = 1;
-  eff->numOutputs = 2;
+  eff->numInputs  = 6;
+  eff->numOutputs = 6;
 #endif
   eff->float1 = 1.;
   eff->object = eff;
