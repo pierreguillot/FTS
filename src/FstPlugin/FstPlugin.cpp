@@ -24,6 +24,8 @@ static unsigned char s_midiDump[] = {0x80, 0x40, 0x0, 0};
 void crash() {
   t_fun0*f=0;
   /* crash */
+  fflush(stdout);
+  fflush(stderr);
   f();
 }
 
