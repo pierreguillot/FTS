@@ -430,7 +430,8 @@ static char*speaker2string(VstSpeakerProperties*props, char*output, size_t lengt
 static void print_speakerarrangement(const char*name, VstSpeakerArrangement*vpp) {
   char buf[512];
   printf("SpeakerArrangement[%s] @ %p: %s", name, vpp, (vpp?speakerArrangement2string(vpp->type, buf, 512):0));
-  if(!vpp)
+  if(!vpp) {
+    printf("\n");
     return;
   for(int i=0; i < vpp->numChannels; i++) {
     printf("\n\t#%d: %s", i, speaker2string(&(vpp->speakers[i]), buf, 512));
