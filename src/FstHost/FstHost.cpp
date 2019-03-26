@@ -489,20 +489,20 @@ void test_reaper(AEffect*effect) {
 
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
 
-  ret = dispatch_v(effect, effGetChunk, 0, 0, strbuf, 0.000000);
+  ret = dispatch(effect, effGetChunk, 0, 0, strbuf, 0.000000);
   dispatch_v(effect, effSetProgram, 0, 1, 000, 0.000000);
   strbuf[0] = 0;
   dispatch_v(effect, effGetProgramName, 0, 0, strbuf, 0.000000);
   fflush(stderr);  fflush(stdout);
-  fstpause(2.);
+//  fstpause(2.);
   test_opcode56(effect);
 
   dispatch_v(effect, effGetProgram, 0, 0, 000, 0.000000);
 
   printf("=============PROC==============================\n");
-  effect->process(effect, insamples, outsamples, blockSize);
+  effect->processReplacing(effect, insamples, outsamples, blockSize);
   test_opcode25(effect);
-  effect->process(effect, insamples, outsamples, blockSize);
+  effect->processReplacing(effect, insamples, outsamples, blockSize);
   printf("==============================================\n");
   dispatch_v(effect, effMainsChanged, 0, 0, 000, 0.000000);
   dispatch_v(effect, effMainsChanged, 0, 1, 000, 0.000000);
