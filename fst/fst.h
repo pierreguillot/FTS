@@ -309,7 +309,7 @@ typedef enum {
   FST_SPEAKER_UNKNOWN(Trr),
   FST_SPEAKER_UNKNOWN(Lfe2),
 
-#warning origin of kSpeakerM/kSpeakerUndefined
+#warning origin of kSpeakerUndefined
   FST_SPEAKER_UNKNOWN(M),
   FST_SPEAKER_UNKNOWN(Undefined),
   fst_speakerLast /* last enum */
@@ -339,10 +339,12 @@ enum {
   FST_CONSTANT_EXPERIMENTAL(MaxLabelLen, 64),
   FST_CONSTANT_EXPERIMENTAL(MaxShortLabelLen, 8),
 
+  /* used as t_fstPinProperties.flags */
   FST_CONSTANT_UNKNOWN(PinIsActive),
   FST_CONSTANT_UNKNOWN(PinIsStereo),
   FST_CONSTANT_UNKNOWN(PinUseSpeaker),
 
+  /* used as: t_fstTimeInfo.smpteFrameRate */
   FST_CONSTANT_UNKNOWN(Smpte239fps),
   FST_CONSTANT_UNKNOWN(Smpte24fps),
   FST_CONSTANT_UNKNOWN(Smpte249fps),
@@ -455,7 +457,7 @@ typedef struct fstTimeInfo_ {
 
 typedef struct fstPinProperties_ {
   char label[64];
-  FST_UNKNOWN(int) flags; /* ? */
+  FST_UNKNOWN(int) flags; /* ? kVstPinIsActive | kVstPinUseSpeaker | kVstPinIsStereo */
   FST_UNKNOWN(int) arrangementType; /* ? */
   char shortLabel[8];
 } FST_UNKNOWN(t_fstPinProperties);
