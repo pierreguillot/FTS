@@ -118,6 +118,21 @@ void test_effCanDo(AEffect*effect, const char*feature) {
   dispatch_v(effect, effCanDo, 0, 0, (void*)feature, 0.000000);
 }
 
+void test_setSpeakerArrangement(AEffect*effect) {
+  VstSpeakerArrangement*iarr=(VstSpeakerArrangement*)calloc(1, sizeof(VstSpeakerArrangement));
+  VstSpeakerArrangement*oarr=(VstSpeakerArrangement*)calloc(1, sizeof(VstSpeakerArrangement));
+  dispatch_v(effect, effSetSpeakerArrangement, 0, (t_fstPtrInt)iarr, oarr, 0.);
+}
+void test_getSpeakerArrangement(AEffect*effect) {
+  VstSpeakerArrangement*iarr=0, *oarr=0;
+  dispatch_v(effect, effGetSpeakerArrangement, 0, (t_fstPtrInt)(&iarr), &oarr, 0.);
+  printf("gotSpeakerArrangements: %p %p: %d\n", iarr, oarr, (char*)oarr-(char*)iarr);
+}
+void test_SpeakerArrangement1(AEffect*effect) {
+//  test_setSpeakerArrangement(effect);
+  test_getSpeakerArrangement(effect);
+}
+
 void test_opcode3334(AEffect*effect) {
   size_t opcode = effGetInputProperties;
   VstPinProperties vpp;
@@ -314,7 +329,7 @@ bool skipOpcodeJUCE(size_t opcode) {
   return false;
 }
 
-void test_SpeakerArrangement(AEffect*effect) {
+void test_SpeakerArrangement0(AEffect*effect) {
   VstSpeakerArrangement*arr[2];
   dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
   dispatch_v(effect, effGetSpeakerArrangement, 0,
