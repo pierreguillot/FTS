@@ -134,23 +134,28 @@ void test_SpeakerArrangement1(AEffect*effect) {
 }
 
 void test_opcode3334(AEffect*effect) {
-  size_t opcode = effGetInputProperties;
+  size_t opcode = 0;
   VstPinProperties vpp;
-  memset(&vpp, 0, sizeof(vpp));
-  printf("\ntrying: %d\n", opcode);
-  t_fstPtrInt res = dispatch (effect, opcode, 0, 0, &vpp, 0);
-  printf("returned %lu\n", res);
-  if(res)
-    print_pinproperties(&vpp);
-
-  opcode = effGetOutputProperties;
-  memset(&vpp, 0, sizeof(vpp));
-  printf("\ntrying: %d\n", opcode);
-  res = dispatch (effect, opcode, 0, 0, &vpp, 0);
-  printf("returned %lu\n", res);
-  if(res) {
-    print_pinproperties(&vpp);
-    print_hex(&vpp, 2*sizeof(vpp));
+  t_fstPtrInt res = 0;
+  for(int chan=0; chan<effect->numInputs; chan++) {
+    memset(&vpp, 0, sizeof(vpp));
+    opcode = effGetInputProperties;
+    printf("\ntrying: %d [channel:%d]\n", opcode, chan);
+    res = dispatch (effect, opcode, chan, 0, &vpp, 0);
+    printf("returned %lu\n", res);
+    if(res)
+      print_pinproperties(&vpp);
+  }
+  for(int chan=0; chan<effect->numOutputs; chan++) {
+    opcode = effGetOutputProperties;
+    memset(&vpp, 0, sizeof(vpp));
+    printf("\ntrying: %d [channel:%d]\n", opcode, chan);
+    res = dispatch (effect, opcode, chan, 0, &vpp, 0);
+    printf("returned %lu\n", res);
+    if(res) {
+      print_pinproperties(&vpp);
+      print_hex(&vpp, sizeof(vpp));
+    }
   }
 }
 
