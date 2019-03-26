@@ -426,6 +426,20 @@ static char*speaker2string(VstSpeakerProperties*props, char*output, size_t lengt
   output[length-1]=0;
   return output;
 }
+static void print_non0bytes(char*bytes, size_t length) {
+  for(size_t i=0; i<length; i++) {
+    if(bytes[i]) {
+      printf("\n");
+      print_hex(bytes, length);
+      return;
+    }
+  }
+}
+static void print_speakerpadding(VstSpeakerProperties*props) {
+  /* print padding bytes if non-0 */
+  print_non0bytes(props->_padding1, sizeof(props->_padding1));
+  print_non0bytes(props->_padding2, sizeof(props->_padding2));
+}
 
 static void print_speakerarrangement(const char*name, VstSpeakerArrangement*vpp) {
   char buf[512];
@@ -433,10 +447,13 @@ static void print_speakerarrangement(const char*name, VstSpeakerArrangement*vpp)
   if(!vpp) {
     printf("\n");
     return;
+  }
   for(int i=0; i < vpp->numChannels; i++) {
     printf("\n\t#%d: %s", i, speaker2string(&(vpp->speakers[i]), buf, 512));
+    print_speakerpadding(&(vpp->speakers[i]));
   }
   printf("\n");
+  //print_hex(vpp, 8192);
 }
 
 
