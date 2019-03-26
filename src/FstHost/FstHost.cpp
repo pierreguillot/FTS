@@ -419,6 +419,7 @@ void test_opcodesJUCE(AEffect*effect) {
 void test_opcode25(AEffect*effect) {
   const unsigned char midi[4] = {0x90, 0x40, 0x7f, 0};
   VstEvents*ves = create_vstevents(midi);
+  //print_events(ves);
   dispatch_v(effect, effProcessEvents, 0, 0, ves, 0.);
 }
 static float** makeFSamples(size_t channels, size_t frames) {
@@ -522,6 +523,7 @@ int test_plugin(const char*filename) {
   printf("instantiated effect %p\n", effect);
   snprintf(effectname, 1024, filename);
   if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
+  print_aeffect(effect);
   //dump_data(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
   dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
