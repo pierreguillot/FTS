@@ -1709,13 +1709,13 @@ and then calling opcode `3` to get that value back (as returned from the dispatc
 
 ## effEdit*
 
-The *Protoverb* plugin prints information:
+The *Protoverb* plugin prints information, for which we can guess opcode names:
 
-| opcode | printout                            | opcodeName      |
-|--------|-------------------------------------|-----------------|
-| 13     | "AM_VST_Editor::getRect 1200 x 600" | effEditGetRect? |
-| 14     | "AM_VST_Editor::open"               | effEditOpen?    |
-| 15     | "closed editor."                    | effEditClose?   |
+| opcode | printout                            | guessed opcodeName |
+|--------|-------------------------------------|--------------------|
+| 13     | "AM_VST_Editor::getRect 1200 x 600" | effEditGetRect?    |
+| 14     | "AM_VST_Editor::open"               | effEditOpen?       |
+| 15     | "closed editor."                    | effEditClose?      |
 
 Opcode `13` does not crash if we provide it a ptr to some memory,
 and it will write some address into that provided memory.
