@@ -482,6 +482,11 @@ And there are also some additional types:
 | `VstIntPtr` | returned by `effect->dispatcher`; used as 4th arg to `effect->dispatcher` |
 |             |                                                                           |
 
+
+### sidenote
+I only discovered *MrsWatson* after reverse engineering a significant portion for the API.
+You will notice that when reading on the discovery of `VstSpeakerProperties` and `VstMidiEvent`.
+
 ## conclusion
 with the changes in place, we can now compile JUCE's AudioPluginProcessor (and *MrsWatson*)
 it's still a long way to make it actually work...
@@ -3649,6 +3654,37 @@ which is most likely `kSpeakerArrEmpty` (something we already guessed above, but
 | `kSpeakerL`        | 1     |
 | `kSpeakerR`        | 2     |
 
+## enter MrsWatson
+After [compiling MrsWatson](#compiling-mrswatson), it becomes a bit clearer, why there's quite an offset
+at the beginning of `VstSpeakerProperties`, as there are some additional members.
+
+*MrsWatson* assigns to the properties like so:
+
+~~~C
+speakerArrangement->speakers[i].azimuth = 0.0f;
+speakerArrangement->speakers[i].elevation = 0.0f;
+speakerArrangement->speakers[i].radius = 0.0f;
+speakerArrangement->speakers[i].reserved = 0.0f;
+speakerArrangement->speakers[i].name[0] = '\0';
+speakerArrangement->speakers[i].type = kSpeakerUndefined;
+~~~
+
+Assuming that the order of members follows the struct definition,
+and that the first four values are indeed single-precision (since the only
+reason why *MrsWatson* would use the `f` specifier is to avoid compiler warnings),
+we get something like:
+
+~~~C
+typedef struct VstSpeakerProperties_ {
+  float azimuth;
+  float elevation;
+  float radius;
+  float reserved;
+  char name[48];
+  int type;
+  char _padding2[28];
+} VstSpeakerProperties;
+~~~
 
 # Summary
 
