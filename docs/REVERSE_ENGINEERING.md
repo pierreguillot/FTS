@@ -2652,13 +2652,13 @@ hold addresses of pointer-sized memory regions, where the plugin is supposed to 
 the addresses of the `VstSpeakerArrangement` structs to (cf. JUCE code).
 
 ~~~C
-  for(size_t opcode=40; opcode<45; opcode++) {
-    VstSpeakerArrangement *arrptr[2] = {0,0};
-    if(42 == opcode)continue;
-    dispatch_v(effect, opcode, 0, (t_fstPtrInt)(arrptr+0), (arrptr+1), 0.f);
-    print_hex(arrptr[0], 32);
-    print_hex(arrptr[1], 32);
-  }
+for(size_t opcode=40; opcode<45; opcode++) {
+  VstSpeakerArrangement *arrptr[2] = {0,0};
+  if(42 == opcode)continue;
+  dispatch_v(effect, opcode, 0, (t_fstPtrInt)(arrptr+0), (arrptr+1), 0.f);
+  print_hex(arrptr[0], 32);
+  print_hex(arrptr[1], 32);
+}
 ~~~
 
 Unfortunately, this is not very successfull.
@@ -3424,7 +3424,7 @@ Trying to compile JUCE plugins or plugin-hosts, we still miss a considerable num
 | `kVstPinIsActive`                        |
 | `kVstPinIsStereo`                        |
 | `kVstPinUseSpeaker`                      |
-| `kVstSmpte*`                            |
+| `kVstSmpte*`                             |
 |                                          |
 
 On the other hand, running using a self-compiled plugin in a commercial DAW (like REAPER)
