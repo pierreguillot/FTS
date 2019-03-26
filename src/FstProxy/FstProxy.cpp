@@ -28,8 +28,16 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
     printf("OPCODE26: %d\n", index);
     return (index<5);
   case 56:
+    printf("OPCODE56\n");
     print_hex(ptr, 256);
+    return dispatch_effect("???", s_host2plugin[effect], effect, opcode, index, ivalue, 0, fvalue);
     break;
+  case 62:
+    printf("OPCODE62?\n");
+    print_hex(ptr, 256);
+      // >=90: stack smashing
+      // <=85: ok
+    snprintf((char*)ptr, 85, "JMZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
   default:
     break;
   }
@@ -64,6 +72,9 @@ t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt iva
   case 56:
     print_hex(ptr, 256);
     break;
+  case 62:
+    printf("OPCODE62!\n");
+    print_hex(ptr, 256);
   }
   return result;
 }
