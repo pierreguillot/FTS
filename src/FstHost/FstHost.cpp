@@ -451,6 +451,7 @@ void test_unknown(AEffect*effect) {
     if(effKnown(opcode))
       continue;
     dispatch_v1(effect, opcode, index, ivalue, ptr, fvalue);
+    fstpause(0.01);
   }
 
   fstpause(0.5);
