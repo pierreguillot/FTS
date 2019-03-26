@@ -418,7 +418,9 @@ typedef struct fstEvents_ {
 } t_fstEvents;
 
 typedef struct fstSpeakerProperties_ {
-  FST_UNKNOWN(int) type;
+  char _padding1[80];
+  int type;
+  char _padding2[28];
 } FST_UNKNOWN(t_fstSpeakerProperties);
 
 typedef struct fstSpeakerArrangement_ {
