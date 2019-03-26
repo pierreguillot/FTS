@@ -384,7 +384,7 @@ void test_opcode56(AEffect*effect) {
   if(*buffer) {
     printf("\tbuffer '%.*s'\n", bufsize, (char*)buffer);
   }
-  print_hex(buffer, 96);
+  print_hex(buffer, bufsize);
 }
 
 void test_opcode29(AEffect*effect) {
