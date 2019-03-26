@@ -553,6 +553,7 @@ typedef t_fstPtrInt VstIntPtr;
 typedef t_fstInt32 VstInt32;
 
 const int FST_CONST(EffectMagic, 0x56737450);
+#warning document origin of CCONST
 #define CCONST(a,b,c,d) ((((unsigned char)a)<<24) + (((unsigned char)b)<<16) + (((unsigned char)c)<<8) + ((unsigned char)d))
 
 #endif /* FST_fst_h_ */
