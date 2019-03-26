@@ -435,7 +435,15 @@ typedef struct fstEvents_ {
 } t_fstEvents;
 
 typedef struct fstSpeakerProperties_ {
-  char _padding1[80];
+  /* azimuth+elevation+radius+reserved+name take up 80 bytes
+   * if the first 4 are doubles, name is char[16]
+   * if they are floats, name is char[48]
+   */
+  FST_UNKNOWN(float) azimuth; /* float? origin:MrsWatson */
+  FST_UNKNOWN(float) elevation; /* float? origin:MrsWatson */
+  FST_UNKNOWN(float) radius; /* float? origin:MrsWatson */
+  FST_UNKNOWN(float) reserved; /* type? origin:MrsWatson */
+  FST_UNKNOWN(char name[48]);
   int type;
   char _padding2[28];
 } FST_UNKNOWN(t_fstSpeakerProperties);
