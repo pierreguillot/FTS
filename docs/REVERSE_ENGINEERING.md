@@ -437,8 +437,53 @@ kVstVersion
 The `kVstVersion` is a bit special, as JUCE doesn't use the `Vst2::` namespace on it.
 We have to `#define` it, rather than use an `enum` for it...
 
+## compiling MrsWatson
+Another largish program we can try to compile is teregonaudio's [MrsWatson](http://teragonaudio.com/MrsWatson.html).
+It seems to use some more symbols
+
+| name                                    | notes                                           |
+|-----------------------------------------|-------------------------------------------------|
+| `audioMasterOpenFileSelector`           | unused                                          |
+| `audioMasterCloseFileSelector`          | unused                                          |
+| `audioMasterEditFile`                   | deprecated                                      |
+| `audioMasterGetChunkFile`               | deprecated                                      |
+| `audioMasterGetInputSpeakerArrangement` | deprecated                                      |
+|-----------------------------------------|-------------------------------------------------|
+| `kVstMaxProgNameLen`                    | used by `effGetProgramName`                     |
+| `kVstAutomationUnsupported`             | returned by `audioMasterGetAutomationState`     |
+| `kVstProcessLevelUnknown`               | returned by `audioMasterGetCurrentProcessLevel` |
+| `kVstLangEnglish`                       | returned by `audioMasterGetLanguage`            |
+| `kSpeakerUndefined`                     | assigned to `VstSpeakerProperties.type`         |
+| `kEffectMagic`                          | `effect->magic`                                 |
+|                                         |                                                 |
+
+Additionally *MrsWatson* uses some struct members that JUCE doesn't care about:
+
+| struct                 | member      | type used |
+|------------------------|-------------|-----------|
+| `VstSpeakerProperties` | `azimuth`   | float     |
+| `VstSpeakerProperties` | `elevation` | float     |
+| `VstSpeakerProperties` | `radius`    | float     |
+| `VstSpeakerProperties` | `reserved`  | float     |
+| `VstSpeakerProperties` | `name`      | char[]    |
+|------------------------|-------------|-----------|
+| `VstMidiEvent`         | `flags`     | int       |
+| `VstMidiEvent`         | `reserved1` | int       |
+| `VstMidiEvent`         | `reserved1` | int       |
+|------------------------|-------------|-----------|
+| `AEffect`              | `user`      | void*     |
+|                        |             |           |
+
+And there are also some additional types:
+
+| type        | description                                                               |
+|-------------|---------------------------------------------------------------------------|
+| `VstInt32`  | ordinary int (32bit length?)                                              |
+| `VstIntPtr` | returned by `effect->dispatcher`; used as 4th arg to `effect->dispatcher` |
+|             |                                                                           |
+
 ## conclusion
-with the changes in place, we can now compile JUCE's AudioPluginProcessor.
+with the changes in place, we can now compile JUCE's AudioPluginProcessor (and *MrsWatson*)
 it's still a long way to make it actually work...
 
 # Part2: how the plugin interfaces with the host
