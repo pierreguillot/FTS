@@ -384,7 +384,7 @@ void test_opcode56(AEffect*effect) {
   }
 
   printf("testing OP:%d\n", opcode);
-  t_fstPtrInt result = dispatch_v(effect, opcode, 0, 0, buffer, 0.f);
+  t_fstPtrInt result = dispatch_v(effect, opcode, 0, 0, (void*)0x1, 0.f);
   printf("\tresult |\t%lu 0x%lX\n", result, result);
   if(*buffer) {
     printf("\tbuffer '%.*s'\n", bufsize, (char*)buffer);
