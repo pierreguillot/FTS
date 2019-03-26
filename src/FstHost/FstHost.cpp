@@ -331,12 +331,10 @@ bool skipOpcodeJUCE(size_t opcode) {
 
 void test_SpeakerArrangement0(AEffect*effect) {
   VstSpeakerArrangement*arr[2];
-  dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
   dispatch_v(effect, effGetSpeakerArrangement, 0,
            (t_fstPtrInt)(&arr[0]), &arr[1], 0.);
   printf("input : %p\n", arr[0]);
   printf("output: %p\n", arr[1]);
-  dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
 }
 
 void test_setChunk(AEffect*effect) {
@@ -438,7 +436,6 @@ static float** makeFSamples(size_t channels, size_t frames) {
 
 void test_unknown(AEffect*effect) {
   char opcodestr[256];
-  dispatch_v0(effect, effOpen, 0, 0, 000, 0.000000);
   fstpause(0.5);
   int index = 0;
   t_fstPtrInt ivalue = 0;
@@ -451,7 +448,6 @@ void test_unknown(AEffect*effect) {
   }
 
   fstpause(0.5);
-  dispatch_v0(effect, effClose, 0, 0, 000, 0.000000);
 }
 
 
@@ -464,7 +460,6 @@ void test_reaper(AEffect*effect) {
   float**outsamples = makeFSamples(effect->numOutputs, blockSize);
 
   printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-  dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
   dispatch_v(effect, effGetPlugCategory, 0, 0, 000, 0.000000);
   dispatch_v(effect, effSetSampleRate, 0, 0, 000, 44100.000000);
   dispatch_v(effect, effSetBlockSize, 0, blockSize, 000, 0.000000);
@@ -517,7 +512,6 @@ void test_reaper(AEffect*effect) {
   dispatch_v(effect, effMainsChanged, 0, 1, 000, 0.000000);
   dispatch_v(effect, effStopProcess, 0, 0, 000, 0.000000);
   dispatch_v(effect, effMainsChanged, 0, 0, 000, 0.000000);
-  dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
   printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
 }
 
@@ -530,6 +524,7 @@ int test_plugin(const char*filename) {
   if(!effect)return printf("unable to instantiate plugin from '%s'\n", filename);
   //dump_data(filename, effect, 160);
   if(effect->magic != 0x56737450) return printf("magic failed: 0x%08X", effect->magic);
+  dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
   //print_aeffect(effect);
   test_reaper(effect); return 0;
   //test_opcode29(effect); return 0;
@@ -539,6 +534,7 @@ int test_plugin(const char*filename) {
 
   //test_unknown(effect);
   //test_SpeakerArrangement(effect);
+  dispatch_v(effect, effClose, 0, 0, 000, 0.000000);
   return 0;
 }
 
