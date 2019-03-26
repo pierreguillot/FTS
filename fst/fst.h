@@ -420,7 +420,7 @@ typedef struct fstMidiEvent_ {
 typedef struct fstMidiSysexEvent_ {
   FSTEVENT_COMMON;
   /* FIXXXME: unknown member order */
-  int pad;
+  int _pad;
   int dumpBytes; /* size of sysexDump */
   FST_UNKNOWN(int) flags; /* ? */
   FST_UNKNOWN(t_fstPtrInt) resvd1; /* ? */
@@ -430,7 +430,7 @@ typedef struct fstMidiSysexEvent_ {
 
 typedef struct fstEvents_ {
   int numEvents;
-  FST_UNKNOWN(t_fstPtrInt pad);
+  FST_UNKNOWN(t_fstPtrInt _pad);
   t_fstEvent*events[];
 } t_fstEvents;
 
@@ -470,7 +470,7 @@ typedef struct fstTimeInfo_ {
   int FST_UNKNOWN(currentBar), FST_UNKNOWN(magic); /* we just made these fields up, as their values seem to be neither flags nor smtp* */
 
 #warning document origin samplesToNextClock
-  /* this used to be 'pad' */
+  /* this used to be '_pad' */
   FST_UNKNOWN(int) samplesToNextClock;/* ? */
 
   FST_UNKNOWN(int) flags;/* = Vst2::kVstNanosValid // ? */
@@ -516,7 +516,7 @@ typedef struct _fstEffect {
   FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd1); /* ?? */
   FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd2); /* ?? */
   FST_UNKNOWN(t_fstInt32) FST_UNKNOWN(initialDelay); /* ??; latency in samples */
-  char pad2[8];
+  char _pad2[8];
 
   float float1;
   void* object;

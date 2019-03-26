@@ -1017,7 +1017,7 @@ but all 4 plugins being based on JUCE (which nudges the user into setting a prop
 Using a version number of `1` as *I don't care* is also not something unheard of...).
 
 Collecting all the info we have so far, we end up with something like the following
-(using `pad` variables to account for unknown 0-memory).
+(using `_pad` variables to account for unknown 0-memory).
 There's also a `float1` dummy member (that always holds the value `1.f`),
 and the `initialDelay` is set to the seemingly const-value at @50 (`16` in decimal,
 which is a plausible value for a sample delay;
@@ -1027,7 +1027,7 @@ will also print something about a 16samples delay to the stderr).
 ~~~C
 typedef struct AEffect_ {
   t_fstInt32 magic; /* @0 0x56737450, aka 'VstP' */
-  char pad1[4]; // always 0
+  char _pad1[4]; // always 0
   AEffectDispatcherProc* dispatcher; // ???
   AEffectProcessProc* process; // ???
   AEffectGetParameterProc* getParameter; // ???
@@ -1043,10 +1043,10 @@ typedef struct AEffect_ {
   t_fstPtrInt resvd2; //??
   t_fstInt32 initialDelay; //??
 
-  char pad2[8]; //?
+  char _pad2[8]; //?
   float float1; //?
   void* object; // FIXXXME
-  char pad3[8] pad3; //??
+  char _pad3[8]; //??
 
   t_fstInt32 uniqueID; // @112
   t_fstInt32 version;
@@ -1094,10 +1094,10 @@ typedef struct AEffect_ {
   t_fstPtrInt resvd2; //??
   t_fstInt32 initialDelay; //??
 
-  char pad2[8]; //??
+  char _pad2[8]; //??
   float float1; //??
   void* object;
-  t_fstPtrInt pad3; //??
+  t_fstPtrInt _pad3; //??
   t_fstInt32 uniqueID;
   t_fstInt32 version;
 
@@ -1124,10 +1124,10 @@ Printing the contents `AEffect` for the *Protoverb* plugin in gdb, gives somethi
  resvd1 = 0,
  resvd2 = 0,
  initialDelay = 16,
- pad2 = "\000\000\000\000\000\000\000",
+ _pad2 = "\000\000\000\000\000\000\000",
  myfloat = 1,
  object = 0x5656eec0,
- pad3 = 0,
+ _pad3 = 0,
  uniqueID = 1969770582,
  version = 1,
  processReplacing = 0xf78d9280,
@@ -2036,7 +2036,7 @@ we can refine our struct definition as:
 ~~~
 typedef struct VstEvents_ {
   int numEvents;
-  t_fstPtrInt pad;//?
+  t_fstPtrInt _pad;//?
   VstEvent*events[];
 } VstEvents;
 ~~~
@@ -2141,7 +2141,7 @@ typedef struct VstMidiSysexEvent_ {
   t_fstEventType type;
   int byteSize;
   int deltaFrames;
-  int pad; //?
+  int _pad; //?
 
   int dumpBytes;
   int flags; //?
