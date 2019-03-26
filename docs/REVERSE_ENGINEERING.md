@@ -3585,9 +3585,6 @@ The value `0` (only seen with the mono setup, tenatively `kSpeakerArrMono`) woul
 either `kSpeakerC` or - following the naming pattern of the Left/Right channels and
 [confirmed to exist by some random googling](http://convolver.sourceforge.net/vst.html)
 `kSpeakerM`.
->
->
-> I am not sure this still make sense, because the new release API, I think all use cases are "covered" now:
 
 As a sidenote, we also see now that a plugin without channels has a `VstSpeakerArrangement.type` of *-1*,
 which is most likely `kSpeakerArrEmpty` (something we already guessed above, but had no backing yet).
