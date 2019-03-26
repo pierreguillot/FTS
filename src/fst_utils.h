@@ -22,7 +22,7 @@ static void print_hex(void*ptr, size_t length) {
   unsigned char* data = (unsigned char*)ptr;
   if(data) {
     for(size_t i=0; i<length; i++) {
-      if(!(i%16))printf("\n\t");
+      if(!(i%16))printf("\n%04x\t", i);
       if(!(i% 8))printf(" ");
       printf(" %02X", *data++);
     }
