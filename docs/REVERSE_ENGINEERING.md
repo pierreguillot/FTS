@@ -3655,7 +3655,7 @@ which is most likely `kSpeakerArrEmpty` (something we already guessed above, but
 | `kSpeakerR`        | 2     |
 
 ## enter MrsWatson
-After [compiling MrsWatson](#compiling-mrswatson), it becomes a bit clearer, why there's quite an offset
+After trying to [compile MrsWatson](#compiling-mrswatson), it becomes a bit clearer, why there's quite an offset
 at the beginning of `VstSpeakerProperties`, as there are some additional members.
 
 *MrsWatson* assigns to the properties like so:
