@@ -419,14 +419,75 @@ static void print_pinproperties(VstPinProperties*vpp) {
 }
 
 static char*speakerArrangement2string(size_t type, char*output, size_t length) {
-  snprintf(output, length, "%d", type);
+  output[0]=0;
+  switch(type) {
+  default:
+    snprintf(output, length, "%d", type);
+    break;
+    FST_UTILS__OPCODESTR(kSpeakerArrEmpty);
+    FST_UTILS__OPCODESTR(kSpeakerArrMono);
+    FST_UTILS__OPCODESTR(kSpeakerArrStereo);
+    FST_UTILS__OPCODESTR(kSpeakerArrStereoSurround);
+    FST_UTILS__OPCODESTR(kSpeakerArrStereoCenter);
+    FST_UTILS__OPCODESTR(kSpeakerArrStereoSide);
+    FST_UTILS__OPCODESTR(kSpeakerArrStereoCLfe);
+    FST_UTILS__OPCODESTR(kSpeakerArr30Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr30Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr31Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr31Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr40Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr40Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr41Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr41Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr50);
+    FST_UTILS__OPCODESTR(kSpeakerArr51);
+    FST_UTILS__OPCODESTR(kSpeakerArr60Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr60Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr61Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr61Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr70Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr70Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr71Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr71Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr80Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr80Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr81Cine);
+    FST_UTILS__OPCODESTR(kSpeakerArr81Music);
+    FST_UTILS__OPCODESTR(kSpeakerArr102);
+    FST_UTILS__OPCODESTR(kSpeakerArrUserDefined);
+  }
   output[length-1]=0;
   return output;
 }
 static char*speaker2string(VstSpeakerProperties*props, char*output, size_t length) {
   output[0]=0;
-  if(props)
-    snprintf(output, length, "%d", props->type);
+  if(props) {
+    switch(props->type) {
+    default:
+      snprintf(output, length, "%d [0x%X]", props->type, props->type);
+      break;
+      FST_UTILS__OPCODESTR(kSpeakerM);
+      FST_UTILS__OPCODESTR(kSpeakerL);
+      FST_UTILS__OPCODESTR(kSpeakerR);
+      FST_UTILS__OPCODESTR(kSpeakerC);
+      FST_UTILS__OPCODESTR(kSpeakerLfe);
+      FST_UTILS__OPCODESTR(kSpeakerLs);
+      FST_UTILS__OPCODESTR(kSpeakerRs);
+      FST_UTILS__OPCODESTR(kSpeakerLc);
+      FST_UTILS__OPCODESTR(kSpeakerRc);
+      FST_UTILS__OPCODESTR(kSpeakerS);
+      FST_UTILS__OPCODESTR(kSpeakerSl);
+      FST_UTILS__OPCODESTR(kSpeakerSr);
+      FST_UTILS__OPCODESTR(kSpeakerTm);
+      FST_UTILS__OPCODESTR(kSpeakerTfl);
+      FST_UTILS__OPCODESTR(kSpeakerTfc);
+      FST_UTILS__OPCODESTR(kSpeakerTfr);
+      FST_UTILS__OPCODESTR(kSpeakerTrl);
+      FST_UTILS__OPCODESTR(kSpeakerTrc);
+      FST_UTILS__OPCODESTR(kSpeakerTrr);
+      FST_UTILS__OPCODESTR(kSpeakerLfe2);
+    }
+  }
   output[length-1]=0;
   return output;
 }
