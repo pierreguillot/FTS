@@ -2154,6 +2154,83 @@ typedef struct VstMidiSysexEvent_ {
 } FST_UNKNOWN(VstMidiSysexEvent);
 ~~~
 
+## enter MrsWatson
+When trying to [compile MrsWatson](#compiling-mrswatson) there's an additional complication,
+as it seems there are some more members in the `VstMidiEvent` structure.
+
+| member      | type    |
+|-------------|---------|
+| `flags`     | integer |
+| `reserved1` | integer |
+| `reserved1` | integer |
+
+This is weird because the `VstMidiEvent.byteSize` reported by REAPER is *24*,
+and our structure is already 28 bytes long (if we include the 4-bytes for `midiData`).
+We probably need another host for testing this structure (and see whether it's just REAPER that reports a bogus `byteSize`,
+or whether some of the fields are only `unsigned char`).
+
+The `flags` member is also part of the `VstMidiSysexEvent`, so it might well be *common* to both structs
+(as in: at the same position).
+So far, the two structures share the first 12 bytes (`type`, `byteSize`, `deltaFrames`).
+We have assigned 4-byte `_pad` member to `VstMidiSysexEvent` right after the common members,
+and the `VstMidiEvent` has some arbitrarily `noteLength` and `noteOffset`, which are always *0*.
+So let's revise this and make the underlying `VstEvent` nicely aligned on 16-bytes:
+
+~~~C
+typedef struct VstEvent_ {
+  t_fstEventType type;
+  int byteSize;
+  int deltaFrames;
+  int flags;
+} VstEvent;
+~~~
+
+The `VstMidiSysexEvent` changes accordingly:
+~~~C
+typedef struct VstMidiSysexEvent_ {
+  t_fstEventType type;
+  int byteSize;
+  int deltaFrames;
+  int flags;
+  int dumpytes;
+  int _pad;
+  t_fstPtrInt resvd1;
+  char*sysexDump;
+  t_fstPtrInt resvd2;
+} VstMidiSysexEvent;
+~~~
+
+This works nicely on 64bit, but when running on 32bit, REAPER core-dumps.
+
+On 64bit the first `byteSize` (48) bytes look like:
+~~~
+0000	  06 00 00 00 30 00 00 00  00 00 00 00 00 00 00 00
+0010	  09 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
+0020	  28 EB 04 AC 19 7F 00 00  00 00 00 00 00 00 00 00
+~~~
+
+Whereas on 32bit the first `byteSize` (32) bytes look like:
+~~~
+0000	  06 00 00 00 20 00 00 00  00 00 00 00 00 00 00 00
+0010	  09 00 00 00 00 00 00 00  B4 E5 E4 ED 00 00 00 00
+~~~
+
+Fiddling around with the type-sizes, it seems we can use use `t_fstPtrInt` as the type for `dumpBytes`,
+and everything will align nicely (without the need for some padding bytes):
+
+~~~C
+typedef struct VstMidiSysexEvent_ {
+  t_fstEventType type;
+  int byteSize;
+  int deltaFrames;
+  int flags;
+  t_fstPtrInt dumpytes;
+  t_fstPtrInt resvd1;
+  char*sysexDump;
+  t_fstPtrInt resvd2;
+} VstMidiSysexEvent;
+~~~
+
 
 # some audioMaster opcodes
 time to play get some more opcodes for the host.
