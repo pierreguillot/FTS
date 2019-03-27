@@ -404,10 +404,13 @@ typedef struct fstMidiEvent_ {
    */
   FST_UNKNOWN(short) noteLength;
   FST_UNKNOWN(short) noteOffset;
-  FST_UNKNOWN(int) detune;
-  FST_UNKNOWN(int) noteOffVelocity;
+  FST_UNKNOWN(short) detune;
+  FST_UNKNOWN(short) noteOffVelocity;
   unsigned char midiData[4]; /* @0x18 */
+  FST_UNKNOWN(short) reserved1;
+  FST_UNKNOWN(short) reserved2;
 } FST_UNKNOWN(t_fstMidiEvent);
+
 typedef struct fstMidiSysexEvent_ {
   FSTEVENT_COMMON;
   /* FIXXXME: unknown member order */
