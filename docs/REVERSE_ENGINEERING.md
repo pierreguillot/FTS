@@ -1169,7 +1169,8 @@ We have the following flags to assign:
 - `effFlagsNoSoundInStop`
 - `effFlagsProgramChunks`
 
-While the bitfields at @38 have the following values (displayed as little-endian)
+While the bitfields at @38 have the following values (displayed as little-endian):
+
 | plugin      | flags               |
 |-------------|---------------------|
 | ProtoEffect | `00000000 00110001` |
@@ -2570,8 +2571,10 @@ To find out some more values, we can use a different VST-Host - `MrsWatson` - th
 `ivalue` field of the callback (using the same flags as the `VstTimeInfo.flags` field)
 to determine which fields of the `VstTimeInfo` struct it fills.
 
-Iterating setting one bit after the other while asking for the time (in the `process` callback),
+Iterating over etting one bit after the other while asking for the time
+(in the `process` callback),
 we get the following errors/warnings:
+
 | ivalue | binary | warning                                |
 |--------|--------|----------------------------------------|
 | 0x0100 | 1<< 8  | "plugin asked for time in nanoseconds" |
@@ -2580,6 +2583,7 @@ we get the following errors/warnings:
 
 
 A few other `ivalue`s seem to enable the setting specific members:
+
 | ivalue | binary | set data                            |
 |--------|--------|-------------------------------------|
 | 0x0200 | 1<< 9  | ppqPos                              |
@@ -3313,20 +3317,22 @@ We can confirm this assumption by returning the proper values for the opcodes `3
 
 So to conclude, we have the following new values:
 
-| `effGetPlugCategory`    | 35 |
-| `effShellGetNextPlugin` | 70 |
-|-------------------------|----|
-| `kPlugCategEffect`      | 1? |
-| `kPlugCategSynth`       | 2  |
-| `kPlugCategAnalysis`    | 3  |
-| `kPlugCategMastering`   | 4  |
-| `kPlugCategSpacializer` | 5  |
-| `kPlugCategRoomFx`      | 6  |
-| `kPlugSurroundFx`       | 7  |
-| `kPlugCategRestoration` | 8  |
-| ??                      | 9  |
-| `kPlugCategShell`       | 10 |
-| `kPlugCategGenerator`   | 11 |
+| name                    | value |
+|-------------------------|-------|
+| `effGetPlugCategory`    | 35    |
+| `effShellGetNextPlugin` | 70    |
+|-------------------------|-------|
+| `kPlugCategEffect`      | 1?    |
+| `kPlugCategSynth`       | 2     |
+| `kPlugCategAnalysis`    | 3     |
+| `kPlugCategMastering`   | 4     |
+| `kPlugCategSpacializer` | 5     |
+| `kPlugCategRoomFx`      | 6     |
+| `kPlugSurroundFx`       | 7     |
+| `kPlugCategRestoration` | 8     |
+| ??                      | 9     |
+| `kPlugCategShell`       | 10    |
+| `kPlugCategGenerator`   | 11    |
 
 
 Scanning through the JUCE sources for strings like `kPlugCategEffect`, we find a list of
