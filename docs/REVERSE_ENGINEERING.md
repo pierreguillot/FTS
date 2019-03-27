@@ -2217,7 +2217,9 @@ Whereas on 32bit the first `byteSize` (32) bytes look like:
 ~~~
 
 Fiddling around with the type-sizes, it seems we can use use `VstIntPtr` as the type for `dumpBytes`,
-and everything will align nicely (without the need for some padding bytes):
+and everything will align nicely, without the need for some padding bytes.
+(Using a pointer-sized into for the size of `sysexDump` aligns with the typical use of `size_t` for memory-sizes,
+although i hope that there will never be a need for 6 terabyte dumps of SysEx data...)
 
 ~~~C
 typedef struct VstMidiSysexEvent_ {
