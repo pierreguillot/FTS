@@ -595,7 +595,7 @@ the name of the main entry function into the plugin, which can be `VSTPluginMain
 The host calls this function, and provides a callback function of type
 
 ~~~C
-typedef t_fstPtrInt (t_fstEffectDispatcher)(AEffect*, int opcode, int, t_fstPtrInt, void* const, float);
+typedef VstIntPtr (t_fstEffectDispatcher)(AEffect*, int opcode, int, VstIntPtr, void* const, float);
 ~~~
 
 The main function returns an `AEffect*` handle, which in turn has a member `dispatcher` of the same
@@ -645,7 +645,7 @@ we just have to open our header-file, go to line `241` (`100241-100000`) and see
 We want to watch how the host calls a plugin, so we add debugging printout to the dispatcher function of our plugin:
 
 ~~~C
-static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+static VstIntPtr dispatcher(AEffect*eff, t_fstInt32 opcode, int index, VstIntPtr ivalue, void* const ptr, float fvalue) {
     printf("dispatcher(%p, %ld, %d, %ld, %p, %f);",
         effect, opcode, index, ivalue, ptr, fvalue);
     /* do the actual work */
@@ -806,7 +806,7 @@ JUCE is rather big and it turns out that it takes just too long...)
 #include <dlfcn.h>
 #include "fst.h"
 typedef AEffect* (t_fstMain)(t_fstEffectDispatcher*);
-t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+VstIntPtr dispatcher (AEffect* effect, int opcode, int index, VstIntPtr ivalue, void*ptr, float fvalue) {
   printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, ivalue, ptr, fvalue);
   return 0;
 }
@@ -844,7 +844,7 @@ So we apparently *must* handle the `audioMasterVersion` opcode in our local disp
 (just like JUCE does); let's extend our local dispatcher to do that:
 
 ~~~
-t_fstPtrInt dispatcher (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+VstIntPtr dispatcher (AEffect* effect, int opcode, int index, VstIntPtr ivalue, void*ptr, float fvalue) {
   printf("FstHost::dispatcher(%p, %d, %d, %d, %p, %f);\n", effect, opcode, index, ivalue, ptr, fvalue);
   switch(opcode) {
   case audioMasterVersion: return 2400;
@@ -1039,9 +1039,9 @@ typedef struct AEffect_ {
   t_fstInt32 numInputs;
   t_fstInt32 numOutputs;
 
-  t_fstPtrInt flags; // size unclear
-  t_fstPtrInt resvd1; //??
-  t_fstPtrInt resvd2; //??
+  VstIntPtr flags; // size unclear
+  VstIntPtr resvd1; //??
+  VstIntPtr resvd2; //??
   t_fstInt32 initialDelay; //??
 
   char _pad2[8]; //?
@@ -1079,7 +1079,7 @@ Using `pointer sized int` instead of `int32` helps a bit:
 
 ~~~
 typedef struct AEffect_ {
-  t_fstPtrInt magic;
+  VstIntPtr magic;
   AEffectDispatcherProc* dispatcher;  //??
   AEffectProcessProc* process; //?
   AEffectGetParameterProc* getParameter; //??
@@ -1090,15 +1090,15 @@ typedef struct AEffect_ {
   t_fstInt32 numInputs;
   t_fstInt32 numOutputs;
 
-  t_fstPtrInt flags;
-  t_fstPtrInt resvd1; //??
-  t_fstPtrInt resvd2; //??
+  VstIntPtr flags;
+  VstIntPtr resvd1; //??
+  VstIntPtr resvd2; //??
   t_fstInt32 initialDelay; //??
 
   char _pad2[8]; //??
   float float1; //??
   void* object;
-  t_fstPtrInt _pad3; //??
+  VstIntPtr _pad3; //??
   t_fstInt32 uniqueID;
   t_fstInt32 version;
 
@@ -1223,7 +1223,7 @@ I've added a `char[512]` as `ptr` to the dispatcher, because I've seen this in t
 ~~~C
 for(int i=0; i<256; i++) {
   char buffer[512] = { 0 };
-  t_fstPtrInt res = effect->dispatcher (effect, i, 0, 0, buffer, 0);
+  VstIntPtr res = effect->dispatcher (effect, i, 0, 0, buffer, 0);
   const char*str = (const char*)res;
   printf("%d[%d=0x%X]: %.*s\n", i, res, res, 32, str);
   if(*buffer)printf("\t'%.*s'\n", 512, buffer);
@@ -1242,7 +1242,7 @@ for(int i=0; i<256; i++) {
       skip = true;
   }
   if(true)continue;
-  t_fstPtrInt res = effect->dispatcher (effect, i, 0, 0, buffer, 0);
+  VstIntPtr res = effect->dispatcher (effect, i, 0, 0, buffer, 0);
   //...
 }
 ~~~
@@ -1275,7 +1275,7 @@ Hooray, we found `effGetProgramName` or `effProgramNameIndexed`
 (probably the former, as setting the `index` (and/or `ivalue` resp. `fvalue`)
 doesn't make any difference.)
 
-We also notice, that the `t_fstPtrInt` returned by `AEffect.dispatcher` is always `0`.
+We also notice, that the `VstIntPtr` returned by `AEffect.dispatcher` is always `0`.
 
 
 To proceed, we take a closer look at what else is printed when we run our host with some plugins.
@@ -1461,7 +1461,7 @@ for host opcodes (`audioMaster*`) check out *juce_VSTPluginFormat.cpp*:
 #include <cstdio>
 #include "fst.h"
 static AEffectDispatcherProc*dispatch = 0;
-static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+static VstIntPtr dispatcher(AEffect*eff, t_fstInt32 opcode, int index, VstIntPtr ivalue, void* const ptr, float fvalue) {
   printf("FstClient::dispatcher(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, ptr, fvalue);
   return 0;
 }
@@ -1514,7 +1514,7 @@ This simple plugin allows us to query the host for whatever opcodes the host und
 ~~~C
 for(size_t i = 0; i<64; i++) {
   char buf[512] = {0};
-  t_fstPtrInt res = dispatch(0, i, 0, 0, buf, 0);
+  VstIntPtr res = dispatch(0, i, 0, 0, buf, 0);
   if(*buf)
     printf("\t'%.*s'\n", 512, buf);
   if(res)
@@ -1806,7 +1806,7 @@ the following little helper gives us information, what a plugin returns for the 
 ~~~C
   for(size_t opcode=16; opcode<64; opcode++) {
     char buffer[200] = { 0 };
-    t_fstPtrInt result = effect->dispatcher(effect, opcode, 0, 0, buffer, 0.f);
+    VstIntPtr result = effect->dispatcher(effect, opcode, 0, 0, buffer, 0.f);
     if(result || *buffer)
       printf("tested %d\n", opcode);
     if(result)
@@ -2037,7 +2037,7 @@ we can refine our struct definition as:
 ~~~
 typedef struct VstEvents_ {
   int numEvents;
-  t_fstPtrInt _pad;//?
+  VstIntPtr _pad;//?
   VstEvent*events[];
 } VstEvents;
 ~~~
@@ -2147,11 +2147,11 @@ typedef struct VstMidiSysexEvent_ {
   int dumpBytes;
   int flags; //?
 
-  t_fstPtrInt resvd1; //?
+  VstIntPtr resvd1; //?
 
   char*sysExDump;
 
-  t_fstPtrInt resvd2; //?
+  VstIntPtr resvd2; //?
 } FST_UNKNOWN(VstMidiSysexEvent);
 ~~~
 
@@ -2195,9 +2195,9 @@ typedef struct VstMidiSysexEvent_ {
   int flags;
   int dumpytes;
   int _pad;
-  t_fstPtrInt resvd1;
+  VstIntPtr resvd1;
   char*sysexDump;
-  t_fstPtrInt resvd2;
+  VstIntPtr resvd2;
 } VstMidiSysexEvent;
 ~~~
 
@@ -2216,7 +2216,7 @@ Whereas on 32bit the first `byteSize` (32) bytes look like:
 0010	  09 00 00 00 00 00 00 00  B4 E5 E4 ED 00 00 00 00
 ~~~
 
-Fiddling around with the type-sizes, it seems we can use use `t_fstPtrInt` as the type for `dumpBytes`,
+Fiddling around with the type-sizes, it seems we can use use `VstIntPtr` as the type for `dumpBytes`,
 and everything will align nicely (without the need for some padding bytes):
 
 ~~~C
@@ -2225,10 +2225,10 @@ typedef struct VstMidiSysexEvent_ {
   int byteSize;
   int deltaFrames;
   int flags;
-  t_fstPtrInt dumpytes;
-  t_fstPtrInt resvd1;
+  VstIntPtr dumpytes;
+  VstIntPtr resvd1;
   char*sysexDump;
-  t_fstPtrInt resvd2;
+  VstIntPtr resvd2;
 } VstMidiSysexEvent;
 ~~~
 
@@ -2792,7 +2792,7 @@ the addresses of the `VstSpeakerArrangement` structs to (cf. JUCE code).
 for(size_t opcode=40; opcode<45; opcode++) {
   VstSpeakerArrangement *arrptr[2] = {0,0};
   if(42 == opcode)continue;
-  dispatch_v(effect, opcode, 0, (t_fstPtrInt)(arrptr+0), (arrptr+1), 0.f);
+  dispatch_v(effect, opcode, 0, (VstIntPtr)(arrptr+0), (arrptr+1), 0.f);
   print_hex(arrptr[0], 32);
   print_hex(arrptr[1], 32);
 }
@@ -3038,7 +3038,7 @@ we must mimick the behaviour of the JUCE plugin (making REAPER think it is reall
 
 We do this incrementally:
 ~~~C
-t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPtrInt ivalue, void* const ptr, float fvalue) {
+VstIntPtr dispatcher(AEffect*eff, t_fstInt32 opcode, int index, VstIntPtr ivalue, void* const ptr, float fvalue) {
     switch(opcode) {
     case effGetVstVersion:
         return 2400;
@@ -3337,7 +3337,7 @@ test plugins and note those were the plugins return non-0 values.
 Something like:
 
 ~~~
-static int effKnown(t_fstPtrInt opcode) {
+static int effKnown(VstIntPtr opcode) {
   if(opcode>=100000)
     return 0;
   switch(opcode) {
@@ -3356,7 +3356,7 @@ static int effKnown(t_fstPtrInt opcode) {
 
 void test(AEffect*effect) {
   int index = 0;
-  t_fstPtrInt ivalue = 0;
+  VstIntPtr ivalue = 0;
   dispatch(effect, effOpen, 0, 0, 0, 0.0);
   for(size_t opcode=2; opcode<128; opcode++)
     if(!effKnown(opcode))
@@ -3404,7 +3404,7 @@ we probably have found the `effString2Parameter` opcode:
 
 ~~~C
   dispatch_v(effect, effOpen, 0, 0, 000, 0.000000);
-  for(t_fstPtrInt opcode=2; opcode<128; opcode++) {
+  for(VstIntPtr opcode=2; opcode<128; opcode++) {
     int index = 0;
     if(effKnown(opcode))
       continue;
@@ -3468,13 +3468,13 @@ Something like the following:
 
 ~~~
 static
-t_fstPtrInt host2plugin (AEffect* effect, int opcode, int index, t_fstPtrInt ivalue, void*ptr, float fvalue) {
+VstIntPtr host2plugin (AEffect* effect, int opcode, int index, VstIntPtr ivalue, void*ptr, float fvalue) {
   AEffectDispatcherProc h2p = s_host2plugin[effect];
   char effbuf[256] = {0};
   printf("Fst::host2plugin(%s, %d, %ld, %p, %f)",
          effCode2string(opcode, effbuf, 255),
          index, ivalue, ptr, fvalue);
-  t_fstPtrInt result = h2p(effect, opcode, index, ivalue, ptr, fvalue);
+  VstIntPtr result = h2p(effect, opcode, index, ivalue, ptr, fvalue);
   printf(" => %ld\n", result);
   fflush(stdout);
   return result;
