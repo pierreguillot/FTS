@@ -2095,13 +2095,13 @@ Anyhow, here's what we have so far:
 
 ~~~
 typedef struct VstEvent_ {
-  t_fstEventType type;
+  int type;
   int byteSize;
   int deltaFrames;
 } VstEvent;
 
 typedef struct VstMidiEvent_ {
-  t_fstEventType type;
+  int type;
   int byteSize;
   int deltaFrames;
 
@@ -2139,7 +2139,7 @@ I guess the `reserved` fields will be at the very end, which gives us:
 
 ~~~
 typedef struct VstMidiSysexEvent_ {
-  t_fstEventType type;
+  int type;
   int byteSize;
   int deltaFrames;
   int _pad; //?
@@ -2179,7 +2179,7 @@ So let's revise this and make the underlying `VstEvent` nicely aligned on 16-byt
 
 ~~~C
 typedef struct VstEvent_ {
-  t_fstEventType type;
+  int type;
   int byteSize;
   int deltaFrames;
   int flags;
@@ -2189,7 +2189,7 @@ typedef struct VstEvent_ {
 The `VstMidiSysexEvent` changes accordingly:
 ~~~C
 typedef struct VstMidiSysexEvent_ {
-  t_fstEventType type;
+  int type;
   int byteSize;
   int deltaFrames;
   int flags;
@@ -2221,7 +2221,7 @@ and everything will align nicely (without the need for some padding bytes):
 
 ~~~C
 typedef struct VstMidiSysexEvent_ {
-  t_fstEventType type;
+  int type;
   int byteSize;
   int deltaFrames;
   int flags;
