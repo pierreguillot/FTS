@@ -3782,7 +3782,7 @@ typedef struct VstSpeakerProperties_ {
   float elevation;
   float radius;
   float reserved;
-  char name[48];
+  char name[64];
   int type;
   char _padding2[28];
 } VstSpeakerProperties;
