@@ -435,7 +435,7 @@ typedef struct fstSpeakerProperties_ {
   FST_UNKNOWN(float) elevation; /* float? origin:MrsWatson */
   FST_UNKNOWN(float) radius; /* float? origin:MrsWatson */
   FST_UNKNOWN(float) reserved; /* type? origin:MrsWatson */
-  FST_UNKNOWN(char name[48]);
+  FST_UNKNOWN(char name[64]);
   int type;
   char _padding2[28];
 } FST_UNKNOWN(t_fstSpeakerProperties);
