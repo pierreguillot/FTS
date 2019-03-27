@@ -389,7 +389,8 @@ typedef enum {
 #define FSTEVENT_COMMON \
   t_fstEventType type; \
   int byteSize; \
-  int deltaFrames
+  int deltaFrames; \
+  int flags
 
 typedef struct fstEvent_ {
   FSTEVENT_COMMON;
@@ -420,12 +421,10 @@ typedef struct fstMidiEvent_ {
 typedef struct fstMidiSysexEvent_ {
   FSTEVENT_COMMON;
   /* FIXXXME: unknown member order */
-  int _pad;
-  int dumpBytes; /* size of sysexDump */
-  FST_UNKNOWN(int) flags; /* ? */
-  FST_UNKNOWN(t_fstPtrInt) resvd1; /* ? */
+  t_fstPtrInt dumpBytes; /* size of sysexDump */
+  t_fstPtrInt resvd1; /* ? */
   char*sysexDump; /* heap allocated memory for sysex-data */
-  FST_UNKNOWN(t_fstPtrInt) resvd2; /* ? */
+  t_fstPtrInt resvd2; /* ? */
 } t_fstSysexEvent;
 
 typedef struct fstEvents_ {
