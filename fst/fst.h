@@ -406,17 +406,7 @@ typedef struct fstMidiEvent_ {
   FST_UNKNOWN(short) noteOffset;
   FST_UNKNOWN(int) detune;
   FST_UNKNOWN(int) noteOffVelocity;
-#if 0
-  /*
-   * REAPER/JUCE suggest a varsized array, although it must always hold 4 bytes
-   * REAPER: byteSize=24
-   * JUCE: byteSize=sizeof(fstMidiEvent)
-   * JUCE: if(numBytes<=4)memcpy(midiData,...,numBytes)
-   */
-  unsigned char midiData[];
-#else
   unsigned char midiData[4]; /* @0x18 */
-#endif
 } FST_UNKNOWN(t_fstMidiEvent);
 typedef struct fstMidiSysexEvent_ {
   FSTEVENT_COMMON;
