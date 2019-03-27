@@ -2175,7 +2175,7 @@ The `flags` member is also part of the `VstMidiSysexEvent`, so it might well be 
 So far, the two structures share the first 12 bytes (`type`, `byteSize`, `deltaFrames`).
 We have assigned 4-byte `_pad` member to `VstMidiSysexEvent` right after the common members,
 and the `VstMidiEvent` has some arbitrarily `noteLength` and `noteOffset`, which are always *0*.
-So let's revise this and make the underlying `VstEvent` nicely aligned on 16-bytes:
+So let's revise this and make the underlying `VstEvent` nicely ending on an 8-bytes boundary:
 
 ~~~C
 typedef struct VstEvent_ {
