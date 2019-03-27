@@ -228,7 +228,7 @@ the `type` is populated by `int channelSetToVstArrangementType()` which really r
 `kSpeakerArrStereo`.
 
 I'd rather assign the `kSpeakerArr*` enumeration a name `t_fstSpeakerArrangementType` and use that for `type`,
-but alas, C++ does not allow to implicitely cast `int` to `enum`, so we need to use `int` instead.
+but alas, C++ does not allow use to implicitly cast `int` to `enum`, so we need to use `int` instead.
 
 ~~~C
 typedef struct VstSpeakerArrangement_ {
@@ -501,7 +501,7 @@ Since those structs are presumably used to pass data between a plugin host and a
 getting them right is very important - at least if we don't want crashes.
 
 Until know, we didn't need to know anything about the structure of the API.
-We just blindly provided "reasonable" (dummy) names whenver we encountered an unknown name.
+We just blindly provided "reasonable" (dummy) names whenever we encountered an unknown name.
 
 In order to reverse engineer the entire API, we should have a closer look about what we have so far.
 
@@ -924,7 +924,7 @@ On my amd64 system, pointers take 8 byte and aligned at 8 bytes (one halfline in
 We don't know which functions are stored in which pointer,
 but it cannot be coincidence, that our `AEffect` struct has exactly 6 function pointers
 (`dispatcher`, `getParameter`, `setParameter`, `process`, `processReplacing`, `processDoubleReplacing`).
-We are also a bit lucky, because we dont really know whether each function ptr must actually be filled
+We are also a bit lucky, because we don't really know whether each function ptr must actually be filled
 with a valid function (it might be allowed to set them to `0x0`).
 The `Protoverb` plugin seems to implement all of them!
 
@@ -1552,7 +1552,7 @@ host-opcode `34` is likely `audioMasterGetVendorVersion`.
 
 The opcode `48` returns the currently opened REAPER session file.
 The `audioMasterGetDirectory` might match, although REAPER returns a
-file rather than a diretory.
+file rather than a directory.
 More importantly, JUCE will `return` the string address
 in the `return` value, whereas REAPER writes the string into `ptr`.
 
@@ -1788,7 +1788,7 @@ The memory looks like
 Given that a GUI rectangle will most likely not have a zero width or height,
 it might be, that the `ERect` members are really only 2-bytes wide (`short`),
 which would then translate to the numbers `0, 0, 600, 1200`,
-which happens to align nicely with the the printout of *Protoverb*
+which happens to align nicely with the printout of *Protoverb*
 
 ~~~C
 typedef struct ERect_ {
@@ -2216,7 +2216,7 @@ Whereas on 32bit the first `byteSize` (32) bytes look like:
 0010	  09 00 00 00 00 00 00 00  B4 E5 E4 ED 00 00 00 00
 ~~~
 
-Fiddling around with the type-sizes, it seems we can use use `VstIntPtr` as the type for `dumpBytes`,
+Fiddling around with the type-sizes, it seems we can use `VstIntPtr` as the type for `dumpBytes`,
 and everything will align nicely, without the need for some padding bytes.
 (Using a pointer-sized into for the size of `sysexDump` aligns with the typical use of `size_t` for memory-sizes,
 although i hope that there will never be a need for 6 terabyte dumps of SysEx data...)
@@ -2437,7 +2437,7 @@ Playing around with the project cursor a bit and watching the third number, it s
 The number `-559038737` has a (little endian) hex representation of 0xDEADBEEF and is a typical magic number.
 
 We should also havea look at the bytes @10-18, which - so far - made most sense when decoded as double.
-Because the numbers are so high (*1.48147e+14*) we devide them by 10^9.
+Because the numbers are so high (*1.48147e+14*) we divide them by 10^9.
 
 This results in the display of a number (e.g. `152197`) that increments by 1 every second.
 It doesn't matter whether the project is playing or not.
@@ -2531,7 +2531,7 @@ Let's do some more tests:
 | 00111111 00000111 | starting loop |
 
 
-The stopping/playing states can only be observed for a a single time frame,
+The stopping/playing states can only be observed for a single time frame,
 whenever we start (resp. stop) playback
 E.g. if we go from *paused* to *playing* (unlooped),
 we first see `10111100000000` (while the system is paused),
@@ -2767,7 +2767,7 @@ FstClient::dispatcher(0x9e36510, 42, 0, 172519840, 0xa487610, 0.000000);
 
 The `ivalue` is a bit strange, unless it is printed in hex (`0x1ec22d0` resp . `0xa4871a0`),
 where it becomes apparent that this is really another address (just compare the hex representation
-to the the `ptr` value; there difference is 1136, which is practically nothing in address space)!
+with the `ptr` value; there difference is 1136, which is practically nothing in address space)!
 
 According to [JUCE](#juce-effect-opcodes), there are only very few opcodes
 where both `ivalue` and `ptr` point both to addresses:
@@ -2835,7 +2835,7 @@ for(size_t opcode=40; opcode<45; opcode++) {
 }
 ~~~
 
-Unfortunately, this is not very successfull.
+Unfortunately, this is not very successful.
 Only `opcode:44` returns 1 for *some* plugins, but none write data into our `VstSpeakerArrangement` struct.
 
 | plugin    | opcode | result |
@@ -3070,7 +3070,7 @@ host2plugin(50, 45, 80, <ptr>, 0.000000)
 So we create a fake plugin (*not* JUCE-based!) that responds to most opcodes with `0`
 and doesn't really do anything.
 In order to make REAPER do the same as with JUCE-plugins (that is: send an `opcode:50` command),
-we must mimick the behaviour of the JUCE plugin (making REAPER think it is really the same).
+we must mimic the behaviour of the JUCE plugin (making REAPER think it is really the same).
 
 We do this incrementally:
 ~~~C
@@ -3336,7 +3336,7 @@ So to conclude, we have the following new values:
 
 
 Scanning through the JUCE sources for strings like `kPlugCategEffect`, we find a list of
-strings in in the *Projucer* sources (`jucer_Project.cpp`):
+strings in the *Projucer* sources (`jucer_Project.cpp`):
 
 - `kPlugCategUnknown` (!)
 - `kPlugCategEffect`
@@ -3351,7 +3351,7 @@ strings in in the *Projucer* sources (`jucer_Project.cpp`):
 - `kPlugCategShell`
 - `kPlugCategGenerator`
 
-So there's two more categories ("Unknown" and "OffliceProcess").
+So there's two more categories ("Unknown" and "OfflineProcess").
 
 If we compare the list (in the same order as found in the Projucer sources) with the values we already found above,
 we see that they align nicely.
@@ -3359,8 +3359,10 @@ we see that they align nicely.
 where we haven't found a name for the value *9* yet.
 Sorting `kPlugCategUnknown` before `kPlugCategEffect` (aka *1*) would give us *0*, which also makes some sense:
 
-| `kPlugCategUnknown`        | 0 |
-| `kPlugCategOfflineProcess` | 9 |
+| name                       | value |
+|----------------------------|-------|
+| `kPlugCategUnknown`        | 0     |
+| `kPlugCategOfflineProcess` | 9     |
 
 
 ## effGetCurrentMidiProgram / effSetTotalSampleToProcess
@@ -3428,7 +3430,7 @@ It also has a single opcode that returns the `ivalue` as is, which is `effSetTot
 
 
 # effString2Parameter
-The `effString2Parameter` is most likely uesd for setting a parameter via a string representation.
+The `effString2Parameter` is most likely used for setting a parameter via a string representation.
 A simple routine to find the opcode value is to send a string with some numeric value to all unknown opcodes,
 and read back the parameter (e.g. as a string representation via `effGetParamDisplay`).
 If the read back parameter has changed (not necessarily to the value we sent it, but in relation to previous printouts),
@@ -3587,7 +3589,7 @@ typedef struct VstSpeakerArrangement_ {
 ~~~
 
 When we [first discovered](#speaker-arrangement) some details of the Speaker Arrangement,
-we noticed non-null values a position @58, which we concluded might be uninitalized data.
+we noticed non-null values a position @58, which we concluded might be uninitialized data.
 
 We can easily test this assumption: since `VstSpeakerProperties` is at least 4 bytes large
 (assuming that it's `type` member is a 32bit `int` like all other types we have seen so far),
@@ -3632,7 +3634,7 @@ Printing the first 512 bytes a 64channel plugin receives with the `effSetSpeaker
 ~~~
 
 This is interesting as we still have a value (`01`) at position @58 -
-which according to the math we did above cannot be "uninitalized memory".
+which according to the math we did above cannot be "uninitialized memory".
 
 If we set the number of channels our plugin can process to *2*, we get the following instead:
 
@@ -3865,7 +3867,7 @@ The index is the parameter index currently being automated...
 
 
 ### effCode:62
-This is called when the MIDI-dialog get's opened (right before effCode:66; but only once)
+This is called when the MIDI-dialog gets opened (right before effCode:66; but only once)
 
 5*16 (80) bytes == 0x00
 
