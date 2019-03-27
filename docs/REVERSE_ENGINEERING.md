@@ -480,7 +480,8 @@ And there are also some additional types:
 |-------------|---------------------------------------------------------------------------|
 | `VstInt32`  | ordinary int (32bit length?)                                              |
 | `VstIntPtr` | returned by `effect->dispatcher`; used as 4th arg to `effect->dispatcher` |
-|             |                                                                           |
+
+`VstIntPtr` is what we have already declared as `t_fstPtrInt`.
 
 
 ### sidenote
