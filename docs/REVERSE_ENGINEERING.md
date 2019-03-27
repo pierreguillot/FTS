@@ -183,11 +183,11 @@ typedef struct VstMidiEvent_ {
 typedef struct VstMidiSysexEvent_ {
  FSTEVENT_COMMON;
  /* FIXXXME: unknown member order */
-  char*sysexDump;
-  FST_UNKNOWN(int) dumpBytes;
-  FST_UNKNOWN(int) deltaFrames;
-  FST_UNKNOWN(int) flags;
-  FST_UNKNOWN(int) resvd1, resvd2;
+ char*sysexDump;
+ FST_UNKNOWN(int) dumpBytes;
+ FST_UNKNOWN(int) deltaFrames;
+ FST_UNKNOWN(int) flags;
+ FST_UNKNOWN(int) resvd1, resvd2;
 } VstMidiSysexEvent;
 ~~~
 
