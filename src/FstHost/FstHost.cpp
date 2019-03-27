@@ -154,7 +154,7 @@ void test_opcode3334(AEffect*effect) {
     printf("returned %lu\n", res);
     if(res) {
       print_pinproperties(&vpp);
-      print_hex(&vpp, sizeof(vpp));
+      //print_hex(&vpp, sizeof(vpp));
     }
   }
 }
@@ -189,7 +189,6 @@ static void test_setParameter(AEffect*effect) {
 }
 
 static void test_opcode42(AEffect*effect) {
-  printf("testing speaker arrangement\n");
   VstSpeakerArrangement setarr[10], getarr[10];
   for(size_t i=0; i<10; i++) memset(setarr+i, 0, sizeof(VstSpeakerArrangement));
   setarr[0].type = setarr[1].type = 0x1;
@@ -208,7 +207,6 @@ static void test_opcode42(AEffect*effect) {
     print_hex(arrptr[0], 8);
     print_hex(arrptr[1], 8);
   }
-  printf("tested speaker arrangement\n");
 }
 
 
