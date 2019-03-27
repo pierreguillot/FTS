@@ -2232,6 +2232,39 @@ typedef struct VstMidiSysexEvent_ {
 } VstMidiSysexEvent;
 ~~~
 
+Since we've added the 4-bytes `flags` to the common `VstEvent` members, we also need to fix the `VstMidiEvent`,
+so that the midiData is still at position @18.
+We already have (quite arbitrarily, to get the alignment right) assigned the `noteLength` and `noteOffset`
+members a `short` type.
+If we also do the same for `noteOffVelocity` and `detune`, we gain exactly 4 bytes and the data aligns again.
+
+We also need to find some place for the `reserved1` and `reserved2` members.
+For now we just arbitrarily use them to fill up the structure,
+so it also ends at an 8-bytes boundary:
+
+~~~C
+typedef struct VstMidiEvent_ {
+  int type;
+  int byteSize;
+  int deltaFrames;
+  int flags;
+  short noteLength; //?
+  short noteOffset; //?
+  short detune; //?
+  short noteOffVelocity; //?
+  unsigned char midiData[4]; /* @0x18 */
+  short reserved1; //?
+  short reserved2; //?
+} VstMidiEvent;
+~~~
+
+Again: note that `noteLength`, `noteOffset`, `noteOffVelocity`, `detune`, `reserved1` and `reserved2` are arbitrarily
+assigned in type and position.
+The `reserved` types will probably always be *0*,
+but we will have to find a plugin host that fills in the `note*` members to learn more about them.
+
+Also note that the size of the `VstMidiEvent` struct is currently 32 bytes,
+rather than the 24 bytes claimed by REAPER.
 
 # some audioMaster opcodes
 time to play get some more opcodes for the host.
