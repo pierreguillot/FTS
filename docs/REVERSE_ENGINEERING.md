@@ -1248,9 +1248,9 @@ for(int i=0; i<256; i++) {
 }
 ~~~
 
-It turns out that the following opcodes '1`, `3`, `4`, `6`, `7`, `8`, `13`,
+It turns out that the following opcodes `1`, `3`, `4`, `6`, `7`, `8`, `13`,
 `14`, `22`, `23`, `24`, `25`, `26`, `29`, `33`, `34`, `35`, `45`, `47`, `48`,
-`49`, `51`, `58`, `63`, `69`, `71`, `72' and `73` all crash
+`49`, `51`, `58`, `63`, `69`, `71`, `72` and `73` all crash
 (most likely these expect a properly initialized structure at `ptr`).
 
 Additional crashers
@@ -2086,7 +2086,7 @@ Since we can cast the latter two to `VstEvent`, the common fields will be at the
 Since all events are of the same type, the `type` field should be constant for all our events, which happens to be the
 true for the very first bytes. So let's assume `kVstMidiType` to be `0x01`.
 
-Bytes at positions @8-11 very and might be the `deltaFrames` field (JUCE uses this field to sort the events chronologically).
+Bytes at positions @8-11 vary and might be the `deltaFrames` field (JUCE uses this field to sort the events chronologically).
 The remaining twelve 0-bytes in the middle need to be somehow assigned to `noteLength`, `noteOffset`, `detune` and `noteOffVelocity`.
 I don't know anything about these fields. `noteLength` and `noteOffVelocity` seem to allow scheduling NoteOff events in the future.
 `noteOffVelocity` should not need more than 7bits (hey MIDI).
@@ -2104,13 +2104,11 @@ typedef struct VstMidiEvent_ {
   int type;
   int byteSize;
   int deltaFrames;
-
   /* no idea about the position and sizes of the following four members */
   short noteLength; //?
   short noteOffset; //?
   int detune; //?
   int noteOffVelocity; //?
-
   unsigned char midiData[]; //really 4 bytes
 } VstMidiEvent;
 ~~~
@@ -2143,14 +2141,10 @@ typedef struct VstMidiSysexEvent_ {
   int byteSize;
   int deltaFrames;
   int _pad; //?
-
   int dumpBytes;
   int flags; //?
-
   VstIntPtr resvd1; //?
-
   char*sysExDump;
-
   VstIntPtr resvd2; //?
 } FST_UNKNOWN(VstMidiSysexEvent);
 ~~~
@@ -3678,8 +3672,8 @@ members, which we already established to be differing), we can *also* see some
 pattern:
 
 The 2-channel plugin gets values `01` and `02` at the positions @58 resp @c8 and after that only zeros,
-whereas the 64-channel version has four alternating `01` and `02` values until the printout ends.
-Could it be that we are actually seeing `VstSpeakerProperties` that are not only occupying 4 bytes but rather
+whereas the 64-channel version has alternating `01` and `02` values until the printout ends.
+Could it be that we are actually seeing `VstSpeakerProperties` that are not occupying only 4 bytes but rather
 112 bytes in length (112 being the difference between @c8 and @58)?
 
 So printing 8192 bytes (which should cover 64 channels if each really takes 112 bytes), we observe:
