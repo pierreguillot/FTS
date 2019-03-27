@@ -458,7 +458,7 @@ static void print_speakerarrangement(const char*name, VstSpeakerArrangement*vpp)
     print_speakerpadding(&(vpp->speakers[i]));
   }
   printf("\n");
-  //print_hex(vpp, 8192);
+  //print_hex(vpp, 1024);
 }
 
 
