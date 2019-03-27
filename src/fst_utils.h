@@ -430,11 +430,12 @@ static char*speaker2string(VstSpeakerProperties*props, char*output, size_t lengt
   output[length-1]=0;
   return output;
 }
-static void print_non0bytes(char*bytes, size_t length) {
+static void print_non0bytes(void*bytes, size_t length) {
+  char*data=(char*)bytes;
   for(size_t i=0; i<length; i++) {
-    if(bytes[i]) {
-      printf("\n");
-      print_hex(bytes, length);
+    if(data[i]) {
+      printf("\n padding ");
+      print_hex(data, length);
       return;
     }
   }
