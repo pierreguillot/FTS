@@ -338,6 +338,7 @@ static void print_aeffect(AEffect*eff) {
   printf("\n\tresvd2=0x%X", eff->resvd2);
   printf("\n\tinitialDelay=%d", eff->initialDelay);
 
+  printf("\n\tuser=%p", eff->user);
   printf("\n\tobject=%p", eff->object);
   printf("\n\tuniqueID=%d", eff->uniqueID);
   printf("\n\tversion=%d", eff->version);
