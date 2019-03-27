@@ -442,7 +442,7 @@ static void print_non0bytes(void*bytes, size_t length) {
 }
 static void print_speakerpadding(VstSpeakerProperties*props) {
   /* print padding bytes if non-0 */
-  //print_non0bytes(props->_padding1, sizeof(props->_padding1));
+  print_non0bytes(props, 80);
   print_non0bytes(props->_padding2, sizeof(props->_padding2));
 }
 
