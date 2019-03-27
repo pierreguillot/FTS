@@ -455,7 +455,7 @@ It seems to use some more symbols
 | `kVstLangEnglish`                       | returned by `audioMasterGetLanguage`            |
 | `kSpeakerUndefined`                     | assigned to `VstSpeakerProperties.type`         |
 | `kEffectMagic`                          | `effect->magic`                                 |
-|                                         |                                                 |
+
 
 Additionally *MrsWatson* uses some struct members that JUCE doesn't care about:
 
@@ -472,7 +472,7 @@ Additionally *MrsWatson* uses some struct members that JUCE doesn't care about:
 | `VstMidiEvent`         | `reserved1` | int       |
 |------------------------|-------------|-----------|
 | `AEffect`              | `user`      | void*     |
-|                        |             |           |
+
 
 And there are also some additional types:
 
@@ -981,7 +981,7 @@ whereas the bits at position @74-77 are:
 | Danaides    | `01100110 00000000 00000000 00000000` | 102     |
 | hypercyclic | `11000010 10010110 00000000 00000000` | 38594   |
 | tonespace   | `11000011 10111010 00000000 00000000` | 47811   |
-|             |                                       |         |
+
 
 
 We still have the following fields to find:
@@ -1543,7 +1543,6 @@ With REAPER, this returns:
 | 43   | 1          |                                   |
 | 44   | 1          |                                   |
 | 48   | 1          | ~/Documents/REAPER Media/test.RPP |
-|      |            |                                   |
 
 This table confirms that host-opcode `33` is `audioMasterGetProductString`,
 and we learn that host-opcode `32` is `audioMasterGetVendorString`.
@@ -2539,7 +2538,7 @@ when we press the space-bar (to start playing) there's a single time frame
 showing `10111100000011`, and then we see `11111100000111` while the system plays.
 
 So far we got:
-- when starting/stopping playbay the 1st (least significant) bit is set.
+- when starting/stopping playback the 1st (least significant) bit is set.
 - the 2nd bit is set when the (target) state is playing (looped or not)
 - the 3rd and 13th bits are set when looping
 - the 4th bit is set when recording
@@ -2805,7 +2804,6 @@ with following types
 | 8            | 23   | 0x17       |
 | 12           | 28   | 0x1C       |
 | all the rest | -2   | 0xFFFFFFFE |
-|              |      |            |
 
 Since the values are filled in by REAPER, it's likely that `effcode:42` is `effSetSpeakerArrangement`.
 This is somewhat confirmed by *Protoverb*, that prints out
@@ -2904,7 +2902,6 @@ We repeat the table from above:
 | 8            | 23   |
 | 12           | 28   |
 | all the rest | -2   |
-|              |      |
 
 Mono is a single channel, Stereo needs two channels, for which REAPER fills in `0` and `1` (`kSpeakerArrMono` resp `kSpeakerArrStereo`).
 That's a bit unconventional: personally I would have used `0` for `kSpeakerArrEmpty`, and `1` and `2` for Mono and Stereo.
@@ -3187,8 +3184,6 @@ The value of `kVstProcessPrecision32` can only be guessed. Intuitively, I would 
 |------------------------|-------|
 | kVstProcessPrecision32 | 0 (?) |
 | kVstProcessPrecision64 | 1     |
-|                        |       |
-
 
 ## effGetPlugCategory
 
@@ -3264,7 +3259,6 @@ Playing around we get the following REAPER categories for various return values:
 | 7      | Surround       |
 | 8      | Restoration    |
 | 11     | Tone Generator |
-|        |                |
 
 The return values `1` and `9` (and `0`) leave the plugin in the previous category (whichever that was),
 so it seems these return values are ignored by REAPER and the host just uses some cached values.
@@ -3272,16 +3266,16 @@ If the plugin returns `10`, it is *not listed* at all in the list of available p
 
 The REAPER categories match nicely with the `kPlugCateg*` constants we need to find:
 
-|                       |    |
-|-----------------------|----|
-| kPlugCategSynth       | 2  |
-| kPlugCategAnalysis    | 3  |
-| kPlugCategMastering   | 4  |
-| kPlugCategSpacializer | 5  |
-| kPlugCategRoomFx      | 6  |
-| kPlugSurroundFx       | 7  |
-| kPlugCategRestoration | 8  |
-| kPlugCategGenerator   | 11 |
+| name                    | value |
+|-------------------------|-------|
+| `kPlugCategSynth`       | 2     |
+| `kPlugCategAnalysis`    | 3     |
+| `kPlugCategMastering`   | 4     |
+| `kPlugCategSpacializer` | 5     |
+| `kPlugCategRoomFx`      | 6     |
+| `kPlugSurroundFx`       | 7     |
+| `kPlugCategRestoration` | 8     |
+| `kPlugCategGenerator`   | 11    |
 
 
 We haven't found any values for `kPlugCategEffect` and `kPlugCategShell` yet.
@@ -3408,7 +3402,6 @@ This gives us the following opcodes:
 | 44    | 1      | JUCE-based plugins |
 | 63    | -1     | ALL plugins        |
 | 78    | 1      | Digits             |
-|       |        |                    |
 
 If we set the `index` to something non-0 and compare the returned values, we don't notice any differences.
 If we set the `ivalue` to something non-0 and compare the returned values, we get another opcode,
@@ -3417,17 +3410,15 @@ that seemingly returns the `ivalue` itself:
 | value | return   | plugins     |
 |-------|----------|-------------|
 | 73    | <ivalue> | ALL plugins |
-|       |          |             |
 
 The [JUCE effect opcode table](#juce-effect-opcodes) lists only
 two opcodes that return `-1` (and `effCanDo` is already known, leaving `effGetCurrentMidiProgram`).
 It also has a single opcode that returns the `ivalue` as is, which is `effSetTotalSampleToProcess`, so we know have:
 
-| opcode                     | value |
-|----------------------------|-------|
-| effGetCurrentMidiProgram   | 63    |
-| effSetTotalSampleToProcess | 73    |
-|                            |       |
+| opcode                       | value |
+|------------------------------|-------|
+| `effGetCurrentMidiProgram`   | 63    |
+| `effSetTotalSampleToProcess` | 73    |
 
 
 # effString2Parameter
@@ -3690,7 +3681,6 @@ So printing 8192 bytes (which should cover 64 channels if each really takes 112 
 | 2        | `01`@58, `02`@c8                                          | after @468  |
 | 64       | alternating `01`/`02` from @58 to @1be8, every 0x70 bytes | after @1f88 |
 | 3        | `01`@58, `02`@c8, `03`@138                                | after @4da  |
-|          |                                                           |             |
 
 After a certain point the data is densly filled with non-null bytes, which probably really is "uninitialized memory" (aka "garbage").
 
@@ -3742,7 +3732,6 @@ we get:
 | 12                                  | 28                           | 1,2,1,2,1,2,1,2,1,2,1,2     |
 | odd                                 | -2                           | 1,2,...,1,2,3               |
 | even                                | -2                           | 1,2,...,1,2,1,2             |
-|                                     |                              |                             |
 
 The 108 unknown bytes in each `VstSpeakerProperties` struct are always `0x00`.
 So the `VstSpeakerProperties.type` is always pairs of `1` and `2`,
@@ -3753,9 +3742,9 @@ JUCE (juce_audio_plugin_client/VST/juce_VST_Wrapper.cpp) assigns values like
 Obviously, REAPER doesn't make full use of these values (at least not in my configuration).
 The values `1` and `2` are probably `kSpeakerL` resp. `kSpeakerR`.
 The value `3` could be `kSpeakerC`, `kSpeakerLfe` or `kSpeakerS`, but it's hard to say.
-The value `0` (only seen with the mono setup, tenatively `kSpeakerArrMono`) would be some mono channel,
-either `kSpeakerC` or of `kSpeakerUndefined` or - following the naming pattern of the Left/Right channels and
-[confirmed to exist by some random googling](http://convolver.sourceforge.net/vst.html)
+The value `0` (only seen with the mono setup, tentatively `kSpeakerArrMono`) would be some mono channel,
+either `kSpeakerC`, `kSpeakerUndefined` or - following the naming pattern of the Left/Right channels and
+[confirmed to exist by some random googling](http://convolver.sourceforge.net/vst.html) -
 `kSpeakerM`.
 
 As a sidenote, we also see now that a plugin without channels has a `VstSpeakerArrangement.type` of *-1*,
@@ -3827,31 +3816,32 @@ Trying to compile JUCE plugins or plugin-hosts, we still miss a considerable num
 | `effKeysRequired`                        |
 | `effSetBypass`                           |
 |------------------------------------------|
-| `kSpeakerArr*`                           |
-| `kSpeaker*`                              |
 | `kVstAutomationReading`                  |
 | `kVstAutomationWriting`                  |
 | `kVstPinIsActive`                        |
 | `kVstPinIsStereo`                        |
 | `kVstPinUseSpeaker`                      |
+| `kSpeakerArr*`                           |
+| `kSpeaker*`                              |
 | `kVstSmpte*`                             |
-|                                          |
+
 
 On the other hand, running using a self-compiled plugin in a commercial DAW (like REAPER)
 or using commercial plugins in a self-compiled plugin host, we only encounter very few opcodes
 that we don't know yet:
 
-|------------|----|
-| audioHost* | 3  |
-| audioHost* | 13 |
-| audioHost* | 42 |
-|------------|----|
-| eff*       | 19 |
-| eff*       | 53 |
-| eff*       | 56 |
-| eff*       | 62 |
-| eff*       | 66 |
-| eff*       |    |
+| name       | value |
+|------------|-------|
+| audioHost* | 3     |
+| audioHost* | 13    |
+| audioHost* | 42    |
+|------------|-------|
+| eff*       | 19    |
+| eff*       | 53    |
+| eff*       | 56    |
+| eff*       | 62    |
+| eff*       | 66    |
+| eff*       |       |
 
 
 # misc
@@ -3899,15 +3889,11 @@ the numbers seem to be the visible notes on the virtual MIDI keyboard.
 | opcode         | effBeginSetProgram             | vstplugin~ |
 | opcode         | effEndSetProgram               | vstplugin~ |
 |----------------|--------------------------------|------------|
-| constant       | kEffectMagic                   | vstplugin~ |
-| constant       | kSpeakerUndefined              | vstplugin~ |
 | constant       | kSpeakerM                      | vstplugin~ |
 |----------------|--------------------------------|------------|
 | member         | VstTimeInfo.samplesToNextClock | vstplugin~ |
-| member         | AEffect.user                   | vstplugin~ |
 |----------------|--------------------------------|------------|
 | type           | VstAEffectFlags                | vstplugin~ |
-| type           | VstIntPtr                      | vstplugin~ |
 | type           | VstInt32                       | vstplugin~ |
 |----------------|--------------------------------|------------|
 | function/macro | CCONST                         | vstplugin~ |
