@@ -3841,7 +3841,6 @@ that we don't know yet:
 | eff*       | 56    |
 | eff*       | 62    |
 | eff*       | 66    |
-| eff*       |       |
 
 
 # misc
