@@ -353,6 +353,11 @@ static void print_event(VstEvent*ev, int hexdump, const char*prefix="") {
     printf(" [%d]\n", sizeof(VstEvent));
     return;
   }
+  if(hexdump) {
+    printf("\n");
+    print_hex(ev, ev->byteSize + 4*(kVstMidiType == ev->type));
+  }
+
   if(ev->type == kVstMidiType) {
     VstMidiEvent*mev = (VstMidiEvent*)ev;
     printf("%s [%d]\n", prefix, sizeof(VstMidiEvent));
@@ -384,8 +389,6 @@ static void print_event(VstEvent*ev, int hexdump, const char*prefix="") {
     printf("\tflags=%d\treserved=%lu\t%lu\n",
         sev->flags, sev->resvd1, sev->resvd2);
   }
-  if(hexdump)
-    print_hex(ev, 64);
 }
 
 static void print_events(VstEvents*evs, int hexdump=0, const char*prefix="") {
