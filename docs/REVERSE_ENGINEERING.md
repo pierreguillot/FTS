@@ -94,9 +94,9 @@ So lets start, by extracting all the symbols that should be part of the `Vst2` n
 
 ~~~bash
 make -k -C JUCE/extras/AudioPluginHost/Builds/LinuxMakefile 2>&1 \
-| grep error: \
-| grep "is not a member of .Vst2.$" \
-| sed -e 's|.* error: ||' | sed -e 's|^.||' -e 's|. .*||' \
+| grep error:                                                    \
+| grep "is not a member of .Vst2.$"                              \
+| sed -e 's|.* error: ||' | sed -e 's|^.||' -e 's|. .*||'        \
 | sort -u
 ~~~
 
@@ -213,8 +213,8 @@ This will yield errors about not being able to access members in a non-class typ
 
 ~~~bash
 make -C JUCE/extras/AudioPluginHost/Builds/LinuxMakefile 2>&1 \
-| grep VstSpeakerArrangement | grep "error:" \
-| sed -e 's|.* error: request for member ||' -e 's| in .*||' \
+| grep VstSpeakerArrangement | grep "error:"                  \
+| sed -e 's|.* error: request for member ||' -e 's| in .*||'  \
 | sort -u
 ~~~
 
@@ -571,7 +571,7 @@ While we are at it, maybe the `audioMaster*` symbols are opcodes for the callbac
 to the `VstPluginMain` function? Let's check:
 
 ~~~bash
-rgrep "audioMaster" JUCE \
+rgrep "audioMaster" JUCE              \
 | sed -e 's|audioMasterCallback|CB|g' \
 | egrep "audioMaster[A-Z]"
 ~~~
@@ -580,7 +580,7 @@ Which seems to confirm our idea.
 Let's also check whether we have missed some `audioMaster*` symbols:
 
 ~~~bash
-rgrep "Vst2::audioMaster[A-Z]" JUCE/ \
+rgrep "Vst2::audioMaster[A-Z]" JUCE/                   \
 | sed -e 's|.*Vst2::\(audioMaster[A-Za-z0-9]*\).*|\1|' \
 | sort -u
 ~~~
