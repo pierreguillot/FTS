@@ -17,7 +17,7 @@ All reverse-engineering steps are documented in the [REVERSE_ENGINEERING](doc/RE
 
 
 ## LICENSING
-FST is released under the `GNU General Public License (version 3)`.
+FST is released under the [`GNU General Public License (version 3 or later)`](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
 It is our understanding that if you use the FST-header in your project,
 you have to use a compatible (Open Source) license for your project as well.
