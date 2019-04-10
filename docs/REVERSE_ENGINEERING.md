@@ -72,8 +72,8 @@ mkdir FST
 touch FST/fst.h
 for i in aeffect.h aeffectx.h ; do
 cat > $i <<EOF
-##pragma once
-##include "fst.h"
+#pragma once
+#include "fst.h"
 EOF
 ~~~
 
