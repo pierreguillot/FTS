@@ -13,7 +13,7 @@ FST is the attempt to create a bona-fide reverse-engineered header file,
 that is created without reference to the official VST SDK and without its
 developer(s) having agreed to the VST SDK license agreement.
 
-All reverse-engineering steps are documented in the [REVERSE_ENGINEERING](doc/REVERSE_ENGINEERING.md) document.
+All reverse-engineering steps are documented in the [REVERSE_ENGINEERING](docs/REVERSE_ENGINEERING.md) document.
 
 
 ## LICENSING
