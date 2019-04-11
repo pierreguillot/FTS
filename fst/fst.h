@@ -29,12 +29,14 @@
 
 /* helper macros for marking values as compatible with the original SDK */
 
-#ifdef __GNUC__
 /* constants that have not yet been discovered are marked as 'deprecated'
  * in order to get a notification during build
  * constants we are not sure about, are marked with an EXPERIMENTAL macro
  */
+#if defined(__GNUC__) || defined(__clang__)
 # define FST_DEPRECATE_UNKNOWN(x) x __attribute__ ((deprecated))
+#elif defined(_MSC_VER)
+# define FST_DEPRECATE __declspec(deprecated)
 #else
 # define FST_DEPRECATE_UNKNOWN(x) x
 #endif
