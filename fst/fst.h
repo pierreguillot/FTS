@@ -25,7 +25,7 @@
 #define FST_fst_h_
 
 #define FST_MAJOR_VERSION 0
-#define FST_MINOR_VERSION 104
+#define FST_MINOR_VERSION 115
 #define FST_MICRO_VERSION 0
 
 #define FST_VERSIONNUM(X, Y, Z)                                         \
