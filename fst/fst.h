@@ -24,7 +24,13 @@
 #ifndef FST_fst_h_
 #define FST_fst_h_
 
-#define FST_VERSION 104
+#define FST_MAJOR_VERSION 0
+#define FST_MINOR_VERSION 104
+#define FST_MICRO_VERSION 0
+
+#define FST_VERSIONNUM(X, Y, Z)                                         \
+        ((X)*10000 + (Y)*1000 + (Z))
+#define FST_VERSION FST_VERSIONNUM(FST_MAJOR_VERSION, FST_MINOR_VERSION, FST_MICRO_VERSION)
 
 
 /* helper macros for marking values as compatible with the original SDK */
