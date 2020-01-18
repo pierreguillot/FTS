@@ -359,6 +359,9 @@ enum {
   FST_FLAG_UNKNOWN(AutomationUnsupported),
   /* returned by audioMasterGetCurrentProcessLevel: */
   FST_CONSTANT_UNKNOWN(ProcessLevelUnknown),
+#warning document origin of ProcessLevel* from https://forums.cockos.com/project.php?issueid=3382
+  FST_CONSTANT_UNKONWN(ProcessLevelOffline),
+  FST_CONSTANT_UNKONWN(ProcessLevelRealtime),
   /* returned by audioMasterGetLanguage: */
   FST_CONSTANT_UNKNOWN(LangEnglish),
 
