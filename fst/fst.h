@@ -325,7 +325,7 @@ typedef enum {
   FST_SPEAKER_UNKNOWN(Trr),
   FST_SPEAKER_UNKNOWN(Lfe2),
 
-#warning origin of kSpeakerM
+#warning warning origin of kSpeakerM
   FST_SPEAKER_UNKNOWN(Undefined),
   fst_speakerLast /* last enum */
 } t_fstSpeakerArrangementType;
