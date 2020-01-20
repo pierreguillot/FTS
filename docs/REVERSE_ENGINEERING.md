@@ -3213,7 +3213,7 @@ Anyhow: once we have the `effGetPlugCategory` it should be pretty easy to find o
 iterating over values `0..n` and see how REAPER categorizes the plugin.
 But how do we get the opcode?
 
-Somebody in the [Cockos forum](https://forum.cockos.com/archive/index.php/t-165245.html)
+Somebody in the [Cockos forum](https://forum.cockos.com/archive/index.php/t-165245.html) (accessed 2020-01-20)
 mentioned, that REAPER would call this opcode when *scanning* for plugins, pretty soon after
 issuing `effOpen`:
 
@@ -3795,7 +3795,7 @@ typedef struct VstSpeakerProperties_ {
 So far we know that there is a host opcode `audioMasterGetCurrentProcessLevel`, which returns `kVstProcessLevelUnknown` in MrsWatson.
 The presence of the host opcode and the generic name of the value returned by MrsWatson, suggest that there are other, more specific values to return.
 
-After another round of googling for terms `vst` and `processlevel`, I eventually stumbled upon a [post in the "Deprecated REAPER issue tracker"](https://forums.cockos.com/project.php?issueid=3382) (accessed 2020/01/20):
+After another round of googling for terms `vst` and `processlevel`, I eventually stumbled upon a [post in the "Deprecated REAPER issue tracker"](https://forums.cockos.com/project.php?issueid=3382) (accessed 2020-01-20):
 
 > Offline Render causes glitching with some plugs (Reaper 3.76 sending kVstProcessLevelRealtime to AudioEffectX during Offline Render)
 >
