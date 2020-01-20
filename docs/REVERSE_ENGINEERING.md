@@ -3795,7 +3795,7 @@ typedef struct VstSpeakerProperties_ {
 So far we know that there is a host opcode `audioMasterGetCurrentProcessLevel`, which returns `kVstProcessLevelUnknown` in MrsWatson.
 The presence of the host opcode and the generic name of the value returned by MrsWatson, suggest that there are other, more specific values to return.
 
-After another round of googling for terms `vst` and `processlevel`, I eventually stumbled upon a [post in the "Deprecated REAPER issue tracker"](https://forums.cockos.com/project.php?issueid=3382):
+After another round of googling for terms `vst` and `processlevel`, I eventually stumbled upon a [post in the "Deprecated REAPER issue tracker"](https://forums.cockos.com/project.php?issueid=3382) (accessed 2020/01/20):
 
 > Offline Render causes glitching with some plugs (Reaper 3.76 sending kVstProcessLevelRealtime to AudioEffectX during Offline Render)
 >
