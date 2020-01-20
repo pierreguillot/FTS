@@ -3891,6 +3891,13 @@ that we don't know yet:
 LATER move this to proper sections
 
 
+## hostCode:3
+## hostCode:13
+## hostCode:42
+
+## effCode:19
+## effCode:53
+
 
 ## effCode:56
 
