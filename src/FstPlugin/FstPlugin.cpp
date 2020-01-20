@@ -126,7 +126,7 @@ static int test_opcode66(AEffect*eff,
   char*str=(char*)ptr + 8;
   int*iptr=(int*)ptr;
   //printf("KEY: %d\t%d\n", iptr[0], iptr[1]);
-  snprintf(str, 16, "key[%d]%d", iptr[0], iptr[1]);
+  snprintf(str, 16, "key[%d]%d=", iptr[0], iptr[1]);
   for(size_t i=0; i<32; i++) {
     //str[i+8]=i+64;
   }
