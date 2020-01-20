@@ -399,7 +399,7 @@ enum {
 enum {
       /* returned by audioMasterGetLanguage: */
       FST_CONSTANT_UNKNOWN(LangEnglish),
-}
+};
 
 
 /* deltaFrames: used by JUCE as "timestamp" (to sort events) */
