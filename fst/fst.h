@@ -394,6 +394,8 @@ enum {
       FST_CONSTANT_EXPERIMENTAL(ProcessLevelUnknown, 0),
       FST_CONSTANT(ProcessLevelRealtime, 2),
       FST_CONSTANT(ProcessLevelOffline, 4),
+#warning document origin of ProcesslevelUser
+      FST_CONSTANT_UNKNOWN(ProcessLevelUser), /* vstplugin~ */
 };
 
 enum {
