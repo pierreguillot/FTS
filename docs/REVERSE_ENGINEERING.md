@@ -3540,13 +3540,13 @@ Since the opcode is called when REAPER does something with automation, it is eve
 However, in our minimal fake plugin, this opcode doesn't really get called.
 Probably we don't reply correctly to some prior opcode.
 
-Anyhow, we can hack our proxy plugin, to respond to `effCpde:26` with `1` only for indices less than (e.g.) `5`.
+Anyhow, we can hack our proxy plugin, to respond to `effCode:26` with `1` only for indices less than (e.g.) `5`.
 Doing that with a plugin that has more parameters (e.g. *GVST/GSinth* has 30 parameters),
 REAPER will reduce the selection choice for parameters to be automated to the first five.
 
 So indeed, `effCanBeAutomated` seems to have the value `26`.
 
-So why does REAPER query this opcode for the *GSynth* plugin, but not for our own fake plugin?
+So why does REAPER query this opcode for the *GSinth* plugin, but not for our own fake plugin?
 Comparing the return values of the *GSinth* plugin with our own, there are not many differences.
 However *GSinth* returns `2400` for the `effGetVstVersion` opcode, whereas our own plugin
 returns the default `0`.
@@ -3902,7 +3902,7 @@ The address seems to be zeroed-out (at least the first 0x99 bytes).
 The index is the parameter index currently being automated...
 
 
-### effCode:62
+## effCode:62
 This is called when the MIDI-dialog gets opened (right before effCode:66; but only once)
 
 5*16 (80) bytes == 0x00
