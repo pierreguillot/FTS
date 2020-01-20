@@ -3824,6 +3824,7 @@ REAPER also reports a a process-level of `1`, but only at the beginning (e.g. wh
 | ??                         | 0     | returned by JUCE is in realtime mode        |
 | ??                         | 1     | returned by REAPER during `effMainsChanged` |
 | `kVstProcessLevelRealtime` | 2     | returned by REAPER during normal rendering  |
+| ??                         | 3     | (inbetween)                                 |
 | `kVstProcessLevelOffline`  | 4     | returned by REAPER when offline-rendering; returned by JUCE if NOT in realtime mode |
 | `kVstProcessLevelUnknown`  | ??    | used by MrsWatson                           |
 
