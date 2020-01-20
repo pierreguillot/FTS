@@ -325,7 +325,7 @@ typedef enum {
   FST_SPEAKER_UNKNOWN(Trr),
   FST_SPEAKER_UNKNOWN(Lfe2),
 
-#warning warning origin of kSpeakerM
+#warning document origin of kSpeakerM
   FST_SPEAKER_UNKNOWN(Undefined),
   fst_speakerLast /* last enum */
 } t_fstSpeakerArrangementType;
@@ -480,7 +480,7 @@ typedef struct fstTimeInfo_ {
 
   int FST_UNKNOWN(currentBar), FST_UNKNOWN(magic); /* we just made these fields up, as their values seem to be neither flags nor smtp* */
 
-#warning document origin samplesToNextClock
+#warning document origin of samplesToNextClock
   /* this used to be '_pad' */
   FST_UNKNOWN(int) samplesToNextClock;/* ? */
 
