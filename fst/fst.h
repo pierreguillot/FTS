@@ -392,9 +392,9 @@ typedef enum {
 
 enum {
   /* returned by audioMasterGetCurrentProcessLevel: */
-      FST_ENUM_EXPERIMENTAL(ProcessLevelUnknown, 0),
-      FST_ENUM(ProcessLevelRealtime, 2),
-      FST_ENUM(ProcessLevelOffline, 4),
+      FST_CONSTANT_EXPERIMENTAL(ProcessLevelUnknown, 0),
+      FST_CONSTANT(ProcessLevelRealtime, 2),
+      FST_CONSTANT(ProcessLevelOffline, 4),
 };
 
 
