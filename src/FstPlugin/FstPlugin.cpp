@@ -338,8 +338,8 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
 #endif
     } while(0);
     return 0;
-  case 12:
-      dispatch_v(eff, 23, 0, 0, 0, 0.);
+  case effMainsChanged:
+      dispatch_v(eff, audioMasterGetCurrentProcessLevel, 0, 0, 0, 0.);
 #if 0
       do {
         static bool first=true;
@@ -357,7 +357,7 @@ static t_fstPtrInt dispatcher(AEffect*eff, t_fstInt32 opcode, int index, t_fstPt
         first=false;
       } while(0);
 #endif
-      dispatch_v(eff, 6, 0, 1, 0, 0.);
+      dispatch_v(eff, audioMasterWantMidi, 0, 1, 0, 0.);
       break;
   }
   //printf("FstClient::dispatch(%p, %d, %d, %d, %p, %f)\n", eff, opcode, index, ivalue, ptr, fvalue);
