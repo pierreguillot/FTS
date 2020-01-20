@@ -48,7 +48,8 @@ t_fstPtrInt dispatch_v (AEffect* effect, int opcode, int index, t_fstPtrInt ival
     doprint=true;
     break;
   case audioMasterGetCurrentProcessLevel:
-    doprint=false;
+    //doprint=false;
+    break;
   }
   if(effect) {
     if(doprint) {
@@ -401,9 +402,10 @@ static void process(AEffect*eff, float**indata, float**outdata, int sampleframes
 #endif
 }
 static void processReplacing(AEffect*eff, float**indata, float**outdata, int sampleframes) {
-#if 0
+#if 1
   printf("FstClient::process1(%p, %p, %p, %d) -> %f\n", eff, indata, outdata, sampleframes, indata[0][0]);
-  test_gettime(eff);
+  test_processLevel(eff);
+  //test_gettime(eff);
 #endif
 }
 static void processDoubleReplacing(AEffect*eff, double**indata, double**outdata, int sampleframes) {
