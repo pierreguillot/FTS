@@ -357,11 +357,6 @@ enum {
 
   /* returned by audioMasterGetAutomationState: */
   FST_FLAG_UNKNOWN(AutomationUnsupported),
-  /* returned by audioMasterGetCurrentProcessLevel: */
-  FST_CONSTANT_UNKNOWN(ProcessLevelUnknown),
-#warning document origin of ProcessLevel* from https://forums.cockos.com/project.php?issueid=3382
-  FST_CONSTANT_UNKNOWN(ProcessLevelOffline),
-  FST_CONSTANT_UNKNOWN(ProcessLevelRealtime),
   /* returned by audioMasterGetLanguage: */
   FST_CONSTANT_UNKNOWN(LangEnglish),
 
@@ -394,6 +389,13 @@ typedef enum {
   FST_CONSTANT(MidiType, 1),
   FST_CONSTANT(SysExType, 6)
 } t_fstEventType;
+
+enum {
+  /* returned by audioMasterGetCurrentProcessLevel: */
+      FST_ENUM_EXPERIMENTAL(ProcessLevelUnknown, 0),
+      FST_ENUM(ProcessLevelRealtime, 2),
+      FST_ENUM(ProcessLevelOffline, 4),
+};
 
 
 /* deltaFrames: used by JUCE as "timestamp" (to sort events) */
