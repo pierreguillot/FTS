@@ -357,8 +357,7 @@ enum {
 
   /* returned by audioMasterGetAutomationState: */
   FST_FLAG_UNKNOWN(AutomationUnsupported),
-  /* returned by audioMasterGetLanguage: */
-  FST_CONSTANT_UNKNOWN(LangEnglish),
+
 
   /* used as t_fstPinProperties.flags */
   FST_FLAG_UNKNOWN(PinIsActive),
@@ -396,6 +395,11 @@ enum {
       FST_CONSTANT(ProcessLevelRealtime, 2),
       FST_CONSTANT(ProcessLevelOffline, 4),
 };
+
+enum {
+      /* returned by audioMasterGetLanguage: */
+      FST_CONSTANT_UNKNOWN(LangEnglish),
+}
 
 
 /* deltaFrames: used by JUCE as "timestamp" (to sort events) */
