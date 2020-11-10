@@ -239,7 +239,7 @@ typedef enum {
 
   FST_EFFECT_OPCODE_UNKNOWN(Idle),
 
-#warning document origin of eff*SetProgram
+//#warning document origin of eff*SetProgram
   FST_EFFECT_OPCODE_UNKNOWN(BeginSetProgram),
   FST_EFFECT_OPCODE_UNKNOWN(EndSetProgram),
 
@@ -325,7 +325,7 @@ typedef enum {
   FST_SPEAKER_UNKNOWN(Trr),
   FST_SPEAKER_UNKNOWN(Lfe2),
 
-#warning document origin of kSpeakerM
+//#warning document origin of kSpeakerM
   FST_SPEAKER_UNKNOWN(Undefined),
   fst_speakerLast /* last enum */
 } t_fstSpeakerArrangementType;
@@ -394,7 +394,7 @@ enum {
       FST_CONSTANT_EXPERIMENTAL(ProcessLevelUnknown, 0),
       FST_CONSTANT(ProcessLevelRealtime, 2),
       FST_CONSTANT(ProcessLevelOffline, 4),
-#warning document origin of ProcesslevelUser
+//#warning document origin of ProcesslevelUser
       FST_CONSTANT_UNKNOWN(ProcessLevelUser), /* vstplugin~ */
 };
 
@@ -480,7 +480,7 @@ typedef struct fstTimeInfo_ {
 
   int FST_UNKNOWN(currentBar), FST_UNKNOWN(magic); /* we just made these fields up, as their values seem to be neither flags nor smtp* */
 
-#warning document origin of samplesToNextClock
+//#warning document origin of samplesToNextClock
   /* this used to be '_pad' */
   FST_UNKNOWN(int) samplesToNextClock;/* ? */
 
@@ -564,7 +564,7 @@ typedef t_fstPtrInt VstIntPtr;
 typedef t_fstInt32 VstInt32;
 
 const int FST_CONST(EffectMagic, 0x56737450);
-#warning document origin of CCONST
+//#warning document origin of CCONST
 #define CCONST(a,b,c,d) ((((unsigned char)a)<<24) + (((unsigned char)b)<<16) + (((unsigned char)c)<<8) + ((unsigned char)d))
 
 #endif /* FST_fst_h_ */
